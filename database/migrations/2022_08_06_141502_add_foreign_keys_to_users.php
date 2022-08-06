@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id')->index();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('user_roles')->onDelete('cascade');
             $table->unsignedBigInteger('tier_id')->index();
-            $table->foreign('tier_id')->references('id')->on('tiers')->onDelete('cascade');
+            $table->foreign('tier_id')->references('id')->on('user_tiers')->onDelete('cascade');
         });
     }
 
