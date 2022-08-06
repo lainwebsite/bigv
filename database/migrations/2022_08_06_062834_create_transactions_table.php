@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->double('total_price');
+            $table->double('shipping_fee');
             $table->unsignedBigInteger('billing_address_id')->index();
             $table->foreign('billing_address_id')->references('id')->on('user_addresses')->onDelete('cascade');
             $table->unsignedBigInteger('shipping_address_id')->index();

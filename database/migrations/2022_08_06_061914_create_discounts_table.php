@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->double('amount');
-            $table->date('duration_start')->nullable();
-            $table->date('duration_end')->nullable();
+            $table->dattime('duration_start')->nullable();
+            $table->datetime('duration_end')->nullable();
             $table->timestamps();
         });
     }

@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->unsignedBigInteger('payment_method_id')->index()->nullable();
-            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
+        Schema::create('user_roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('user_roles');
     }
 };

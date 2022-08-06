@@ -17,8 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->double('price');
-            $table->double('discount')->default(0);
             $table->double('rating')->default(0);
             $table->timestamps();
         });
