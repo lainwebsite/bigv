@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'date_of_birth',
+        'visits',
+        'tier_points',
+        'tier_id', 'role_id'
     ];
 
     /**
@@ -41,4 +46,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function carts() {
+        return $this->hasMany(Cart::class, 'user_id', 'id');
+    }
+    public function reviews() {
+        return $this->hasMany(Review::class, 'user_id', 'id');
+    }
+    public function addresses() {
+        return $this->hasMany(UserAddress::class, 'user_id', 'id');
+    }
+    public function role() {
+        return $this->belongsTo(UserRole::class, 'role_id', 'id');
+    }
+    public function tier() {
+        return $this->belongsTo(UserTier::class, 'tier_id', 'id');
+    }
 }
