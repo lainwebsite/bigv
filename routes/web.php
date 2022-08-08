@@ -56,7 +56,7 @@ Route::group(['middleware' => ['user', 'verified']], function () {
     Route::resource('user', UserController::class);
 });
 
-Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.'], function () {
+Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
     Route::resource('cart', CartController::class);
     Route::resource('discount', DiscountController::class);
     Route::resource('paymentmethod', PaymentMethodController::class);
@@ -75,7 +75,7 @@ Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.'], function (
     Route::resource('vendor', VendorController::class);
 });
 
-Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.'], function () {
+Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::resource('cart', AdminCartController::class);
     Route::resource('discount', AdminDiscountController::class);
     Route::resource('paymentmethod', AdminPaymentMethodController::class);
