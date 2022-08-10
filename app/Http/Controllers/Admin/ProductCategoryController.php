@@ -15,7 +15,7 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = ProductCategory::all();
     }
 
     /**
@@ -36,7 +36,10 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = ProductCategory::create([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
     }
 
     /**
@@ -70,7 +73,10 @@ class ProductCategoryController extends Controller
      */
     public function update(Request $request, ProductCategory $productCategory)
     {
-        //
+        $productCategory->update([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
     }
 
     /**
@@ -81,6 +87,6 @@ class ProductCategoryController extends Controller
      */
     public function destroy(ProductCategory $productCategory)
     {
-        //
+        $productCategory->delete();
     }
 }
