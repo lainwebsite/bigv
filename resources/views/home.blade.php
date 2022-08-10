@@ -42,6 +42,13 @@
 						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
                         @auth
 						    <li><a href="{{ route('profile') }}"><i class="fa fa-user-o"></i> My Account</a></li>
+						    <li>
+								<a href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('logout').submit();"><i class="fa fa-sign-out"></i> Logout
+									<form id="logout" action="{{ route('logout') }}" method="POST" class="d-none">
+										@csrf
+									</form>
+								</a>
+							</li>
                         @else
 						    <li><a href="{{ route('login') }}"><i class="fa fa-user-o"></i> Login/Register</a></li>
                         @endauth
