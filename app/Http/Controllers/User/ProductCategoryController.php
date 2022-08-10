@@ -15,7 +15,12 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $productCategories = ProductCategory::all();
+
+        return view('home', [
+            'productCategories' => $productCategories,
+            'active' => 0
+        ]);
     }
 
     /**
@@ -47,7 +52,12 @@ class ProductCategoryController extends Controller
      */
     public function show(ProductCategory $productCategory)
     {
-        //
+        $productCategories = ProductCategory::all();
+
+        return view('home', [
+            'productCategories' => $productCategories,
+            'active' => $productCategory->id
+        ]);
     }
 
     /**
