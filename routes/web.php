@@ -53,10 +53,6 @@ Auth::routes();
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 
-Route::group(['middleware' => ['user', 'verified']], function () {
-    Route::resource('user', UserController::class);
-});
-
 Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
     Route::resource('cart', CartController::class);
     Route::resource('discount', DiscountController::class);
@@ -74,6 +70,10 @@ Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' =>
     Route::resource('user-role', UserRoleController::class);
     Route::resource('user-tier', UserTierController::class);
     Route::resource('vendor', VendorController::class);
+});
+
+Route::group(['middleware' => ['user', 'verified']], function () {
+    Route::resource('user', UserController::class);
 });
 
 Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
