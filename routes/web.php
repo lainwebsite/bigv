@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CartController as AdminCartController;
 use App\Http\Controllers\Admin\DiscountController as AdminDiscountController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
 use App\Http\Controllers\Admin\PickupMethodController as AdminPickupMethodController;
 use App\Http\Controllers\Admin\ProductCategoryController as AdminProductCategoryController;
@@ -76,6 +77,7 @@ Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' =>
 });
 
 Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
+    Route::get('/dashboard', [AdminPageController::class, 'dashboard'])->name('dashboard');
     Route::resource('cart', AdminCartController::class);
     Route::resource('discount', AdminDiscountController::class);
     Route::resource('payment-method', AdminPaymentMethodController::class);

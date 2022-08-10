@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -15,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
     }
 
     /**
@@ -25,7 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = UserRole::all();
     }
 
     /**
@@ -36,7 +38,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'date_of_birth' => $request->date_of_birth,
+            'role_id' => $request->role_id
+        ]);
     }
 
     /**
@@ -58,7 +67,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $roles = UserRole::all();
     }
 
     /**
@@ -70,7 +79,24 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        if ($request->password) {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+                'date_of_birth' => $request->date_of_birth,
+                'role_id' => $request->role_id
+            ]);
+        } else {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'date_of_birth' => $request->date_of_birth,
+                'role_id' => $request->role_id
+            ]);
+        }
     }
 
     /**
@@ -81,6 +107,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
     }
 }
