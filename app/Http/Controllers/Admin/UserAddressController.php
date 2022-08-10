@@ -36,7 +36,19 @@ class UserAddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $address = UserAddress::create([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'additional_info' => $request->additional_info,
+            'street' => $request->street,
+            'condo' => $request->condo,
+            'estate' => $request->estate,
+            'label' => $request->label,
+            'house_number' => $request->house_number,
+            'unit_number' => $request->unit_number,
+            'postal_code' => $request->postal_code,
+            'user_id' => $request->user_id,
+        ]);
     }
 
     /**
@@ -70,7 +82,19 @@ class UserAddressController extends Controller
      */
     public function update(Request $request, UserAddress $userAddress)
     {
-        //
+        $userAddress->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'additional_info' => $request->additional_info,
+            'street' => $request->street,
+            'condo' => $request->condo,
+            'estate' => $request->estate,
+            'label' => $request->label,
+            'house_number' => $request->house_number,
+            'unit_number' => $request->unit_number,
+            'postal_code' => $request->postal_code,
+            'user_id' => $request->user_id,
+        ]);
     }
 
     /**
@@ -81,6 +105,6 @@ class UserAddressController extends Controller
      */
     public function destroy(UserAddress $userAddress)
     {
-        //
+        $userAddress->delete();
     }
 }
