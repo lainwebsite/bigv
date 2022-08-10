@@ -15,7 +15,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        $transactions = Transaction::all();
     }
 
     /**
@@ -70,7 +70,9 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        //
+        $transaction->update([
+            'status_id' => $request->status_id,
+        ]);
     }
 
     /**
