@@ -47,7 +47,7 @@ class ProductController extends Controller
             'category_id' => $request->category_id
         ]);
         foreach ($request->images as $key => $image) {
-            $imaged = time() . '-' . $image->getClientOriginalName();
+            $imaged = 'product-' . time() . '-' . $image->getClientOriginalName();
             $image->move(public_path('uploads'), $imaged);
             ProductImage::create([
                 'link' => $imaged,

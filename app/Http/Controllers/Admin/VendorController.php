@@ -15,7 +15,7 @@ class VendorController extends Controller
      */
     public function index()
     {
-        //
+        $vendors = Vendor::all();
     }
 
     /**
@@ -36,7 +36,16 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $photo = 'vendor-' . time() . '-' . $request['photo']->getClientOriginalName();
+        $request->photo->move(public_path('uploads'), $photo);
+        $vendor = Vendor::create([
+           'name' => $request->vendor,
+           'phone' => $request->phone,
+           'email' => $request->email,
+           'description' => $request->description,
+           'location' => $request->location,
+           'photo' => $photo
+        ]);
     }
 
     /**
@@ -70,7 +79,20 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        //
+        if($request->photo){
+            $photo = 'vendor-' . time() . '-' . $request['photo']->getClientOriginalName();
+            $request->photo->move(public_path('uploads'), $photo);
+        }else{
+            $photo = $vendor->photo;
+        }
+        $vendor->update([
+           'name' => $request->vendor,
+           'phone' => $request->phone,
+           'email' => $request->email,
+           'description' => $request->description,
+           'location' => $request->location,
+           'photo' => $photo
+        ]);
     }
 
     /**
@@ -81,6 +103,6 @@ class VendorController extends Controller
      */
     public function destroy(Vendor $vendor)
     {
-        //
+        $vendor->delete();
     }
 }
