@@ -13,6 +13,7 @@ class ProductVariation extends Model
         'name',
         'price',
         'discount',
+        'discount_date',
         'product_id',
     ];
 
