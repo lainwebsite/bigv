@@ -22,4 +22,7 @@ class ProductReview extends Model
     public function product_variation() {
         return $this->belongsTo(ProductVariation::class, 'product_variation_id', 'id');
     }
+    public function images() {
+        return $this->hasMany(ReviewImage::class, 'review_id', 'id');
+    }
 }

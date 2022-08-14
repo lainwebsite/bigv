@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ProductImageController as AdminProductImageController;
 use App\Http\Controllers\Admin\ProductReviewController as AdminProductReviewController;
 use App\Http\Controllers\Admin\ProductVariationController as AdminProductVariationController;
+use App\Http\Controllers\Admin\ReviewImageController as AdminReviewImageController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Admin\TransactionDiscountController as AdminTransactionDiscountController;
 use App\Http\Controllers\Admin\TransactionStatusController as AdminTransactionStatusController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\User\ProductController;
 use App\Http\Controllers\User\ProductImageController;
 use App\Http\Controllers\User\ProductReviewController;
 use App\Http\Controllers\User\ProductVariationController;
+use App\Http\Controllers\User\ReviewImageController;
 use App\Http\Controllers\User\TransactionController;
 use App\Http\Controllers\User\TransactionDiscountController;
 use App\Http\Controllers\User\TransactionStatusController;
@@ -52,10 +54,6 @@ Auth::routes();
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 
-Route::group(['middleware' => ['user', 'verified']], function () {
-    Route::resource('user', UserController::class);
-});
-
 Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
     Route::resource('cart', CartController::class);
     Route::resource('discount', DiscountController::class);
@@ -65,6 +63,7 @@ Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' =>
     Route::resource('product-category', ProductCategoryController::class);
     Route::resource('product-image', ProductImageController::class);
     Route::resource('product-review', ProductReviewController::class);
+    Route::resource('review-image', ReviewImageController::class);
     Route::resource('product-variation', ProductVariationController::class);
     Route::resource('transaction', TransactionController::class);
     Route::resource('transaction-discount', TransactionDiscountController::class);
@@ -73,6 +72,10 @@ Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' =>
     Route::resource('user-role', UserRoleController::class);
     Route::resource('user-tier', UserTierController::class);
     Route::resource('vendor', VendorController::class);
+});
+
+Route::group(['middleware' => ['user', 'verified']], function () {
+    Route::resource('user', UserController::class);
 });
 
 Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
@@ -84,6 +87,7 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::resource('product-category', AdminProductCategoryController::class);
     Route::resource('product-image', AdminProductImageController::class);
     Route::resource('product-review', AdminProductReviewController::class);
+    Route::resource('review-image', AdminReviewImageController::class);
     Route::resource('product-variation', AdminProductVariationController::class);
     Route::resource('transaction', AdminTransactionController::class);
     Route::resource('transaction-discount', AdminTransactionDiscountController::class);
