@@ -19,11 +19,10 @@ return new class extends Migration
             $table->string('phone');
             $table->text('additional_info')->nullable();
             $table->string('street')->nullable();
-            $table->string('condo')->nullable();
-            $table->string('estate')->nullable();
-            $table->string('label')->nullable();
-            $table->string('house_number')->nullable();
-            $table->string('unit_number')->nullable();
+            $table->string('building_name')->nullable();
+            $table->integer('unit_level')->nullable();
+            $table->integer('building_number')->nullable();
+            $table->integer('unit_number')->nullable();
             $table->string('postal_code');
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
