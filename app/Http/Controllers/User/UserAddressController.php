@@ -15,7 +15,8 @@ class UserAddressController extends Controller
      */
     public function index()
     {
-        //
+        $addresses = UserAddress::where('user_id', auth()->user()->id)->get();
+        return view('address.index', ['addresses' => $addresses]);
     }
 
     /**
@@ -25,7 +26,7 @@ class UserAddressController extends Controller
      */
     public function create()
     {
-        //
+        return view('address.create');
     }
 
     /**
@@ -36,7 +37,25 @@ class UserAddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => ['required', 'regex:/^((\+65)|(65)|0)\d{7,10}$/', 'min:10', 'max:15'],
+            'additional_info' => 'nullable|string',
+            'street' => 'nullable|string|max:255',
+            'condo' => 'nullable|string|max:255',
+            'estate' => 'nullable|string|max:255',
+            'label' => 'nullable|string|max:255',
+            'house_number' => 'nullable|string|max:255',
+            'unit_number' => 'nullable|string|max:255',
+            'postal_code' => 'required|string|max:6',
+        ]);
+
+        $data = $request->all();
+        $data += ['user_id' => auth()->user()->id];
+
+        UserAddress::create($data);
+
+        return redirect('user/user-address')->with('success', 'New Address created successfully.');
     }
 
     /**
@@ -47,7 +66,7 @@ class UserAddressController extends Controller
      */
     public function show(UserAddress $userAddress)
     {
-        //
+        return view('address.show', ['address' => $userAddress]);
     }
 
     /**
@@ -58,7 +77,7 @@ class UserAddressController extends Controller
      */
     public function edit(UserAddress $userAddress)
     {
-        //
+        return view('address.edit', ['address' => $userAddress]);
     }
 
     /**
@@ -70,7 +89,22 @@ class UserAddressController extends Controller
      */
     public function update(Request $request, UserAddress $userAddress)
     {
-        //
+        $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'phone' => ['sometimes', 'required', 'regex:/^((\+65)|(65)|0)\d{7,10}$/', 'min:10', 'max:15'],
+            'additional_info' => 'sometimes|nullable|string',
+            'street' => 'sometimes|nullable|string|max:255',
+            'condo' => 'sometimes|nullable|string|max:255',
+            'estate' => 'sometimes|nullable|string|max:255',
+            'label' => 'sometimes|nullable|string|max:255',
+            'house_number' => 'sometimes|nullable|string|max:255',
+            'unit_number' => 'sometimes|nullable|string|max:255',
+            'postal_code' => 'sometimes|required|string|max:6',
+        ]);
+
+        $userAddress->fill($request->all())->save();
+
+        return redirect('user/user-address')->with('success', 'Address updated successfully.');
     }
 
     /**
@@ -81,6 +115,8 @@ class UserAddressController extends Controller
      */
     public function destroy(UserAddress $userAddress)
     {
-        //
+        $userAddress->delete();
+
+        return redirect('user/user-address')->with('success', 'Address deleted successfully.');
     }
 }

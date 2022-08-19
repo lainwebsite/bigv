@@ -92,6 +92,17 @@
 						<!-- ACCOUNT -->
 						<div class="col-md-3 clearfix">
 							<div class="header-ctn">
+								@auth
+									<!-- Addresses -->
+									<div>
+										<a href="{{ route('user.user-address.index') }}">
+											<i class="fa fa-map"></i>
+											<span>My Addresses</span>
+										</a>
+									</div>
+									<!-- /Addresses -->
+								@endauth
+
 								<!-- Wishlist -->
 								<div>
 									<a href="#">
@@ -174,7 +185,7 @@
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
                         @if ($active == 0)
-						    <li class="active"><a href="{{ route('user.product-category.index') }}">Home</a></li>
+						    <li class="active"><a href="{{ url('/') }}">Home</a></li>
                         @else
                             <li><a href="{{ route('user.product-category.index') }}">Home</a></li>
                         @endif
