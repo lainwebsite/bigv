@@ -11,9 +11,16 @@
 </head>
 <body>
     <div class="container">
-        <div class="mt-5">
+        <div class="mt-5 d-flex justify-content-between">
             <a href="{{ route('home') }}" class="btn btn-outline-secondary"><span><i data-feather="arrow-left"></i></span> Back</a>
+            <a href="{{ route('editProfileForm') }}" class="btn btn-outline-secondary">Edit Profile</a>
         </div>
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span>{{ session('success') }}</span>
+                <button type="button" class="custom-btn-close data-dismiss"><i data-feather="x"></i></button>
+            </div>
+        @endif
         <div class="border rounded px-5 py-3 mt-3">
             <div class="mb-3 row">
                 <h1>My Account</h1>

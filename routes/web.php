@@ -75,6 +75,8 @@ Route::group(['middleware' => ['user', 'verified']], function () {
     Route::resource('user', UserController::class);
 
     Route::get('profile', [UserController::class, 'profile'])->name('profile');
+    Route::get('profile/edit', [UserController::class, 'showEditProfile'])->name('editProfileForm');
+    Route::post('profile/edit', [UserController::class, 'editProfile'])->name('editProfile');
 });
 
 Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
