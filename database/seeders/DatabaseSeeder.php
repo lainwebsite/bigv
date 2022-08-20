@@ -29,5 +29,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserRoleSeeder::class);
         $this->call(UserTierSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(PickupTimeSeeder::class);
     }
 }

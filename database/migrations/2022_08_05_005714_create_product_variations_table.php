@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('name');
             $table->double('price');
             $table->double('discount')->default(0);
+            $table->dateTime('discount_date')->nullable();
             $table->unsignedBigInteger('product_id')->index();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
