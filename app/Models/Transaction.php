@@ -38,4 +38,7 @@ class Transaction extends Model
     public function pickup_time() {
         return $this->belongsTo(PickupTime::class, 'pickup_time_id', 'id');
     }
+    public function status() {
+        return $this->belongsTo(TransactionStatus::class, 'status_id', 'id');
+    }
 }

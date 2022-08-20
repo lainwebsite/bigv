@@ -15,7 +15,9 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactions = Transaction::all();
+        $transactions = Transaction::orderBy('created_at', 'desc')->paginate(3);
+        $transactiones = Transaction::all();
+        return view('admin.manage.transaction.index', compact('transactions', 'transactiones'));
     }
 
     /**
@@ -84,5 +86,11 @@ class TransactionController extends Controller
     public function destroy(Transaction $transaction)
     {
         //
+    }
+
+    public function sort(Request $request)
+    {
+        $transactions = Transaction::orderBy('created_at', $request->sort)->paginate(3);
+        return view('admin.manage.transaction.inc.transaction', compact('transactions'));
     }
 }
