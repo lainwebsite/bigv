@@ -100,7 +100,7 @@
                                 </div>
                                 <!-- Column -->
                             </div>
-                            <div class="row" id="transaction-cards">
+                            <div class="row" id="transaction-list">
                                 @include('admin.manage.transaction.inc.transaction')
                             </div>
                         </div>
@@ -143,7 +143,7 @@
                     sort: $('#sort').val(),
                 })
                 .done(function(data) {
-                    $('#transaction-cards').html(data);
+                    $('#transaction-list').html(data);
                 })
                 .fail(function(error) {
                     console.log(error);

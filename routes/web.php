@@ -86,6 +86,7 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::resource('payment-method', AdminPaymentMethodController::class);
     Route::resource('pickup-method', AdminPickupMethodController::class);
     Route::resource('product', AdminProductController::class);
+    Route::post('product-category/sort', [AdminProductCategoryController::class, 'sort'])->name('product-category.sort');
     Route::resource('product-category', AdminProductCategoryController::class);
     Route::resource('product-image', AdminProductImageController::class);
     Route::resource('product-review', AdminProductReviewController::class);
