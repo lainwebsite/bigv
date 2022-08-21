@@ -18,7 +18,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::orderBy('created_at', 'desc')->paginate(10);
+        $categories = ProductCategory::all();
+        return view('admin.manage.product.index', compact('products', 'categories'));
     }
 
     /**
@@ -107,5 +109,15 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+        return redirect()->route('admin.product.index');
+    }
+    public function sort(Request $request)
+    {
+        if ($request->filter) {
+            $products = Product::orderBy($request->metric, $request->sort)->where('category_id', $request->filter)->paginate(10);
+        } else {
+            $products = Product::orderBy($request->metric, $request->sort)->paginate(10);
+        }
+        return view('admin.manage.product.inc.product', compact('products'));
     }
 }

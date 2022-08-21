@@ -128,7 +128,7 @@ active
 <!-- ============================================================== -->
 @endsection
 
-@section('javascript-extra')
+@section('scripts')
 <script>
     var countImage = 0;
     $(".review-filter").on('click',function(){

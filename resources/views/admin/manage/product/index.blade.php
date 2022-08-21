@@ -1,179 +1,180 @@
 @extends('admin.layout')
 
 @section('products-manage-selected')
-selected
+    selected
 @endsection
 
 @section('products-manage-link-active')
-active
+    active
 @endsection
 
 @section('content')
-<!-- ============================================================== -->
-<!-- Page wrapper  -->
-<!-- ============================================================== -->
-<div class="page-wrapper">
     <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
+    <!-- Page wrapper  -->
     <!-- ============================================================== -->
-    <div class="page-breadcrumb">
-        <div class="row">
-            <div class="col-5 align-self-center">
-                <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Product List</h4>
-                <div class="d-flex align-items-center">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb m-0 p-0">
-                            <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}" class="text-muted">Dashboard</a></li>
-                            <li class="breadcrumb-item text-muted active" aria-current="page">Products</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-            <div class="col-7 align-self-center d-flex justify-content-end align-items-center">
-                <p class="mr-4 mb-0">Sort By</p>
-                <div class="customize-input float-right mr-4">
-                    <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
-                        <option value="1" selected>Newest</option>
-                        <option value="2">Oldest</option>
-                        <option value="3">Highest Price</option>
-                        <option value="4">Lowest Price</option>
-                        <option value="5">Highest Rating</option>
-                        <option value="6">Lowest Rating</option>
-                    </select>
-                </div>
-                <a class="btn btn-primary text-white pr-4 pl-4" href="{{route('products.create')}}">Create Product</a>
-            </div>
-        </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
-    <div class="container-fluid">
+    <div class="page-wrapper">
         <!-- ============================================================== -->
-        <!-- Start Page Content -->
+        <!-- Bread crumb and right sidebar toggle -->
         <!-- ============================================================== -->
-        <!-- basic table -->
-        <div class="d-flex gap-15x mb-3">
-            <div class="card-selected pr-3 pl-3 pt-2 pb-2 category-filter">
-                <div class="d-flex">
-                    <h6 class="m-0">Food & Beverages</h6>
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-5 align-self-center">
+                    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Product List</h4>
+                    <div class="d-flex align-items-center">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb m-0 p-0">
+                                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"
+                                        class="text-muted">Dashboard</a></li>
+                                <li class="breadcrumb-item text-muted active" aria-current="page">Products</li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
-            </div>
-            <div class="card-not-selected pr-3 pl-3 pt-2 pb-2 category-filter">
-                <div class="d-flex">
-                    <h6 class="m-0">Snacks</h6>
-                </div>
-            </div>
-            <div class="card-not-selected pr-3 pl-3 pt-2 pb-2 category-filter">
-                <div class="d-flex">
-                    <h6 class="m-0">Muslim Owned</h6>
+                <div class="col-7 align-self-center d-flex justify-content-end align-items-center">
+                    <p class="mr-4 mb-0">Sort By</p>
+                    <div class="customize-input float-right mr-4">
+                        <select id="sort"
+                            class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
+                            <option value="1" selected>Newest</option>
+                            <option value="2">Oldest</option>
+                            {{-- <option value="3">Highest Price</option>
+                            <option value="4">Lowest Price</option> --}}
+                            <option value="5">Highest Rating</option>
+                            <option value="6">Lowest Rating</option>
+                        </select>
+                    </div>
+                    <a class="btn btn-primary text-white pr-4 pl-4" href="{{ route('admin.product.create') }}">Create
+                        Product</a>
                 </div>
             </div>
         </div>
-        <div class="alert alert-success" role="alert">
-            <strong>Success - </strong> A simple success alert—check it out!
-        </div>
-        <div class="alert alert-danger" role="alert">
-            <strong>Error - </strong> A simple danger alert—check it out!
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="zero_config" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Price</th>
-                                        <th>Variations</th>
-                                        <th>Vendor</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for ($i = 0; $i < 5; $i++)
-                                    <tr>
-                                        <td>
-                                            <a href="/productdet" class="a-normal d-flex align-items-center">
-                                                <img class="d-flex br-18 mr-3" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58.jpeg" width="60" alt="Generic placeholder image">
-                                                <div class="d-flex align-items-start flex-column">
-                                                    <h5 class="m-0"><b>Cute Tiger Aroma Stone Set”</b></h5>
-                                                    <small class="m-0">Snacks</small>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td class="align-middle">$10</td>
-                                        <td class="align-middle">Red, Yellow, Blue, Black</td>
-                                        <td class="align-middle">Mont Delizioso</td>
-                                        <td class="align-middle">
-                                            <div class="d-flex" style="gap: 10px;">
-                                                <a href="" class="a-normal text-info"><i data-feather="edit" class="feather-icon"></i></a>
-                                                <a href="" class="a-normal text-danger"><i data-feather="trash" class="feather-icon"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endfor
-                                    <tr>
-                                        <td>
-                                            <a href="" class="a-normal d-flex align-items-center">
-                                                <img class="d-flex br-18 mr-3" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58.jpeg" width="60" alt="Generic placeholder image">
-                                                <div class="d-flex align-items-start flex-column">
-                                                    <h5 class="m-0"><b>Cute Tiger Aroma Stone Set”</b></h5>
-                                                    <small class="m-0">Snacks</small>
-                                                </div>
-                                            </a>
-                                        </td>
-                                        <td class="align-middle"><s>$20</s><br>$10</td>
-                                        <td class="align-middle">Red, Yellow, Blue, Black</td>
-                                        <td class="align-middle">Mont Delizioso</td>
-                                        <td class="align-middle">
-                                            <div class="d-flex" style="gap: 10px;">
-                                                <a href="" class="a-normal text-info"><i data-feather="edit" class="feather-icon"></i></a>
-                                                <a href="" class="a-normal text-danger"><i data-feather="trash" class="feather-icon"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <!-- basic table -->
+            <div class="d-flex gap-15x mb-3">
+                @foreach ($categories as $category)
+                    <div id="category-filter-{{ $category->id }}"
+                        class="card-not-selected pr-3 pl-3 pt-2 pb-2 category-filter"
+                        onclick="changeFilter({{ $category->id }});">
+                        <div class="d-flex">
+                            <h6 class="m-0">{{ $category->name }}</h6>
                         </div>
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
+                    </div>
+                @endforeach
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card" id="product-list">
+                        @include('admin.manage.product.inc.product')
                     </div>
                 </div>
             </div>
         </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
-    <!-- End Container fluid  -->
+    <!-- End Page wrapper  -->
     <!-- ============================================================== -->
-</div>
-<!-- ============================================================== -->
-<!-- End Page wrapper  -->
-<!-- ============================================================== -->
 @endsection
 
-@section('javascript-extra')
-<script>
-    $(".category-filter").on('click',function(){
-        $(".category-filter").removeClass("card-selected");
-        $(".category-filter").addClass("card-not-selected");
-        $(this).removeClass("card-not-selected");
-        $(this).addClass("card-selected");
-    });
-</script>
+@section('scripts')
+    <script>
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    </script>
+    <script>
+        var page = 1;
+        var metric = "created_at";
+        var sorted = "desc";
+        var filter = null;
+        $(document).on('click', '.pagination a', function(event) {
+            event.preventDefault();
+            page = $(this).attr('href').split('page=')[1];
+            sort(page);
+        });
+    </script>
+    <script>
+        function changeFilter(selected) {
+            $(".category-filter").removeClass("card-selected");
+            $(".category-filter").addClass("card-not-selected");
+            if (filter != selected) {
+                filter = selected;
+                $(`#category-filter-${selected}`).removeClass("card-not-selected");
+                $(`#category-filter-${selected}`).addClass("card-selected");
+            } else {
+                filter = null;
+            }
+            sort(page);
+        };
+    </script>
+    <script>
+        $('#sort').on('change', function() {
+            switch ($('#sort').val()) {
+                case "1":
+                    metric = "created_at";
+                    sorted = "desc";
+                    break;
+                case "2":
+                    metric = "created_at";
+                    sorted = "asc";
+                    break;
+                case "3":
+                    metric = "price";
+                    sorted = "desc";
+                    break;
+                case "4":
+                    metric = "price";
+                    sorted = "asc";
+                    break;
+                case "5":
+                    metric = "rating";
+                    sorted = "desc";
+                    break;
+                case "6":
+                    metric = "rating";
+                    sorted = "asc";
+                    break;
+
+                default:
+                    break;
+            }
+            sort(page);
+        });
+    </script>
+    <script>
+        function sort(page) {
+            console.log(metric)
+            console.log(page)
+            console.log(sorted)
+            console.log(filter)
+            var hostname = "{{ request()->getHost() }}"
+            var url = ""
+            if (hostname.includes('www')) {
+                url = "https://" + hostname
+            } else {
+                url = "{{ config('app.url') }}"
+            }
+            $.post(url + "/admin/product/sort?page=" + page, {
+                    _token: CSRF_TOKEN,
+                    sort: sorted,
+                    filter: filter,
+                    metric: metric
+                })
+                .done(function(data) {
+                    $('#product-list').html(data);
+                })
+                .fail(function(error) {
+                    console.log(error);
+                });
+        }
+    </script>
 @endsection

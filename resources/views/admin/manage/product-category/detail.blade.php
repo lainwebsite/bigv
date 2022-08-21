@@ -72,7 +72,7 @@ active
 <!-- ============================================================== -->
 @endsection
 
-@section('javascript-extra')
+@section('scripts')
 <script>
     $(".review-filter").on('click',function(){
         $(".review-filter").removeClass("card-selected");
