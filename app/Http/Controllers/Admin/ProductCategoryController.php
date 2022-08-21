@@ -52,7 +52,7 @@ class ProductCategoryController extends Controller
      */
     public function show(ProductCategory $productCategory)
     {
-        //
+        return view('admin.manage.product-category.detail', compact('productCategory'));
     }
 
     /**

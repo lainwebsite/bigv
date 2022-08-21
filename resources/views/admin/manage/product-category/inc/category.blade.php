@@ -13,7 +13,7 @@
                 @foreach ($categories as $category)
                     <tr>
                         <td>
-                            <a href="/categorydet" class="a-normal">
+                            <a href="{{route('admin.product-category.show', $category->id)}}" class="a-normal">
                                 <div class="d-flex align-items-start flex-column">
                                     <h5 class="m-0"><b>{{ $category->name }}</b></h5>
                                 </div>
