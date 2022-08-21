@@ -63,7 +63,7 @@ class ProductCategoryController extends Controller
      */
     public function edit(ProductCategory $productCategory)
     {
-        //
+        return view('admin.manage.product-category.edit', compact('productCategory'));
     }
 
     /**
@@ -79,6 +79,7 @@ class ProductCategoryController extends Controller
             'name' => $request->name,
             'description' => $request->description
         ]);
+        return redirect()->route('admin.product-category.index');
     }
 
     /**
