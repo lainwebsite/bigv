@@ -2,7 +2,7 @@
     <ul class="list-unstyled mb-5">
         @foreach ($transactions as $transaction)
             <li>
-                <a href="/orderdet" class="media a-normal">
+                <a href="{{route('admin.transaction.show', $transaction->id)}}" class="media a-normal">
                     <div class="w-100 card custom-border my-2">
                         <div @class([
                             'card-header d-flex justify-content-between flex-column',

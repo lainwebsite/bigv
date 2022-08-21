@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Models\TransactionStatus;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -49,7 +50,8 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
-        //
+        $statuses = TransactionStatus::all();
+        return view('admin.manage.transaction.detail', compact('transaction', 'statuses'));
     }
 
     /**
@@ -72,9 +74,7 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        $transaction->update([
-            'status_id' => $request->status_id,
-        ]);
+        //
     }
 
     /**
@@ -92,5 +92,12 @@ class TransactionController extends Controller
     {
         $transactions = Transaction::orderBy('created_at', $request->sort)->paginate(3);
         return view('admin.manage.transaction.inc.transaction', compact('transactions'));
+    }
+    public function status(Request $request, Transaction $transaction)
+    {
+        $transaction->update([
+            'status_id' => $request->status_id,
+        ]);
+        return $transaction;
     }
 }

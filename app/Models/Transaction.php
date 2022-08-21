@@ -14,7 +14,8 @@ class Transaction extends Model
         'shipping_fee',
         'billing_address_id', 'shipping_address_id',
         'payment_method_id',
-        'pickup_method_id', 'pickup_time_id'
+        'pickup_method_id', 'pickup_time_id',
+        'status_id'
     ];
 
     public function carts() {
