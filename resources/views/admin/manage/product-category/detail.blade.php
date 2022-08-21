@@ -24,7 +24,7 @@ active
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
                             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}" class="text-muted">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{url('/categories')}}" class="text-muted">Categories</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('admin.product-category.index')}}" class="text-muted">Categories</a></li>
                             <li class="breadcrumb-item text-muted active" aria-current="page">Category Detail</li>
                         </ol>
                     </nav>

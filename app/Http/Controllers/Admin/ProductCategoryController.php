@@ -26,7 +26,7 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.manage.product-category.create');
     }
 
     /**
@@ -41,6 +41,7 @@ class ProductCategoryController extends Controller
             'name' => $request->name,
             'description' => $request->description
         ]);
+        return redirect()->route('admin.product-category.index');
     }
 
     /**

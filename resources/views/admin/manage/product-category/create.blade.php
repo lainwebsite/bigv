@@ -24,7 +24,7 @@ active
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
                             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}" class="text-muted">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{url('/categories')}}" class="text-muted">Categories</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('admin.product-category.index')}}" class="text-muted">Categories</a></li>
                             <li class="breadcrumb-item text-muted active" aria-current="page">Create Category</li>
                         </ol>
                     </nav>
@@ -47,18 +47,19 @@ active
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="" method="POST">
+                        <form action="{{route('admin.product-category.store')}}" method="POST">
+                            @csrf
                             <div class="form-group">
-                                <label for="categoryName">Category Name</label>
-                                <input type="text" class="form-control" id="categoryName" name="categoryName" required placeholder="Category Name">
+                                <label for="name">Category Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required placeholder="Category Name">
                             </div>
                             <div class="form-group">
-                                <label for="categoryDescription">Product Description</label>
-                                <textarea class="form-control" id="categoryDescription" name="categoryDescription" required placeholder="Category Description" rows="4"></textarea>
+                                <label for="description">Product Description</label>
+                                <textarea class="form-control" id="description" name="description" required placeholder="Category Description" rows="4"></textarea>
                             </div>
                             <div class="d-flex mt-4 gap-15x">
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
-                                <a href="{{route('categories.index')}}" class="btn btn-light">Cancel</a>
+                                <a href="{{route('admin.product-category.index')}}" class="btn btn-light">Cancel</a>
                             </div>
                         </form>
                     </div>
