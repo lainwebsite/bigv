@@ -16,7 +16,7 @@ class UserAddressController extends Controller
     public function index()
     {
         $addresses = UserAddress::where('user_id', auth()->user()->id)->get();
-        return view('address.index', ['addresses' => $addresses]);
+        return view('user.address.index', ['addresses' => $addresses]);
     }
 
     /**
@@ -26,7 +26,7 @@ class UserAddressController extends Controller
      */
     public function create()
     {
-        return view('address.create');
+        return view('user.address.create');
     }
 
     /**
@@ -66,7 +66,7 @@ class UserAddressController extends Controller
      */
     public function show(UserAddress $userAddress)
     {
-        return view('address.show', ['address' => $userAddress]);
+        return view('user.address.show', ['address' => $userAddress]);
     }
 
     /**
@@ -77,7 +77,7 @@ class UserAddressController extends Controller
      */
     public function edit(UserAddress $userAddress)
     {
-        return view('address.edit', ['address' => $userAddress]);
+        return view('user.address.edit', ['address' => $userAddress]);
     }
 
     /**
