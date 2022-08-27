@@ -13,7 +13,8 @@ class Transaction extends Model
         'total_price',
         'shipping_fee',
         'billing_address_id', 'shipping_address_id',
-        'payment_method_id', 'pickup_method_id'
+        'payment_method_id',
+        'pickup_method_id', 'pickup_time_id'
     ];
 
     public function carts() {
@@ -33,5 +34,8 @@ class Transaction extends Model
     }
     public function pickup_method() {
         return $this->belongsTo(PickupMethod::class, 'pickup_method_id', 'id');
+    }
+    public function pickup_time() {
+        return $this->belongsTo(PickupTime::class, 'pickup_time_id', 'id');
     }
 }

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+<<<<<<< HEAD
         // $this->call(DiscountTypeSeeder::class);
         // $this->call(PaymentMethodSeeder::class);
         // $this->call(PickupMethodSeeder::class);
@@ -37,5 +38,15 @@ class DatabaseSeeder extends Seeder
         // $this->call(UserTierSeeder::class);
         // $this->call(UserSeeder::class);
         // $this->call(UserAddressSeeder::class);
+=======
+        $this->call(DiscountTypeSeeder::class);
+        $this->call(PaymentMethodSeeder::class);
+        $this->call(PickupMethodSeeder::class);
+        $this->call(TransactionStatusSeeder::class);
+        $this->call(UserRoleSeeder::class);
+        $this->call(UserTierSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(PickupTimeSeeder::class);
+>>>>>>> origin/base
     }
 }
