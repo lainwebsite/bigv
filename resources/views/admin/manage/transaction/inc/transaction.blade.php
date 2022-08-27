@@ -28,7 +28,7 @@
                             <ul class="list-unstyled">
                                 <li class="media align-items-center">
                                     <img class="d-flex mr-3 br-18"
-                                        src="{{ asset('uploads/' . $transaction->carts->first()->product_variation->product->images->first()->link) }}"
+                                        src="{{ asset('uploads/' . $transaction->carts->first()->product_variation->product->featured_image) }}"
                                         width="60" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <h5 class="mt-0 mb-1">

@@ -168,7 +168,7 @@
                                             <li class="media align-items-center mt-3 mb-3 justify-content-between">
                                                 <div class="d-flex align-items-center">
                                                     <img class="d-flex mr-3 br-18"
-                                                        src="{{ asset('uploads/' . $cart->product_variation->product->images->first()->link) }}"
+                                                        src="{{ asset('uploads/' . $cart->product_variation->product->featured_image) }}"
                                                         width="60" alt="Generic placeholder image">
                                                     <div class="d-flex flex-column">
                                                         <h5 class="mt-0 mb-1">
