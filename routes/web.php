@@ -51,13 +51,13 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['verify' => true]);
 
 Route::get('/', [PageController::class, 'home'])->name('home');
+Route::resource('product', ProductController::class);
 
 Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
     Route::resource('cart', CartController::class);
     Route::resource('discount', DiscountController::class);
     Route::resource('payment-method', PaymentMethodController::class);
     Route::resource('pickup-method', PickupMethodController::class);
-    Route::resource('product', ProductController::class);
     Route::resource('product-category', ProductCategoryController::class);
     Route::resource('product-image', ProductImageController::class);
     Route::resource('product-review', ProductReviewController::class);

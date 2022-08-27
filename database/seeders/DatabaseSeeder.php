@@ -30,11 +30,12 @@ class DatabaseSeeder extends Seeder
         // $this->call(ProductCategorySeeder::class);
         // $this->call(ProductSeeder::class);
         // $this->call(ProductVariationSeeder::class);
+        $this->call(ProductImageSeeder::class);
 
         // $this->call(TransactionStatusSeeder::class);
         // $this->call(UserRoleSeeder::class);
         // $this->call(UserTierSeeder::class);
         // $this->call(UserSeeder::class);
-        $this->call(UserAddressSeeder::class);
+        // $this->call(UserAddressSeeder::class);
     }
 }

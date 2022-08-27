@@ -11,7 +11,7 @@ class PageController extends Controller
     public function home()
     {
         $productCategories = ProductCategory::all();
-        $products = Product::with(['vendor', 'category', 'variations', 'image']);
+        $products = Product::with(['vendor', 'category', 'variations', 'images'])->get();
 
         return view('home', [
             'products' => $products,
