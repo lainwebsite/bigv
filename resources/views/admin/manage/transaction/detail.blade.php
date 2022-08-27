@@ -32,10 +32,6 @@
                         </nav>
                     </div>
                 </div>
-                <div class="col-4 d-flex justify-content-end">
-                    <button class="btn btn-danger d-flex gap-15x align-items-center pr-4 pl-4"><i
-                            class="fa fa-trash"></i>Delete</button>
-                </div>
             </div>
         </div>
         <!-- ============================================================== -->
