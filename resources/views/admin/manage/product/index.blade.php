@@ -104,6 +104,7 @@
     </script>
     <script>
         function changeFilter(selected) {
+            page = 1;
             $(".category-filter").removeClass("card-selected");
             $(".category-filter").addClass("card-not-selected");
             if (filter != selected) {
@@ -117,6 +118,7 @@
         };
     </script>
     <script>
+        page = 1;
         $('#sort').on('change', function() {
             switch ($('#sort').val()) {
                 case "1":
@@ -152,10 +154,6 @@
     </script>
     <script>
         function sort(page) {
-            console.log(metric)
-            console.log(page)
-            console.log(sorted)
-            console.log(filter)
             var hostname = "{{ request()->getHost() }}"
             var url = ""
             if (hostname.includes('www')) {

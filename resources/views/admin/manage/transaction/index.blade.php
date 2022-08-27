@@ -53,6 +53,17 @@
             <!-- Start Page Content -->
             <!-- ============================================================== -->
             <!-- basic table -->
+            <div class="d-flex gap-15x mb-3">
+                @foreach ($statuses as $status)
+                    <div id="status-filter-{{ $status->id }}"
+                        class="card-not-selected pr-3 pl-3 pt-2 pb-2 status-filter"
+                        onclick="changeFilter({{ $status->id }});">
+                        <div class="d-flex">
+                            <h6 class="m-0">{{ $status->name }}</h6>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -123,11 +134,27 @@
     </script>
     <script>
         var page = 1;
+        var filter = null;
         $(document).on('click', '.pagination a', function(event) {
             event.preventDefault();
             page = $(this).attr('href').split('page=')[1];
             sort(page);
         });
+    </script>
+    <script>
+        function changeFilter(selected) {
+            page = 1;
+            $(".status-filter").removeClass("card-selected");
+            $(".status-filter").addClass("card-not-selected");
+            if (filter != selected) {
+                filter = selected;
+                $(`#status-filter-${selected}`).removeClass("card-not-selected");
+                $(`#status-filter-${selected}`).addClass("card-selected");
+            } else {
+                filter = null;
+            }
+            sort(page);
+        };
     </script>
     <script>
         function sort(page) {
@@ -141,6 +168,7 @@
             $.post(url + "/admin/transaction/sort?page=" + page, {
                     _token: CSRF_TOKEN,
                     sort: $('#sort').val(),
+                    filter: filter,
                 })
                 .done(function(data) {
                     $('#transaction-list').html(data);
@@ -152,6 +180,7 @@
     </script>
     <script>
         $('#sort').on('change', function() {
+            page = 1;
             sort(page);
         });
     </script>
