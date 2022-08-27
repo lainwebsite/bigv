@@ -16,7 +16,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactions = Transaction::orderBy('created_at', 'desc')->paginate(3);
+        $transactions = Transaction::orderBy('created_at', 'desc')->paginate(10);
         $transactiones = Transaction::all();
         $statuses = TransactionStatus::all();
         return view('admin.manage.transaction.index', compact('transactions', 'transactiones', 'statuses'));
@@ -92,9 +92,9 @@ class TransactionController extends Controller
     public function sort(Request $request)
     {
         if ($request->filter) {
-            $transactions = Transaction::orderBy('created_at', $request->sort)->where('status_id', $request->filter)->paginate(1);
+            $transactions = Transaction::orderBy('created_at', $request->sort)->where('status_id', $request->filter)->paginate(10);
         } else {
-            $transactions = Transaction::orderBy('created_at', $request->sort)->paginate(1);
+            $transactions = Transaction::orderBy('created_at', $request->sort)->paginate(10);
         }
         return view('admin.manage.transaction.inc.transaction', compact('transactions'));
     }
