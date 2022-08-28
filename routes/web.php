@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\TransactionController as AdminTransactionControll
 use App\Http\Controllers\Admin\TransactionDiscountController as AdminTransactionDiscountController;
 use App\Http\Controllers\Admin\TransactionStatusController as AdminTransactionStatusController;
 use App\Http\Controllers\Admin\UserAddressController as AdminUserAddressController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\UserRoleController as AdminUserRoleController;
 use App\Http\Controllers\Admin\UserTierController as AdminUserTierController;
 use App\Http\Controllers\Admin\VendorController as AdminVendorController;
@@ -98,6 +99,8 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::resource('transaction', AdminTransactionController::class);
     Route::resource('transaction-discount', AdminTransactionDiscountController::class);
     Route::resource('transaction-status', AdminTransactionStatusController::class);
+    Route::post('user/sort', [AdminUserController::class, 'sort'])->name('user.sort');
+    Route::resource('user', AdminUserController::class);
     Route::resource('user-address', AdminUserAddressController::class);
     Route::resource('user-role', AdminUserRoleController::class);
     Route::resource('user-tier', AdminUserTierController::class);

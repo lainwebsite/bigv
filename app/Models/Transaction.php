@@ -15,7 +15,7 @@ class Transaction extends Model
         'billing_address_id', 'shipping_address_id',
         'payment_method_id',
         'pickup_method_id', 'pickup_time_id',
-        'status_id'
+        'status_id', 'user_id'
     ];
 
     public function carts() {
@@ -41,5 +41,8 @@ class Transaction extends Model
     }
     public function status() {
         return $this->belongsTo(TransactionStatus::class, 'status_id', 'id');
+    }
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

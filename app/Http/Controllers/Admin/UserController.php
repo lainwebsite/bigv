@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Models\UserTier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,7 +18,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::where('role_id', 1)->paginate(15);
+        $tiers = UserTier::all();
+        return view('admin.manage.customers.index', compact('users', 'tiers'));
     }
 
     /**
@@ -108,5 +111,15 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+    }
+
+    public function sort(Request $request)
+    {
+        if ($request->filter) {
+            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('tier_id', $request->filter)->paginate(15);
+        } else {
+            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->paginate(15);
+        }
+        return view('admin.manage.customers.inc.user', compact('users'));
     }
 }
