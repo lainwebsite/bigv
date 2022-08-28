@@ -28,7 +28,8 @@ class VendorController extends Controller
      */
     public function create()
     {
-        //
+        $locations = VendorLocation::all();
+        return view('admin.manage.vendors.create', compact('locations'));
     }
 
     /**
@@ -42,13 +43,14 @@ class VendorController extends Controller
         $photo = 'vendor-' . time() . '-' . $request['photo']->getClientOriginalName();
         $request->photo->move(public_path('uploads'), $photo);
         $vendor = Vendor::create([
-           'name' => $request->vendor,
+           'name' => $request->name,
            'phone' => $request->phone,
            'email' => $request->email,
            'description' => $request->description,
-           'location' => $request->location,
+           'location_id' => $request->location,
            'photo' => $photo
         ]);
+        return redirect()->route('admin.vendor.index');
     }
 
     /**

@@ -49,34 +49,34 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="" method="POST">
+                            <form action="{{route('admin.vendor.store')}}" method="POST" enctype="multipart/form-data">
+                                @csrf
                                 <div class="form-group">
                                     <label for="vendorName">Vendor Name</label>
-                                    <input type="text" class="form-control" id="vendorName" name="vendorName" required
+                                    <input type="text" class="form-control" id="vendorName" name="name" required
                                         placeholder="Vendor Name">
                                 </div>
                                 <div class="form-group">
                                     <label for="vendorDescription">Vendor Description</label>
-                                    <textarea class="form-control" id="vendorDescription" name="vendorDescription" required placeholder="Vendor Description"
+                                    <textarea class="form-control" id="vendorDescription" name="description" required placeholder="Vendor Description"
                                         rows="4"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="vendorPhone">Phone Number</label>
-                                    <input type="number" class="form-control" id="vendorPhone" name="vendorPhone" required
+                                    <input type="number" class="form-control" id="vendorPhone" name="phone" required
                                         placeholder="Vendor Phone Number">
                                 </div>
                                 <div class="form-group">
                                     <label for="vendorEmail">Email</label>
-                                    <input type="email" class="form-control" id="vendorEmail" name="vendorEmail" required
+                                    <input type="email" class="form-control" id="vendorEmail" name="email" required
                                         placeholder="Vendor Email">
                                 </div>
                                 <div class="form-group">
                                     <label for="vendorLocation">Location</label>
-                                    <select class="custom-select" id="vendorLocation">
-                                        <option selected value="1">North</option>
-                                        <option value="2">South</option>
-                                        <option value="3">West</option>
-                                        <option value="4">East</option>
+                                    <select class="custom-select" id="vendorLocation" name="location">
+                                        @foreach ($locations as $vendorLocation)
+                                            <option value="{{ $vendorLocation->id }}">{{ $vendorLocation->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -86,14 +86,14 @@
                                             <span class="input-group-text">Upload</span>
                                         </div>
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="vendorPhoto">
+                                            <input type="file" class="custom-file-input" id="vendorPhoto" name="photo">
                                             <label class="custom-file-label" for="vendorPhoto">Choose file</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="d-flex mt-4 gap-15x">
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    <a href="{{ route('products.index') }}" class="btn btn-light">Cancel</a>
+                                    <a href="{{ route('admin.vendor.index') }}" class="btn btn-light">Cancel</a>
                                 </div>
                             </form>
                         </div>
