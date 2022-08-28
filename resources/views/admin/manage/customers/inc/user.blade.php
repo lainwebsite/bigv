@@ -31,10 +31,9 @@
                         </td>
                         <td class="align-middle">
                             <div class="d-flex" style="gap: 10px;">
-                                <a href="{{ route('admin.user.edit', $user->id) }}" class="a-normal text-info"><i
-                                        data-feather="edit" class="feather-icon"></i></a>
+                                <a href="{{ route('admin.user.edit', $user->id) }}" class="a-normal text-info">@include('admin.icons.edit')</a>
                                 <a onclick="event.preventDefault(); document.getElementById('delete-user-form-{{ $user->id }}').submit();"
-                                    class="a-normal text-danger"><i data-feather="trash" class="feather-icon"></i></a>
+                                    class="a-normal text-danger">@include('admin.icons.delete')</a>
                             </div>
                         </td>
                     </tr>

@@ -27,7 +27,7 @@
                                     class="a-normal text-info"><i data-feather="edit" class="feather-icon"></i></a>
                                 <a onclick="event.preventDefault();
                                                         document.getElementById('delete-category-form-{{ $category->id }}').submit();"
-                                    class="a-normal text-danger"><i data-feather="trash" class="feather-icon"></i></a>
+                                    class="a-normal text-danger">@include('admin.icons.delete')</a>
                             </div>
                         </td>
                     </tr>

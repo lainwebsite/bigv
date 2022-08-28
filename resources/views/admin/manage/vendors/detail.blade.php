@@ -100,7 +100,7 @@ active
                                         <td class="align-middle">
                                             <div class="d-flex" style="gap: 10px;">
                                                 <a href="" class="a-normal text-info"><i data-feather="edit" class="feather-icon"></i></a>
-                                                <a href="" class="a-normal text-danger"><i data-feather="trash" class="feather-icon"></i></a>
+                                                <a href="" class="a-normal text-danger">@include('admin.icons.delete')</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -120,7 +120,7 @@ active
                                         <td class="align-middle">
                                             <div class="d-flex" style="gap: 10px;">
                                                 <a href="" class="a-normal text-info"><i data-feather="edit" class="feather-icon"></i></a>
-                                                <a href="" class="a-normal text-danger"><i data-feather="trash" class="feather-icon"></i></a>
+                                                <a href="" class="a-normal text-danger">@include('admin.icons.delete')</a>
                                             </div>
                                         </td>
                                     </tr>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
+use App\Models\VendorLocation;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
@@ -15,8 +16,9 @@ class VendorController extends Controller
      */
     public function index()
     {
-        $vendors = Vendor::all();
-        return view('admin.manage.vendors.index', compact('vendors'));
+        $vendors = Vendor::paginate(10);
+        $locations = VendorLocation::all();
+        return view('admin.manage.vendors.index', compact('vendors', 'locations'));
     }
 
     /**
@@ -105,5 +107,15 @@ class VendorController extends Controller
     public function destroy(Vendor $vendor)
     {
         $vendor->delete();
+    }
+
+    public function sort(Request $request)
+    {
+        if ($request->filter) {
+            $vendors = Vendor::orderBy('created_at', $request->sort)->where('location_id', $request->filter)->paginate(10);
+        } else {
+            $vendors = Vendor::orderBy('created_at', $request->sort)->paginate(10);
+        }
+        return view('admin.manage.vendors.inc.vendor', compact('vendors'));
     }
 }

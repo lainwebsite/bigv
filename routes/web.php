@@ -104,5 +104,6 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::resource('user-address', AdminUserAddressController::class);
     Route::resource('user-role', AdminUserRoleController::class);
     Route::resource('user-tier', AdminUserTierController::class);
+    Route::post('vendor/sort', [AdminVendorController::class, 'sort'])->name('vendor.sort');
     Route::resource('vendor', AdminVendorController::class);
 });

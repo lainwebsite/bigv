@@ -14,10 +14,13 @@ class Vendor extends Model
         'phone',
         'email',
         'description',
-        'location',
         'photo',
+        'location_id'
     ];
 
+    public function location() {
+        return $this->belongsTo(VendorLocation::class, 'location_id', 'id');
+    }
     public function products() {
         return $this->hasMany(Product::class, 'vendor_id', 'id');
     }
