@@ -45,7 +45,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $featured = 'product-' . time() . '-' . $request->featured_image->getClientOriginalName();
         $request->featured_image->move(public_path('uploads'), $featured);
 
@@ -101,6 +100,8 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = ProductCategory::all();
+        $vendors = Vendor::all();
+        return view('admin.manage.product.edit', compact('product', 'categories', 'vendors'));
     }
 
     /**
@@ -112,7 +113,49 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        if ($request->featured_image) {
+            $featured = 'product-' . time() . '-' . $request->featured_image->getClientOriginalName();
+            $request->featured_image->move(public_path('uploads'), $featured);
+        } else {
+            $featured = $product->featured_image;
+        }
+        $product->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'featured_image' => $featured,
+            'vendor_id' => $request->vendor,
+            'category_id' => $request->category
+        ]);
+        foreach ($request->delete_product_image_id as $key => $id) {
+            if ($id) {
+                $productImage = ProductImage::where('id', $id)->first();
+                $productImage->delete();
+            }
+        }
+        if ($request->productImage) {
+            foreach ($request->productImage as $key => $image) {
+                $imaged = 'product-' . time() . '-' . $image->getClientOriginalName();
+                $image->move(public_path('uploads'), $imaged);
+                ProductImage::create([
+                    'link' => $imaged,
+                    'product_id' => $product->id
+                ]);
+            }
+        }
+
+        foreach ($product->variations as $key => $productVariation) {
+            $productVariation->delete();
+        }
+        foreach ($request->variation_name as $key => $variation) {
+            ProductVariation::create([
+                'name' => $request->variation_name[$key],
+                'price' => $request->variation_price[$key],
+                'discount' => $request->variation_discount[$key] ?? 0,
+                'discount_date' => $request->variation_discount_date[$key] ?? Carbon::now(),
+                'product_id' => $product->id
+            ]);
+        }
+        return redirect()->route('admin.product.index');
     }
 
     /**
