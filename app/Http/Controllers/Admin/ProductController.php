@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
 use App\Models\ProductVariation;
+use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -31,6 +33,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = ProductCategory::all();
+        $vendors = Vendor::all();
+        return view('admin.manage.product.create', compact('categories', 'vendors'));
     }
 
     /**
@@ -41,29 +45,40 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
+        $featured = 'product-' . time() . '-' . $request->featured_image->getClientOriginalName();
+        $request->featured_image->move(public_path('uploads'), $featured);
+
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'rating' => 0,
-            'vendor_id' => $request->vendor_id,
-            'category_id' => $request->category_id
+            'featured_image' => $featured,
+            'vendor_id' => $request->vendor,
+            'category_id' => $request->category
         ]);
-        foreach ($request->images as $key => $image) {
-            $imaged = 'product-' . time() . '-' . $image->getClientOriginalName();
-            $image->move(public_path('uploads'), $imaged);
-            ProductImage::create([
-                'link' => $imaged,
-                'product_id' => $product->id
-            ]);
+
+        if ($request->productImage) {
+            foreach ($request->productImage as $key => $image) {
+                $imaged = 'product-' . time() . '-' . $image->getClientOriginalName();
+                $image->move(public_path('uploads'), $imaged);
+                ProductImage::create([
+                    'link' => $imaged,
+                    'product_id' => $product->id
+                ]);
+            }
         }
+
         foreach ($request->variation_name as $key => $variation) {
             ProductVariation::create([
                 'name' => $request->variation_name[$key],
                 'price' => $request->variation_price[$key],
-                'discount' => $request->variation_discount[$key],
+                'discount' => $request->variation_discount[$key] ?? 0,
+                'discount_date' => $request->variation_discount_date[$key] ?? Carbon::now(),
                 'product_id' => $product->id
             ]);
         }
+        return redirect()->route('admin.product.index');
     }
 
     /**
