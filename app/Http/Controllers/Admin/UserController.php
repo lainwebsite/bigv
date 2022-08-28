@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('role_id', 1)->paginate(15);
+        $users = User::where('role_id', 1)->paginate(10);
         $tiers = UserTier::all();
         return view('admin.manage.customers.index', compact('users', 'tiers'));
     }
@@ -116,9 +116,9 @@ class UserController extends Controller
     public function sort(Request $request)
     {
         if ($request->filter) {
-            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('tier_id', $request->filter)->paginate(15);
+            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('tier_id', $request->filter)->paginate(10);
         } else {
-            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->paginate(15);
+            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->paginate(10);
         }
         return view('admin.manage.customers.inc.user', compact('users'));
     }

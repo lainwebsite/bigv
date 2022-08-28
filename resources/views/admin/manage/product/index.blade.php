@@ -118,8 +118,8 @@
         };
     </script>
     <script>
-        page = 1;
         $('#sort').on('change', function() {
+            page = 1;
             switch ($('#sort').val()) {
                 case "1":
                     metric = "created_at";

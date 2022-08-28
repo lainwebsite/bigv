@@ -13,7 +13,7 @@
                 @foreach ($vendors as $vendor)
                     <tr>
                         <td>
-                            <a href="{{ route('admin.vendor.index', $vendor->id) }}"
+                            <a href="{{ route('admin.vendor.show', $vendor->id) }}"
                                 class="a-normal d-flex align-items-center">
                                 <img class="d-flex br-18 mr-3" src="{{ asset('uploads/' . $vendor->photo) }}"
                                     width="60" alt="Generic placeholder image">

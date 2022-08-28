@@ -6,7 +6,9 @@
                     <th>Product</th>
                     <th>Price</th>
                     <th>Variations</th>
-                    <th>Vendor</th>
+                    @if (!$vendor)
+                        <th>Vendor</th>
+                    @endif
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -44,7 +46,9 @@
                                     @endif
                                 @endforeach
                             </td>
-                            <td class="align-middle">{{ $product->vendor->name }}</td>
+                            @if (!$vendor)
+                                <td class="align-middle">{{ $product->vendor->name }}</td>
+                            @endif
                             <td class="align-middle">
                                 <div class="d-flex" style="gap: 10px;">
                                     <a href="{{ route('admin.product.edit', $product->id) }}"

@@ -107,6 +107,7 @@
     </script>
     <script>
         $('#sort').on('change', function() {
+            page = 1;
             sort(page);
         });
     </script>

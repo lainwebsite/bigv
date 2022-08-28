@@ -16,7 +16,7 @@ class VendorController extends Controller
      */
     public function index()
     {
-        $vendors = Vendor::paginate(10);
+        $vendors = Vendor::orderBy('created_at', 'desc')->paginate(10);
         $locations = VendorLocation::all();
         return view('admin.manage.vendors.index', compact('vendors', 'locations'));
     }
@@ -61,7 +61,7 @@ class VendorController extends Controller
      */
     public function show(Vendor $vendor)
     {
-        //
+        return view('admin.manage.vendors.detail', compact('vendor'));
     }
 
     /**
