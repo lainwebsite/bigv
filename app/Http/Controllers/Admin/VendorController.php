@@ -72,7 +72,8 @@ class VendorController extends Controller
      */
     public function edit(Vendor $vendor)
     {
-        //
+        $locations = VendorLocation::all();
+        return view('admin.manage.vendors.edit', compact('vendor', 'locations'));
     }
 
     /**
@@ -91,13 +92,14 @@ class VendorController extends Controller
             $photo = $vendor->photo;
         }
         $vendor->update([
-           'name' => $request->vendor,
+           'name' => $request->name,
            'phone' => $request->phone,
            'email' => $request->email,
            'description' => $request->description,
-           'location' => $request->location,
+           'location_id' => $request->location,
            'photo' => $photo
         ]);
+        return redirect()->route('admin.vendor.index');
     }
 
     /**
