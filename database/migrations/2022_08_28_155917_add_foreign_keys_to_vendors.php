@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('vendors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('phone');
-            $table->string('email');
-            $table->text('description')->nullable();
-            $table->text('photo')->nullable();
-            $table->timestamps();
+        Schema::table('vendors', function (Blueprint $table) {
+            $table->unsignedBigInteger('location_id')->index();
+            $table->foreign('location_id')->references('id')->on('vendor_locations')->onDelete('cascade');
         });
     }
 
@@ -31,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vendors');
+        Schema::table('vendors', function (Blueprint $table) {
+            //
+        });
     }
 };
