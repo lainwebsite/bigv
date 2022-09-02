@@ -80,6 +80,9 @@ Route::group(['middleware' => ['user', 'verified']], function () {
     Route::resource('user', UserController::class);
 });
 
+Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
+    Route::get('/', [AdminPageController::class, 'login'])->name('login');
+});
 Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [AdminPageController::class, 'dashboard'])->name('dashboard');
     Route::resource('cart', AdminCartController::class);
