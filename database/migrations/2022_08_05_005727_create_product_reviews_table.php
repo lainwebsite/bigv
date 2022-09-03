@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->double('rating');
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('product_variation_id')->index();
-            $table->foreign('product_variation_id')->references('id')->on('product_variations')->onDelete('cascade');
+            $table->string('variation_name');
+            $table->unsignedBigInteger('product_id')->index();
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

@@ -5,19 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TransactionDiscount extends Model
+class VariationDiscount extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'transaction_id', 'discount_id'
+        'discount_id',
+        'product_variation_id'
     ];
-    public function transaction()
-    {
-        return $this->belongsTo(Transaction::class, 'transaction_id', 'id');
-    }
-    public function discount()
-    {
+    public function discount() {
         return $this->belongsTo(Discount::class, 'discount_id', 'id');
+    }
+    public function product_variation() {
+        return $this->belongsTo(ProductVariation::class, 'product_variation_id', 'id');
     }
 }

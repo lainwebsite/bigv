@@ -15,6 +15,7 @@ class Vendor extends Model
         'email',
         'description',
         'photo',
+        'rating',
         'location_id'
     ];
 
@@ -23,5 +24,9 @@ class Vendor extends Model
     }
     public function products() {
         return $this->hasMany(Product::class, 'vendor_id', 'id');
+    }
+    public function vendor_discounts()
+    {
+        return $this->hasMany(VendorDiscount::class, 'vendor_id', 'id');
     }
 }
