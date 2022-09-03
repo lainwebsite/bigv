@@ -12,6 +12,8 @@ class Transaction extends Model
     protected $fillable = [
         'total_price',
         'shipping_fee',
+        'product_discount_total',
+        'shipping_discount_total',
         'billing_address_id', 'shipping_address_id',
         'payment_method_id',
         'pickup_method_id', 'pickup_time_id'

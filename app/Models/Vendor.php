@@ -16,9 +16,15 @@ class Vendor extends Model
         'description',
         'location',
         'photo',
+        'rating',
+        'location_id'
     ];
 
     public function products() {
         return $this->hasMany(Product::class, 'vendor_id', 'id');
+    }
+    public function vendor_discounts()
+    {
+        return $this->hasMany(VendorDiscount::class, 'vendor_id', 'id');
     }
 }

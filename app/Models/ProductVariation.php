@@ -14,14 +14,21 @@ class ProductVariation extends Model
         'name',
         'price',
         'discount',
-        'discount_date',
+        'discount_start_date',
+        'discount_end_date',
         'product_id',
     ];
 
-    public function product() {
+    public function product()
+    {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
-    public function reviews() {
+    public function reviews()
+    {
         return $this->hasMany(ProductReview::class, 'product_variation_id', 'id');
+    }
+    public function variation_discounts()
+    {
+        return $this->hasMany(VariationDiscount::class, 'product_variation_id', 'id');
     }
 }

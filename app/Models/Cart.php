@@ -26,4 +26,7 @@ class Cart extends Model
     public function transaction() {
         return $this->belongsTo(Transaction::class, 'transaction_id', 'id');
     }
+    public function addon_options() {
+        return $this->hasMany(AddonOption::class, 'cart_id', 'id');
+    }
 }

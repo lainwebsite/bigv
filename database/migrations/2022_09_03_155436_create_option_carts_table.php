@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('vendors', function (Blueprint $table) {
+        Schema::create('option_carts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('phone');
-            $table->string('email');
-            $table->text('description')->nullable();
-            $table->text('photo')->nullable();
-            $table->double('rating')->default(0);
+            $table->unsignedBigInteger('addon_option_id')->index();
+            $table->foreign('addon_option_id')->references('id')->on('addon_options')->onDelete('cascade');
+            $table->unsignedBigInteger('cart_id')->index();
+            $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vendors');
+        Schema::dropIfExists('option_carts');
     }
 };
