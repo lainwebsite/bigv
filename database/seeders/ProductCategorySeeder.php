@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\PickupTime;
+use App\Models\ProductCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PickupTimeSeeder extends Seeder
+class ProductCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,12 +15,8 @@ class PickupTimeSeeder extends Seeder
      */
     public function run()
     {
-        $temp = new PickupTime();
-        $temp->time = "AM";
-        $temp->save();
-
-        $temp = new PickupTime();
-        $temp->time = "PM";
+        $temp = new ProductCategory();
+        $temp->name = "Uncategorized";
         $temp->save();
     }
 }
