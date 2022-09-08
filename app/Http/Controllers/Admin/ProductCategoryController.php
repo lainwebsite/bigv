@@ -15,7 +15,8 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = ProductCategory::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.manage.product-category.index', compact('categories'));
     }
 
     /**
@@ -25,7 +26,7 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.manage.product-category.create');
     }
 
     /**
@@ -36,7 +37,11 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = ProductCategory::create([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
+        return redirect()->route('admin.product-category.index');
     }
 
     /**
@@ -47,7 +52,7 @@ class ProductCategoryController extends Controller
      */
     public function show(ProductCategory $productCategory)
     {
-        //
+        return view('admin.manage.product-category.detail', compact('productCategory'));
     }
 
     /**
@@ -58,7 +63,7 @@ class ProductCategoryController extends Controller
      */
     public function edit(ProductCategory $productCategory)
     {
-        //
+        return view('admin.manage.product-category.edit', compact('productCategory'));
     }
 
     /**
@@ -70,7 +75,11 @@ class ProductCategoryController extends Controller
      */
     public function update(Request $request, ProductCategory $productCategory)
     {
-        //
+        $productCategory->update([
+            'name' => $request->name,
+            'description' => $request->description
+        ]);
+        return redirect()->route('admin.product-category.index');
     }
 
     /**
@@ -81,6 +90,12 @@ class ProductCategoryController extends Controller
      */
     public function destroy(ProductCategory $productCategory)
     {
-        //
+        $productCategory->delete();
+        return redirect()->route('admin.product-category.index');
+    }
+    public function sort(Request $request)
+    {
+        $categories = ProductCategory::orderBy('created_at', $request->sort)->paginate(10);
+        return view('admin.manage.product-category.inc.category', compact('categories'));
     }
 }

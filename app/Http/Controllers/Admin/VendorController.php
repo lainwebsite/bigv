@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
+use App\Models\VendorLocation;
 use Illuminate\Http\Request;
 
 class VendorController extends Controller
@@ -15,7 +16,9 @@ class VendorController extends Controller
      */
     public function index()
     {
-        //
+        $vendors = Vendor::orderBy('created_at', 'desc')->paginate(10);
+        $locations = VendorLocation::all();
+        return view('admin.manage.vendors.index', compact('vendors', 'locations'));
     }
 
     /**
@@ -25,7 +28,8 @@ class VendorController extends Controller
      */
     public function create()
     {
-        //
+        $locations = VendorLocation::all();
+        return view('admin.manage.vendors.create', compact('locations'));
     }
 
     /**
@@ -36,7 +40,17 @@ class VendorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $photo = 'vendor-' . time() . '-' . $request['photo']->getClientOriginalName();
+        $request->photo->move(public_path('uploads'), $photo);
+        $vendor = Vendor::create([
+           'name' => $request->name,
+           'phone' => $request->phone,
+           'email' => $request->email,
+           'description' => $request->description,
+           'location_id' => $request->location,
+           'photo' => $photo
+        ]);
+        return redirect()->route('admin.vendor.index');
     }
 
     /**
@@ -47,7 +61,7 @@ class VendorController extends Controller
      */
     public function show(Vendor $vendor)
     {
-        //
+        return view('admin.manage.vendors.detail', compact('vendor'));
     }
 
     /**
@@ -58,7 +72,8 @@ class VendorController extends Controller
      */
     public function edit(Vendor $vendor)
     {
-        //
+        $locations = VendorLocation::all();
+        return view('admin.manage.vendors.edit', compact('vendor', 'locations'));
     }
 
     /**
@@ -70,7 +85,21 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        //
+        if($request->photo){
+            $photo = 'vendor-' . time() . '-' . $request['photo']->getClientOriginalName();
+            $request->photo->move(public_path('uploads'), $photo);
+        }else{
+            $photo = $vendor->photo;
+        }
+        $vendor->update([
+           'name' => $request->name,
+           'phone' => $request->phone,
+           'email' => $request->email,
+           'description' => $request->description,
+           'location_id' => $request->location,
+           'photo' => $photo
+        ]);
+        return redirect()->route('admin.vendor.index');
     }
 
     /**
@@ -81,6 +110,16 @@ class VendorController extends Controller
      */
     public function destroy(Vendor $vendor)
     {
-        //
+        $vendor->delete();
+    }
+
+    public function sort(Request $request)
+    {
+        if ($request->filter) {
+            $vendors = Vendor::orderBy('created_at', $request->sort)->where('location_id', $request->filter)->paginate(10);
+        } else {
+            $vendors = Vendor::orderBy('created_at', $request->sort)->paginate(10);
+        }
+        return view('admin.manage.vendors.inc.vendor', compact('vendors'));
     }
 }

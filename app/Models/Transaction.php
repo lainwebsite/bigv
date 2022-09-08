@@ -12,9 +12,12 @@ class Transaction extends Model
     protected $fillable = [
         'total_price',
         'shipping_fee',
+        'product_discount_total',
+        'shipping_discount_total', 'delivery_date',
         'billing_address_id', 'shipping_address_id',
         'payment_method_id',
-        'pickup_method_id', 'pickup_time_id'
+        'pickup_method_id', 'pickup_time_id',
+        'status_id', 'user_id'
     ];
 
     public function carts() {
@@ -37,5 +40,11 @@ class Transaction extends Model
     }
     public function pickup_time() {
         return $this->belongsTo(PickupTime::class, 'pickup_time_id', 'id');
+    }
+    public function status() {
+        return $this->belongsTo(TransactionStatus::class, 'status_id', 'id');
+    }
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

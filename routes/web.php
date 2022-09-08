@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CartController as AdminCartController;
 use App\Http\Controllers\Admin\DiscountController as AdminDiscountController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
 use App\Http\Controllers\Admin\PickupMethodController as AdminPickupMethodController;
 use App\Http\Controllers\Admin\ProductCategoryController as AdminProductCategoryController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Admin\TransactionController as AdminTransactionControll
 use App\Http\Controllers\Admin\TransactionDiscountController as AdminTransactionDiscountController;
 use App\Http\Controllers\Admin\TransactionStatusController as AdminTransactionStatusController;
 use App\Http\Controllers\Admin\UserAddressController as AdminUserAddressController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\UserRoleController as AdminUserRoleController;
 use App\Http\Controllers\Admin\UserTierController as AdminUserTierController;
 use App\Http\Controllers\Admin\VendorController as AdminVendorController;
@@ -81,21 +83,32 @@ Route::group(['middleware' => ['user', 'verified']], function () {
     Route::post('profile/edit', [UserController::class, 'editProfile'])->name('editProfile');
 });
 
+Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
+    Route::get('/', [AdminPageController::class, 'login'])->name('login');
+});
 Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
+    Route::get('/dashboard', [AdminPageController::class, 'dashboard'])->name('dashboard');
     Route::resource('cart', AdminCartController::class);
     Route::resource('discount', AdminDiscountController::class);
     Route::resource('payment-method', AdminPaymentMethodController::class);
     Route::resource('pickup-method', AdminPickupMethodController::class);
+    Route::post('product/sort', [AdminProductController::class, 'sort'])->name('product.sort');
     Route::resource('product', AdminProductController::class);
+    Route::post('product-category/sort', [AdminProductCategoryController::class, 'sort'])->name('product-category.sort');
     Route::resource('product-category', AdminProductCategoryController::class);
     Route::resource('product-image', AdminProductImageController::class);
     Route::resource('product-review', AdminProductReviewController::class);
     Route::resource('product-variation', AdminProductVariationController::class);
+    Route::post('transaction/{transaction}/status', [AdminTransactionController::class, 'status'])->name('transaction.status');
+    Route::post('transaction/sort', [AdminTransactionController::class, 'sort'])->name('transaction.sort');
     Route::resource('transaction', AdminTransactionController::class);
     Route::resource('transaction-discount', AdminTransactionDiscountController::class);
     Route::resource('transaction-status', AdminTransactionStatusController::class);
+    Route::post('user/sort', [AdminUserController::class, 'sort'])->name('user.sort');
+    Route::resource('user', AdminUserController::class);
     Route::resource('user-address', AdminUserAddressController::class);
     Route::resource('user-role', AdminUserRoleController::class);
     Route::resource('user-tier', AdminUserTierController::class);
+    Route::post('vendor/sort', [AdminVendorController::class, 'sort'])->name('vendor.sort');
     Route::resource('vendor', AdminVendorController::class);
 });

@@ -18,5 +18,13 @@ class UserTierSeeder extends Seeder
         $temp = new UserTier();
         $temp->name = "Bronze";
         $temp->save();
+
+        $temp = new UserTier();
+        $temp->name = "Silver";
+        $temp->save();
+
+        $temp = new UserTier();
+        $temp->name = "Gold";
+        $temp->save();
     }
 }

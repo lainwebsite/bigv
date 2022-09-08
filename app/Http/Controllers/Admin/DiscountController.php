@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Discount;
+use App\Models\DiscountType;
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller
@@ -15,7 +16,7 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        //
+        $discounts = Discount::all();
     }
 
     /**
@@ -25,7 +26,7 @@ class DiscountController extends Controller
      */
     public function create()
     {
-        //
+        $types = DiscountType::all();
     }
 
     /**
@@ -36,7 +37,14 @@ class DiscountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $discount = Discount::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'duration_start' => $request->duration_start,
+            'duration_end' => $request->duration_end,
+            'type_id' => $request->type_id
+        ]);
     }
 
     /**
@@ -58,7 +66,7 @@ class DiscountController extends Controller
      */
     public function edit(Discount $discount)
     {
-        //
+        $types = DiscountType::all();
     }
 
     /**
@@ -70,7 +78,14 @@ class DiscountController extends Controller
      */
     public function update(Request $request, Discount $discount)
     {
-        //
+        $discount->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'duration_start' => $request->duration_start,
+            'duration_end' => $request->duration_end,
+            'type_id' => $request->type_id
+        ]);
     }
 
     /**
@@ -81,6 +96,6 @@ class DiscountController extends Controller
      */
     public function destroy(Discount $discount)
     {
-        //
+        $discount->delete();
     }
 }

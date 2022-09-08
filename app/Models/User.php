@@ -53,11 +53,15 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'user_id', 'id');
+        return $this->hasMany(ProductReview::class, 'user_id', 'id');
     }
     public function addresses()
     {
         return $this->hasMany(UserAddress::class, 'user_id', 'id');
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'user_id', 'id');
     }
     public function role()
     {

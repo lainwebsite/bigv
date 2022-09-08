@@ -16,7 +16,7 @@ class TransactionStatusSeeder extends Seeder
     public function run()
     {
         $temp = new TransactionStatus();
-        $temp->name = "Waiting Payment Confirmation";
+        $temp->name = "Order Pending";
         $temp->save();
 
         $temp = new TransactionStatus();
@@ -24,15 +24,19 @@ class TransactionStatusSeeder extends Seeder
         $temp->save();
 
         $temp = new TransactionStatus();
-        $temp->name = "On Delivery";
+        $temp->name = "Delivered";
         $temp->save();
 
         $temp = new TransactionStatus();
-        $temp->name = "Confirmed";
+        $temp->name = "Success";
         $temp->save();
 
         $temp = new TransactionStatus();
         $temp->name = "Canceled";
+        $temp->save();
+
+        $temp = new TransactionStatus();
+        $temp->name = "Refunded";
         $temp->save();
     }
 }
