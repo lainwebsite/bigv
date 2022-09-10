@@ -24,6 +24,8 @@ return new class extends Migration
             $table->foreign('status_id')->references('id')->on('transaction_statuses')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('self_collection_address_id')->index()->nullable();
+            $table->foreign('self_collection_address_id')->references('id')->on('pickup_addresses')->onDelete('cascade');
         });
     }
 
