@@ -15,8 +15,13 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactions = Transaction::where('');
-        return view('user.transactionHistory', ['transactions' => $transactions]);
+        $transactions = Transaction::with(['carts' => function ($query) {
+            $query->with(['product_variation']);
+        }, 'transaction_discounts' => function ($query) {
+            $query->with(['discount']);
+        }, 'billing_address', 'shipping_address', 'payment_method', 'pickup_method', 'pickup_time'])->get();
+
+        return view('user.transaction.history', ['transactions' => $transactions]);
     }
 
     /**
@@ -48,7 +53,23 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
-        //
+        $transaction->load([
+            'carts' => function ($query) {
+                $query->with(['product_variation']);
+            }, 'transaction_discounts' => function ($query) {
+                $query->with(['discount']);
+            }, 'billing_address', 'shipping_address', 'payment_method', 'pickup_method', 'pickup_time', 'transaction_status',
+            'transaction_discounts' => function ($query) {
+                $query->with(['discount']);
+            }
+        ]);
+
+        $discounts = [];
+        foreach ($transaction->transaction_discounts as $discount)
+            $discounts[] = $discount->discount->name;
+        $discounts = implode(", ", $discounts);
+
+        return view('user.transaction.detail', ['transaction' => $transaction, 'discounts' => $discounts]);
     }
 
     /**

@@ -30,5 +30,9 @@ class ProductCategorySeeder extends Seeder
                 $temp = new ProductCategory();
                 $temp->name = "Cookies";
                 $temp->save();
+
+                $temp = new ProductCategory();
+                $temp->name = "Pasta";
+                $temp->save();
         }
 }

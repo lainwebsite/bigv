@@ -15,7 +15,11 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        $carts = Cart::with(['product_variation' => function ($query) {
+            $query->with(['product']);
+        }])->whereNull('transaction_id')->get();
+
+        return view('user.cart.index', ['carts' => $carts]);
     }
 
     /**
@@ -81,6 +85,8 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-        //
+        $cart->delete();
+
+        return redirect()->back();
     }
 }

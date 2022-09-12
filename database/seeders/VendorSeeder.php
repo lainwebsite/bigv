@@ -20,7 +20,7 @@ class VendorSeeder extends Seeder
                 $temp->phone = "08123456789";
                 $temp->email = "ally_gourmet@gmail.com";
                 $temp->description = "descc";
-                $temp->location = "Surabaya";
+                $temp->location_id = "1";
                 $temp->save();
 
                 $temp = new Vendor();
@@ -28,7 +28,23 @@ class VendorSeeder extends Seeder
                 $temp->phone = "08123456789";
                 $temp->email = "veats@gmail.com";
                 $temp->description = "desccc";
-                $temp->location = "Jakarta";
+                $temp->location_id = "2";
+                $temp->save();
+
+                $temp = new Vendor();
+                $temp->name = "Baking Ibu";
+                $temp->phone = "08123456789";
+                $temp->email = "bakingibu@gmail.com";
+                $temp->description = "ccc";
+                $temp->location_id = "2";
+                $temp->save();
+
+                $temp = new Vendor();
+                $temp->name = "Mont Delizioso";
+                $temp->phone = "08123456789";
+                $temp->email = "mont_delizioso@gmail.com";
+                $temp->description = "ddd";
+                $temp->location_id = "1";
                 $temp->save();
         }
 }

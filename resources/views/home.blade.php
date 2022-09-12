@@ -110,60 +110,61 @@
 										</a>
 									</div>
 									<!-- /Transaction History -->
-								@endauth
-
-								<!-- Wishlist -->
-								<div>
-									<a href="#">
-										<i class="fa fa-heart-o"></i>
-										<span>Your Wishlist</span>
-										<div class="qty">2</div>
-									</a>
-								</div>
-								<!-- /Wishlist -->
-
-								<!-- Cart -->
-								<div class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-										<i class="fa fa-shopping-cart"></i>
-										<span>Your Cart</span>
-										<div class="qty">3</div>
-									</a>
-									<div class="cart-dropdown">
-										<div class="cart-list">
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="./img/product01.png" alt="">
+									
+									<!-- Wishlist -->
+									<div>
+										<a href="#">
+											<i class="fa fa-heart-o"></i>
+											<span>Your Wishlist</span>
+											<div class="qty">2</div>
+										</a>
+									</div>
+									<!-- /Wishlist -->
+	
+									<!-- Cart -->
+									<div class="dropdown">
+										<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+											<i class="fa fa-shopping-cart"></i>
+											<span>Your Cart</span>
+											<div class="qty">3</div>
+										</a>
+										<div class="cart-dropdown">
+											<div class="cart-list">
+												<div class="product-widget">
+													<div class="product-img">
+														<img src="./img/product01.png" alt="">
+													</div>
+													<div class="product-body">
+														<h3 class="product-name"><a href="#">product name goes here</a></h3>
+														<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+													</div>
+													<button class="delete"><i class="fa fa-close"></i></button>
 												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+	
+												<div class="product-widget">
+													<div class="product-img">
+														<img src="./img/product02.png" alt="">
+													</div>
+													<div class="product-body">
+														<h3 class="product-name"><a href="#">product name goes here</a></h3>
+														<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+													</div>
+													<button class="delete"><i class="fa fa-close"></i></button>
 												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
 											</div>
-
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="./img/product02.png" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
+											<div class="cart-summary">
+												<small>3 Item(s) selected</small>
+												<h5>SUBTOTAL: $2940.00</h5>
 											</div>
-										</div>
-										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: $2940.00</h5>
-										</div>
-										<div class="cart-btns">
-											<a href="#">View Cart</a>
-											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+											<div class="cart-btns">
+												<a href="{{ route('user.cart.index') }}">View Cart</a>
+												<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+											</div>
 										</div>
 									</div>
-								</div>
-								<!-- /Cart -->
+									<!-- /Cart -->
+								@endauth
+
 
 								<!-- Menu Toogle -->
 								<div class="menu-toggle">
@@ -193,7 +194,8 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-                        @if ($active == 0)
+						<li><a href="javascript:void(0)">Home</a></li>
+                        {{-- @if ($active == 0)
 						    <li class="active"><a href="{{ url('/') }}">All</a></li>
                         @else
                             <li><a href="{{ route('user.product-category.index') }}">All</a></li>
@@ -201,7 +203,7 @@
                         
                         @foreach ($productCategories as $productCategory)
                             @if ($active == $productCategory->id) <li class="active"> @else <li> @endif<a href="{{ route('user.product-category.show', $productCategory->id) }}">{{ $productCategory->name }}</a></li>
-                        @endforeach
+                        @endforeach --}}
 					</ul>
 					<!-- /NAV -->
 				</div>
@@ -238,8 +240,52 @@
 			<div class="container">
 				<!-- row -->
 				<div class="row">
+					<!-- SECTION -->
+				<div class="row">
+					<!-- ASIDE -->
+					<div id="aside" class="col-md-3">
+						<!-- aside Widget -->
+						<div class="aside">
+							<h3 class="aside-title">Categories</h3>
+							<div class="checkbox-filter">
+								@foreach ($productCategories as $productCategory)
+									<div class="input-checkbox">
+										<input type="checkbox" id="category-{{ $productCategory->id }}">
+										<label for="category-{{ $productCategory->id }}">
+											<span></span>
+											{{ $productCategory->name }}
+											<small>(120)</small>
+										</label>
+									</div>
+								@endforeach
+							</div>
+						</div>
+						<!-- /aside Widget -->
+
+						<!-- aside Widget -->
+						<div class="aside">
+							<h3 class="aside-title">Price</h3>
+							<div class="price-filter">
+								<div id="price-slider"></div>
+								<div class="input-number price-min">
+									<input id="price-min" type="number">
+									<span class="qty-up">+</span>
+									<span class="qty-down">-</span>
+								</div>
+								<span>-</span>
+								<div class="input-number price-max">
+									<input id="price-max" type="number">
+									<span class="qty-up">+</span>
+									<span class="qty-down">-</span>
+								</div>
+							</div>
+						</div>
+						<!-- /aside Widget -->
+					</div>
+					<!-- /ASIDE -->
+
 					<!-- STORE -->
-					<div id="store" class="col-md-12">
+					<div id="store" class="col-md-9">
 						<!-- store top filter -->
 						<div class="store-filter clearfix">
 							<div class="store-sort">

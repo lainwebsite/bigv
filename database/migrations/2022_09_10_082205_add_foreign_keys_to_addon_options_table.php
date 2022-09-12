@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('addon_options', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->double('price');
-            $table->timestamps();
+        Schema::table('addon_options', function (Blueprint $table) {
+            $table->unsignedBigInteger('addon_id')->index()->nullable();
+            $table->foreign('addon_id')->references('id')->on('addons')->onDelete('cascade');
         });
     }
 
@@ -28,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addon_options');
+        Schema::table('addon_options', function (Blueprint $table) {
+            //
+        });
     }
 };

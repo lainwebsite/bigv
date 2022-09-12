@@ -33,5 +33,23 @@ class ProductVariationSeeder extends Seeder
         $temp->price = "15.00";
         $temp->product_id = "3";
         $temp->save();
+
+        $temp = new ProductVariation();
+        $temp->name = "Medium";
+        $temp->price = "20.90";
+        $temp->product_id = "4";
+        $temp->save();
+
+        $temp = new ProductVariation();
+        $temp->name = "Large";
+        $temp->price = "25.90";
+        $temp->product_id = "4";
+        $temp->save();
+
+        $temp = new ProductVariation();
+        $temp->name = "novariation";
+        $temp->price = "71.00";
+        $temp->product_id = "5";
+        $temp->save();
     }
 }
