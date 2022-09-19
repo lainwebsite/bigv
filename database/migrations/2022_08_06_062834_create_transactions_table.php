@@ -20,9 +20,9 @@ return new class extends Migration
             $table->double('product_discount_total')->default(0);
             $table->double('shipping_discount_total')->default(0);
             $table->date('delivery_date');
-            $table->unsignedBigInteger('billing_address_id')->index();
+            $table->unsignedBigInteger('billing_address_id')->index()->nullable();
             $table->foreign('billing_address_id')->references('id')->on('user_addresses')->onDelete('cascade');
-            $table->unsignedBigInteger('shipping_address_id')->index();
+            $table->unsignedBigInteger('shipping_address_id')->index()->nullable();
             $table->foreign('shipping_address_id')->references('id')->on('user_addresses')->onDelete('cascade');
             $table->timestamps();
         });
