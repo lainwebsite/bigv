@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('min_tier_points')->default(0);
             $table->datetime('duration_start')->nullable();
             $table->datetime('duration_end')->nullable();
+            $table->tinyInteger('visible')->default(0);
             $table->timestamps();
         });
     }
