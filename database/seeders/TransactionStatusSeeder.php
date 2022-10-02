@@ -36,6 +36,10 @@ class TransactionStatusSeeder extends Seeder
         $temp->save();
 
         $temp = new TransactionStatus();
+        $temp->name = "Request Refund";
+        $temp->save();
+
+        $temp = new TransactionStatus();
         $temp->name = "Refunded";
         $temp->save();
     }
