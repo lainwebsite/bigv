@@ -166,13 +166,14 @@
                                     class="hide-menu">Discount</span></a></li>
 
                         <li class="sidebar-item @yield('customers-manage-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('customers-manage-active')" href="{{route('admin.user.index')}}"
-                                aria-expanded="false"><i data-feather="users" class="feather-icon"></i><span
-                                    class="hide-menu">Customer</span></a></li>
+                                class="sidebar-link sidebar-link @yield('customers-manage-active')"
+                                href="{{ route('admin.user.index') }}" aria-expanded="false"><i data-feather="users"
+                                    class="feather-icon"></i><span class="hide-menu">Customer</span></a></li>
 
                         <li class="sidebar-item @yield('vendors-manage-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('vendors-manage-active')" href="{{route('admin.vendor.index')}}"
-                                aria-expanded="false"><i data-feather="smile" class="feather-icon"></i><span
+                                class="sidebar-link sidebar-link @yield('vendors-manage-active')"
+                                href="{{ route('admin.vendor.index') }}" aria-expanded="false"><i
+                                    data-feather="smile" class="feather-icon"></i><span
                                     class="hide-menu">Vendor</span></a></li>
 
                         <li class="list-divider"></li>
@@ -199,9 +200,16 @@
                                     class="hide-menu">Vendor</span></a></li>
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Extra</span></li>
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link"
-                                href="authentication-login1.html" aria-expanded="false"><i data-feather="log-out"
-                                    class="feather-icon"></i><span class="hide-menu">Logout</span></a></li>
+                        <li class="sidebar-item">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                            <a class="sidebar-link sidebar-link" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                          document.getElementById('logout-form').submit();">
+                                <i data-feather="log-out" class="feather-icon"></i><span
+                                    class="hide-menu">Logout</span></a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
