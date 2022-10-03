@@ -37,9 +37,13 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $image = 'categaory-' . time() . '-' . $request->image->getClientOriginalName();
+        $request->image->move(public_path('uploads'), $image);
+
         $category = ProductCategory::create([
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'photo_url' => $image
         ]);
         return redirect()->route('admin.product-category.index');
     }
@@ -75,9 +79,17 @@ class ProductCategoryController extends Controller
      */
     public function update(Request $request, ProductCategory $productCategory)
     {
+        if ($request->image) {
+            $image = 'product-' . time() . '-' . $request->image->getClientOriginalName();
+            $request->image->move(public_path('uploads'), $image);
+        } else {
+            $image = $productCategory->photo_url;
+        }
+
         $productCategory->update([
             'name' => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'photo_url' => $image
         ]);
         return redirect()->route('admin.product-category.index');
     }
