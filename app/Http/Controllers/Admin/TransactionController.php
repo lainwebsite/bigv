@@ -105,4 +105,16 @@ class TransactionController extends Controller
         ]);
         return $transaction;
     }
+    public function change_status(Request $request)
+    {
+        $transaction_ids = explode(",", $request->transaction_id);
+        $transactions = Transaction::whereIn('id', $transaction_ids)->get();
+
+        foreach ($transactions as $key => $transaction) {
+            $transaction->update([
+                'status_id' => $request->status_id
+            ]);
+        }
+        return redirect()->route('admin.transaction.index');
+    }
 }

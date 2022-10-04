@@ -98,6 +98,7 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::resource('review-image', AdminReviewImageController::class);
     Route::resource('product-variation', AdminProductVariationController::class);
     Route::post('transaction/{transaction}/status', [AdminTransactionController::class, 'status'])->name('transaction.status');
+    Route::post('transaction/change_status', [AdminTransactionController::class, 'change_status'])->name('transaction.change_status');
     Route::post('transaction/sort', [AdminTransactionController::class, 'sort'])->name('transaction.sort');
     Route::resource('transaction', AdminTransactionController::class);
     Route::resource('transaction-discount', AdminTransactionDiscountController::class);
