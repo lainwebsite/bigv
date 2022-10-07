@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\UserTier;
@@ -59,7 +60,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('admin.manage.customers.detail', compact('user'));
     }
 
     /**
@@ -110,7 +111,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        if ($user->ban == 1) {
+            $user->update([
+                'ban' => 0
+            ]);
+        } else {
+            $user->update([
+                'ban' => 1
+            ]);
+        }
+        return redirect()->route('admin.user.show', $user->id);
     }
 
     public function sort(Request $request)
@@ -121,5 +131,13 @@ class UserController extends Controller
             $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->paginate(10);
         }
         return view('admin.manage.customers.inc.user', compact('users'));
+    }
+
+    public function analytics(Request $request)
+    {
+        $transactions = Transaction::where('created_at', '>=', $request->start)
+            ->where('created_at', '<=', date('Y-m-d', strtotime($request->end . ' + 1 days')))
+            ->where("user_id", $request->id)->get();
+        return view('admin.manage.customers.inc.analytics', compact('transactions'));
     }
 }

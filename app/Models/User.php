@@ -24,7 +24,7 @@ class User extends Authenticatable
         'phone',
         'date_of_birth',
         'visits',
-        'tier_points',
+        'tier_points', 'ban',
         'tier_id', 'role_id'
     ];
 

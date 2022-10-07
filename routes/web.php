@@ -104,6 +104,7 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::resource('transaction-discount', AdminTransactionDiscountController::class);
     Route::resource('transaction-status', AdminTransactionStatusController::class);
     Route::post('user/sort', [AdminUserController::class, 'sort'])->name('user.sort');
+    Route::post('user/analytics', [AdminUserController::class, 'analytics'])->name('user.analytics');
     Route::resource('user', AdminUserController::class);
     Route::resource('user-address', AdminUserAddressController::class);
     Route::resource('user-role', AdminUserRoleController::class);

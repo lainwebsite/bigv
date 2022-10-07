@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('date_of_birth');
             $table->bigInteger('visits');
             $table->bigInteger('tier_points');
+            $table->integer('ban')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
