@@ -161,8 +161,9 @@
                                     class="hide-menu">Product</span></a></li>
 
                         <li class="sidebar-item @yield('discounts-manage-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('discounts-manage-active')" href="app-calendar.html"
-                                aria-expanded="false"><i data-feather="percent" class="feather-icon"></i><span
+                                class="sidebar-link sidebar-link @yield('discounts-manage-active')"
+                                href="{{ route('admin.discount.index') }}" aria-expanded="false"><i
+                                    data-feather="percent" class="feather-icon"></i><span
                                     class="hide-menu">Discount</span></a></li>
 
                         <li class="sidebar-item @yield('customers-manage-selected')"> <a

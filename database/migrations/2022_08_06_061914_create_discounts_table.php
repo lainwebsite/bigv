@@ -26,6 +26,7 @@ return new class extends Migration
             $table->datetime('duration_end')->nullable();
             $table->tinyInteger('visible')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

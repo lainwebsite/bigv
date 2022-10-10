@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Discount;
 use App\Models\DiscountType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller
@@ -16,7 +17,8 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discounts = Discount::all();
+        $discounts = Discount::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.manage.discounts.index', compact('discounts'));
     }
 
     /**
@@ -97,5 +99,20 @@ class DiscountController extends Controller
     public function destroy(Discount $discount)
     {
         $discount->delete();
+        return redirect()->route('admin.discount.index');
+    }
+
+    public function sort(Request $request)
+    {
+        if ($request->filter == "upcoming") {
+            $discounts = Discount::where('duration_start', '>', Carbon::now())->orderBy('created_at', $request->sort)->paginate(10);
+        } else if ($request->filter == "active") {
+            $discounts = Discount::where('duration_start', '<=', Carbon::now())->where('duration_end', '>=', Carbon::now())->orderBy('created_at', $request->sort)->paginate(10);
+        } else if ($request->filter == "ended") {
+            $discounts = Discount::where('duration_end', '<', Carbon::now())->orderBy('created_at', $request->sort)->paginate(10);
+        }else{
+            $discounts = Discount::orderBy('created_at', $request->sort)->paginate(10);
+        }
+        return view('admin.manage.discounts.inc.discount', compact('discounts'));
     }
 }

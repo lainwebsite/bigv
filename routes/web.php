@@ -86,6 +86,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
 Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [AdminPageController::class, 'dashboard'])->name('dashboard');
     Route::resource('cart', AdminCartController::class);
+    Route::post('discount/sort', [AdminDiscountController::class, 'sort'])->name('user.sort');
     Route::resource('discount', AdminDiscountController::class);
     Route::resource('payment-method', AdminPaymentMethodController::class);
     Route::resource('pickup-method', AdminPickupMethodController::class);

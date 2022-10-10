@@ -4,19 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Discount extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name', 'code',
+        'name',
+        'code',
         'description',
         'amount',
-        'max_quota', 'min_order', 'min_tier_points',
+        'max_quota',
+        'min_order',
+        'min_tier_points',
         'duration_start',
         'duration_end',
-        'type_id', 'applicable_id'
+        'type_id',
+        'applicable_id'
     ];
     public function type()
     {
