@@ -7,6 +7,8 @@ use App\Models\Discount;
 use App\Models\DiscountType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class DiscountController extends Controller
 {
@@ -29,6 +31,7 @@ class DiscountController extends Controller
     public function create()
     {
         $types = DiscountType::all();
+        return view('admin.manage.discounts.create', compact('types'));
     }
 
     /**
@@ -39,14 +42,24 @@ class DiscountController extends Controller
      */
     public function store(Request $request)
     {
-        $discount = Discount::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'amount' => $request->amount,
-            'duration_start' => $request->duration_start,
-            'duration_end' => $request->duration_end,
-            'type_id' => $request->type_id
-        ]);
+        if ($request->discount_type == "1") {
+            $validator = Validator::make($request->all(), [
+                'code' => 'unique:discounts,code',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
+            $discount = Discount::create([
+                'name' => $request->name,
+                'code' => $request->code,
+                'description' => $request->description,
+                'amount' => $request->amount_shipping,
+                'duration_start' => $request->duration_start,
+                'duration_end' => $request->duration_end,
+                'type_id' => 1
+            ]);
+        }
+        return redirect()->route('admin.discount.index');
     }
 
     /**
@@ -110,7 +123,7 @@ class DiscountController extends Controller
             $discounts = Discount::where('duration_start', '<=', Carbon::now())->where('duration_end', '>=', Carbon::now())->orderBy('created_at', $request->sort)->paginate(10);
         } else if ($request->filter == "ended") {
             $discounts = Discount::where('duration_end', '<', Carbon::now())->orderBy('created_at', $request->sort)->paginate(10);
-        }else{
+        } else {
             $discounts = Discount::orderBy('created_at', $request->sort)->paginate(10);
         }
         return view('admin.manage.discounts.inc.discount', compact('discounts'));
