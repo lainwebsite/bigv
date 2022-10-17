@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         $this->call(VendorSeeder::class);
         $this->call(PickupTimeSeeder::class);
         $this->call(ProductCategorySeeder::class);
+        $this->call(DiscountApplicableSeeder::class);
     }
 }
