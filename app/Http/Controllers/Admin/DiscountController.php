@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Discount;
 use App\Models\DiscountType;
+use App\Models\Product;
+use App\Models\ProductVariation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -31,7 +33,8 @@ class DiscountController extends Controller
     public function create()
     {
         $types = DiscountType::all();
-        return view('admin.manage.discounts.create', compact('types'));
+        $product = Product::first();
+        return view('admin.manage.discounts.create', compact('types', 'product'));
     }
 
     /**
@@ -44,6 +47,9 @@ class DiscountController extends Controller
     {
         if ($request->discount_type == "1") {
             $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'code' => 'required',
+                'description' => 'required',
                 'code' => 'unique:discounts,code',
             ]);
             if ($validator->fails()) {
@@ -58,6 +64,31 @@ class DiscountController extends Controller
                 'duration_end' => $request->duration_end,
                 'type_id' => 1
             ]);
+        } else if ($request->discount_type == "0") {
+            $validator = Validator::make($request->all(), [
+                'sale_price' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
+            //product sale
+            $variation = ProductVariation::find($request->product_sale);
+            $variation->update([
+                "discount_start_date" => $request->duration_start,
+                "discount_end_date" => $request->duration_end,
+                "discount" => $request->sale_price
+            ]);
+        } else if ($request->discount_type == "2") {
+            //product
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'code' => 'required',
+                'description' => 'required',
+                'code' => 'unique:discounts,code',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
         }
         return redirect()->route('admin.discount.index');
     }
@@ -127,5 +158,17 @@ class DiscountController extends Controller
             $discounts = Discount::orderBy('created_at', $request->sort)->paginate(10);
         }
         return view('admin.manage.discounts.inc.discount', compact('discounts'));
+    }
+
+    public function search(Request $request)
+    {
+        $products = Product::where('name', 'like', '%' . $request->search . '%')->get();
+        return view('admin.manage.discounts.inc.product', compact('products'));
+    }
+
+    public function get_variations(Request $request)
+    {
+        $product = Product::find($request->id);
+        return $product->variations;
     }
 }
