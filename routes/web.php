@@ -89,6 +89,9 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::post('discount/sort', [AdminDiscountController::class, 'sort'])->name('user.sort');
     Route::post('discount/search', [AdminDiscountController::class, 'search'])->name('user.search');
     Route::post('discount/get_variations', [AdminDiscountController::class, 'get_variations'])->name('user.get_variations');
+    Route::post('discount/search_voucher_product', [AdminDiscountController::class, 'search_voucher_product'])->name('user.search_voucher_product');
+    Route::post('discount/search_voucher_vendor', [AdminDiscountController::class, 'search_voucher_vendor'])->name('user.search_voucher_vendor');
+    Route::post('discount/search_voucher_category', [AdminDiscountController::class, 'search_voucher_category'])->name('user.search_voucher_category');
     Route::resource('discount', AdminDiscountController::class);
     Route::resource('payment-method', AdminPaymentMethodController::class);
     Route::resource('pickup-method', AdminPickupMethodController::class);

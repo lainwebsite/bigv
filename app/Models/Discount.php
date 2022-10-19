@@ -16,10 +16,13 @@ class Discount extends Model
         'description',
         'amount',
         'max_quota',
+        'max_discount',
         'min_order',
         'min_tier_points',
         'duration_start',
         'duration_end',
+        'visible',
+        'all_products',
         'type_id',
         'applicable_id'
     ];

@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CategoryDiscount;
 use App\Models\Discount;
 use App\Models\DiscountType;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\ProductVariation;
+use App\Models\VariationDiscount;
+use App\Models\Vendor;
+use App\Models\VendorDiscount;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -62,7 +67,8 @@ class DiscountController extends Controller
                 'amount' => $request->amount_shipping,
                 'duration_start' => $request->duration_start,
                 'duration_end' => $request->duration_end,
-                'type_id' => 1
+                'type_id' => 1,
+                'visible' => $request->visible == 'on' ? 1 : 0
             ]);
         } else if ($request->discount_type == "0") {
             $validator = Validator::make($request->all(), [
@@ -88,6 +94,65 @@ class DiscountController extends Controller
             ]);
             if ($validator->fails()) {
                 return Redirect::back()->withErrors($validator);
+            }
+            $discount = Discount::create([
+                'name' => $request->name,
+                'code' => $request->code,
+                'description' => $request->description,
+                'amount' => $request->voucher_value,
+                'duration_start' => $request->duration_start,
+                'duration_end' => $request->duration_end,
+                'min_order' => $request->min_order,
+                'type_id' => $request->voucher_type,
+                'applicable_id' => $request->discount_applicable,
+                'visible' => $request->visible == 'on' ? 1 : 0
+            ]);
+            if ($request->max_quota_bool == "on") {
+                $discount->update([
+                    'max_quota' => $request->max_quota
+                ]);
+            }
+            if ($request->max_discount_bool == "on") {
+                $discount->update([
+                    'max_discount' => $request->max_discount
+                ]);
+            }
+
+            if ($request->discount_applicable == 2) {
+                $vendor_ids = explode(",", $request->voucher_vendors);
+                $vendors = Vendor::whereIn('id', $vendor_ids)->get();
+
+                foreach ($vendors as $key => $vendor) {
+                    VendorDiscount::create([
+                        'vendor_id' => $vendor->id,
+                        'discount_id' => $discount->id
+                    ]);
+                }
+            } else if ($request->discount_applicable == 3) {
+                $category_ids = explode(",", $request->voucher_categories);
+                $categories = ProductCategory::whereIn('id', $category_ids)->get();
+
+                foreach ($categories as $key => $category) {
+                    CategoryDiscount::create([
+                        'product_category_id' => $category->id,
+                        'discount_id' => $discount->id
+                    ]);
+                }
+            } else if ($request->discount_applicable == 1) {
+                if ($request->all_products == "on") {
+                    $discount->update([
+                        'all_products' => 1
+                    ]);
+                }
+                $product_ids = explode(",", $request->voucher_products);
+                $products = ProductVariation::whereIn('id', $product_ids)->get();
+
+                foreach ($products as $key => $product) {
+                    VariationDiscount::create([
+                        'product_variation_id' => $product->id,
+                        'discount_id' => $discount->id
+                    ]);
+                }
             }
         }
         return redirect()->route('admin.discount.index');
@@ -170,5 +235,23 @@ class DiscountController extends Controller
     {
         $product = Product::find($request->id);
         return $product->variations;
+    }
+
+    public function search_voucher_product(Request $request)
+    {
+        $variations = ProductVariation::where('name', 'like', '%' . $request->search . '%')->get();
+        return view('admin.manage.discounts.inc.voucher_product', compact('variations'));
+    }
+
+    public function search_voucher_vendor(Request $request)
+    {
+        $vendors = Vendor::where('name', 'like', '%' . $request->search . '%')->get();
+        return view('admin.manage.discounts.inc.voucher_vendor', compact('vendors'));
+    }
+
+    public function search_voucher_category(Request $request)
+    {
+        $categories = ProductCategory::where('name', 'like', '%' . $request->search . '%')->get();
+        return view('admin.manage.discounts.inc.voucher_category', compact('categories'));
     }
 }

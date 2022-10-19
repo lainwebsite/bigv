@@ -49,6 +49,10 @@
             <form action="{{ route('admin.discount.store') }}" method="post">
                 @csrf
                 <input type="hidden" name="discount_type" id="discount-type" value="0">
+                <input type="hidden" name="discount_applicable" id="discount-applicable" value="1">
+                <input type="hidden" name="voucher_products" id="voucher-products">
+                <input type="hidden" name="voucher_vendors" id="voucher-vendors">
+                <input type="hidden" name="voucher_categories" id="voucher-categories">
                 @if ($errors->any())
                     @foreach ($errors->all() as $error)
                         <div class="alert alert-danger" role="alert">
@@ -88,6 +92,16 @@
                                 <div class="divider-dash mt-4 mb-4"></div>
                                 <h4 class="card-title mb-4">Basic Information</h4>
                                 <div class="form-group d-none voucher-input">
+                                    <div class="form-check form-check-inline">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="voucher-visible"
+                                                name="visible">
+                                            <label class="custom-control-label" for="voucher-visible">Voucher Visible to All
+                                                User</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group d-none voucher-input">
                                     <label for="discountName">Discount Name</label>
                                     <input type="text" class="form-control" id="discountName" name="name"
                                         placeholder="Discount Name">
@@ -106,10 +120,12 @@
                                     <label>Active Period</label>
                                     <div class="align-self-center d-flex align-items-center flex-wrap">
                                         <p class="mr-4 mb-0 text-nowrap">Start Datetime</p>
-                                        <input type="datetime-local" class="form-control w-auto" name="duration_start" required>
+                                        <input type="datetime-local" class="form-control w-auto" name="duration_start"
+                                            required>
                                         <p class="ml-4 mr-4 mb-0">-</p>
                                         <p class="mr-4 mb-0 text-nowrap">End Datetime</p>
-                                        <input type="datetime-local" class="form-control w-auto mr-4" name="duration_end" required>
+                                        <input type="datetime-local" class="form-control w-auto mr-4" name="duration_end"
+                                            required>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +137,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title mb-4">Discount Setting</h4>
-                                <div class="card-not-selected border-lightgray p-3 br-18 mb-2" id="expandSearchProductSale">
+                                <div class="card-not-selected border-lightgray p-3 br-18 mb-2"
+                                    id="expandSearchProductSale">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
                                             <img id="selected-product-sale-image" class="d-flex br-18 mr-3"
@@ -224,7 +241,8 @@
                                 <div class="w-100 h-auto" id="containerProductBasedVoucher">
                                     <div class="form-check form-check-inline">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="allProductVoucher">
+                                            <input type="checkbox" class="custom-control-input" id="allProductVoucher"
+                                                name="all_products">
                                             <label class="custom-control-label" for="allProductVoucher">Apply Discount for
                                                 All
                                                 Products</label>
@@ -235,12 +253,12 @@
                                         <div class="form-group">
                                             <label for="productName">Search Product for Discount</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="productName"
+                                                <input type="text" class="form-control" id="voucherProductName"
                                                     name="productName" placeholder="Product Name">
                                                 <div class="input-group-append">
-                                                    <button id="searchProductVoucher"
+                                                    <div id="searchProductVoucher"
                                                         style="border-radius: 0 10px 10px 0 !important;"
-                                                        class="btn btn-outline-secondary border-lightgray">Search</button>
+                                                        class="btn btn-outline-secondary border-lightgray">Search</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -251,10 +269,9 @@
                                                     id="containerSearchProductResultVoucher">
 
                                                 </div>
-                                                <div class="d-flex justify-content-end mt-4 gap-15x">
-                                                    <button type="submit" class="btn btn-primary"
-                                                        id="addProductVoucher">Add</button>
-                                                </div>
+                                                {{-- <div class="d-flex justify-content-end mt-4 gap-15x">
+                                                    <div class="btn btn-primary" id="addProductVoucher">Add</div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                         <label for="productListVoucher" class="pt-3">Discounted Products</label>
@@ -266,12 +283,12 @@
                                 </div>
                                 <div class="w-100 h-auto d-none" id="containerVendorBasedVoucher">
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="vendorName" name="vendorName"
-                                            placeholder="Vendor Name">
+                                        <input type="text" class="form-control" id="voucherVendorName"
+                                            name="vendorName" placeholder="Vendor Name">
                                         <div class="input-group-append">
-                                            <button id="searchVendorProductVoucher"
+                                            <div id="searchVendorProductVoucher"
                                                 style="border-radius: 0 10px 10px 0 !important;"
-                                                class="btn btn-outline-secondary border-lightgray">Search</button>
+                                                class="btn btn-outline-secondary border-lightgray">Search</div>
                                         </div>
                                     </div>
                                     <div class="w-100 card" id="expandableSearchVendorProductVoucher"
@@ -291,12 +308,12 @@
                                 </div>
                                 <div class="w-100 h-auto d-none" id="containerCategoryBasedVoucher">
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="categoryName" name="categoryName"
-                                            placeholder="Category Name">
+                                        <input type="text" class="form-control" id="voucherCategoryName"
+                                            name="categoryName" placeholder="Category Name">
                                         <div class="input-group-append">
-                                            <button id="searchCategoryProductVoucher"
+                                            <div id="searchCategoryProductVoucher"
                                                 style="border-radius: 0 10px 10px 0 !important;"
-                                                class="btn btn-outline-secondary border-lightgray">Search</button>
+                                                class="btn btn-outline-secondary border-lightgray">Search</div>
                                         </div>
                                     </div>
                                     <div class="w-100 card" id="expandableSearchCategoryProductVoucher"
@@ -319,7 +336,7 @@
                                     <div class="input-group">
                                         <div class="input-group-prepend w-25">
                                             <select class="custom-select custom-border" id="discountTypeProductVoucher"
-                                                style="border-radius: 10px 0 0 10px !important;">
+                                                name="voucher_type" style="border-radius: 10px 0 0 10px !important;">
                                                 <option selected value="1">Fixed</option>
                                                 <option value="2">Percentage</option>
                                             </select>
@@ -329,7 +346,7 @@
                                                 <label class="input-group-text" style="border-radius:0;">$</label>
                                             </div>
                                             <input type="number" class="form-control" id="discountProductVoucher"
-                                                name="discountProductVoucher" style="border-radius: 0 10px 10px 0;"
+                                                name="voucher_value" style="border-radius: 0 10px 10px 0;"
                                                 placeholder="Discount">
                                             <div class="input-group-append d-none"
                                                 id="discountTypePercentageLabelProductVoucher">
@@ -342,7 +359,7 @@
                                 <div class="form-check form-check-inline form-group" style="display:none;"
                                     id="expandableCheckboxMaxDiscountProductVoucher">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input"
+                                        <input type="checkbox" class="custom-control-input" name="max_discount_bool"
                                             id="setMaxDiscountProductVoucher">
                                         <label class="custom-control-label" for="setMaxDiscountProductVoucher">Set Maximum
                                             Discount Amount</label>
@@ -354,7 +371,7 @@
                                             <label class="input-group-text" style="border-radius:10px 0 0 10px;">$</label>
                                         </div>
                                         <input type="number" class="form-control" id="maxDiscountProductVoucher"
-                                            name="maxDiscountProductVoucher" placeholder="Maximum Discount">
+                                            name="max_discount" placeholder="Maximum Discount">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -364,14 +381,13 @@
                                             <label class="input-group-text" style="border-radius:10px 0 0 10px;">$</label>
                                         </div>
                                         <input type="number" class="form-control" id="minOrderProductVoucher"
-                                            name="minOrderProductVoucher" placeholder="Minimum Order" min="0"
-                                            value="0">
+                                            name="min_order" placeholder="Minimum Order" min="0" value="0">
                                     </div>
                                 </div>
                                 <div class="form-check form-check-inline form-group"
                                     id="expandableCheckboxMaxQuotaProductVoucher">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input"
+                                        <input type="checkbox" class="custom-control-input" name="max_quota_bool"
                                             id="setMaxQuotaProductVoucher">
                                         <label class="custom-control-label" for="setMaxQuotaProductVoucher">Set Maximum
                                             Usage
@@ -381,7 +397,7 @@
                                 <div class="form-group" id="expandableMaxQuotaProductVoucher" style="display:none;">
                                     <label for="maxQuotaProductVoucher">Maximum Usage Quota</label>
                                     <input type="number" class="form-control" id="maxQuotaProductVoucher"
-                                        name="maxQuotaProductVoucher" placeholder="Maximum Usage Quota">
+                                        name="max_quota" placeholder="Maximum Usage Quota">
                                 </div>
                                 <div class="d-flex mt-4 gap-15x">
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -546,66 +562,73 @@
         $("#searchProductVoucher").on('click', function() {
             $("#containerProductVoucher").slideDown();
             $("#containerSearchProductResultVoucher").html("");
-            for (var i = 0; i < 5; i++) {
-                $("#containerSearchProductResultVoucher").append(`
-                <div class="d-flex align-items-center justify-content-between product-result-voucher cursor-pointer">
-                    <div class="d-flex align-items-center">
-                        <div class="custom-control custom-checkbox mr-3">
-                            <input type="checkbox" class="custom-control-input" id="productResultVoucher${i}">
-                            <label class="custom-control-label" for="productResultVoucher${i}"></label>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <img class="d-flex br-18 mr-3" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58.jpeg" height="60" width="60" alt="Generic placeholder image">
-                            <div class="d-flex justify-content-center flex-column">
-                                <h5 class="m-0"><b>Cute Tiger Aroma Stone Set”</b></h5>
-                                <small class="m-0">Snacks</small>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="m-0">Normal Price: <b>$5</b></p>
-                </div>
-                <div class="divider-dash"></div>
-            `);
+            var hostname = "{{ request()->getHost() }}"
+            var url = ""
+            if (hostname.includes('www')) {
+                url = "https://" + hostname
+            } else {
+                url = "{{ config('app.url') }}"
             }
+            $.post(url + "/admin/discount/search_voucher_product", {
+                    _token: CSRF_TOKEN,
+                    search: $('#voucherProductName').val(),
+                })
+                .done(function(data) {
+                    $("#containerSearchProductResultVoucher").html(data);
+                })
+                .fail(function(error) {
+                    console.log(error);
+                });
         });
 
-        $(document).on('click', '#addProductVoucher', function() {
+        var voucher_products = [];
+
+        function selectVoucherProduct(id, image, name, category) {
             $("#containerProductVoucher").slideUp();
+            voucher_products.push(id)
+            $('#voucher-products').val(voucher_products)
             $("#productListVoucher").append(`
-            <div>
+            <div data-id="${id}">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <img class="d-flex br-18 mr-3" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58.jpeg" height="60" width="60" alt="Generic placeholder image">
+                        <img class="d-flex br-18 mr-3" src="${image}" height="60" width="60" alt="Generic placeholder image">
                         <div class="d-flex justify-content-center flex-column">
-                            <h5 class="m-0"><b>Cute Tiger Aroma Stone Set”</b></h5>
-                            <small class="m-0">Snacks</small>
+                            <h5 class="m-0"><b>${name}</b></h5>
+                            <small class="m-0">${category}</small>
                         </div>
                     </div>
-                    <p class="m-0">Normal Price: <b>$5</b></p>
                     <i class="fa fa-times cursor-pointer delete-product-voucher" width="20" height="20"></i>
                 </div>
                 <div class="divider-dash"></div>
             <div>
         `);
-        });
+        };
 
         $(document).on('click', '.delete-product-voucher', function() {
+            var index = voucher_products.indexOf($(this).parent().parent().data("id"));
+            if (index > -1) { // only splice array when item is found
+                voucher_products.splice(index, 1); // 2nd parameter means remove one item only
+            }
+            $('#voucher-products').val(voucher_products)
             $(this).parent().parent().remove();
         });
 
         $("#productBasedVoucher").on('click', function() {
+            $("#discount-applicable").val(1);
             $("#containerProductBasedVoucher").removeClass("d-none");
             $("#containerVendorBasedVoucher").addClass("d-none");
             $("#containerCategoryBasedVoucher").addClass("d-none");
         });
 
         $("#vendorBasedVoucher").on('click', function() {
+            $("#discount-applicable").val(2);
             $("#containerProductBasedVoucher").addClass("d-none");
             $("#containerVendorBasedVoucher").removeClass("d-none");
             $("#containerCategoryBasedVoucher").addClass("d-none");
         });
 
         $("#categoryBasedVoucher").on('click', function() {
+            $("#discount-applicable").val(3);
             $("#containerProductBasedVoucher").addClass("d-none");
             $("#containerVendorBasedVoucher").addClass("d-none");
             $("#containerCategoryBasedVoucher").removeClass("d-none");
@@ -614,86 +637,110 @@
         $("#searchVendorProductVoucher").on('click', function() {
             $("#expandableSearchVendorProductVoucher").slideDown();
             $("#containerSearchVendorResultProductVoucher").html("");
-            for (var i = 0; i < 9; i++) {
-                $("#containerSearchVendorResultProductVoucher").append(`
-                <div class="d-flex align-items-center justify-content-between vendor-result-product-voucher cursor-pointer">
-                    <div class="d-flex align-items-center">
-                        <img class="d-flex br-18 mr-3" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58.jpeg" height="60" width="60" alt="Generic placeholder image">
-                        <div class="d-flex justify-content-center flex-column">
-                            <h5 class="m-0"><b>Pollia</b></h5>
-                            <small class="m-0">Location <b>East</b></small>
-                        </div>
-                    </div>
-                    <p class="m-0">Total Product <b>30</b></p>
-                </div>
-                <div class="divider-dash"></div>
-            `);
+            var hostname = "{{ request()->getHost() }}"
+            var url = ""
+            if (hostname.includes('www')) {
+                url = "https://" + hostname
+            } else {
+                url = "{{ config('app.url') }}"
             }
+            $.post(url + "/admin/discount/search_voucher_vendor", {
+                    _token: CSRF_TOKEN,
+                    search: $('#voucherVendorName').val(),
+                })
+                .done(function(data) {
+                    $("#containerSearchVendorResultProductVoucher").html(data);
+                })
+                .fail(function(error) {
+                    console.log(error);
+                });
         });
 
-        $(document).on('click', '.vendor-result-product-voucher', function() {
+        var voucher_vendors = [];
+
+        function selectVoucherVendor(id, image, name, location, products) {
             $("#expandableSearchVendorProductVoucher").slideUp();
+            voucher_vendors.push(id)
+            $('#voucher-vendors').val(voucher_vendors)
             $("#vendorListVoucher").append(`
-            <div>
+            <div data-id="${id}">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <img class="d-flex br-18 mr-3" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58.jpeg" height="60" width="60" alt="Generic placeholder image">
+                        <img class="d-flex br-18 mr-3" src="${image}" height="60" width="60" alt="Generic placeholder image">
                         <div class="d-flex justify-content-center flex-column">
-                            <h5 class="m-0"><b>Pollia</b></h5>
-                            <small class="m-0">Location: <b>East</b></small>
+                            <h5 class="m-0"><b>${name}</b></h5>
+                            <small class="m-0">Location: <b>${location}</b></small>
                         </div>
                     </div>
-                    <p class="m-0">Total Product: <b>30</b></p>
+                    <p class="m-0">Total Product: <b>${products}</b></p>
                     <i class="fa fa-times cursor-pointer delete-vendor-voucher" width="20" height="20"></i>
                 </div>
                 <div class="divider-dash"></div>
             <div>
         `);
-        });
+        }
+
 
         $(document).on('click', '.delete-vendor-voucher', function() {
+            var index = voucher_vendors.indexOf($(this).parent().parent().data("id"));
+            if (index > -1) { // only splice array when item is found
+                voucher_vendors.splice(index, 1); // 2nd parameter means remove one item only
+            }
+            $('#voucher-vendors').val(voucher_vendors)
             $(this).parent().parent().remove();
         });
 
         $("#searchCategoryProductVoucher").on('click', function() {
             $("#expandableSearchCategoryProductVoucher").slideDown();
             $("#containerSearchCategoryResultProductVoucher").html("");
-            for (var i = 0; i < 9; i++) {
-                $("#containerSearchCategoryResultProductVoucher").append(`
-                <div class="d-flex align-items-center justify-content-between category-result-product-voucher cursor-pointer">
-                    <div class="d-flex align-items-center">
-                        <img class="d-flex br-18 mr-3" src="https://bigvsg.com/wp-content/uploads/2021/12/Hae-Bee-Hiam-Pasta.jpg" width="60" height="60" alt="Generic placeholder image">
-                        <div class="d-flex justify-content-center flex-column">
-                            <h5 class="m-0"><b>Food and Beverages</b></h5>
-                        </div>
-                    </div>
-                    <p class="m-0">Total Product <b>30</b></p>
-                </div>
-                <div class="divider-dash"></div>
-            `);
+            var hostname = "{{ request()->getHost() }}"
+            var url = ""
+            if (hostname.includes('www')) {
+                url = "https://" + hostname
+            } else {
+                url = "{{ config('app.url') }}"
             }
+            $.post(url + "/admin/discount/search_voucher_category", {
+                    _token: CSRF_TOKEN,
+                    search: $('#voucherCategoryName').val(),
+                })
+                .done(function(data) {
+                    $("#containerSearchCategoryResultProductVoucher").html(data);
+                })
+                .fail(function(error) {
+                    console.log(error);
+                });
         });
 
-        $(document).on('click', '.category-result-product-voucher', function() {
+        var voucher_categories = [];
+
+        function selectVoucherCategory(id, image, name, products) {
             $("#expandableSearchCategoryProductVoucher").slideUp();
+            voucher_categories.push(id)
+            $('#voucher-categories').val(voucher_categories)
             $("#categoryListVoucher").append(`
-            <div>
+            <div data-id="${id}">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <img class="d-flex br-18 mr-3" src="https://bigvsg.com/wp-content/uploads/2021/12/Hae-Bee-Hiam-Pasta.jpg" height="60" width="60" alt="Generic placeholder image">
+                        <img class="d-flex br-18 mr-3" src="${image}" height="60" width="60" alt="Generic placeholder image">
                         <div class="d-flex justify-content-center flex-column">
-                            <h5 class="m-0"><b>Food and Beverages</b></h5>
+                            <h5 class="m-0"><b>${name}</b></h5>
                         </div>
                     </div>
-                    <p class="m-0">Total Product: <b>30</b></p>
+                    <p class="m-0">Total Product: <b>${products}</b></p>
                     <i class="fa fa-times cursor-pointer delete-category-voucher" width="20" height="20"></i>
                 </div>
                 <div class="divider-dash"></div>
             <div>
         `);
-        });
+        };
 
         $(document).on('click', '.delete-category-voucher', function() {
+            var index = voucher_categories.indexOf($(this).parent().parent().data("id"));
+            if (index > -1) { // only splice array when item is found
+                voucher_categories.splice(index, 1); // 2nd parameter means remove one item only
+            }
+            $('#voucher-vendors').val(voucher_categories)
             $(this).parent().parent().remove();
         });
 
