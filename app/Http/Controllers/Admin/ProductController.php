@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
+use App\Models\ProductReview;
 use App\Models\ProductVariation;
 use App\Models\Vendor;
 use Carbon\Carbon;
@@ -89,7 +90,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        $reviews = ProductReview::where('product_id', $product->id)->paginate(5);
+        return view('admin.manage.product.detail', compact('product', 'reviews'));
     }
 
     /**
@@ -185,5 +187,19 @@ class ProductController extends Controller
             }
             return view('admin.manage.product.inc.product', compact('products', 'vendor'));
         }
+    }
+
+    public function sort_review(Request $request)
+    {
+        if ($request->filter) {
+            $reviews = ProductReview::where('product_id', $request->product_id)
+                ->where('rating', '<=', intval($request->filter + 0.9))
+                ->where('rating', '>=', intval($request->filter))
+                ->paginate(5);
+        } else {
+            $reviews = ProductReview::where('product_id', $request->product_id)
+                ->paginate(5);
+        }
+        return view('admin.manage.product.inc.review', compact('reviews'));
     }
 }
