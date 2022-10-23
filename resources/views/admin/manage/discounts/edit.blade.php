@@ -23,7 +23,7 @@ active
                 <div class="d-flex align-items-center">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
-                            <li class="breadcrumb-item"><a href="{{url('/')}}" class="text-muted">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}" class="text-muted">Dashboard</a></li>
                             <li class="breadcrumb-item"><a href="{{url('/discounts')}}" class="text-muted">Discounts</a></li>
                             <li class="breadcrumb-item text-muted active" aria-current="page">Edit Discount</li>
                         </ol>
@@ -60,7 +60,7 @@ active
                             <textarea class="form-control" id="discountDescription" name="discountDescription" required placeholder="Discount Description" rows="4"></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Active Period</label>    
+                            <label>Active Period</label>
                             <div class="align-self-center d-flex align-items-center">
                                 <p class="mr-4 mb-0 text-nowrap">Start Datetime</p>
                                 <input type="datetime-local" class="form-control w-auto" value="2018-05-13">
@@ -100,7 +100,7 @@ active
                                     </div>
                                 </div>
                                 <div class="w-100 pr-3 custom-scroll" id="containerSearchProductResultSalePrice">
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@ active
                                 </div>
                                 <input type="number" class="form-control" id="salePrice" name="salePrice" placeholder="Sale Price">
                             </div>
-                        </div>  
+                        </div>
                         <div class="d-flex mt-4 gap-15x">
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                             <a href="{{route('products.index')}}" class="btn btn-light">Cancel</a>
@@ -170,13 +170,13 @@ active
                                 <div class="w-100 card" id="containerProductVoucher" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; display:none;">
                                     <div class="p-3">
                                         <div class="w-100 pr-3 custom-scroll" id="containerSearchProductResultVoucher">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
                                 <label for="productListVoucher" class="pt-3">Discounted Products</label>
                                 <div class="container custom-scroll" id="productListVoucher">
-                                    
+
                                 </div>
                                 <div class="divider-dash mt-3 mb-3"></div>
                             </div>
@@ -204,7 +204,7 @@ active
                                         </div>
                                     </div>
                                     <div class="w-100 pr-3 custom-scroll" id="containerSearchVendorResultProductVoucher">
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -235,7 +235,7 @@ active
                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="form-check form-check-inline form-group" style="display:none;" id="expandableCheckboxMaxDiscountProductVoucher">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="setMaxDiscountProductVoucher">
@@ -306,12 +306,12 @@ active
             $("#expandableSearchProductSale").slideUp();
             expandSearchProductSale = false;
             $("#iconExpandSearchProductSale").toggleClass("flip");
-        } else { 
+        } else {
             $("#expandableSearchProductSale").slideDown();
             expandSearchProductSale = true;
             $("#iconExpandSearchProductSale").toggleClass("flip");
         }
-    }); 
+    });
 
     $("#searchProductSale").on('click', function(){
         $("#containerSearchProductResultSalePrice").html("");
@@ -439,12 +439,12 @@ active
             $("#expandableSearchVendorProductVoucher").slideUp();
             expandSearchVendorProductVoucher = false;
             $("#iconExpandSearchVendorProductVoucher").toggleClass("flip");
-        } else { 
+        } else {
             $("#expandableSearchVendorProductVoucher").slideDown();
             expandSearchVendorProductVoucher = true;
             $("#iconExpandSearchVendorProductVoucher").toggleClass("flip");
         }
-    }); 
+    });
 
     $("#searchVendorProductVoucher").on('click', function(){
         $("#containerSearchVendorResultProductVoucher").html("");
