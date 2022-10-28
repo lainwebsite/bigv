@@ -162,7 +162,7 @@
         }
 
         function setupArray(array) {
-            refactArray(transactions);
+            refactArray(array);
             array.forEach(function callback(value, index) {
                 if (index == 0) {
                     object_count = 0;

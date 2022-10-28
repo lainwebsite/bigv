@@ -98,6 +98,9 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::post('product/sort', [AdminProductController::class, 'sort'])->name('product.sort');
     Route::post('product/review/sort', [AdminProductController::class, 'sort_review'])->name('product.sort_review');
     Route::get('product/analytics', [AdminProductController::class, 'view_analytics'])->name('product.view_analytics');
+    Route::post('product/sort/analytics', [AdminProductController::class, 'sort_analytics'])->name('product.sort_analytics');
+    Route::post('product/date/analytics', [AdminProductController::class, 'date_analytics'])->name('product.date_analytics');
+    Route::get('product/analytics/{product}', [AdminProductController::class, 'analytics_detail'])->name('product.analytics.detail');
     Route::resource('product', AdminProductController::class);
     Route::post('product-category/sort', [AdminProductCategoryController::class, 'sort'])->name('product-category.sort');
     Route::resource('product-category', AdminProductCategoryController::class);

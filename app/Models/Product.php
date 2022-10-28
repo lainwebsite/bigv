@@ -15,19 +15,28 @@ class Product extends Model
         'vendor_id', 'category_id'
     ];
 
-    public function vendor() {
+    public function vendor()
+    {
         return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
     }
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
     }
-    public function variations() {
+    public function variations()
+    {
         return $this->hasMany(ProductVariation::class, 'product_id', 'id');
     }
-    public function reviews() {
+    public function reviews()
+    {
         return $this->hasMany(ProductReview::class, 'product_id', 'id');
     }
-    public function images() {
+    public function images()
+    {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
+    }
+    public function carts()
+    {
+        return $this->hasManyThrough(Cart::class, ProductVariation::class);
     }
 }

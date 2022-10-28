@@ -8,9 +8,12 @@ use App\Models\ProductCategory;
 use App\Models\ProductImage;
 use App\Models\ProductReview;
 use App\Models\ProductVariation;
+use App\Models\Transaction;
 use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -25,6 +28,36 @@ class ProductController extends Controller
         $products = Product::orderBy('created_at', 'desc')->paginate(10);
         $categories = ProductCategory::all();
         return view('admin.manage.product.index', compact('products', 'categories', 'vendor'));
+    }
+
+    public function view_analytics()
+    {
+        $vendor = false;
+        $transactions = Transaction::orderBy('created_at', 'asc')
+            ->where('created_at', '<=', Carbon::now())
+            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->withCount('carts')
+            ->get();
+        $products = Product::orderBy('created_at', 'desc')->withCount(['carts as transaction_count' => function ($query) {
+            $query->whereHas('transaction', function ($q) {
+                $q->where('created_at', '<=', Carbon::now())
+                    ->where('created_at', '>=', Carbon::now()->subDays(7));
+            })->select(DB::raw('count(distinct(transaction_id))'));
+        }])->withCount(['carts as sold_count' => function ($query) {
+            $query->whereHas('transaction', function ($q) {
+                $q->where('created_at', '<=', Carbon::now())
+                    ->where('created_at', '>=', Carbon::now()->subDays(7));
+            })->select(DB::raw('sum(quantity)'));
+        }])->withCount(['carts as total_income' => function ($query) {
+            $query->whereHas('transaction', function ($q) {
+                $q->where('created_at', '<=', Carbon::now())
+                    ->where('created_at', '>=', Carbon::now()->subDays(7));
+            })->select(DB::raw('sum(carts.price * quantity)'));
+        }])
+            ->paginate(10);
+        $categories = ProductCategory::withCount('products')
+            ->get();
+        return view('admin.analytics.products.index', compact('products', 'categories', 'vendor', 'transactions'));
     }
 
     /**
@@ -201,5 +234,91 @@ class ProductController extends Controller
                 ->paginate(5);
         }
         return view('admin.manage.product.inc.review', compact('reviews'));
+    }
+
+    public function sort_analytics(Request $request)
+    {
+        if ($request->category == 0) {
+            $products = Product::whereHas('carts', function ($q) use ($request) {
+                $q->whereHas('transaction', function ($q) use ($request) {
+                    $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                        ->where('created_at', '>=', $request->start_date);
+                });
+            })->withCount(['carts as transaction_count' => function ($query) use ($request) {
+                $query->whereHas('transaction', function ($q) use ($request) {
+                    $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                        ->where('created_at', '>=', $request->start_date);
+                });
+            }])->withCount(['carts as sold_count' => function ($query) use ($request) {
+                $query->whereHas('transaction', function ($q) use ($request) {
+                    $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                        ->where('created_at', '>=', $request->start_date);
+                })->select(DB::raw('sum(quantity)'));
+            }])->withCount(['carts as total_income' => function ($query) use ($request) {
+                $query->whereHas('transaction', function ($q) use ($request) {
+                    $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                        ->where('created_at', '>=', $request->start_date);
+                })->select(DB::raw('sum(carts.price * quantity)'));
+            }]);
+        } else {
+            $products = Product::where('category_id', $request->category)
+                ->whereHas('carts', function ($q) use ($request) {
+                    $q->whereHas('transaction', function ($q) use ($request) {
+                        $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                            ->where('created_at', '>=', $request->start_date);
+                    });
+                })->withCount(['carts as transaction_count' => function ($query) use ($request) {
+                    $query->whereHas('transaction', function ($q) use ($request) {
+                        $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                            ->where('created_at', '>=', $request->start_date);
+                    })->select(DB::raw('count(distinct(transaction_id))'));
+                }])->withCount(['carts as sold_count' => function ($query) use ($request) {
+                    $query->whereHas('transaction', function ($q) use ($request) {
+                        $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                            ->where('created_at', '>=', $request->start_date);
+                    })->select(DB::raw('sum(quantity)'));
+                }])->withCount(['carts as total_income' => function ($query) use ($request) {
+                    $query->whereHas('transaction', function ($q) use ($request) {
+                        $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                            ->where('created_at', '>=', $request->start_date);
+                    })->select(DB::raw('sum(carts.price * quantity)'));
+                }]);
+        }
+        if ($request->sort == "transaction") {
+            $products = $products->orderBy('transaction_count', 'desc')->paginate(10);
+        } else if ($request->sort == "sold") {
+            $products = $products->orderBy('sold_count', 'desc')->paginate(10);
+        } else if ($request->sort == "income") {
+            $products = $products->orderBy('total_income', 'desc')->paginate(10);
+        } else if ($request->sort == "rating") {
+            $products = $products->orderBy('rating', 'desc')->paginate(10);
+        } else {
+            $products = $products->paginate(10);
+        }
+        return view('admin.analytics.products.inc.product', compact('products'));
+    }
+
+    public function date_analytics(Request $request)
+    {
+        if ($request->category == 0) {
+            $transactions = Transaction::orderBy('created_at', 'asc')
+                ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                ->where('created_at', '>=', $request->start_date)
+                ->withCount('carts')
+                ->get();
+        } else {
+            $transactions = Transaction::orderBy('created_at', 'asc')
+                ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                ->where('created_at', '>=', $request->start_date)->whereHas('carts', function ($q) use ($request) {
+                    $q->whereHas('product_variation', function ($q) use ($request) {
+                        $q->whereHas('product', function ($q) use ($request) {
+                            $q->where('category_id', $request->category);
+                        })->get();
+                    });
+                })
+                ->withCount('carts')
+                ->get();
+        }
+        return $transactions;
     }
 }
