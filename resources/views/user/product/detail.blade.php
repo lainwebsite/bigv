@@ -1,787 +1,526 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-		<title>{{ $product->name }}</title>
+@extends('user.template.layout')
 
- 		<!-- Google font -->
- 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+@section('page-title')
+Product Name - Big V
+@endsection
 
- 		<!-- Bootstrap -->
- 		<link type="text/css" rel="stylesheet" href="{{ asset('asset-user/css/bootstrap.min.css') }}"/>
+@section('head-extra')
+<link href="{{asset('assets/css/style-product-detail.css')}}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
+@endsection
 
- 		<!-- Slick -->
- 		<link type="text/css" rel="stylesheet" href="{{ asset('asset-user/css/slick.css') }}"/>
- 		<link type="text/css" rel="stylesheet" href="{{ asset('asset-user/css/slick-theme.css') }}"/>
+@section('content')
+<?php $shareLink = "https://my.ubaya.ac.id"; ?>
+<div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v14.0" nonce="7vBOYaJD"></script>
+<div class="content">
+<div style="margin-bottom: 1rem;">
+    <img src="{{asset('assets/6303b67a5064f05035c5a701_shape 1.svg')}}" loading="lazy" alt="" class="absolute shape-1 ea-right" />
+    <div class="product-hero">
+        <div class="content-col col--width-50 display-none">
+            <img src="{{asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg')}}" sizes="100vw" srcset="{{asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg')}}" alt="" class="image-9 card27" />
+            <img src="{{asset('assets/6308e8dff31701dadd206186_image%2032.jpg')}}" sizes="100vw" srcset="{{asset('assets/6308e8dff31701dadd206186_image%2032.jpg')}}" alt="" class="image-9 card27" />
+            <img src="{{asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg')}}" sizes="100vw" srcset="{{asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg')}}" alt="" class="image-9 card27" />
+        </div>
+        <div id="productImage" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                <img class="d-block w-100" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg" alt="First slide">
+                </div>
+                <div class="carousel-item">
+                <img class="d-block w-100" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg" alt="Second slide">
+                </div>
+                <div class="carousel-item">
+                <img class="d-block w-100" src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg" alt="Third slide">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#productImage" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#productImage" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        <div class="content-col col--width-50" id="productDetail">
+            <div class="div-block-5 ea-up">
+                <div class="product-info">
+                    <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey">Food and Beverage</h5>
+                    <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey"> &gt; </h5>
+                    <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey">Chinese New Year</h5>
+                    <h2 class="product-variation heading-2 text-color-grey margin-vertical margin-xsmall" variation-id="{{ $product->variations[0]->id }}">{{ count($product->variations) > 0 ? ($product->variations[0]->name == "novariation" ? $product->name : $product->variations[0]->name) : $product->name }}</h2>
+                    <div class="flex" style="justify-content: space-between; gap: 10px;">
+                        <div class="c-product-rating">
+                            <div class="flex">
+                                <div class="c-product-rating__star">
+                                    <div class="icon">
+                                        <div class="fas fa-star">
+                                            <img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="c-product-rating__star">
+                                    <div class="icon">
+                                        <div class="fas fa-star">
+                                            <img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="c-product-rating__star">
+                                    <div class="icon">
+                                        <div class="fas fa-star">
+                                            <img src="{{asset('assets/Star 2.svg')}}" loading="lazy" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="c-product-rating__star">
+                                    <div class="icon">
+                                        <div class="fas fa-star">
+                                            <img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="c-product-rating__star">
+                                    <div class="icon">
+                                        <div class="fas fa-star">
+                                            <img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="heading-4 p-beside-star">{{ $product->rating }} (300 rating)</h5>
+                            <h5 class="heading-4 p-beside-star">1.000 sold</h5>
+                        </div>
+                        <div class="share-dialog">
+                            <header class="share-header">
+                                <h3 class="dialog-title">Share Product</h3>
+                                <button class="close-button share-media-button share-svg"><svg><use href="#close"></use></svg></button>
+                            </header>
+                            <div class="link">
+                                <div id="shareLink" class="pen-url"><?= $shareLink ?></div>
+                                <button class="copy-link share-media-button" id="copyLink">Copy Link</button>
+                            </div>
+                        </div>
+                        <button class="share-button" type="button" title="Share this product">
+                            <svg class="share-btn-svg">
+                                <use href="#share-icon"></use>
+                            </svg>
+                            <span class="small">Share</span>
+                        </button>
+                        <svg class="hidden">
+                            <defs>
+                                <symbol id="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></symbol>
+                                <symbol id="facebook" viewBox="0 0 24 24" fill="#3b5998" stroke="#3b5998" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></symbol>
+                                <symbol id="twitter" viewBox="0 0 24 24" fill="#1da1f2" stroke="#1da1f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></symbol>
+                                <symbol id="email" viewBox="0 0 24 24" fill="#777" stroke="#fafafa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></symbol>
+                                <symbol id="linkedin" viewBox="0 0 24 24" fill="#0077B5" stroke="#0077B5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></symbol>
+                                <symbol id="close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-square"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line><line x1="15" y1="9" x2="9" y2="15"></line></symbol>
+                            </defs>
+                        </svg>
+                    </div>
 
- 		<!-- nouislider -->
- 		<link type="text/css" rel="stylesheet" href="{{ asset('asset-user/css/nouislider.min.css') }}"/>
-
- 		<!-- Font Awesome Icon -->
- 		<link rel="stylesheet" href="{{ asset('asset-user/css/font-awesome.min.css') }}">
-
- 		<!-- Custom stlylesheet -->
- 		<link type="text/css" rel="stylesheet" href="{{ asset('asset-user/css/style.css') }}"/>
-
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-		<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-
-    </head>
-	<body>
-		<!-- HEADER -->
-		<header>
-			<!-- TOP HEADER -->
-			<div id="top-header">
-				<div class="container">
-					<ul class="header-links pull-left">
-						<li><a href="javascript:void(0)"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-						<li><a href="javascript:void(0)"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-						<li><a href="javascript:void(0)"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
-					</ul>
-					<ul class="header-links pull-right">
-						<li><a href="javascript:void(0)"><i class="fa fa-dollar"></i> USD</a></li>
-						<li><a href="javascript:void(0)"><i class="fa fa-user-o"></i> My Account</a></li>
-					</ul>
-				</div>
-			</div>
-			<!-- /TOP HEADER -->
-
-			<!-- MAIN HEADER -->
-			<div id="header">
-				<!-- container -->
-				<div class="container">
-					<!-- row -->
-					<div class="row">
-						<!-- LOGO -->
-						<div class="col-md-3">
-							<div class="header-logo">
-								<a href="javascript:void(0)" class="logo">
-									<img src="./img/logo.png" alt="">
-								</a>
-							</div>
-						</div>
-						<!-- /LOGO -->
-
-						<!-- SEARCH BAR -->
-						<div class="col-md-6">
-							<div class="header-search">
-								<form>
-									<select class="input-select">
-										<option value="0">All Categories</option>
-										<option value="1">Category 01</option>
-										<option value="1">Category 02</option>
-									</select>
-									<input class="input" placeholder="Search here">
-									<button class="search-btn">Search</button>
-								</form>
-							</div>
-						</div>
-						<!-- /SEARCH BAR -->
-
-						<!-- ACCOUNT -->
-						<div class="col-md-3 clearfix">
-							<div class="header-ctn">
-								<!-- Wishlist -->
-								<div>
-									<a href="javascript:void(0)">
-										<i class="fa fa-heart-o"></i>
-										<span>Your Wishlist</span>
-										<div class="qty">2</div>
-									</a>
-								</div>
-								<!-- /Wishlist -->
-
-								<!-- Cart -->
-								<div class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-										<i class="fa fa-shopping-cart"></i>
-										<span>Your Cart</span>
-										<div class="qty">3</div>
-									</a>
-									<div class="cart-dropdown">
-										<div class="cart-list">
-										</div>
-										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: $2940.00</h5>
-										</div>
-										<div class="cart-btns">
-											<a href="javascript:void(0)">View Cart</a>
-											<a href="javascript:void(0)">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-										</div>
-									</div>
-								</div>
-								<!-- /Cart -->
-
-								<!-- Menu Toogle -->
-								<div class="menu-toggle">
-									<a href="javascript:void(0)">
-										<i class="fa fa-bars"></i>
-										<span>Menu</span>
-									</a>
-								</div>
-								<!-- /Menu Toogle -->
-							</div>
-						</div>
-						<!-- /ACCOUNT -->
-					</div>
-					<!-- row -->
-				</div>
-				<!-- container -->
-			</div>
-			<!-- /MAIN HEADER -->
-		</header>
-		<!-- /HEADER -->
-
-		<!-- NAVIGATION -->
-		<nav id="navigation">
-			<!-- container -->
-			<div class="container">
-				<!-- responsive-nav -->
-				<div id="responsive-nav">
-					<!-- NAV -->
-					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="javascript:void(0)">Home</a></li>
-						<li><a href="javascript:void(0)">Hot Deals</a></li>
-						<li><a href="javascript:void(0)">Categories</a></li>
-						<li><a href="javascript:void(0)">Laptops</a></li>
-						<li><a href="javascript:void(0)">Smartphones</a></li>
-						<li><a href="javascript:void(0)">Cameras</a></li>
-						<li><a href="javascript:void(0)">Accessories</a></li>
-					</ul>
-					<!-- /NAV -->
-				</div>
-				<!-- /responsive-nav -->
-			</div>
-			<!-- /container -->
-		</nav>
-		<!-- /NAVIGATION -->
-
-		<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="breadcrumb-tree">
-							<li><a href="javascript:void(0)">Home</a></li>
-							<li><a href="javascript:void(0)">All Categories</a></li>
-							<li><a href="javascript:void(0)">Accessories</a></li>
-							<li><a href="javascript:void(0)">Headphones</a></li>
-							<li class="active">Product name goes here</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
-
-		<!-- SECTION -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<!-- Product main img -->
-					<div class="col-md-5 col-md-push-2">
-						<div id="product-main-img">
-                            @foreach($product->images as $image)
-							<div class="product-preview">
-								<img src="{{ $image->link }}" alt="">
-							</div>
+                    @if ($product->variations[0]->name == "novariation") <!-- NO VARIATIONS -->
+                        <h3 class="product-price heading-3 margin-vertical margin-xsmall" price="{{ $product->variations[0]->price }}" variation-id="{{ $product->variations[0]->id }}">${{ $product->variations[0]->price }}</h3>
+                        <div class="div-line"></div>
+                    @else <!-- VARIATIONS -->
+                        <h3 class="product-price heading-3 margin-vertical margin-xsmall" min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}">${{ $minProductPrice }} - ${{ $maxProductPrice }}</h3>
+                        <div class="div-line"></div>
+                        <h5 class="heading-4 mb-2">Variant Name</h5>
+                        <div class="flex flex-wrap mb-3">
+                            @foreach($product->variations as $productVariation) 
+                                <button class="product-variation button-secondary-copy w-button" variation-id="{{ $productVariation->id }}" price="{{ $productVariation->price }}">{{ $productVariation->name }}</button>
                             @endforeach
-						</div>
-					</div>
-					<!-- /Product main img -->
+                        </div>
+                    @endif
 
-					<!-- Product thumb imgs -->
-					<div class="col-md-2  col-md-pull-5">
-						<div id="product-imgs">
-							<div class="product-preview">
-								<img src="{{ $product->images[0]->link }}" alt="">
-							</div>
-						</div>
-					</div>
-					<!-- /Product thumb imgs -->
+                    <!-- ADDONS -->
+                    @if(count($addons) > 0)
+                    <div class="row">
+                        @foreach($addons as $addon)
+                            <div class="col-6 input-group mb-2">
+                                <h5 class="heading-4 mb-2">{{ $addon->name }}</h5>
+                                <select class="addons-option w-100 custom-select" name="" id="" @if($addon->required) required @endif>
+                                    @foreach($addon->addons_options as $addons_option)
+                                        <option price="{{ $addons_option->price }}" value="{{ $addons_option->id }}">{{ $addons_option->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="div-line"></div>
+                    @endif
+                </div>
+                <div data-w-id="e5486bd2-858d-5f10-525d-cc969625544d" class="product-info flex actionSectionProductDetail">
+                    <div class="quantity-pill">
+                        <div class="cursor-pointer quantity-change" id="subQuantity">-</div>
+                        <input type="number" class="product-quantity" value="1" min="1">
+                        <div class="cursor-pointer quantity-change" id="addQuantity">+</div>
+                    </div>
+                    <div class="upper-product-buttons">
+                        @if ($product->variations[0]->name == "novariation")
+                            <a href="#" class="btn-add-cart atc-product-page oh-grow w-button">Add to Cart</a>
+                            <a href="#" class="btn-buy-now button-secondary oh-grow w-button">Buy Now</a>
+                        @else
+                            <a href="#" class="btn-add-cart btn-secondary atc-product-page oh-grow w-button">Add to Cart</a>
+                            <a href="#" class="btn-buy-now btn-outline-secondary text-secondary button-secondary oh-grow w-button">Buy Now</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- VENDOR -->
+<div class="product-vendor-n-info ea-up">
+    <div class="div-block-8">
+        <div class="vendor-product-detail" >
+            <img src="{{ $product->vendor->photo }}" loading="lazy" alt="" class="image-10" />
+            <div class="vendor-detail-product-detail">
+                <h4 class="text-color-dark-grey">{{ $product->vendor->name }}</h4>
+                <div class="text-color-grey" style="font-size: 0.8rem;">Location: <b>{{ $product->vendor->location->name }}</b></div>
+                <div class="c-product-rating">
+                    <div class="flex">
+                        <div class="c-product-rating__star">
+                            <div class="icon">
+                                <div class="fas fa-star"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" /></div>
+                            </div>
+                        </div>
+                        <div class="c-product-rating__star">
+                            <div class="icon">
+                                <div class="fas fa-star"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" /></div>
+                            </div>
+                        </div>
+                        <div class="c-product-rating__star">
+                            <div class="icon">
+                                <div class="fas fa-star"><img src="{{asset('assets/Star 2.svg')}}" loading="lazy" alt="" /></div>
+                            </div>
+                        </div>
+                        <div class="c-product-rating__star">
+                            <div class="icon">
+                                <div class="fas fa-star"><img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" /></div>
+                            </div>
+                        </div>
+                        <div class="c-product-rating__star">
+                            <div class="icon">
+                                <div class="fas fa-star"><img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" /></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="heading-4 p-beside-star">{{ $product->vendor->rating }} (300 rating)</h5>
+                    <h5 class="heading-4 p-beside-star">1.000 sold</h5>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="text-style-link margin-right div-block-7">
+                <div class="text-color-grey">Visit Vendor</div>
+        </a>
+    </div>
+    <div class="div-line"></div>
+    <h4 class="text-color-grey mb-2">Product Description</h4>
+    <p class="paragraph-2 text-color-grey mb-3" style="max-width: 500px;">{{ $product->description }}</p>
+    {{-- <div class="div-block-9">
+        <div id="w-node-_274f20e5-cf76-d21b-b2d2-1fb0375edc27-fac73a6b">
+            <h4 class="text-color-grey mb-2">Additional Information</h4>
+            <div class="paragraph-2 text-color-grey">Information: Cute Tiger Aroma Stone Set come with special essential oil blend 2ml
+                <br/>Product Ingredient: “Handcraft grade plaster powder, Dried flowers, Aromatherapy grade essential oil, Aromatherapy grade base oil”
+                <br/>The product images shown are for illustration purposes only and may not be an exact representation of the product.</div>
+        </div>
+        <div id="w-node-_84a64200-c92a-b6c2-6879-3576d907de5e-fac73a6b">
+            <h4 class="text-color-grey mb-2">Shipping &amp; Delivery</h4>
+            <div class="paragraph-2 text-color-grey">$10 island wide delivery except off-shore islands
+                <br/>Delivery only starts from 1 week from purchase date
+                <br/>Delivery time from 11am – 9pm
+                <br/>No deliveries available during Sunday and PH</div>
+        </div>
+    </div> --}}
+</div>
+<!-- END VENDOR -->
+<div class="flex relative max-width-full align-center"><img src="{{asset('assets/6303b7b9afc8585f7943565c_shape 2.svg')}}" loading="lazy" alt="" class="absolute bottom-left ea-left" />
+    <div class="flex top-align max-width relative">
+        <div class="card27 padding-small margin-small sticky-top ea-left" id="reviewSummary">
+            <h4 class="text-color-dark-grey">Reviews</h4>
+            <div class="flex gap-small"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" />
+                <h5 class="heading-4 p-beside-star">{{ $product->rating }}</h5>
+                <h5 class="heading-4 p-beside-star">/</h5>
+                <h5 class="heading-4 p-beside-star">5</h5></div>
+            <h5 class="heading-4 p-beside-star">300 Rating</h5>
+            <div class="div-block-16">
+                <div class="flex gap-small"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" class="image-11" />
+                    <h5 class="heading-4 p-beside-star text-weight-medium">5</h5>
+                    <div class="div-block-10">
+                        <div class="div-block-11"></div>
+                    </div>
+                    <h5 class="heading-4 p-beside-star text-weight-medium">121</h5></div>
+                <div class="flex gap-small"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" class="image-11" />
+                    <h5 class="heading-4 p-beside-star text-weight-medium">4</h5>
+                    <div class="div-block-10">
+                        <div class="div-block-12"></div>
+                    </div>
+                    <h5 class="heading-4 p-beside-star text-weight-medium">40</h5></div>
+                <div class="flex gap-small"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" class="image-11" />
+                    <h5 class="heading-4 p-beside-star text-weight-medium">3</h5>
+                    <div class="div-block-10">
+                        <div class="div-block-13"></div>
+                    </div>
+                    <h5 class="heading-4 p-beside-star text-weight-medium">13</h5></div>
+                <div class="flex gap-small"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" class="image-11" />
+                    <h5 class="heading-4 p-beside-star text-weight-medium">2</h5>
+                    <div class="div-block-10">
+                        <div class="div-block-14"></div>
+                    </div>
+                    <h5 class="heading-4 p-beside-star text-weight-medium">8</h5></div>
+                <div class="flex gap-small"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" class="image-11" />
+                    <h5 class="heading-4 p-beside-star text-weight-medium">1</h5>
+                    <div class="div-block-10">
+                        <div class="div-block-15"></div>
+                    </div>
+                    <h5 class="heading-4 p-beside-star text-weight-medium">2</h5></div>
+            </div>
+        </div>
+        <div class="text-color-dark-grey ea-right">
+            @for ($i = 0; $i < 10; $i++)
+            <div class="card27 padding-small margin-small">
+                <div class="div-block-17">
+                    <h4>Chris William</h4>
+                    <h5 class="heading-4 p-beside-star">29-10-2022</h5></div>
+                <div class="flex">
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 2.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                </div>
+                <h5 class="heading-4 p-beside-star">300 Rating</h5>
+                <div class="text-size-tiny text-color-grey">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</div>
+            </div>
+            @endfor
+        </div>
+    </div>
+</div>
+<div class="pagination flex justify-center margin-large">
+    <a href="#" class="pagination-selected text-style-none">
+        <div class="text-color-white">1</div>
+    </a>
+    <a href="#" class="pagination-not-selected text-style-none">
+        <div class="orange-text">1</div>
+    </a>
+</div>
+</div>
+<div data-w-id="1469b1e8-77d5-4eda-0931-cc24293decef" style="-webkit-transform:translate3d(0, -100%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, -100%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, -100%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, -100%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="atc-popup">
+<div class="c-product-form w-form">
+    <div class="c-product-form__row">
+        <div class="c-product-form__col col-sizing--grow">
+            <h3 class="product-name heading-2 text-color-grey">{{ count($product->variations) > 0 ? ($product->variations[0]->name == "novariation" ? $product->name : $product->variations[0]->name) : $product->name }}</h3>
+            <div class="popup-atc-price-n-star">
+                @if ($product->variations[0]->name == "novariation")
+                    <h4 class="product-price heading-3">${{ $product->variations[0]->price }}</h4>
+                @else
+                    <h4 class="product-price heading-3">${{ $minProductPrice }} - ${{ $maxProductPrice }}</h4>
+                @endif
+                <div class="flex">
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 2.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                    <div class="c-product-rating__star">
+                        <div class="icon">
+                            <div class="fas fa-star"><img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" /></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="c-product-form__col">
+            <a href="#productDetail" class="button-3 button-size--small oh-jiggle w-inline-block">
+                <div class="text-color-white">Add to Your Cart</div>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+<div class="new-products-section padding-xxlarge ea-fade">
+<div class="heading-large text-align-center margin-bottom margin-large">Suggested Products</div>
+<div class="products-archive-grid margin-auto">
+    @for ($i=0; $i < 10; $i++)
+    <a href="https://www.google.com">
+        <div id="w-node-_6b6feb56-ca1c-a712-de43-c09a32981649-fac73a6b" class="product-card padding-small">
+            <div class="text-rich-text text-size-small text-color-grey">Cak Har</div><img src="{{asset('assets/62fc7f0ee2b4118e2f35c5d6_image%2034.png')}}" loading="lazy" alt="" class="product-image" />
+            <div class="product-card-stars"><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" class="card-stars" /><img src="{{asset('assets/Star 1.svg')}}" loading="lazy" alt="" class="card-stars" /><img src="{{asset('assets/Star 2.svg')}}" loading="lazy" alt="" class="card-stars" /><img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" class="card-stars" /><img src="{{asset('assets/Star 3.svg')}}" loading="lazy" alt="" class="card-stars" /></div>
+            <div class="product-card-title text-rich-text text-size-regular text-weight-bold text-color-dark-grey">Macaroni</div>
+            <div class="product-card-low-div">
+                <div class="card-discount">
+                    <div class="discount">50%</div>
+                </div>
+                <div id="w-node-_6b6feb56-ca1c-a712-de43-c09a32981656-fac73a6b" class="sale-price text-color-light-grey">$24.00</div>
+                <div class="text-rich-text text-color-orange text-weight-bold">$12.00</div>
+            </div>
+        </div>
+    </a>
+    @endfor
+    </div><a href="#" class="button margin-top margin-large ea-grow w-button">See More</a>
+    <div data-w-id="2763fafa-9663-7a88-db5c-9d4056894d11" class="product-info"></div>
+</div>
+<div class="cursor">
+    <div data-w-id="43814446-d33a-082e-5ffc-db029d2c2dc1" class="dot"></div>
+</div>
+@endsection
 
-					<!-- Product details -->
-					<div class="col-md-5">
-						<div class="product-details">
-							<h2 class="product-name">{{ $product->name }}</h2>
-							<div>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star-o"></i>
-								</div>
-								<a class="review-link" href="javascript:void(0)">10 Review(s) | Add your review</a>
-							</div>
-							<div>
-								<h3 class="product-price">${{ $product->variations[0]->price }} <del class="product-old-price">$0.00</del></h3>
-								<span class="product-available">In Stock</span>
-							</div>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+@section('javascript-extra')
+<script src="{{asset('assets/js/script-product-detail.js')}}" type="text/javascript"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>
+    $(".product-variation").on("click", function() {    
+        if ($(this).hasClass("selected")) {
+            $(this).removeClass("selected");
+            $(".product-price").html("$" + $(".product-price").attr("min-price") + " - $" + $(".product-price").attr("max-price")).removeAttr("product-id");
+            $(".btn-add-cart").attr("disabled", "").addClass("btn-secondary");
+            $(".btn-buy-now").attr("disabled", "").addClass("btn-outline-secondary text-secondary");
+        } else {
+            $(".product-variation").each(function() {
+                $(this).removeClass("selected");
+            });
 
-							<div class="product-options">
-								<label>
-									Size
-									<select class="input-select">
-										<option value="0">X</option>
-									</select>
-								</label>
-								<label>
-									Color
-									<select class="input-select">
-										<option value="0">Red</option>
-									</select>
-								</label>
-							</div>
+            $(this).addClass("selected");
+            $(".product-price").html("$" + $(this).attr("price")).attr("variation-id", $(this).attr("variation-id"));
+            $(".btn-add-cart").removeAttr("disabled").removeClass("btn-secondary");
+            $(".btn-buy-now").removeAttr("disabled").removeClass("btn-outline-secondary text-secondary");
+        }
+    });
 
-							<div class="add-to-cart">
-								<div class="qty-label">
-									Qty
-									<div class="input-number">
-										<input type="number">
-										<span class="qty-up">+</span>
-										<span class="qty-down">-</span>
-									</div>
-								</div>
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
+    $(".addons-option option").on("click", function() {
+        var price = parseFloat($(".product-price").attr("price"));
+        var addons_price = parseFloat($(this).attr("price"));
+        
+        $(".product-price").html("$"+(price + addons_price));
+    });
 
-							<ul class="product-btns">
-								<li><a href="javascript:void(0)"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-exchange"></i> add to compare</a></li>
-							</ul>
+    $(".quantity-change").on('click', function(){
+        var qty = parseInt($(".product-quantity").val());
+        if ($(this).attr("id") == "addQuantity"){
+            $(".product-quantity").val(qty + 1);
+        }
+        else {
+            if (qty - 1 >= 1){
+                $(".product-quantity").val(qty -1);
+            }
+        }
+    });
 
-							<ul class="product-links">
-								<li>Category:</li>
-								<li><a href="javascript:void(0)">Headphones</a></li>
-								<li><a href="javascript:void(0)">Accessories</a></li>
-							</ul>
+    @if (auth()->user() != null)
+        @if (auth()->user()->role_id == 1)
+            document.querySelector(".btn-add-cart").addEventListener("click", function(event) {
+                event.preventDefault();
 
-							<ul class="product-links">
-								<li>Share:</li>
-								<li><a href="javascript:void(0)"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-google-plus"></i></a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-envelope"></i></a></li>
-							</ul>
+                if ($(".product-variation.selected").length > 0) {
+                    $.post(url + "/user/cart", {
+                        _token: CSRF_TOKEN,
+                        product_variation_id: $(".product-variation.selected").attr("variation-id"),
+                        quantity: $(".product-quantity").val()
+                    }).done(function(data) {
+                        alert(data);
+                    }).fail(function(error) {
+                        console.log(error);
+                    });
+                } else {
+                    $.post(url + "/user/cart", {
+                        _token: CSRF_TOKEN,
+                        product_variation_id: $(".product-price").attr("variation-id"),
+                        quantity: $(".product-quantity").val()
+                    }).done(function(data) {
+                        alert(data);
+                    }).fail(function(error) {
+                        console.log(error);
+                    });
+                }
+            });
+            document.querySelector(".btn-buy-now").addEventListener("click", function(event) {
+                event.preventDefault();
 
-						</div>
-					</div>
-					<!-- /Product details -->
+                $.post(url + "/user/cart/verify-checkout", {
+                    _token: CSRF_TOKEN,
+                    carts: {},
+                }).done(function(data) {
+                    alert(data);
+                }).fail(function(error) {
+                    console.log(error);
+                });
+            });
+        @endif
+    @else
+        $(".btn-add-cart, .btn-buy-now").attr("href", "{{ route('login') }}");
+    @endif
 
-					<!-- Product tab -->
-					<div class="col-md-12">
-						<div id="product-tab">
-							<!-- product tab nav -->
-							<ul class="tab-nav">
-								<li class="active"><a data-toggle="tab" href="javascript:void(0)tab1">Description</a></li>
-								<li><a data-toggle="tab" href="javascript:void(0)tab2">Details</a></li>
-								<li><a data-toggle="tab" href="javascript:void(0)tab3">Reviews (3)</a></li>
-							</ul>
-							<!-- /product tab nav -->
+    var shareLink = "<?= $shareLink ?>";
 
-							<!-- product tab content -->
-							<div class="tab-content">
-								<!-- tab1  -->
-								<div id="tab1" class="tab-pane fade in active">
-									<div class="row">
-										<div class="col-md-12">
-											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-										</div>
-									</div>
-								</div>
-								<!-- /tab1  -->
+    const shareButton = document.querySelector('.share-button');
+    const shareDialog = document.querySelector('.share-dialog');
+    const closeButton = document.querySelector('.close-button');
 
-								<!-- tab2  -->
-								<div id="tab2" class="tab-pane fade in">
-									<div class="row">
-										<div class="col-md-12">
-											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-										</div>
-									</div>
-								</div>
-								<!-- /tab2  -->
+    shareButton.addEventListener('click', event => {
+        if (navigator.share) { 
+            navigator.share({
+                title: 'Big V - Share Product',
+                url: shareLink // product link
+            }).then(() => {
+                console.log('Thanks for sharing!');
+            })
+            .catch(console.error);
+        } else {
+            shareDialog.classList.add('is-open');
+        }
+    });
 
-								<!-- tab3  -->
-								<div id="tab3" class="tab-pane fade in">
-									<div class="row">
-										<!-- Rating -->
-										<div class="col-md-3">
-											<div id="rating">
-												<div class="rating-avg">
-													<span>4.5</span>
-													<div class="rating-stars">
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star-o"></i>
-													</div>
-												</div>
-												<ul class="rating">
-													<li>
-														<div class="rating-stars">
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-														</div>
-														<div class="rating-progress">
-															<div style="width: 80%;"></div>
-														</div>
-														<span class="sum">3</span>
-													</li>
-													<li>
-														<div class="rating-stars">
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star-o"></i>
-														</div>
-														<div class="rating-progress">
-															<div style="width: 60%;"></div>
-														</div>
-														<span class="sum">2</span>
-													</li>
-													<li>
-														<div class="rating-stars">
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star-o"></i>
-															<i class="fa fa-star-o"></i>
-														</div>
-														<div class="rating-progress">
-															<div></div>
-														</div>
-														<span class="sum">0</span>
-													</li>
-													<li>
-														<div class="rating-stars">
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star-o"></i>
-															<i class="fa fa-star-o"></i>
-															<i class="fa fa-star-o"></i>
-														</div>
-														<div class="rating-progress">
-															<div></div>
-														</div>
-														<span class="sum">0</span>
-													</li>
-													<li>
-														<div class="rating-stars">
-															<i class="fa fa-star"></i>
-															<i class="fa fa-star-o"></i>
-															<i class="fa fa-star-o"></i>
-															<i class="fa fa-star-o"></i>
-															<i class="fa fa-star-o"></i>
-														</div>
-														<div class="rating-progress">
-															<div></div>
-														</div>
-														<span class="sum">0</span>
-													</li>
-												</ul>
-											</div>
-										</div>
-										<!-- /Rating -->
+    closeButton.addEventListener('click', event => {
+        shareDialog.classList.remove('is-open');
+    });
 
-										<!-- Reviews -->
-										<div class="col-md-6">
-											<div id="reviews">
-												<ul class="reviews">
-													<li>
-														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
-															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
-															</div>
-														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
-													</li>
-													<li>
-														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
-															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
-															</div>
-														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
-													</li>
-													<li>
-														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
-															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
-															</div>
-														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
-													</li>
-												</ul>
-												<ul class="reviews-pagination">
-													<li class="active">1</li>
-													<li><a href="javascript:void(0)">2</a></li>
-													<li><a href="javascript:void(0)">3</a></li>
-													<li><a href="javascript:void(0)">4</a></li>
-													<li><a href="javascript:void(0)"><i class="fa fa-angle-right"></i></a></li>
-												</ul>
-											</div>
-										</div>
-										<!-- /Reviews -->
-
-										<!-- Review Form -->
-										<div class="col-md-3">
-											<div id="review-form">
-												<form class="review-form">
-													<input class="input" type="text" placeholder="Your Name">
-													<input class="input" type="email" placeholder="Your Email">
-													<textarea class="input" placeholder="Your Review"></textarea>
-													<div class="input-rating">
-														<span>Your Rating: </span>
-														<div class="stars">
-															<input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
-															<input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
-															<input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
-															<input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
-															<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
-														</div>
-													</div>
-													<button class="primary-btn">Submit</button>
-												</form>
-											</div>
-										</div>
-										<!-- /Review Form -->
-									</div>
-								</div>
-								<!-- /tab3  -->
-							</div>
-							<!-- /product tab content  -->
-						</div>
-					</div>
-					<!-- /product tab -->
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /SECTION -->
-
-		<!-- Section -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-
-					<div class="col-md-12">
-						<div class="section-title text-center">
-							<h3 class="title">Related Products</h3>
-						</div>
-					</div>
-
-					<!-- product -->
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="./img/product01.png" alt="">
-								<div class="product-label">
-									<span class="sale">-30%</span>
-								</div>
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="javascript:void(0)">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								<div class="product-rating">
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-					<!-- /product -->
-
-					<!-- product -->
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="./img/product02.png" alt="">
-								<div class="product-label">
-									<span class="new">NEW</span>
-								</div>
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="javascript:void(0)">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-					<!-- /product -->
-
-					<div class="clearfix visible-sm visible-xs"></div>
-
-					<!-- product -->
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="./img/product03.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="javascript:void(0)">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star-o"></i>
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-					<!-- /product -->
-
-					<!-- product -->
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="./img/product04.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="javascript:void(0)">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								<div class="product-rating">
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-					<!-- /product -->
-
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /Section -->
-
-		<!-- NEWSLETTER -->
-		<div id="newsletter" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="newsletter">
-							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-							<form>
-								<input class="input" type="email" placeholder="Enter Your Email">
-								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
-							</form>
-							<ul class="newsletter-follow">
-								<li>
-									<a href="javascript:void(0)"><i class="fa fa-facebook"></i></a>
-								</li>
-								<li>
-									<a href="javascript:void(0)"><i class="fa fa-twitter"></i></a>
-								</li>
-								<li>
-									<a href="javascript:void(0)"><i class="fa fa-instagram"></i></a>
-								</li>
-								<li>
-									<a href="javascript:void(0)"><i class="fa fa-pinterest"></i></a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /NEWSLETTER -->
-
-		<!-- FOOTER -->
-		<footer id="footer">
-			<!-- top footer -->
-			<div class="section">
-				<!-- container -->
-				<div class="container">
-					<!-- row -->
-					<div class="row">
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">About Us</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-								<ul class="footer-links">
-									<li><a href="javascript:void(0)"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-									<li><a href="javascript:void(0)"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-									<li><a href="javascript:void(0)"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Categories</h3>
-								<ul class="footer-links">
-									<li><a href="javascript:void(0)">Hot deals</a></li>
-									<li><a href="javascript:void(0)">Laptops</a></li>
-									<li><a href="javascript:void(0)">Smartphones</a></li>
-									<li><a href="javascript:void(0)">Cameras</a></li>
-									<li><a href="javascript:void(0)">Accessories</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="clearfix visible-xs"></div>
-
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Information</h3>
-								<ul class="footer-links">
-									<li><a href="javascript:void(0)">About Us</a></li>
-									<li><a href="javascript:void(0)">Contact Us</a></li>
-									<li><a href="javascript:void(0)">Privacy Policy</a></li>
-									<li><a href="javascript:void(0)">Orders and Returns</a></li>
-									<li><a href="javascript:void(0)">Terms & Conditions</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="col-md-3 col-xs-6">
-							<div class="footer">
-								<h3 class="footer-title">Service</h3>
-								<ul class="footer-links">
-									<li><a href="javascript:void(0)">My Account</a></li>
-									<li><a href="javascript:void(0)">View Cart</a></li>
-									<li><a href="javascript:void(0)">Wishlist</a></li>
-									<li><a href="javascript:void(0)">Track My Order</a></li>
-									<li><a href="javascript:void(0)">Help</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<!-- /row -->
-				</div>
-				<!-- /container -->
-			</div>
-			<!-- /top footer -->
-
-			<!-- bottom footer -->
-			<div id="bottom-footer" class="section">
-				<div class="container">
-					<!-- row -->
-					<div class="row">
-						<div class="col-md-12 text-center">
-							<ul class="footer-payments">
-								<li><a href="javascript:void(0)"><i class="fa fa-cc-visa"></i></a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-credit-card"></i></a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-cc-paypal"></i></a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-cc-mastercard"></i></a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-cc-discover"></i></a></li>
-								<li><a href="javascript:void(0)"><i class="fa fa-cc-amex"></i></a></li>
-							</ul>
-							<span class="copyright">
-								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-								Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-							</span>
-						</div>
-					</div>
-						<!-- /row -->
-				</div>
-				<!-- /container -->
-			</div>
-			<!-- /bottom footer -->
-		</footer>
-		<!-- /FOOTER -->
-
-		<!-- jQuery Plugins -->
-		<script src="{{ asset('asset-user/js/jquery.min.js') }}"></script>
-		<script src="{{ asset('asset-user/js/bootstrap.min.js') }}"></script>
-		<script src="{{ asset('asset-user/js/slick.min.js') }}"></script>
-		<script src="{{ asset('asset-user/js/nouislider.min.js') }}"></script>
-		<script src="{{ asset('asset-user/js/jquery.zoom.min.js') }}"></script>
-		<script src="{{ asset('asset-user/js/main.js') }}"></script>
-
-	</body>
-</html>
+    $(document).on('click', "#copyLink", function(){
+        navigator.permissions.query({ name: "write-on-clipboard" }).then((result) => {
+            if (result.state == "granted" || result.state == "prompt") {
+                alert("Write access granted!");
+            }
+        });
+        navigator.clipboard.writeText(shareLink); //product link
+        $("#copyLink").html("Link Copied");
+    });
+</script>
+@endsection
