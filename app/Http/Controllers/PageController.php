@@ -18,7 +18,7 @@ class PageController extends Controller
         //     'productCategories' => $productCategories,
         //     'active' => 0
         // ]);
-        return view('product.index', [
+        return view('home', [
             'products' => $products,
             'productCategories' => $productCategories,
             'active' => 0
