@@ -23,6 +23,10 @@ class ProductVariation extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, 'product_variation_id', 'id');
+    }
     public function reviews()
     {
         return $this->hasMany(ProductReview::class, 'product_variation_id', 'id');

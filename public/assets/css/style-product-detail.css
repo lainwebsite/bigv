@@ -2934,6 +2934,29 @@ figcaption {
   aspect-ratio: 1/1;
 }
 
+.quantity-pill-small {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 114px;
+  height: 36px;
+  margin-right: 0rem;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  grid-column-gap: 27px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #c5c5c5;
+  border-radius: 27px;
+}
+
 .div-block-9 {
   display: -ms-grid;
   display: grid;

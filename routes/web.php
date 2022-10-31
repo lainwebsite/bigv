@@ -20,7 +20,9 @@ use App\Http\Controllers\Admin\UserRoleController as AdminUserRoleController;
 use App\Http\Controllers\Admin\UserTierController as AdminUserTierController;
 use App\Http\Controllers\Admin\VendorController as AdminVendorController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PickupAddressController;
 use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\DiscountController;
 use App\Http\Controllers\User\PaymentMethodController;
 use App\Http\Controllers\User\PickupMethodController;
@@ -56,12 +58,22 @@ Auth::routes(['verify' => true]);
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::resource('product', ProductController::class);
+Route::post('product/filter', [ProductController::class, 'filter']);
 
 Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
+    // Route::post('cart/{id}/{qty}', [CartController::class, 'update']);
+
+    Route::post('cart/verify-checkout', [CheckoutController::class, 'verifyCheckout']);
+    Route::get('cart/checkout', [CheckoutController::class, 'getCheckout']);
+    Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
     Route::resource('cart', CartController::class);
+    // Route::get('discount/search', [DiscountController::class, 'search']);
     Route::resource('discount', DiscountController::class);
+    Route::get('discount/search/{keyword?}', [DiscountController::class, 'search']);
+    Route::post('discount/apply-voucher', [DiscountController::class, 'applyVoucher']);
     Route::resource('payment-method', PaymentMethodController::class);
     Route::resource('pickup-method', PickupMethodController::class);
+    Route::post('pickup-address/search', [PickupAddressController::class, 'search']);
     Route::resource('product-category', ProductCategoryController::class);
     Route::resource('product-image', ProductImageController::class);
     Route::resource('product-review', ProductReviewController::class);
@@ -69,6 +81,9 @@ Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' =>
     Route::resource('transaction', TransactionController::class);
     Route::resource('transaction-discount', TransactionDiscountController::class);
     Route::resource('transaction-status', TransactionStatusController::class);
+    Route::post('user-address/create-address', [UserAddressController::class, 'createAddressAJAX']);
+    Route::get('user-address/get-address/{user_address}', [UserAddressController::class, 'getAddressAJAX']);
+    Route::post('user-address/search', [UserAddressController::class, 'search']);
     Route::resource('user-address', UserAddressController::class);
     Route::resource('user-role', UserRoleController::class);
     Route::resource('user-tier', UserTierController::class);

@@ -82,4 +82,24 @@ class PickupAddressController extends Controller
     {
         //
     }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->keyword;
+        $addresses = PickupAddress::all();
+
+        if (isset($keyword)) {
+            $addresses = PickupAddress::where('name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('street', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('building_name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('unit_level', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('block_number', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('unit_number', 'LIKE', '%' . $keyword . '%')
+                ->get();
+        }
+
+        if (isset($addresses)) {
+            return view('user.cart.itemPickupAddressCheckout', ['addresses' => $addresses]);
+        }
+    }
 }
