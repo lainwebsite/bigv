@@ -20,7 +20,7 @@ class DiscountTypeSeeder extends Seeder
         $temp->save();
 
         $temp = new DiscountType();
-        $temp->name = "Percentage";
+        $temp->name = "Voucher Code";
         $temp->save();
 
         $temp = new DiscountType();

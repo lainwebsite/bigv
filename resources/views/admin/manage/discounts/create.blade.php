@@ -48,7 +48,7 @@
             <!-- basic table -->
             <form action="{{ route('admin.discount.store') }}" method="post">
                 @csrf
-                <input type="hidden" name="discount_type" id="discount-type" value="0">
+                <input type="hidden" name="discount_type" id="discount-type" value="3">
                 <input type="hidden" name="discount_applicable" id="discount-applicable" value="1">
                 <input type="hidden" name="voucher_products" id="voucher-products">
                 <input type="hidden" name="voucher_vendors" id="voucher-vendors">
@@ -528,7 +528,7 @@
         });
 
         $("#productSalePrice").on('click', function() {
-            $('#discount-type').val(0);
+            $('#discount-type').val(3);
             $(".voucher-input").addClass("d-none");
             $("#productSalePriceSection").removeClass("d-none");
             $("#productVoucherSection").addClass("d-none");

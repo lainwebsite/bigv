@@ -107,8 +107,6 @@ class ProductController extends Controller
             ProductVariation::create([
                 'name' => $request->variation_name[$key],
                 'price' => $request->variation_price[$key],
-                'discount' => $request->variation_discount[$key] ?? 0,
-                'discount_date' => $request->variation_discount_date[$key] ?? Carbon::now(),
                 'product_id' => $product->id
             ]);
         }
@@ -186,8 +184,6 @@ class ProductController extends Controller
             ProductVariation::create([
                 'name' => $request->variation_name[$key],
                 'price' => $request->variation_price[$key],
-                'discount' => $request->variation_discount[$key] ?? 0,
-                'discount_date' => $request->variation_discount_date[$key] ?? Carbon::now(),
                 'product_id' => $product->id
             ]);
         }

@@ -27,7 +27,8 @@ class DiscountController extends Controller
     public function index()
     {
         $discounts = Discount::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.manage.discounts.index', compact('discounts'));
+        $products = ProductVariation::where('discount_start_date', '!=', null)->get();
+        return view('admin.manage.discounts.index', compact('discounts', 'products'));
     }
 
     /**
@@ -70,7 +71,7 @@ class DiscountController extends Controller
                 'type_id' => 1,
                 'visible' => $request->visible == 'on' ? 1 : 0
             ]);
-        } else if ($request->discount_type == "0") {
+        } else if ($request->discount_type == "3") {
             $validator = Validator::make($request->all(), [
                 'sale_price' => 'required',
             ]);
@@ -83,6 +84,15 @@ class DiscountController extends Controller
                 "discount_start_date" => $request->duration_start,
                 "discount_end_date" => $request->duration_end,
                 "discount" => $request->sale_price
+            ]);
+            $discount = Discount::create([
+                'name' => $variation->id,
+                'code' => $variation->name . '-' . (Discount::where('name', $variation->product->name . ' - ' . $variation->name)->get()->count() + 1),
+                'amount' => $request->sale_price,
+                'duration_start' => $request->duration_start,
+                'duration_end' => $request->duration_end,
+                'type_id' => 3,
+                'visible' => $request->visible == 'on' ? 1 : 0
             ]);
         } else if ($request->discount_type == "2") {
             //product
