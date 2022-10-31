@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PickupMethodSeeder::class);
         $this->call(VendorLocationSeeder::class);
         $this->call(VendorSeeder::class);
+        $this->call(PickupAddressSeeder::class);
         $this->call(ProductCategorySeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(ProductVariationSeeder::class);

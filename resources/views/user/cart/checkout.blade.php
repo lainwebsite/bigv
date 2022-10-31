@@ -53,7 +53,7 @@ Checkout - Big V
                                             <div class="text-size-small">{{ $pickup_method->name }}</div>
                                         </a>
                                     @else
-                                        <a href="#" pickup-method-id="{{ $pickup_method->id }}" class="shipping-button w-inline-block" id="deliveryShippingButton">
+                                        <a href="#" pickup-method-id="{{ $pickup_method->id }}" class="shipping-button w-inline-block" id="pickupShippingButton">
                                             <svg width="33" height="33" viewBox="0 0 33 33" class="shipping-icon" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M26.125 9.625C26.125 8.1125 24.8875 6.875 23.375 6.875H19.25V9.625H23.375V13.2687L18.59 19.25H13.75V12.375H8.25C5.21125 12.375 2.75 14.8362 2.75 17.875V22H5.5C5.5 24.2825 7.3425 26.125 9.625 26.125C11.9075 26.125 13.75 24.2825 13.75 22H19.91L26.125 14.2313V9.625ZM9.625 23.375C8.86875 23.375 8.25 22.7563 8.25 22H11C11 22.7563 10.3812 23.375 9.625 23.375Z" />
                                                 <path d="M6.875 8.25H13.75V11H6.875V8.25ZM26.125 17.875C23.8425 17.875 22 19.7175 22 22C22 24.2825 23.8425 26.125 26.125 26.125C28.4075 26.125 30.25 24.2825 30.25 22C30.25 19.7175 28.4075 17.875 26.125 17.875ZM26.125 23.375C25.3687 23.375 24.75 22.7563 24.75 22C24.75 21.2437 25.3687 20.625 26.125 20.625C26.8813 20.625 27.5 21.2437 27.5 22C27.5 22.7563 26.8813 23.375 26.125 23.375Z" />
@@ -155,7 +155,9 @@ Checkout - Big V
                                     <img loading="lazy" srcset="{{ $product->featured_image }}" alt="" class="image-18" />
                                     <div>
                                         <h5 class="text-color-dark-grey">{{ $product->product_name }}</h5>
-                                        <div class="text-size-small text-color-grey">{{ $product->product_variation_name }}</div>
+                                        @if ($product->product_variation_name != "novariation")
+                                            <div class="text-size-small text-color-grey">Variant: {{ $product->product_variation_name }}</div>
+                                        @endif
                                         <div class="text-size-small text-color-grey">${{ $product->price }}</div>
                                     </div>
                                 </div>
@@ -583,6 +585,9 @@ Checkout - Big V
             keyword: "",
         }).done(function(data) {
             $("#pickupShippingDetail .container-address").html(data);
+
+            // set default selected pickup-address
+            $("#pickupShippingDetail").attr("selected-address", addressId);
         }).fail(function(error) {
             console.log("Error!")
         });

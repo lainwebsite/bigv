@@ -1,5 +1,5 @@
 @foreach ($addresses as $address) 
-    <div address-id={{ $address->id }} class="delivery-add-item w-auto flex-column align-items-start pickup-address-button cursor-pointer">
+    <div address-id={{ $address->id }} class="delivery-add-item w-auto flex-column align-items-start pickup-address-button @if ($loop->index == 0) pickup-address-button-active @endif cursor-pointer">
         <h4 class="heading-7">{{ $address->name }}</h4>
         @if (isset($address->block_number))
             <div class="text-size-small">

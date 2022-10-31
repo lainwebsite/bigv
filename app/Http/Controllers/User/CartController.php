@@ -14,8 +14,11 @@ class CartController extends Controller
 {
     public function __construct()
     {
-        session()->forget('total-checkout-price');
         session()->forget('checkout-items');
+        session()->forget('shipping-price');
+        session()->forget('total-checkout-price');
+        session()->forget('grandtotal-checkout-price');
+        session()->forget('total-checkout-items');
         session()->save();
     }
 

@@ -16,13 +16,14 @@ class CheckoutController extends Controller
 {
     public function getCheckout(Request $request)
     {
-        if (session()->has('checkout-items') && session()->has('total-checkout-price') && session()->has('total-checkout-items')) {
+        if (
+            session()->has('checkout-items') &&
+            session()->has('shipping-price') &&
+            session()->has('total-checkout-price') &&
+            session()->has('grandtotal-checkout-price') &&
+            session()->has('total-checkout-items')
+        ) {
             $addresses = UserAddress::where('user_id', auth()->user()->id)->get();
-            $shipping_price = 30;
-            $total_price = session()->get('total-checkout-price');
-
-            session()->put('shipping-price', $shipping_price);
-            session()->put('total-checkout-price', $total_price + $shipping_price);
 
             $checkout_items = Vendor::with(['products' => function ($q1) {
                 $q1->select('vendor_id', 'carts.id as cart_id', 'products.featured_image', 'products.name as product_name', 'product_variations.name as product_variation_name', 'carts.price', 'carts.quantity', 'carts.user_id')
@@ -48,10 +49,10 @@ class CheckoutController extends Controller
                 'pickup_times' => $pickup_times,
                 'addresses' => $addresses,
                 'checkouts' => $checkout_items,
-                'total_price' => $total_price,
+                'total_price' => session()->get('total-checkout-price'),
                 'total_items' => session()->get('total-checkout-items'),
-                'shipping_price' => $shipping_price,
-                'grandtotal_price' => $total_price + $shipping_price,
+                'shipping_price' => session()->get('shipping-price'),
+                'grandtotal_price' => session()->get('grandtotal-checkout-price'),
             ]);
         }
 
@@ -78,8 +79,12 @@ class CheckoutController extends Controller
                 }
 
                 if (count($cart_checkout_id) > 0) {
+                    $shipping_price = 30;
+
                     session()->put('total-checkout-items', $total_items);
                     session()->put('total-checkout-price', $total_price);
+                    session()->put('grandtotal-checkout-price', $total_price + $shipping_price);
+                    session()->put('shipping-price', $shipping_price);
                     session()->put('checkout-items', $cart_checkout_id);
                     session()->save();
 
