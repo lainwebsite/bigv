@@ -249,7 +249,10 @@ class DiscountController extends Controller
 
     public function search_voucher_product(Request $request)
     {
-        $variations = ProductVariation::where('name', 'like', '%' . $request->search . '%')->get();
+        $variations = ProductVariation::where('name', 'like', '%' . $request->search . '%')
+            ->orWhereHas('product', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
+            })->get();
         return view('admin.manage.discounts.inc.voucher_product', compact('variations'));
     }
 
