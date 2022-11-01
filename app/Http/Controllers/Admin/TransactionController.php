@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\TransactionStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -27,10 +28,14 @@ class TransactionController extends Controller
     {
         $transactions = Transaction::orderBy('created_at', 'asc')
             ->where('created_at', '<=', Carbon::now())->where('created_at', '>=', Carbon::now()->subDays(7))
-            ->paginate(10);
+            ->withCount(['carts as sold_count' => function ($query) {
+                $query->select(DB::raw('sum(quantity)'));
+            }])->paginate(10);
         $transactiones = Transaction::orderBy('created_at', 'asc')
             ->where('created_at', '<=', Carbon::now())->where('created_at', '>=', Carbon::now()->subDays(7))
-            ->get();
+            ->withCount(['carts as sold_count' => function ($query) {
+                $query->select(DB::raw('sum(quantity)'));
+            }])->get();
         return view('admin.analytics.orders.index', compact('transactions', 'transactiones'));
     }
 
@@ -135,16 +140,24 @@ class TransactionController extends Controller
         if ($request->sort == "carts") {
             $transactions = Transaction::where('created_at', '>=', $request->start_date)
                 ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
-                ->withCount('carts')->orderBy('carts_count', 'desc')
+                ->withCount(['carts as sold_count' => function ($query) {
+                    $query->select(DB::raw('sum(quantity)'));
+                }])->orderBy('sold_count', 'desc')
                 ->paginate(10);
         } else if ($request->sort == "total_price") {
             $transactions = Transaction::where('created_at', '>=', $request->start_date)
                 ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                ->withCount(['carts as sold_count' => function ($query) {
+                    $query->select(DB::raw('sum(quantity)'));
+                }])
                 ->orderBy('total_price', 'desc')
                 ->paginate(10);
         } else {
             $transactions = Transaction::where('created_at', '>=', $request->start_date)
                 ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                ->withCount(['carts as sold_count' => function ($query) {
+                    $query->select(DB::raw('sum(quantity)'));
+                }])
                 ->orderBy('created_at', 'asc')
                 ->paginate(10);
         }
@@ -156,6 +169,9 @@ class TransactionController extends Controller
         $transactiones = Transaction::orderBy('created_at', 'asc')
             ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
             ->where('created_at', '>=', $request->start_date)
+            ->withCount(['carts as sold_count' => function ($query) {
+                $query->select(DB::raw('sum(quantity)'));
+            }])
             ->get();
         return $transactiones;
     }
