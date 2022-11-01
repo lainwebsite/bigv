@@ -42,9 +42,9 @@ class DatabaseSeeder extends Seeder
                 $this->call(DiscountSeeder::class);
                 $this->call(TransactionSeeder::class);
                 $this->call(TransactionDiscountSeeder::class);
+                $this->call(CartSeeder::class);
                 $this->call(AddonSeeder::class);
                 $this->call(AddonOptionSeeder::class);
-                $this->call(CartSeeder::class);
                 $this->call(DiscountApplicableSeeder::class);
         }
 }

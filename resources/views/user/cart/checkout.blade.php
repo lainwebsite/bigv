@@ -336,15 +336,28 @@ Checkout - Big V
                 </button>
             </div>
             <div class="modal-body">
+                {{-- PRODUCT VOUCHER --}}
                 <div class="d-flex justify-content-between m-2">
                     <div class="form-block-3 w-form">
-                        <input type="text" class="text-field-2 w-input" maxlength="256" placeholder="Search discount code">
+                        <input type="text" id="inputProductDiscountSearch" class="text-field-2 w-input" maxlength="256" placeholder="Search discount code">
                     </div>
-                    <a href="#" class="search-modal" tabindex="0">Search</a>
+                    <button type="button" id="btnProductDiscountSearch" class="search-modal" tabindex="0">Search</button>
                 </div>
                 <div class="div-line ml-3 mr-3"></div>
+                <h4 class="heading-7 ml-2 mb-3">Product Discount Voucher</h4>
+                <div id="productVoucher" class="d-flex flex-column modal-list-container-2"></div>
+                <div class="div-line ml-3 mr-3"></div>
 
-                <div id="containerVoucher"></div>
+                {{-- SHIPPING VOUCHER --}}
+                <div class="d-flex justify-content-between m-2">
+                    <div class="form-block-3 w-form">
+                        <input type="text" id="inputShippingDiscountSearch" class="text-field-2 w-input" maxlength="256" placeholder="Search discount code">
+                    </div>
+                    <button type="button" id="btnShippingDiscountSearch" class="search-modal" tabindex="0">Search</button>
+                </div>
+                <div class="div-line ml-3 mr-3"></div>
+                <h4 class="heading-7 ml-2 mb-3">Shipping Discount Voucher</h4>
+                <div id="shippingVoucher" class="d-flex flex-column modal-list-container-2"></div>
 
                 <div class="d-flex justify-content-end mt-3" style="gap: 10px;">
                     <button id="btnApplyDiscount" type="button" class="pr-4 pl-4 checkout-button w-button" data-dismiss="modal">Apply</button>
@@ -399,11 +412,20 @@ Checkout - Big V
             console.log("Error!");
         });
     }
-
-    function getDiscounts(keyword) {
-        var urlDiscount = keyword == "" ? (url + "/user/discount/search") : (url + "/user/discount/search/" + keyword);
+    
+    function getProductDiscounts(keyword) {
+        var urlDiscount = keyword == "" ? (url + "/user/product-discount/search") : (url + "/user/product-discount/search/" + keyword);
         $.get(urlDiscount).done(function(data) {
-            $("#containerVoucher").html(data);
+            $("#productVoucher").html(data);
+        }).fail(function() {
+            console.log("Error!");
+        });
+    }
+
+    function getShippingDiscounts(keyword) {
+        var urlDiscount = keyword == "" ? (url + "/user/shipping-discount/search") : (url + "/user/shipping-discount/search/" + keyword);
+        $.get(urlDiscount).done(function(data) {
+            $("#shippingVoucher").html(data);
         }).fail(function() {
             console.log("Error!");
         });
@@ -607,7 +629,8 @@ Checkout - Big V
     });
 
     $("#btnSelectDiscount").on("click", function() {
-        getDiscounts("");
+        getShippingDiscounts("");
+        getProductDiscounts("");
     });
 
     $("#btnApplyDiscount").on("click", function() {
@@ -682,6 +705,14 @@ Checkout - Big V
             // remove input hidden another shipping address
             $("input[name=shipping_address_id]").remove();
         }
+    });
+
+    $("#btnShippingDiscountSearch").on("click", function() {
+        getShippingDiscounts($("#inputShippingDiscountSearch").val());
+    });
+    
+    $("#btnProductDiscountSearch").on("click", function() {
+        getProductDiscounts($("#inputProductDiscountSearch").val());
     });
 
     const nth = function(d) {

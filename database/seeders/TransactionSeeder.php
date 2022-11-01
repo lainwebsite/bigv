@@ -44,5 +44,20 @@ class TransactionSeeder extends Seeder
                 $temp->status_id = "1";
                 $temp->user_id = "1";
                 $temp->save();
+
+                $temp = new Transaction();
+                $temp->total_price = "222";
+                $temp->shipping_fee = "5";
+                $temp->product_discount_total = "5";
+                $temp->shipping_discount_total = "5";
+                $temp->delivery_date = "2022-08-19 10:12:37";
+                $temp->billing_address_id = "2";
+                $temp->shipping_address_id = "1";
+                $temp->payment_method_id = "1";
+                $temp->pickup_method_id = "2";
+                $temp->pickup_time_id = "1";
+                $temp->status_id = "1";
+                $temp->user_id = "1";
+                $temp->save();
         }
 }

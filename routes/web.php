@@ -67,10 +67,12 @@ Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' =>
     Route::get('cart/checkout', [CheckoutController::class, 'getCheckout']);
     Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
     Route::resource('cart', CartController::class);
-    Route::get('discount/search', [DiscountController::class, 'search']);
-    Route::resource('discount', DiscountController::class);
-    Route::get('discount/search/{keyword?}', [DiscountController::class, 'search']);
+    Route::get('product-discount/search', [DiscountController::class, 'productSearch']);
+    Route::get('shipping-discount/search', [DiscountController::class, 'shippingSearch']);
+    Route::get('product-discount/search/{keyword?}', [DiscountController::class, 'productSearch']);
+    Route::get('shipping-discount/search/{keyword?}', [DiscountController::class, 'shippingSearch']);
     Route::post('discount/apply-voucher', [DiscountController::class, 'applyVoucher']);
+    Route::resource('discount', DiscountController::class);
     Route::resource('payment-method', PaymentMethodController::class);
     Route::resource('pickup-method', PickupMethodController::class);
     Route::post('pickup-address/search', [PickupAddressController::class, 'search']);

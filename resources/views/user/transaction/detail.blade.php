@@ -1,4 +1,4 @@
-@extends('user.template.layout')
+@extends('template.layout')
 
 @section('page-title')
 Transaction - Big V
@@ -87,6 +87,22 @@ Transaction - Big V
                   </div>
                   <input type="hidden" value="5">
               </div>
+              <div class="flex" style="width: 100%; gap: 10px; flex-direction: column;">
+                <div class="flex photo-review-container" style="width: 100%; flex-wrap: wrap; gap: 10px;">
+                  <div class="flex">
+                    <input type="file" style="font-size: 12px;" class="photoReviewInput">
+                    <div style="position:relative; display: none;">
+                      <img src="#" style="width: 150px; height: 150px; object-fit: cover; border-radius: 15px;" alt="">
+                      <div class="remove-photo-review" style="width: 20px; height: 20px; background: #fb3b1e; display: flex; z-index: 5; justify-content:center; align-items:center; color: white; font-size: 10px; border-radius: 50%; cursor: pointer; position: absolute; top: 0; right:0;">X</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex" style="justify-content: flex-end; width: 100%;">
+                  <button class="button-3 w-inline-block button-add-photo-review" style="height: auto !important; padding: 5px 10px !important;">
+                      <div class="text-color-white" style="font-size: 12px; white-space: nowrap;">Add Photo</div>
+                  </button>
+                </div>
+              </div>
               <textarea style="width: 100%; border-radius: 10px; padding: 10px; resize: none; border: #c5c5c5 1px solid; font-size: 0.875rem;" rows="2"></textarea>
             </div>
           </div>
@@ -134,6 +150,22 @@ Transaction - Big V
                       @endfor
                   </div>
                   <input type="hidden" value="5">
+              </div>
+              <div class="flex" style="width: 100%; gap: 10px; flex-direction: column;">
+                <div class="flex photo-review-container" style="width: 100%; flex-wrap: wrap; gap: 10px;">
+                  <div class="flex">
+                    <input type="file" style="font-size: 12px;" class="photoReviewInput">
+                    <div style="position:relative; display: none;">
+                      <img src="#" style="width: 150px; height: 150px; object-fit: cover; border-radius: 15px;" alt="">
+                      <div class="remove-photo-review" style="width: 20px; height: 20px; background: #fb3b1e; display: flex; z-index: 5; justify-content:center; align-items:center; color: white; font-size: 10px; border-radius: 50%; cursor: pointer; position: absolute; top: 0; right:0;">X</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex" style="justify-content: flex-end; width: 100%;">
+                  <button class="button-3 w-inline-block button-add-photo-review" style="height: auto !important; padding: 5px 10px !important;">
+                      <div class="text-color-white" style="font-size: 12px; white-space: nowrap;">Add Photo</div>
+                  </button>
+                </div>
               </div>
               <textarea style="width: 100%; border-radius: 10px; padding: 10px; resize: none; border: #c5c5c5 1px solid; font-size: 0.875rem;" rows="2"></textarea>
             </div>
@@ -249,22 +281,42 @@ Transaction - Big V
 @section('javascript-extra')
 <script src="{{asset('assets/js/script-transaction.js')}}" type="text/javascript"></script>
 <script>
+$(document).on("change", ".photoReviewInput", function(){
+    var input = this;
+    var inputFile = $(this);
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
-//   function readURL(input) {
-//     if (input.files && input.files[0]) {
-//         var reader = new FileReader();
+        reader.onload = function (e) {
+          inputFile.parent().children("div").css("display", "unset");
+          inputFile.parent().children("div").children("img").attr('src', e.target.result);
+          inputFile.hide();
+        }
 
-//         reader.onload = function (e) {
-//             $('#blah').attr('src', e.target.result);
-//         }
+        reader.readAsDataURL(input.files[0]);
+    }
+});
 
-//         reader.readAsDataURL(input.files[0]);
-//     }
-// }
+$(".button-add-photo-review").on('click', function(){
+  var count = $(this).parent().parent().children(".photo-review-container").children().length;
+  if (count < 3){
+    $(this).parent().parent().children(".photo-review-container").append(`
+      <div class="flex">
+        <input type="file" style="font-size: 12px;" class="photoReviewInput">
+        <div style="position:relative; display: none;">
+          <img src="#" style="width: 150px; height: 150px; object-fit: cover; border-radius: 15px;" alt="">
+          <div class="remove-photo-review" style="width: 20px; height: 20px; background: #fb3b1e; display: flex; z-index: 5; justify-content:center; align-items:center; color: white; font-size: 10px; border-radius: 50%; cursor: pointer; position: absolute; top: 0; right:0;">X</div>
+        </div>
+      </div>
+    `);
+  } else {
+    alert("You can only add up to 3 photos per product!");
+  }
+});
 
-// $("#imgInp").change(function(){
-//     readURL(this);
-// });
+$(document).on('click', ".remove-photo-review", function(){
+  $(this).parent().parent().remove();
+})
 
 $(".star-review").on('click', function(){
   var rate = $(this).attr('step');

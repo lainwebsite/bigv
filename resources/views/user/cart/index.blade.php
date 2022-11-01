@@ -30,8 +30,10 @@ Cart - Big V
                                         <input type="checkbox" class="product-cart" value="{{ $product->cart_id }}">
                                         <img src="{{ $product->featured_image }}" loading="lazy" alt="" class="image-18" />
                                         <div>
-                                            <h5 class="text-color-dark-grey">{{ $product->product_variation_name == "novariation" ? $product->product_name : $product->product_name." (".$product->product_variation_name.")" }}</h5>
-                                            <div class="text-size-small text-color-grey">Color: white</div>
+                                            <h5 class="text-color-dark-grey">{{ $product->product_name }}</h5>
+                                            @if ($product->product_variation_name != "novariation")
+                                                <div class="text-size-small text-color-grey">Variant: {{ $product->product_variation_name }}</div>
+                                            @endif
                                             <div class="text-size-small text-color-grey">${{ $product->price }}</div>
                                         </div>
                                     </div>
@@ -71,6 +73,7 @@ Cart - Big V
                             <button id="btn-proceed" type="submit" class="checkout-button oh-grow w-button" style="width: 100%;">Proceed to Checkout</button>
                         </form>
                     </div>
+                </div>
             </div>
         </div><img src="{{asset('assets/6303b67a5064f05035c5a701_shape 1.svg')}}" loading="lazy" alt="" class="absolute shape-cart" />
         <div class="new-products-section padding-xxlarge ea-fade">
