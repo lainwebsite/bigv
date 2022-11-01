@@ -20,8 +20,8 @@ class ProductReview extends Model
     public function user() {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function product_variation() {
-        return $this->belongsTo(ProductVariation::class, 'product_variation_id', 'id');
+    public function product() {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
     public function images() {
         return $this->hasMany(ReviewImage::class, 'review_id', 'id');

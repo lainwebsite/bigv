@@ -55,8 +55,7 @@
             <!-- basic table -->
             <div class="d-flex gap-15x mb-3">
                 @foreach ($statuses as $status)
-                    <div id="status-filter-{{ $status->id }}"
-                        class="card-not-selected pr-3 pl-3 pt-2 pb-2 status-filter"
+                    <div id="status-filter-{{ $status->id }}" class="card-not-selected pr-3 pl-3 pt-2 pb-2 status-filter"
                         onclick="changeFilter({{ $status->id }});">
                         <div class="d-flex">
                             <h6 class="m-0">{{ $status->name }}</h6>
@@ -64,23 +63,40 @@
                     </div>
                 @endforeach
             </div>
+            <form action="{{ route('admin.transaction.change_status') }}" method="post">
+                @csrf
+                <div class="align-self-center d-flex align-items-center mb-3">
+                    <p class="mr-4 mb-0"><b>Bulk Action</b></p>
+                    <p class="mr-3 mb-0">Set Order Status</p>
+                    <div class="customize-input float-right mr-3">
+                        <select name="status_id"
+                            class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
+                            @foreach ($statuses as $status)
+                                <option value={{ $status->id }}>{{ $status->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <input type="hidden" name="transaction_id" id="status_change">
+                    <button class="btn btn-primary text-white pr-4 pl-4">Apply</button>
+                </div>
+            </form>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <!-- Column -->
-                                <div class="col-md-6 col-lg-3 col-xlg-3">
+                                <div class="col-md-6 col-lg-13 col-xlg-2">
                                     <div class="card card-hover">
                                         <div class="p-2 br-18 bg-danger text-center">
                                             <h1 class="font-light text-white">
                                                 {{ $transactiones->where('status_id', 1)->count() }}</h1>
-                                            <h6 class="text-white">Payment Pending</h6>
+                                            <h6 class="text-white">Order Pending</h6>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Column -->
-                                <div class="col-md-6 col-lg-3 col-xlg-3">
+                                <div class="col-md-6 col-lg-13 col-xlg-2">
                                     <div class="card card-hover">
                                         <div class="p-2 br-18 bg-primary text-center">
                                             <h1 class="font-light text-white">
@@ -90,7 +106,7 @@
                                     </div>
                                 </div>
                                 <!-- Column -->
-                                <div class="col-md-6 col-lg-3 col-xlg-3">
+                                <div class="col-md-6 col-lg-13 col-xlg-2">
                                     <div class="card card-hover">
                                         <div class="p-2 br-18 bg-cyan text-center">
                                             <h1 class="font-light text-white">
@@ -100,7 +116,7 @@
                                     </div>
                                 </div>
                                 <!-- Column -->
-                                <div class="col-md-6 col-lg-3 col-xlg-3">
+                                <div class="col-md-6 col-lg-13 col-xlg-2">
                                     <div class="card card-hover">
                                         <div class="p-2 br-18 bg-success text-center">
                                             <h1 class="font-light text-white">
@@ -110,6 +126,15 @@
                                     </div>
                                 </div>
                                 <!-- Column -->
+                                <div class="col-md-6 col-lg-13 col-xlg-2">
+                                    <div class="card card-hover">
+                                        <div class="p-2 br-18 bg-dark text-center">
+                                            <h1 class="font-light text-white">
+                                                {{ $transactiones->where('status_id', 7)->count() }}</h1>
+                                            <h6 class="text-white">Refunded</h6>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row" id="transaction-list">
                                 @include('admin.manage.transaction.inc.transaction')
@@ -182,6 +207,18 @@
         $('#sort').on('change', function() {
             page = 1;
             sort(page);
+        });
+    </script>
+    <script>
+        var transaction_id_array = [];
+        $(".status-checkbox").change(function() {
+            if (this.checked) {
+                transaction_id_array.push($(this).attr("data-tid"))
+            } else {
+                const tindex = transaction_id_array.indexOf($(this).attr("data-tid"));
+                transaction_id_array.splice(tindex)
+            }
+            $("#status_change").val(transaction_id_array);
         });
     </script>
 @endsection

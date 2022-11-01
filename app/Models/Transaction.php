@@ -15,6 +15,7 @@ class Transaction extends Model
         'product_discount_total',
         'shipping_discount_total',
         'delivery_date',
+        'is_reviewed',
         'billing_address_id',
         'shipping_address_id',
         'payment_method_id',

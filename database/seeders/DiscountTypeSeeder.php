@@ -16,11 +16,11 @@ class DiscountTypeSeeder extends Seeder
     public function run()
     {
         $temp = new DiscountType();
-        $temp->name = "Free Shipping";
+        $temp->name = "Shipping";
         $temp->save();
 
         $temp = new DiscountType();
-        $temp->name = "Percentage";
+        $temp->name = "Voucher Code";
         $temp->save();
 
         $temp = new DiscountType();

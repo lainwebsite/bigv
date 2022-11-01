@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\TransactionStatus;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -20,6 +21,17 @@ class TransactionController extends Controller
         $transactiones = Transaction::all();
         $statuses = TransactionStatus::all();
         return view('admin.manage.transaction.index', compact('transactions', 'transactiones', 'statuses'));
+    }
+
+    public function view_analytics()
+    {
+        $transactions = Transaction::orderBy('created_at', 'asc')
+            ->where('created_at', '<=', Carbon::now())->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->paginate(10);
+        $transactiones = Transaction::orderBy('created_at', 'asc')
+            ->where('created_at', '<=', Carbon::now())->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->get();
+        return view('admin.analytics.orders.index', compact('transactions', 'transactiones'));
     }
 
     /**
@@ -104,5 +116,47 @@ class TransactionController extends Controller
             'status_id' => $request->status_id,
         ]);
         return $transaction;
+    }
+    public function change_status(Request $request)
+    {
+        $transaction_ids = explode(",", $request->transaction_id);
+        $transactions = Transaction::whereIn('id', $transaction_ids)->get();
+
+        foreach ($transactions as $key => $transaction) {
+            $transaction->update([
+                'status_id' => $request->status_id
+            ]);
+        }
+        return redirect()->route('admin.transaction.index');
+    }
+
+    public function sort_analytics(Request $request)
+    {
+        if ($request->sort == "carts") {
+            $transactions = Transaction::where('created_at', '>=', $request->start_date)
+                ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                ->withCount('carts')->orderBy('carts_count', 'desc')
+                ->paginate(10);
+        } else if ($request->sort == "total_price") {
+            $transactions = Transaction::where('created_at', '>=', $request->start_date)
+                ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                ->orderBy('total_price', 'desc')
+                ->paginate(10);
+        } else {
+            $transactions = Transaction::where('created_at', '>=', $request->start_date)
+                ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                ->orderBy('created_at', 'asc')
+                ->paginate(10);
+        }
+        return view('admin.analytics.orders.inc.transaction', compact('transactions'));
+    }
+
+    public function date_analytics(Request $request)
+    {
+        $transactiones = Transaction::orderBy('created_at', 'asc')
+            ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+            ->where('created_at', '>=', $request->start_date)
+            ->get();
+        return $transactiones;
     }
 }

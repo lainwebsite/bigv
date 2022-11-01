@@ -28,10 +28,10 @@
                                     </div>
                                 </a>
                             </td>
-                            @if ($product->variations->first()->discount != 0 &&
-                                $product->variations->first()->discount_date > Carbon\Carbon::now())
+                            @if ($product->variations->first()->discount_start_date < Carbon\Carbon::now() &&
+                                $product->variations->first()->discount_end_date > Carbon\Carbon::now())
                                 <td class="align-middle">
-                                    <s>${{ $product->variations->first()->price }}</s><br>${{ $product->variations->first()->price - $product->variations->first()->discount }}
+                                    <s>${{ $product->variations->first()->price }}</s><br>${{ $product->variations->first()->discount }}
                                 </td>
                             @else
                                 <td class="align-middle">

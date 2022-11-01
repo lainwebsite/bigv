@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone');
             $table->date('date_of_birth');
-            $table->bigInteger('visits')->default(0);
-            $table->bigInteger('tier_points')->default(0);
+            $table->bigInteger('visits');
+            $table->bigInteger('tier_points');
+            $table->integer('ban')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -109,15 +109,12 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <a class="dropdown-item" href="javascript:void(0)"><i data-feather="settings"
-                                        class="svg-icon mr-2 ml-1"></i>
-                                    Account Setting</a>
+                                        class="svg-icon mr-2 ml-1"></i> Account Setting</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="javascript:void(0)"><i data-feather="power"
-                                        class="svg-icon mr-2 ml-1"></i>
-                                    Logout</a>
+                                        class="svg-icon mr-2 ml-1"></i> Logout</a>
                             </div>
-                        </li>
-                        <!-- ============================================================== -->
+                        </li> <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
                     </ul>
@@ -142,66 +139,68 @@
                                     class="feather-icon"></i><span class="hide-menu">Dashboard</span></a></li>
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Manage</span></li>
-
                         <li class="sidebar-item @yield('orders-manage-selected')"> <a class="sidebar-link @yield('orders-manage-active')"
                                 href="{{ route('admin.transaction.index') }}" aria-expanded="false"><i
                                     data-feather="shopping-bag" class="feather-icon"></i><span
                                     class="hide-menu">Order</span></a></li>
-
                         <li class="sidebar-item @yield('categories-manage-selected')"> <a
                                 class="sidebar-link sidebar-link @yield('categories-manage-active')"
                                 href="{{ route('admin.product-category.index') }}" aria-expanded="false"><i
                                     data-feather="grid" class="feather-icon"></i><span
                                     class="hide-menu">Category</span></a></li>
-
                         <li class="sidebar-item @yield('products-manage-selected')"> <a
                                 class="sidebar-link sidebar-link @yield('products-manage-active')"
                                 href="{{ route('admin.product.index') }}" aria-expanded="false"><i
                                     data-feather="archive" class="feather-icon"></i><span
                                     class="hide-menu">Product</span></a></li>
-
                         <li class="sidebar-item @yield('discounts-manage-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('discounts-manage-active')" href="app-calendar.html"
-                                aria-expanded="false"><i data-feather="percent" class="feather-icon"></i><span
+                                class="sidebar-link sidebar-link @yield('discounts-manage-active')"
+                                href="{{ route('admin.discount.index') }}" aria-expanded="false"><i
+                                    data-feather="percent" class="feather-icon"></i><span
                                     class="hide-menu">Discount</span></a></li>
-
                         <li class="sidebar-item @yield('customers-manage-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('customers-manage-active')" href="{{route('admin.user.index')}}"
-                                aria-expanded="false"><i data-feather="users" class="feather-icon"></i><span
-                                    class="hide-menu">Customer</span></a></li>
-
+                                class="sidebar-link sidebar-link @yield('customers-manage-active')"
+                                href="{{ route('admin.user.index') }}" aria-expanded="false"><i data-feather="users"
+                                    class="feather-icon"></i><span class="hide-menu">Customer</span></a></li>
                         <li class="sidebar-item @yield('vendors-manage-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('vendors-manage-active')" href="{{route('admin.vendor.index')}}"
-                                aria-expanded="false"><i data-feather="smile" class="feather-icon"></i><span
+                                class="sidebar-link sidebar-link @yield('vendors-manage-active')"
+                                href="{{ route('admin.vendor.index') }}" aria-expanded="false"><i
+                                    data-feather="smile" class="feather-icon"></i><span
                                     class="hide-menu">Vendor</span></a></li>
-
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Analytics</span></li>
-
                         <li class="sidebar-item @yield('orders-analytics-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('orders-analytics-active')" href="app-calendar.html"
-                                aria-expanded="false"><i data-feather="shopping-bag" class="feather-icon"></i><span
+                                class="sidebar-link sidebar-link @yield('orders-analytics-active')"
+                                href="{{ route('admin.transaction.view_analytics') }}" aria-expanded="false"><i
+                                    data-feather="shopping-bag" class="feather-icon"></i><span
                                     class="hide-menu">Order</span></a></li>
-
                         <li class="sidebar-item @yield('products-analytics-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('products-analytics-active')" href="app-calendar.html"
-                                aria-expanded="false"><i data-feather="archive" class="feather-icon"></i><span
+                                class="sidebar-link sidebar-link @yield('products-analytics-active')"
+                                href="{{ route('admin.product.view_analytics') }}" aria-expanded="false"><i
+                                    data-feather="archive" class="feather-icon"></i><span
                                     class="hide-menu">Product</span></a></li>
-
                         <li class="sidebar-item @yield('customers-analytics-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('customers-analytics-active')" href="app-calendar.html"
-                                aria-expanded="false"><i data-feather="users" class="feather-icon"></i><span
+                                class="sidebar-link sidebar-link @yield('customers-analytics-active')"
+                                href="{{ route('admin.user.view_analytics') }}" aria-expanded="false"><i
+                                    data-feather="users" class="feather-icon"></i><span
                                     class="hide-menu">Customer</span></a></li>
-
                         <li class="sidebar-item @yield('vendors-analytics-selected')"> <a
-                                class="sidebar-link sidebar-link @yield('vendors-analytics-active')" href="app-calendar.html"
-                                aria-expanded="false"><i data-feather="smile" class="feather-icon"></i><span
+                                class="sidebar-link sidebar-link @yield('vendors-analytics-active')"
+                                href="{{ route('admin.vendor.view_analytics') }}" aria-expanded="false"><i
+                                    data-feather="smile" class="feather-icon"></i><span
                                     class="hide-menu">Vendor</span></a></li>
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Extra</span></li>
-                        <li class="sidebar-item"> <a class="sidebar-link sidebar-link"
-                                href="authentication-login1.html" aria-expanded="false"><i data-feather="log-out"
-                                    class="feather-icon"></i><span class="hide-menu">Logout</span></a></li>
+                        <li class="sidebar-item">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                            <a class="sidebar-link sidebar-link" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                          document.getElementById('logout-form').submit();">
+                                <i data-feather="log-out" class="feather-icon"></i><span
+                                    class="hide-menu">Logout</span></a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->

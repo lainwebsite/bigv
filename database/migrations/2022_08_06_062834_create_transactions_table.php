@@ -20,6 +20,7 @@ return new class extends Migration
             $table->double('product_discount_total')->default(0);
             $table->double('shipping_discount_total')->default(0);
             $table->date('delivery_date');
+            $table->tinyInteger('is_reviewed')->default(0);
             $table->unsignedBigInteger('billing_address_id')->index()->nullable();
             $table->foreign('billing_address_id')->references('id')->on('user_addresses')->onDelete('cascade');
             $table->unsignedBigInteger('shipping_address_id')->index()->nullable();

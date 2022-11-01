@@ -189,17 +189,11 @@
                     <div class="col-1 d-flex align-items-center">
                         <p style="white-space: nowrap;" class="m-0 mr-3">Variation</p>
                     </div>
-                    <div class="col-3">
+                    <div class="col-6">
                         <input type="text" class="form-control" id="name" name="variation_name[${countVariation}]" required placeholder="Name">
                     </div>
-                    <div class="col-2">
-                        <input type="number" class="form-control" id="name" name="variation_price[${countVariation}]" required placeholder="Price">
-                    </div>
-                    <div class="col-2">
-                        <input type="number" class="form-control" id="name" name="variation_discount[${countVariation}]" placeholder="Discount">
-                    </div>
                     <div class="col-3">
-                        <input type="date" class="form-control" id="name" name="variation_discount_date[${countVariation}]" placeholder="Price">
+                        <input type="number" class="form-control" id="name" name="variation_price[${countVariation}]" required placeholder="Price">
                     </div>
                     <div class="col-1">
                         <div class="d-flex h-100">

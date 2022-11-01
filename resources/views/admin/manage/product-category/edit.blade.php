@@ -49,8 +49,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('admin.product-category.update', $productCategory->id) }}"
-                                method="POST">
+                            <form action="{{ route('admin.product-category.update', $productCategory->id) }}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
                                 @method('PATCH')
                                 <div class="form-group">
@@ -62,6 +62,19 @@
                                     <label for="description">Product Description</label>
                                     <textarea class="form-control" id="description" name="description" required placeholder="Category Description"
                                         rows="4">{{ $productCategory->description }}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="productFeaturedImage">Profile Photo</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                        <div class="custom-file">
+                                            <input type="file" name="image" class="custom-file-input"
+                                                id="categoryPhoto">
+                                            <label class="custom-file-label" for="categoryPhoto">{{$productCategory->photo_url}}</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="d-flex mt-4 gap-15x">
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
