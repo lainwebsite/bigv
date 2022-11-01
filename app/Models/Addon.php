@@ -15,7 +15,13 @@ class Addon extends Model
         'product_id'
     ];
 
-    public function product() {
+    public function product()
+    {
         return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function addons_options()
+    {
+        return $this->hasMany(AddonOption::class, 'addon_id', 'id');
     }
 }
