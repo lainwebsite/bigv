@@ -67,7 +67,6 @@ Transaction - Big V
                 <div>
                   <h5 class="text-color-dark-grey">ID: {{ $transaction->id }}</h5>
                   <div class="text-size-small text-color-grey">{{ date('d F Y', strtotime($transaction->created_at)) }}</div>
-                  {{-- <div class="text-size-small text-color-grey">4 September</div> --}}
                 </div>
               </div>
               <div class="flex gap-small">
@@ -99,7 +98,9 @@ Transaction - Big V
                     sizes="(max-width: 479px) 61vw, 70px" alt="" class="image-18" />
                   <div>
                     <h5 class="text-color-dark-grey">{{ $cart->product_name }}</h5>
-                    <div class="text-size-small text-color-grey">Variant: {{ $cart->product_variation_name }}</div>
+                    @if ($cart->product_variation_name != "novariation"):
+                      <div class="text-size-small text-color-grey">Variant: {{ $cart->product_variation_name }}</div>
+                    @endif
                     <div class="text-size-small text-color-grey">${{ $cart->product_price }}</div>
                     <!-- <div class="text-size-small text-color-grey">+ 4 more products</div> -->
                   </div>

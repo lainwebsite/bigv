@@ -3913,6 +3913,10 @@ input[type="checkbox"]{
   text-align: center;
 }
 
+.checkout-button:disabled {
+  background-color: #666363;
+}
+
 .checkout-button.oh-grow {
   margin-top: 12px;
 }

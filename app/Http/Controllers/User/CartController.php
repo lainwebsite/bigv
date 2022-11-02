@@ -175,10 +175,25 @@ class CartController extends Controller
             $errorInfo = $exception->errorInfo;
         }
 
+        $currentCartProduct = Vendor::where('id', $cart->product_variation->product->vendor->id)->with(['products' => function ($q1) {
+            $q1->select('vendor_id', 'carts.id as cart_id', 'products.featured_image', 'products.name as product_name', 'product_variations.name as product_variation_name', 'carts.price', 'carts.quantity', 'carts.user_id')
+                ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
+                ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+                ->whereNull('carts.transaction_id')
+                ->where('user_id', auth()->user()->id);
+        }, 'location'])->whereHas('products', function ($q1) {
+            $q1->select('vendor_id')
+                ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
+                ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+                ->whereNull('carts.transaction_id')
+                ->where('user_id', auth()->user()->id);
+        })->get();
+
         return json_encode(isset($errorInfo) ? [
             'message' => "Error when delete this product. Please try again or contact our developer."
         ] : [
             'message' => "Successfully delete this product",
+            'vendor_product_exist' => count($currentCartProduct),
             'vendor_id' => $cart->product_variation->product->vendor->id,
             'cart_id' => $cart->id
         ]);

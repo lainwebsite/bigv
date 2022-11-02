@@ -64,13 +64,13 @@ Cart - Big V
                     <div class="div-line"></div>
                     <div class="div-block-24">
                         <div class="inline text-weight-bold">Total</div>
-                        <div class="inline text-weight-bold">$<span id="grand-total-price">0</span></div>
+                        <div class="inline text-weight-bold">$<span id="grandTotalPrice">0</span></div>
                     </div>
                         <form method="POST" action="{{ url('user/cart/verify-checkout') }}">
                             @csrf
 
                             <input id="cart-items" type="hidden" name="carts">
-                            <button id="btn-proceed" type="submit" class="checkout-button oh-grow w-button" style="width: 100%;">Proceed to Checkout</button>
+                            <button id="btnProceed" type="submit" class="checkout-button oh-grow w-button" disabled style="width: 100%;">Proceed to Checkout</button>
                         </form>
                     </div>
                 </div>
@@ -114,7 +114,7 @@ Cart - Big V
         return Math.ceil(num * precision) / precision;
     }
 
-    function updateCheckout() {       
+    function updateCheckout() {     
         var grandTotalPrice = 0;
         if (Object.keys(cartItems).length > 0) {
             $(".container-summary-item").html("");
@@ -149,7 +149,13 @@ Cart - Big V
                 </div>
             `);
         }
-        $("#grand-total-price").html(grandTotalPrice.toFixed(2));
+        $("#grandTotalPrice").html(grandTotalPrice.toFixed(2));
+
+        if ($(".product-cart:checked").length > 0) {
+            $("#btnProceed").removeAttr("disabled");
+        } else {
+            $("#btnProceed").attr("disabled", "");
+        }
     }
 
     function updateBaseCheckout(checkbox) {
@@ -175,6 +181,7 @@ Cart - Big V
                     cartItems[data.vendor_id] = {};
                     cartItems[data.vendor_id][cartId] = {sub_total_price: roundUp((data.price * data.quantity), 2), quantity: data.quantity};
                 }
+
                 cartItems[data.vendor_id]["vendor_name"] = data.vendor_name;
                 
                 updateCheckout();
@@ -201,6 +208,22 @@ Cart - Big V
         });
     });
 
+    $(document).ajaxSend(function(event, request, settings) {
+        if ($(".product-cart:checked").length > 0) {
+            $("#btnProceed").removeAttr("disabled");
+        } else {
+            $("#btnProceed").attr("disabled", "");
+        }
+    });
+
+    $(document).ajaxSuccess(function() {
+        if ($(".product-cart:checked").length > 0) {
+            $("#btnProceed").removeAttr("disabled");
+        } else {
+            $("#btnProceed").attr("disabled", "");
+        }
+    });
+
     $(document).on("click", ".quantity-change", function(){
         var qty = $(this).parent().find(".product-quantity");
         if ($(this).attr("logic") == "add"){
@@ -211,7 +234,18 @@ Cart - Big V
         }
 
         updateBaseCheckout($(this).parents(".vendor-item").find(".product-cart"));
-        updateCheckout();
+    });
+
+    $(document).on("change", ".product-quantity", function() {
+        if ($(this).val() != "") {
+            $(this).attr("disabled", "");
+            updateBaseCheckout($(this).parents(".vendor-item").find(".product-cart"));
+
+            var product_qty = $(this);
+            setTimeout(function() {
+                product_qty.removeAttr("disabled");
+            }, 2000);
+        }
     });
 
     $(document).on("change", ".product-cart", function() {
@@ -219,6 +253,7 @@ Cart - Big V
     });
 
     $(document).on("click", ".btn-delete-product", function() {
+        var grandParent = $(this).parents(".vendors-card");
         var parent = $(this).parents(".vendor-item");
         var checkbox = $(this).parent().prev().find(".product-cart");
         var vendorId = parent.attr("vendor-id");
@@ -230,7 +265,7 @@ Cart - Big V
                 _method: "DELETE",
             }).done(function(data) {
                 var obj = JSON.parse(data);
-
+                
                 if (checkbox.is(":checked")) {
                     if (Object.keys(cartItems).length <= 1) {
                         delete cartItems[obj.vendor_id];
@@ -243,7 +278,11 @@ Cart - Big V
                     updateCheckout();
                 }
                 parent.remove();
-                
+
+                if (obj.vendor_product_exist <= 0) {
+                    grandParent.remove();
+                }
+
                 alert(obj.message);
             }).fail(function(error) {
                 console.log(error);
@@ -251,10 +290,12 @@ Cart - Big V
         }
     });
 
-    $("#btn-proceed").on("click", function() {
-        if (Object.keys(cartItems).length > 0) {
-            if (Object.keys(cartItems[Object.keys(cartItems)[0]]).length > 0) {
-                $("#cart-items").val(JSON.stringify(cartItems));
+    $("#btnProceed").on("click", function() {
+        if ($(this).attr("disabled") === false) {
+            if (Object.keys(cartItems).length > 0) {
+                if (Object.keys(cartItems[Object.keys(cartItems)[0]]).length > 0) {
+                    $("#cart-items").val(JSON.stringify(cartItems));
+                }
             }
         }
     });

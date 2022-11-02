@@ -178,7 +178,7 @@ Checkout - Big V
                             <div id="applyVoucher" class="text-block-3 text-color-dark-grey">Apply Discount</div>
                             <div class="icon-3 w-icon-dropdown-toggle"></div>
                             <div id="voucherUsed" class="text-block-3 text-color-dark-grey d-none"></div>
-                            <div class="icon-3 w-icon-close-toggle d-none"></div>
+                            <div id="cancelVoucher" class="icon-3 w-icon-close-toggle d-none"></div>
                         </div>
                     </div>
                     <h4 class="heading-8 text-color-dark-grey">Summary</h4>
@@ -202,7 +202,7 @@ Checkout - Big V
                     <div class="div-block-24 text-color-dark-grey">
                         <div class="inline text-weight-bold">Total</div>
                         <div class="inline text-weight-bold">$<span id="grandtotal-price">{{ $grandtotal_price }}</span></div>
-                    </div><button id="placeOrder" type="submit" class="checkout-button oh-grow w-button">Place Order</button>
+                    </div><button id="placeOrder" type="submit" class="checkout-button oh-grow w-button" disabled>Place Order</button>
                     <button type="button" class="text-left payment-gateway-button w-inline-block">
                         <div class="text-weight-bold">HitPay Payment Gateway</div><img src="{{asset('assets/6312dbbdcf1b3f0de3362511_Hitpay.png')}}" loading="lazy" alt="" />
                     </button>
@@ -449,57 +449,66 @@ Checkout - Big V
         // load default different delivery address
         getDetailAddress($("#shippingAddressData"), 1);
     });
+
+    $(document).ajaxSend(function(event, request, settings) {
+        $("#placeOrder").attr("disabled", "");
+    });
     
-    $("#placeOrder").on("click", function() {
-        // Shipping Method
-        var shipping_method = $(".shipping-button.shipping-button-active");
-        if ($("input[name=pickup_method_id]").length <= 0 && shipping_method.length > 0) {
-            $("<input>").attr({
-                type: "hidden",
-                name: "pickup_method_id",
-                value: shipping_method.attr("pickup-method-id")
-            }).appendTo('#checkoutForm');
-        }
-        
-        // Time
-        var time = $(".time-button.time-button-active");
-        if ($("input[name=pickup_time_id]").length <= 0 && time.length > 0) {
-            $("<input>").attr({
-                type: "hidden",
-                name: "pickup_time_id",
-                value: time.attr("pickup-time-id")
-            }).appendTo('#checkoutForm');
-        }
-
-        var method_type = shipping_method.find("div").html();
-        if (method_type.includes("self")) {
-            if ($("input[name=self_collection_address_id]").length <= 0 && editAddress != "") {
+    $(document).ajaxSuccess(function() {
+        $("#placeOrder").removeAttr("disabled");
+    });
+    
+    $("#placeOrder").on("click", function(e) {
+        if ($(this).is(":disabled") === false) {
+            // Shipping Method
+            var shipping_method = $(".shipping-button.shipping-button-active");
+            if ($("input[name=pickup_method_id]").length <= 0 && shipping_method.length > 0) {
                 $("<input>").attr({
                     type: "hidden",
-                    name: "self_collection_address_id",
-                    value: $("#pickupShippingDetail").attr("selected-address")
+                    name: "pickup_method_id",
+                    value: shipping_method.attr("pickup-method-id")
                 }).appendTo('#checkoutForm');
+            }
+            
+            // Time
+            var time = $(".time-button.time-button-active");
+            if ($("input[name=pickup_time_id]").length <= 0 && time.length > 0) {
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "pickup_time_id",
+                    value: time.attr("pickup-time-id")
+                }).appendTo('#checkoutForm');
+            }
+    
+            var method_type = shipping_method.find("div").html();
+            if (method_type.includes("self")) {
+                if ($("input[name=self_collection_address_id]").length <= 0 && editAddress != "") {
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "self_collection_address_id",
+                        value: $("#pickupShippingDetail").attr("selected-address")
+                    }).appendTo('#checkoutForm');
+                } else {
+                    alert("Please try again or refresh this page!");
+                }
             } else {
-                alert("Please try again or refresh this page!");
-            }
-        } else {
-            if ($("input[name=billing_address_id]").length <= 0 && $("#deliveryAddressData").attr("selected-address") !== undefined) {
-                $("<input>").attr({
-                    type: "hidden",
-                    name: "billing_address_id",
-                    value: $("#deliveryAddressData").attr("selected-address")
-                }).appendTo('#checkoutForm');
-            }
-
-            if ($("input[name=shipping_address_id]").length <= 0 && $("#shippingAddressData").attr("selected-address") !== undefined) {
-                $("<input>").attr({
-                    type: "hidden",
-                    name: "shipping_address_id",
-                    value: $("#shippingAddressData").attr("selected-address")
-                }).appendTo('#checkoutForm');
+                if ($("input[name=billing_address_id]").length <= 0 && $("#deliveryAddressData").attr("selected-address") !== undefined) {
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "billing_address_id",
+                        value: $("#deliveryAddressData").attr("selected-address")
+                    }).appendTo('#checkoutForm');
+                }
+    
+                if ($("input[name=shipping_address_id]").length <= 0 && $("#shippingAddressData").attr("selected-address") !== undefined) {
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "shipping_address_id",
+                        value: $("#shippingAddressData").attr("selected-address")
+                    }).appendTo('#checkoutForm');
+                }
             }
         }
-        e.preventDefault();
     });
     
     $("#btnEditDeliveryAddress").on("click", function() {
@@ -609,7 +618,7 @@ Checkout - Big V
             $("#pickupShippingDetail .container-address").html(data);
 
             // set default selected pickup-address
-            $("#pickupShippingDetail").attr("selected-address", addressId);
+            $("#pickupShippingDetail").attr("selected-address", 1);
         }).fail(function(error) {
             console.log("Error!")
         });
@@ -634,13 +643,14 @@ Checkout - Big V
     });
 
     $("#btnApplyDiscount").on("click", function() {
+        $("#btnSelectDiscount").removeAttr("data-toggle");
         if ($("#productVoucher").attr("selected-voucher") != "" && $("#shippingVoucher").attr("selected-voucher") != "") {
             $.post(url + "/user/discount/apply-voucher", {
                 _token: CSRF_TOKEN,
                 product_voucher: $("#productVoucher").attr("selected-voucher"),
                 shipping_voucher: $("#shippingVoucher").attr("selected-voucher"),
             }).done(function(data) {
-                console.log(data);
+
                 if (data.product_voucher !== undefined) {
                     $("#applyVoucher").addClass("d-none").next().addClass("d-none");
                     $("#voucherUsed").html(data.product_voucher.name).removeClass("d-none").next().removeClass("d-none");
@@ -658,14 +668,34 @@ Checkout - Big V
                     $("#shippingDiscountPrice").html(data.shipping_voucher.amount);
                 } else {
                     $("#shippingDiscountUsed").addClass("d-none");
-                    $("#shippingDiscountPrice").html("");
+                    $("#shippingDiscountPrice").html("0");
                 }
+                
 
                 $("#grandtotal-price").html(data.total_price_after_discount);
             }).fail(function(error) {
                 console.log(error);
             });
         }
+    });
+
+    $("#cancelVoucher").on("click", function() {
+        $.get(url + "/user/discount/cancel-voucher").done(function(data) {
+            $("#btnSelectDiscount").attr("data-toggle", "modal");
+
+            $("#applyVoucher").removeClass("d-none").next().removeClass("d-none");
+            $("#voucherUsed").html("").addClass("d-none").next().addClass("d-none");
+            
+            $("#productDiscountUsed").addClass("d-none");
+            $("#productDiscountPrice").html("0");
+            
+            $("#shippingDiscountUsed").addClass("d-none");
+            $("#shippingDiscountPrice").html("0");
+
+            $("#grandtotal-price").html(data);
+        }).fail(function(error) {
+            console.log(error);
+        });
     });
 
     $(".time-button").on('click', function() {

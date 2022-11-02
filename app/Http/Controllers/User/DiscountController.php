@@ -123,7 +123,7 @@ class DiscountController extends Controller
         $productVoucher = $request->product_voucher;
         $shippingVoucher = $request->shipping_voucher;
         $output = [];
-        $totalPrice = session()->get('total-checkout-price');
+        $totalPrice = session()->get('grandtotal-checkout-price');
 
         if (isset($productVoucher)) {
             $voucher = Discount::where('code', $productVoucher)->first();
@@ -146,5 +146,13 @@ class DiscountController extends Controller
         $output["total_price_after_discount"] = $totalPrice;
 
         return $output;
+    }
+
+    public function cancelVoucher()
+    {
+        session()->forget('product-voucher-used');
+        session()->forget('shipping-voucher-used');
+
+        return session()->get('grandtotal-checkout-price');
     }
 }
