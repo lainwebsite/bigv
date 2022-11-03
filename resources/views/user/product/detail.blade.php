@@ -172,7 +172,7 @@ Product Name - Big V
     </div>
 </div>
 <!-- VENDOR -->
-<div class="product-vendor-n-info ea-up">
+<div class="product-vendor-n-info ea-up" style="width: 90%;">
     <div class="div-block-8">
         <div class="vendor-product-detail" >
             <img src="{{ $product->vendor->photo }}" loading="lazy" alt="" class="image-10" />
