@@ -29,8 +29,12 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product->load('vendor', 'category', 'variations', 'images');
-        $product->vendor->load('location');
+
+        // $product->load('vendor', 'category', 'variations', 'images');
+        // $product->vendor->load('location');
+        $product = Product::withCount(['carts as item_sold' => function ($query) {
+            $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+        }])->where('id', $product->id)->get()[0];
 
         $addons = Addon::where('product_id', $product->id)->with(['addons_options'])->get();
 

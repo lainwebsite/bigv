@@ -266,36 +266,45 @@
                         </div>
                         <div class="c-product-rating">
                             <div class="flex">
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}"
-                                                loading="lazy" alt="" /></div>
+                                @php($arr_rating = explode('.', $product->rating))
+                                @php($first_num = $arr_rating[0])
+                                @while ($first_num > 0)
+                                    <div class="c-product-rating__star">
+                                        <div class="icon">
+                                            <div class="fas fa-star">
+                                                <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
+                                                    alt="" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}"
-                                                loading="lazy" alt="" /></div>
+                                    @php($first_num--)
+                                @endwhile
+
+                                @if (isset($arr_rating[1]))
+                                    <div class="c-product-rating__star">
+                                        <div class="icon">
+                                            <div class="fas fa-star">
+                                                <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
+                                                    alt="" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 2.svg') }}"
-                                                loading="lazy" alt="" /></div>
-                                    </div>
-                                </div>
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}"
-                                                loading="lazy" alt="" /></div>
-                                    </div>
-                                </div>
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}"
-                                                loading="lazy" alt="" /></div>
-                                    </div>
-                                </div>
+                                @endif
+
+                                @php($remaining_rating = explode('.', 5 - $product->rating)[0])
+                                @if ($remaining_rating > 0)
+                                    @while ($remaining_rating > 0)
+                                        <div class="c-product-rating__star">
+                                            <div class="icon">
+                                                <div class="fas fa-star">
+                                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @php($remaining_rating--)
+                                    @endwhile
+                                @endif
                             </div>
                             <h5 class="heading-4 p-beside-star">{{ $product->vendor->rating }} (300 rating)</h5>
                             <h5 class="heading-4 p-beside-star">1.000 sold</h5>
