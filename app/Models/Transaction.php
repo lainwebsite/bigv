@@ -34,6 +34,10 @@ class Transaction extends Model
     {
         return $this->hasMany(TransactionDiscount::class, 'transaction_id', 'id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
     public function billing_address()
     {
         return $this->belongsTo(UserAddress::class, 'billing_address_id', 'id');

@@ -162,7 +162,6 @@ class TransactionController extends Controller
         foreach ($transaction->transaction_discounts as $discount)
             $discounts[] = $discount->discount->name;
         $discounts = implode(", ", $discounts);
-
         return view('user.transaction.detail', ['transaction' => $transaction, 'discounts' => $discounts]);
     }
 
