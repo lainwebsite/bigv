@@ -20,15 +20,17 @@
                 class="absolute shape-1 ea-right" />
             <div class="product-hero">
                 <div class="content-col col--width-50 display-none">
-                    <img src="{{ asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg') }}" sizes="100vw"
-                        srcset="{{ asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg') }}" alt=""
-                        class="image-9 card27" />
-                    <img src="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" sizes="100vw"
+                    @foreach ($product->images as $image)
+                        <img src="{{ $image->link }}" sizes="100vw"
+                            srcset="{{ $image->link }}" alt=""
+                            class="image-9 card27" />
+                    @endforeach
+                    {{-- <img src="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" sizes="100vw"
                         srcset="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" alt=""
                         class="image-9 card27" />
                     <img src="{{ asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg') }}" sizes="100vw"
                         srcset="{{ asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg') }}" alt=""
-                        class="image-9 card27" />
+                        class="image-9 card27" /> --}}
                 </div>
                 <div id="productImage" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
@@ -266,7 +268,7 @@
                         </div>
                         <div class="c-product-rating">
                             <div class="flex">
-                                @php($arr_rating = explode('.', $product->rating))
+                                @php($arr_rating = explode('.', $product->vendor->rating))
                                 @php($first_num = $arr_rating[0])
                                 @while ($first_num > 0)
                                     <div class="c-product-rating__star">
@@ -291,7 +293,7 @@
                                     </div>
                                 @endif
 
-                                @php($remaining_rating = explode('.', 5 - $product->rating)[0])
+                                @php($remaining_rating = explode('.', 5 - $product->vendor->rating)[0])
                                 @if ($remaining_rating > 0)
                                     @while ($remaining_rating > 0)
                                         <div class="c-product-rating__star">
@@ -465,36 +467,45 @@
                             <h4 class="product-price heading-3">${{ $minProductPrice }} - ${{ $maxProductPrice }}</h4>
                         @endif
                         <div class="flex">
-                            <div class="c-product-rating__star">
-                                <div class="icon">
-                                    <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
-                                            alt="" /></div>
+                            @php($arr_rating = explode('.', $product->rating))
+                            @php($first_num = $arr_rating[0])
+                            @while ($first_num > 0)
+                                <div class="c-product-rating__star">
+                                    <div class="icon">
+                                        <div class="fas fa-star">
+                                            <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
+                                                alt="" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="c-product-rating__star">
-                                <div class="icon">
-                                    <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
-                                            alt="" /></div>
+                                @php($first_num--)
+                            @endwhile
+
+                            @if (isset($arr_rating[1]))
+                                <div class="c-product-rating__star">
+                                    <div class="icon">
+                                        <div class="fas fa-star">
+                                            <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
+                                                alt="" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="c-product-rating__star">
-                                <div class="icon">
-                                    <div class="fas fa-star"><img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
-                                            alt="" /></div>
-                                </div>
-                            </div>
-                            <div class="c-product-rating__star">
-                                <div class="icon">
-                                    <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
-                                            alt="" /></div>
-                                </div>
-                            </div>
-                            <div class="c-product-rating__star">
-                                <div class="icon">
-                                    <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
-                                            alt="" /></div>
-                                </div>
-                            </div>
+                            @endif
+
+                            @php($remaining_rating = explode('.', 5 - $product->rating)[0])
+                            @if ($remaining_rating > 0)
+                                @while ($remaining_rating > 0)
+                                    <div class="c-product-rating__star">
+                                        <div class="icon">
+                                            <div class="fas fa-star">
+                                                <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
+                                                    alt="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @php($remaining_rating--)
+                                @endwhile
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -596,37 +607,32 @@
             @if (auth()->user()->role_id == 1)
                 document.querySelector(".btn-add-cart").addEventListener("click", function(event) {
                     event.preventDefault();
+                    
+                    var product_variation_id = ($(".product-variation.selected").length > 0) 
+                        ? $(".product-variation.selected").attr("variation-id") : $(".product-price").attr("variation-id");
 
-                    if ($(".product-variation.selected").length > 0) {
-                        $.post(url + "/user/cart", {
-                            _token: CSRF_TOKEN,
-                            product_variation_id: $(".product-variation.selected").attr("variation-id"),
-                            quantity: $(".product-quantity").val()
-                        }).done(function(data) {
-                            alert(data);
-                        }).fail(function(error) {
-                            console.log(error);
-                        });
-                    } else {
-                        $.post(url + "/user/cart", {
-                            _token: CSRF_TOKEN,
-                            product_variation_id: $(".product-price").attr("variation-id"),
-                            quantity: $(".product-quantity").val()
-                        }).done(function(data) {
-                            alert(data);
-                        }).fail(function(error) {
-                            console.log(error);
-                        });
-                    }
+                    $.post(url + "/user/cart", {
+                        _token: CSRF_TOKEN,
+                        product_variation_id: product_variation_id,
+                        quantity: $(".product-quantity").val()
+                    }).done(function(data) {
+                        alert(data);
+                    }).fail(function(error) {
+                        console.log(error);
+                    });
                 });
                 document.querySelector(".btn-buy-now").addEventListener("click", function(event) {
                     event.preventDefault();
 
-                    $.post(url + "/user/cart/verify-checkout", {
+                    var product_variation_id = ($(".product-variation.selected").length > 0) 
+                        ? $(".product-variation.selected").attr("variation-id") : $(".product-price").attr("variation-id");
+
+                    $.post(url + "/user/cart/checkout/buy-now", {
                         _token: CSRF_TOKEN,
-                        carts: {},
+                        product_variation_id: product_variation_id,
+                        quantity: $(".product-quantity").val()
                     }).done(function(data) {
-                        alert(data);
+                        window.location.href = url + "/user/cart/checkout";
                     }).fail(function(error) {
                         console.log(error);
                     });

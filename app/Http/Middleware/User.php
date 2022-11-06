@@ -18,6 +18,16 @@ class User
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
+            // dd(strpos($request->route()->uri(), "checkout") === false ? 1 : 0)
+            if (strpos($request->route()->uri(), "checkout") === false) {
+                session()->forget('checkout-items');
+                session()->forget('shipping-price');
+                session()->forget('total-checkout-price');
+                session()->forget('grandtotal-checkout-price');
+                session()->forget('total-checkout-items');
+                session()->save();
+            }
+
             if (Auth::user()->role_id == 1) {
                 return $next($request);
             } else {

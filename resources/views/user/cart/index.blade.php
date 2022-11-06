@@ -237,11 +237,7 @@
         });
 
         $(document).ajaxSend(function(event, request, settings) {
-            if ($(".product-cart:checked").length > 0) {
-                $("#btnProceed").removeAttr("disabled");
-            } else {
-                $("#btnProceed").attr("disabled", "");
-            }
+            $("#btnProceed").attr("disabled", "");
         });
 
         $(document).ajaxSuccess(function() {

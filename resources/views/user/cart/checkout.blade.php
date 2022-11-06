@@ -373,7 +373,7 @@ Checkout - Big V
 <script src="{{asset('assets/js/script-cart-checkout.js')}}" type="text/javascript"></script>
 <script>
     function getDetailAddress(el, addressId, selected = false) {
-        $.get(url + "/user/user-address/get-address/" + addressId).done(function(data) {
+        $.get(url + "/user/checkout/user-address/get-address/" + addressId).done(function(data) {
             if (data.block_number) {
                 el.html(`
                     <h4 class="heading-7">` + data.name + `</h4>
@@ -403,7 +403,7 @@ Checkout - Big V
     }
 
     function getAddresses(keyword, el) {
-        $.post(url + "/user/user-address/search", {
+        $.post(url + "/user/checkout/user-address/search", {
             _token: CSRF_TOKEN,
             keyword: keyword,
         }).done(function(data) {
@@ -414,7 +414,7 @@ Checkout - Big V
     }
     
     function getProductDiscounts(keyword) {
-        var urlDiscount = keyword == "" ? (url + "/user/product-discount/search") : (url + "/user/product-discount/search/" + keyword);
+        var urlDiscount = keyword == "" ? (url + "/user/checkout/product-discount/search") : (url + "/user/checkout/product-discount/search/" + keyword);
         $.get(urlDiscount).done(function(data) {
             $("#productVoucher").html(data);
         }).fail(function() {
@@ -423,7 +423,7 @@ Checkout - Big V
     }
 
     function getShippingDiscounts(keyword) {
-        var urlDiscount = keyword == "" ? (url + "/user/shipping-discount/search") : (url + "/user/shipping-discount/search/" + keyword);
+        var urlDiscount = keyword == "" ? (url + "/user/checkout/shipping-discount/search") : (url + "/user/checkout/shipping-discount/search/" + keyword);
         $.get(urlDiscount).done(function(data) {
             $("#shippingVoucher").html(data);
         }).fail(function() {
@@ -539,7 +539,7 @@ Checkout - Big V
     });
 
     $("#btnCreateAddress").on("click", function() {
-        $.post(url + "/user/user-address/create-address", {
+        $.post(url + "/user/checkout/user-address/create-address", {
             _token: CSRF_TOKEN,
             name: $("#name:visible input").val(),
             phone: $("#phoneNumber:visible input").val(),
@@ -611,7 +611,7 @@ Checkout - Big V
         $("#pickupShippingDetail, #deliveryAddressData, #shippingAddressData").removeAttr("selected-address");
 
         // get all pickup address
-        $.post(url + "/user/pickup-address/search", {
+        $.post(url + "/user/checkout/pickup-address/search", {
             _token: CSRF_TOKEN,
             keyword: "",
         }).done(function(data) {
@@ -645,7 +645,7 @@ Checkout - Big V
     $("#btnApplyDiscount").on("click", function() {
         $("#btnSelectDiscount").removeAttr("data-toggle");
         if ($("#productVoucher").attr("selected-voucher") != "" && $("#shippingVoucher").attr("selected-voucher") != "") {
-            $.post(url + "/user/discount/apply-voucher", {
+            $.post(url + "/user/checkout/discount/apply-voucher", {
                 _token: CSRF_TOKEN,
                 product_voucher: $("#productVoucher").attr("selected-voucher"),
                 shipping_voucher: $("#shippingVoucher").attr("selected-voucher"),
@@ -680,7 +680,7 @@ Checkout - Big V
     });
 
     $("#cancelVoucher").on("click", function() {
-        $.get(url + "/user/discount/cancel-voucher").done(function(data) {
+        $.get(url + "/user/checkout/discount/cancel-voucher").done(function(data) {
             $("#btnSelectDiscount").attr("data-toggle", "modal");
 
             $("#applyVoucher").removeClass("d-none").next().removeClass("d-none");

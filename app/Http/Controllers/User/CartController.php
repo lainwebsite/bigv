@@ -73,18 +73,22 @@ class CartController extends Controller
             $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
             $cart = Cart::whereNull('transaction_id')->where('product_variation_id', $request->product_variation_id)->first();
 
-            if ($cart == null) {
-                $data = $request->all();
-                $data += [
-                    'price' => $productVariation->price,
-                    'user_id' => auth()->user()->id,
-                ];
-                $cart = Cart::create($data);
+            if ($request->quantity > 0) {
+                if ($cart == null) {
+                    $data = $request->all();
+                    $data += [
+                        'price' => $productVariation->price,
+                        'user_id' => auth()->user()->id,
+                    ];
+                    $cart = Cart::create($data);
+                } else {
+                    $qty = $cart->quantity + $request->quantity;
+                    $cart->update([
+                        'quantity' => $qty
+                    ]);
+                }
             } else {
-                $qty = $cart->quantity + $request->quantity;
-                $cart->update([
-                    'quantity' => $qty
-                ]);
+                return "Please choose at least one product.";
             }
         } catch (\Illuminate\Database\QueryException $exception) {
             $errorInfo = $exception->errorInfo;

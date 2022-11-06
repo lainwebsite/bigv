@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\PickupMethod;
 use App\Models\PickupTime;
+use App\Models\ProductVariation;
 use App\Models\UserAddress;
 use App\Models\Transaction;
 use App\Models\Vendor;
@@ -59,7 +60,7 @@ class CheckoutController extends Controller
         return redirect()->back();
     }
 
-    public function verifyCheckout(Request $request)
+    public function preCheckout(Request $request)
     {
         $carts = json_decode($request->carts, true);
 
@@ -69,6 +70,8 @@ class CheckoutController extends Controller
         if (isset($carts)) {
             if (count($carts) > 0) {
                 foreach ($carts as $cart) {
+                    array_pop($cart);
+
                     foreach ($cart as $cart_id => $product) {
                         if (isset($product['sub_total_price']) && isset($product['quantity'])) {
                             $cart_checkout_id[] = $cart_id;
@@ -91,6 +94,47 @@ class CheckoutController extends Controller
                     return redirect('/user/cart/checkout');
                 }
             }
+        }
+
+        return redirect()->back();
+    }
+
+    public function buyNowCheckout(Request $request)
+    {
+        $request->validate([
+            'quantity' => 'required|numeric',
+            'product_variation_id' => 'required|numeric',
+        ]);
+
+        $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
+        $cart = Cart::whereNull('transaction_id')->where('product_variation_id', $request->product_variation_id)->first();
+
+        if ($request->quantity > 0) {
+            if ($cart == null) {
+                $data = $request->all();
+                $data += [
+                    'price' => $productVariation->price,
+                    'user_id' => auth()->user()->id,
+                ];
+                $cart = Cart::create($data);
+            } else {
+                $qty = $cart->quantity + $request->quantity;
+                $cart->update([
+                    'quantity' => $qty
+                ]);
+            }
+
+            $shipping_price = 30;
+
+            $total_price = $cart->quantity * $cart->price; // WARNING (price can be updated by user)
+            session()->put('total-checkout-items', $cart->quantity);
+            session()->put('total-checkout-price', $total_price);
+            session()->put('grandtotal-checkout-price', $total_price + $shipping_price);
+            session()->put('shipping-price', $shipping_price);
+            session()->put('checkout-items', [$cart->id]);
+            session()->save();
+        } else {
+            return "Please choose at least one product.";
         }
 
         return redirect()->back();
