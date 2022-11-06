@@ -103,7 +103,6 @@ class CheckoutController extends Controller
             // 'payment_method_id' => 'required|numeric',
             'pickup_method_id' => 'required|numeric',
             'pickup_time_id' => 'required|numeric',
-            // 'status_id' => 'required|numeric',
             'billing_address_id' => 'required_without:self_collection_address_id|numeric',
             'self_collection_address_id' => 'required_without:billing_address_id|numeric',
             'shipping_address_id' => 'sometimes|required|numeric',
@@ -124,8 +123,8 @@ class CheckoutController extends Controller
             'total_price' => session()->get('total-checkout-price'),
             'shipping_fee' => session()->get('shipping-price'),
             'user_id' => auth()->user()->id,
-            'status_id' => 1,
-            'payment_method_id' => 1,
+            'status_id' => 1, // default "Order Pending"
+            'payment_method_id' => 1, // contoh
         ];
 
         $transaction = Transaction::create($data);

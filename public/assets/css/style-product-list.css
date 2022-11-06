@@ -3948,7 +3948,7 @@ figcaption {
 
 @media screen and (min-width: 991px){
   #productsList{
-    display: flex; flex-wrap: wrap; width: calc(100% - 288px); gap: 18px; justify-content: center;
+    display: flex; flex-wrap: wrap; width: calc(100% - 288px); gap: 18px; justify-content: start;
   }
 }
 

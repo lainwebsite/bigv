@@ -91,9 +91,13 @@
                                     class="button-4 w-button" />
                             </form>
                         </div>
-                        <div class="flex-row-center">
+                        {{-- <div class="flex-row-center">
                             <div>Forgot Password? <a href="#" data-ms-modal="login" class="link"><strong>Reset
                                         Password</strong></a>
+                            </div>
+                        </div> --}}
+                        <div class="flex-row-center">
+                            <div>Doesn't have an account? <a href="#" class="link"><strong>Register</strong></a>
                             </div>
                         </div>
                     </div>

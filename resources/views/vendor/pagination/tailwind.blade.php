@@ -1,13 +1,8 @@
-<ul class="pagination justify-content-center">
-
-    @if ($paginator->onFirstPage())
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-    @else
-        <li class="page-item">
-            <a class="page-link" href="{{ $paginator->previousPageUrl() }}">Previous</a>
-        </li>
+<div class="pagination flex justify-center margin-large">
+    @if (!$paginator->onFirstPage())
+        <a href="{{ $paginator->previousPageUrl() }}" class="pagination-not-selected text-style-none">
+            <div class="orange-text">Previous</div>
+        </a>
     @endif
     @foreach ($elements as $element)
         {{-- "Three Dots" Separator --}}
@@ -22,21 +17,21 @@
         @if (is_array($element))
             @foreach ($element as $page => $url)
                 @if ($page == $paginator->currentPage())
-                    <li class="page-item active"><a class="page-link" href="#">{{ $page }}</a></li>
+                    <a href="#" class="pagination-selected text-style-none">
+                        <div class="text-color-white">1{{ $page }}</div>
+                    </a>
                 @else
-                    <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                    </li>
+                    <a href="{{ $url }}" class="pagination-not-selected text-style-none">
+                        <div class="orange-text">8{{ $page }}</div>
+                    </a>
                 @endif
             @endforeach
         @endif
     @endforeach
+
     @if ($paginator->hasMorePages())
-        <li class="page-item">
-            <a class="page-link" href="{{ $paginator->nextPageUrl() }}">Next</a>
-        </li>
-    @else
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Next</a>
-        </li>
+        <a href="{{ $paginator->nextPageUrl() }}" class="pagination-not-selected text-style-none">
+            <div class="orange-text">Next</div>
+        </a>
     @endif
-</ul>
+</div>

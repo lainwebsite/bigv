@@ -57,8 +57,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['verify' => true]);
 
 Route::get('/', [PageController::class, 'home'])->name('home');
-Route::resource('product', ProductController::class);
+Route::get('product/search', [ProductController::class, 'search']);
+Route::post('product/sort', [ProductController::class, 'sort']);
 Route::post('product/filter', [ProductController::class, 'filter']);
+Route::resource('product', ProductController::class);
 
 Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
     // Route::post('cart/{id}/{qty}', [CartController::class, 'update']);
