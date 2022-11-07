@@ -18,7 +18,6 @@ class User
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            // dd(strpos($request->route()->uri(), "checkout") === false ? 1 : 0)
             if (strpos($request->route()->uri(), "checkout") === false) {
                 session()->forget('checkout-items');
                 session()->forget('shipping-price');

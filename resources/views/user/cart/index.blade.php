@@ -87,13 +87,11 @@
         </div><img src="{{ asset('assets/6303b67a5064f05035c5a701_shape 1.svg') }}" loading="lazy" alt=""
             class="absolute shape-cart" />
         <div class="new-products-section padding-xxlarge ea-fade">
-            <div class="heading-large text-align-center margin-bottom margin-large text-color-dark-grey">Suggested Products
-            </div>
-            <div class="products-archive-grid" id="productsList">
-                <!-- 20 product per page -->
-                @for ($i = 0; $i < 15; $i++)
-                    <a href="https://www.google.com" class="text-style-none">
-                        <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
+            <div class="heading-large text-align-center margin-bottom margin-large">Suggested Products</div>
+            <div class="products-archive-grid margin-auto">
+                @for ($i = 0; $i < 10; $i++)
+                    <a href="https://www.google.com">
+                        <div id="w-node-_6b6feb56-ca1c-a712-de43-c09a32981649-fac73a6b" class="product-card padding-small">
                             <div class="text-rich-text text-size-small text-color-grey">Cak Har</div><img
                                 src="{{ asset('assets/62fc7f0ee2b4118e2f35c5d6_image%2034.png') }}" loading="lazy"
                                 alt="" class="product-image" />
@@ -111,7 +109,7 @@
                                 <div class="card-discount">
                                     <div class="discount">50%</div>
                                 </div>
-                                <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
+                                <div id="w-node-_6b6feb56-ca1c-a712-de43-c09a32981656-fac73a6b"
                                     class="sale-price text-color-light-grey">$24.00</div>
                                 <div class="text-rich-text text-color-orange text-weight-bold">$12.00</div>
                             </div>
@@ -120,7 +118,7 @@
                 @endfor
             </div>
             <a href="#" class="button margin-top margin-large ea-grow w-button">See More</a>
-            <div data-w-id="1371aed2-3fc5-f904-82f2-4cec36fc3a06" class="product-info"></div>
+            <div data-w-id="2763fafa-9663-7a88-db5c-9d4056894d11" class="product-info"></div>
         </div>
     </div>
     </div>

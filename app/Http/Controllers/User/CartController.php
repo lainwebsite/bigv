@@ -12,16 +12,6 @@ use DB;
 
 class CartController extends Controller
 {
-    public function __construct()
-    {
-        session()->forget('checkout-items');
-        session()->forget('shipping-price');
-        session()->forget('total-checkout-price');
-        session()->forget('grandtotal-checkout-price');
-        session()->forget('total-checkout-items');
-        session()->save();
-    }
-
     /**
      * Display a listing of the resource.
      *

@@ -12,6 +12,7 @@ use App\Models\Transaction;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Paynow\Payments\Paynow;
+use Illuminate\Support\Facades\Http;
 
 class CheckoutController extends Controller
 {
@@ -133,8 +134,10 @@ class CheckoutController extends Controller
             session()->put('shipping-price', $shipping_price);
             session()->put('checkout-items', [$cart->id]);
             session()->save();
+
+            return redirect('/user/cart/checkout');
         } else {
-            return "Please choose at least one product.";
+            return redirect()->back()->with('error', 'Please choose at least one product.'); // di UI belum ada modal error
         }
 
         return redirect()->back();
@@ -180,5 +183,111 @@ class CheckoutController extends Controller
         }
 
         return redirect()->route('home');
+    }
+
+    public function atomePayment(Request $request)
+    {
+        $response = Http::post('https://api.apaylater.net/v2/payments', [
+            "referenceId" => "123456789",
+            "currency" => "SGD",
+            "amount" => 12010,
+            "callbackUrl" => "https://api.merchant-site.com/apaylater-callback",
+            "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
+            "customerInfo" => [
+                "mobileNumber" => "+6587654321",
+                "fullName" => "Atome Developer",
+                "email" => "developer@atome.sg"
+            ],
+            "shippingAddress" => [
+                "countryCode" => "SG",
+                "lines" => [
+                    "80 Robinson Road",
+                    "#09-01",
+                    "Singapore, 068898"
+                ],
+                "postCode" => "068898"
+            ],
+            "items" => [
+                [
+                    "itemId" => "P100",
+                    "name" => "iPhone",
+                    "price" => 11020,
+                    "quantity" => 1,
+                    "variationName" => "Black, 128GB",
+                    "originalPrice" => 12020,
+                    "categories" => [
+                        "Electronics"
+                    ]
+                ],
+                [
+                    "itemId" => "P101",
+                    "name" => "iPhone SE case",
+                    "price" => 1000,
+                    "quantity" => 1,
+                    "variationName" => "White",
+                    "categories" => [
+                        "Accessories"
+                    ]
+                ]
+            ]
+        ]);
+        // $response = Http::post('https://api.apaylater.net/v2/payments', [
+        //     "referenceId" => "123456789",
+        //     "currency" => "SGD",
+        //     "amount" => 12010,
+        //     "callbackUrl" => "https://api.merchant-site.com/apaylater-callback",
+        //     "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
+        //     "paymentCancelUrl" => "https://www.merchant-site.com/checkout",
+        //     "merchantReferenceId" => "P1293201980299030",
+        //     "customerInfo" => [
+        //         "mobileNumber" => "+6587654321",
+        //         "fullName" => "Atome Developer",
+        //         "email" => "developer@atome.sg"
+        //     ],
+        //     "shippingAddress" => [
+        //         "countryCode" => "SG",
+        //         "lines" => [
+        //             "80 Robinson Road",
+        //             "#09-01",
+        //             "Singapore, 068898"
+        //         ],
+        //         "postCode" => "068898"
+        //     ],
+        //     "billingAddress" => [
+        //         "countryCode" => "SG",
+        //         "lines" => [
+        //             "80 Robinson Road",
+        //             "#09-01",
+        //             "Singapore, 068898"
+        //         ],
+        //         "postCode" => "068898"
+        //     ],
+        //     "taxAmount" => 655,
+        //     "shippingAmount" => 1020,
+        //     "originalAmount" => 13020,
+        //     "items" => [
+        //         [
+        //             "itemId" => "P100",
+        //             "name" => "iPhone",
+        //             "price" => 11020,
+        //             "quantity" => 1,
+        //             "variationName" => "Black, 128GB",
+        //             "originalPrice" => 12020,
+        //             "categories" => [
+        //                 "Electronics"
+        //             ]
+        //         ],
+        //         [
+        //             "itemId" => "P101",
+        //             "name" => "iPhone SE case",
+        //             "price" => 1000,
+        //             "quantity" => 1,
+        //             "variationName" => "White",
+        //             "categories" => [
+        //                 "Accessories"
+        //             ]
+        //         ]
+        //     ]
+        // ]);
     }
 }

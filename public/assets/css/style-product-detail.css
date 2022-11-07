@@ -1419,6 +1419,14 @@ figcaption {
 
 .product-card-title.text-rich-text.text-size-regular.text-weight-bold.text-color-dark-grey {
   color: #707070;
+  text-align: center;
+}
+
+.product-image{
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 18px;
 }
 
 .product-card-low-div {
@@ -1532,6 +1540,8 @@ figcaption {
 }
 
 .new-products-section {
+  position: relative;
+  z-index: 2;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2989,6 +2999,15 @@ figcaption {
   position: -webkit-sticky;
   position: sticky;
   top: 10vh;
+}
+
+.card28 {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  grid-row-gap: 9px;
+  border-radius: 27px;
+  background-color: #fff;
+  z-index: 800 !important;
 }
 
 .div-block-10 {

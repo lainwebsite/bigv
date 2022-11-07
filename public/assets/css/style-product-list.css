@@ -1422,6 +1422,7 @@ figcaption {
 
 .product-card-title.text-rich-text.text-size-regular.text-weight-bold.text-color-dark-grey {
   color: #707070;
+  text-align: center;
 }
 
 .product-card-low-div {

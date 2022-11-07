@@ -15,16 +15,21 @@
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v14.0"
         nonce="7vBOYaJD"></script>
     <div class="content">
-        <div style="margin-bottom: 1rem;">
+        <div style="margin-bottom: 1rem;" class="col-12">
             <img src="{{ asset('assets/6303b67a5064f05035c5a701_shape 1.svg') }}" loading="lazy" alt=""
                 class="absolute shape-1 ea-right" />
-            <div class="product-hero">
+            <div class="product-hero margin-auto">
                 <div class="content-col col--width-50 display-none">
-                    @foreach ($product->images as $image)
-                        <img src="{{ $image->link }}" sizes="100vw"
-                            srcset="{{ $image->link }}" alt=""
+                    @if (count($product->images) > 0)
+                        @foreach ($product->images as $image)
+                            <img src="{{ $image->link }}" sizes="100vw" srcset="{{ $image->link }}" alt=""
+                                class="image-9 card27" />
+                        @endforeach
+                    @else
+                        <img src="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" sizes="100vw"
+                            srcset="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" alt=""
                             class="image-9 card27" />
-                    @endforeach
+                    @endif
                     {{-- <img src="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" sizes="100vw"
                         srcset="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" alt=""
                         class="image-9 card27" />
@@ -116,7 +121,8 @@
                                         @endif
                                     </div>
                                     <h5 class="heading-4 p-beside-star">{{ $product->rating }} (300 rating)</h5>
-                                    <h5 class="heading-4 p-beside-star">1.000 sold</h5>
+                                    <h5 class="heading-4 p-beside-star">
+                                        {{ $product->items_sold == null ? '0' : $product->items_sold }} sold</h5>
                                 </div>
                                 <div class="share-dialog">
                                     <header class="share-header">
@@ -200,7 +206,7 @@
                                     min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}">
                                     ${{ $minProductPrice }} - ${{ $maxProductPrice }}</h3>
                                 <div class="div-line"></div>
-                                <h5 class="heading-4 mb-2">Variant Name</h5>
+                                <h5 class="heading-4 mb-2">{{ ucwords($product->variation_name) }}</h5>
                                 <div class="flex flex-wrap mb-3">
                                     @foreach ($product->variations as $productVariation)
                                         <button class="product-variation button-secondary-copy w-button"
@@ -241,7 +247,15 @@
                                 @if ($product->variations[0]->name == 'novariation')
                                     <a href="#" class="btn-add-cart atc-product-page oh-grow w-button">Add to
                                         Cart</a>
-                                    <a href="#" class="btn-buy-now button-secondary oh-grow w-button">Buy Now</a>
+                                    <form method="POST" action="{{ url('user/cart/checkout/buy-now') }}">
+                                        @csrf
+
+                                        <input id="productVariationId" type="hidden" name="product_variation_id">
+                                        <input id="quantity" type="hidden" name="quantity">
+                                        <button type="submit" class="btn-buy-now button-secondary oh-grow w-button"
+                                            style="width: 100%;">Buy
+                                            Now</button>
+                                    </form>
                                 @else
                                     <a href="#"
                                         class="btn-add-cart btn-secondary atc-product-page oh-grow w-button">Add to
@@ -395,48 +409,83 @@
                 </div>
                 <div class="text-color-dark-grey ea-right">
                     @for ($i = 0; $i < 10; $i++)
-                        <div class="card27 padding-small margin-small">
-                            <div class="div-block-17">
-                                <h4>Chris William</h4>
-                                <h5 class="heading-4 p-beside-star">29-10-2022</h5>
-                            </div>
-                            <div class="flex">
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}"
-                                                loading="lazy" alt="" /></div>
+                        <div class="card28 row padding-small margin-small m-3">
+                            <div class="col-md-3 col-sm-2 col-6">
+                                <div id="reviewImage{{ $i }}" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img class="d-block w-100"
+                                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
+                                                alt="First slide">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100"
+                                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
+                                                alt="Second slide">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100"
+                                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
+                                                alt="Third slide">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}"
-                                                loading="lazy" alt="" /></div>
-                                    </div>
-                                </div>
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 2.svg') }}"
-                                                loading="lazy" alt="" /></div>
-                                    </div>
-                                </div>
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}"
-                                                loading="lazy" alt="" /></div>
-                                    </div>
-                                </div>
-                                <div class="c-product-rating__star">
-                                    <div class="icon">
-                                        <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}"
-                                                loading="lazy" alt="" /></div>
-                                    </div>
+                                    <a class="carousel-control-prev" href="#reviewImage{{ $i }}"
+                                        role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#reviewImage{{ $i }}"
+                                        role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
                                 </div>
                             </div>
-                            <h5 class="heading-4 p-beside-star">300 Rating</h5>
-                            <div class="text-size-tiny text-color-grey">At vero eos et accusamus et iusto odio dignissimos
-                                ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas
-                                molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
-                                officia deserunt mollitia animi, id est laborum et dolorum fuga.</div>
+                            <div class="col-md-9 col-sm-10 col-12">
+                                <div class="div-block-17">
+                                    <h4>Chris William</h4>
+                                    <h5 class="heading-4 p-beside-star">29-10-2022</h5>
+                                </div>
+                                <div class="flex">
+                                    <div class="c-product-rating__star">
+                                        <div class="icon">
+                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}"
+                                                    loading="lazy" alt="" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="c-product-rating__star">
+                                        <div class="icon">
+                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}"
+                                                    loading="lazy" alt="" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="c-product-rating__star">
+                                        <div class="icon">
+                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 2.svg') }}"
+                                                    loading="lazy" alt="" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="c-product-rating__star">
+                                        <div class="icon">
+                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}"
+                                                    loading="lazy" alt="" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="c-product-rating__star">
+                                        <div class="icon">
+                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}"
+                                                    loading="lazy" alt="" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 class="heading-4 p-beside-star">300 Rating</h5>
+                                <div class="text-size-tiny text-color-grey">At vero eos et accusamus et iusto odio
+                                    dignissimos
+                                    ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et
+                                    quas
+                                    molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
+                                    officia deserunt mollitia animi, id est laborum et dolorum fuga.</div>
+                            </div>
                         </div>
                     @endfor
                 </div>
@@ -473,8 +522,7 @@
                                 <div class="c-product-rating__star">
                                     <div class="icon">
                                         <div class="fas fa-star">
-                                            <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
-                                                alt="" />
+                                            <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy" alt="" />
                                         </div>
                                     </div>
                                 </div>
@@ -485,8 +533,7 @@
                                 <div class="c-product-rating__star">
                                     <div class="icon">
                                         <div class="fas fa-star">
-                                            <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
-                                                alt="" />
+                                            <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy" alt="" />
                                         </div>
                                     </div>
                                 </div>
@@ -607,9 +654,10 @@
             @if (auth()->user()->role_id == 1)
                 document.querySelector(".btn-add-cart").addEventListener("click", function(event) {
                     event.preventDefault();
-                    
-                    var product_variation_id = ($(".product-variation.selected").length > 0) 
-                        ? $(".product-variation.selected").attr("variation-id") : $(".product-price").attr("variation-id");
+
+                    var product_variation_id = ($(".product-variation.selected").length > 0) ?
+                        $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
+                            "variation-id");
 
                     $.post(url + "/user/cart", {
                         _token: CSRF_TOKEN,
@@ -621,22 +669,35 @@
                         console.log(error);
                     });
                 });
-                document.querySelector(".btn-buy-now").addEventListener("click", function(event) {
-                    event.preventDefault();
 
-                    var product_variation_id = ($(".product-variation.selected").length > 0) 
-                        ? $(".product-variation.selected").attr("variation-id") : $(".product-price").attr("variation-id");
+                $(".btn-buy-now").on("click", function() {
+                    var product_variation_id = ($(".product-variation.selected").length > 0) ?
+                        $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
+                            "variation-id");
 
-                    $.post(url + "/user/cart/checkout/buy-now", {
-                        _token: CSRF_TOKEN,
-                        product_variation_id: product_variation_id,
-                        quantity: $(".product-quantity").val()
-                    }).done(function(data) {
-                        window.location.href = url + "/user/cart/checkout";
-                    }).fail(function(error) {
-                        console.log(error);
-                    });
+                    $("#productVariationId").val(product_variation_id);
+                    $("#quantity").val($(".product-quantity").val());
                 });
+                // document.querySelector(".btn-buy-now").addEventListener("click", function(event) {
+                //     event.preventDefault();
+
+                //     var product_variation_id = ($(".product-variation.selected").length > 0) ?
+                //         $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
+                //             "variation-id");
+
+                //     $.post(url + "/user/cart/checkout/buy-now", {
+                //         _token: CSRF_TOKEN,
+                //         product_variation_id: product_variation_id,
+                //         quantity: $(".product-quantity").val()
+                //     }).done(function(data) {
+                //         $.get(url + '/user/coba').done(function(data) {
+                //             console.log(data);
+                //         });
+                //         // window.location.href = url + "/user/cart/checkout";
+                //     }).fail(function(error) {
+                //         console.log(error);
+                //     });
+                // });
             @endif
         @else
             $(".btn-add-cart, .btn-buy-now").attr("href", "{{ route('login') }}");
