@@ -145,44 +145,95 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
-        $request->validate([
-            'delivery_date' => 'required|string|date_format:Y-m-h',
-            // 'payment_method_id' => 'required|numeric',
-            'pickup_method_id' => 'required|numeric',
-            'pickup_time_id' => 'required|numeric',
-            'billing_address_id' => 'required_without:self_collection_address_id|numeric',
-            'self_collection_address_id' => 'required_without:billing_address_id|numeric',
-            'shipping_address_id' => 'sometimes|required|numeric',
-        ]);
-
-        // $paynow = new Paynow(
-        //     'INTEGRATION_ID',
-        //     'INTEGRATION_KEY',
-        //     'http://example.com/gateways/paynow/update',
-
-        //     // The return url can be set at later stages. You might want to do this if you want to pass data to the return url (like the reference of the transaction)
-        //     'http://example.com/return?gateway=paynow'
-        // );
-        // dd($paynow);
-
-        $data = $request->all();
-        $data += [
-            'total_price' => session()->get('total-checkout-price'),
-            'shipping_fee' => session()->get('shipping-price'),
-            'user_id' => auth()->user()->id,
-            'status_id' => 1, // default "Order Pending"
-            'payment_method_id' => 1, // contoh
-        ];
-
-        $transaction = Transaction::create($data);
-
-        // update transaction id in cart
-        $checkout_items = session()->get('checkout-items');
-        foreach ($checkout_items as $item) {
-            Cart::where('id', $item)->update(['transaction_id' => $transaction->id]);
+        if ($request->payment_gateway == 'atome') {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->post('https://api.apaylater.net/v2/payments', [
+                "referenceId" => "123456789",
+                "currency" => "SGD",
+                "amount" => 12010,
+                "callbackUrl" => "https://api.merchant-site.com/apaylater-callback",
+                "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
+                "customerInfo" => [
+                    "mobileNumber" => "+6587654321",
+                    "fullName" => "Atome Developer",
+                    "email" => "developer@atome.sg"
+                ],
+                "shippingAddress" => [
+                    "countryCode" => "SG",
+                    "lines" => [
+                        "80 Robinson Road",
+                        "#09-01",
+                        "Singapore, 068898"
+                    ],
+                    "postCode" => "068898"
+                ],
+                "items" => [
+                    [
+                        "itemId" => "P100",
+                        "name" => "iPhone",
+                        "price" => 11020,
+                        "quantity" => 1,
+                        "variationName" => "Black, 128GB",
+                        "originalPrice" => 12020,
+                        "categories" => [
+                            "Electronics"
+                        ]
+                    ],
+                    [
+                        "itemId" => "P101",
+                        "name" => "iPhone SE case",
+                        "price" => 1000,
+                        "quantity" => 1,
+                        "variationName" => "White",
+                        "categories" => [
+                            "Accessories"
+                        ]
+                    ]
+                ]
+            ]);
+            dd($response->status());
         }
+        // $request->validate([
+        //     'delivery_date' => 'required|string|date_format:Y-m-h',
+        //     // 'payment_method_id' => 'required|numeric',
+        //     'pickup_method_id' => 'required|numeric',
+        //     'pickup_time_id' => 'required|numeric',
+        //     'billing_address_id' => 'required_without:self_collection_address_id|numeric',
+        //     'self_collection_address_id' => 'required_without:billing_address_id|numeric',
+        //     'shipping_address_id' => 'sometimes|required|numeric',
+        // ]);
 
-        return redirect()->route('home');
+        // $data = $request->all();
+        // $data += [
+        //     'total_price' => session()->get('total-checkout-price'),
+        //     'shipping_fee' => session()->get('shipping-price'),
+        //     'user_id' => auth()->user()->id,
+        //     'status_id' => 1, // default "Order Pending"
+        //     'payment_method_id' => 1, // contoh
+        // ];
+
+        // $transaction = Transaction::create($data);
+
+        // // update transaction id in cart
+        // $checkout_items = session()->get('checkout-items');
+        // foreach ($checkout_items as $item) {
+        //     Cart::where('id', $item)->update(['transaction_id' => $transaction->id]);
+        // }
+
+        // return redirect()->route('home');
+    }
+
+    public function responseAtome(Request $request)
+    {
+        dd($request);
+        // $response = Http::withHeaders([
+        //     'Content-Type' => 'application/json'
+        // ])->post('https://api.apaylater.net/v2/payments', [
+        //     "referenceId" => "123456789",
+        // ]);
+
+        // dd($response->status());
     }
 
     public function atomePayment(Request $request)
@@ -191,7 +242,7 @@ class CheckoutController extends Controller
             "referenceId" => "123456789",
             "currency" => "SGD",
             "amount" => 12010,
-            "callbackUrl" => "https://api.merchant-site.com/apaylater-callback",
+            "callbackUrl" => "https://api.merchant-site.com/response-atome",
             "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
             "customerInfo" => [
                 "mobileNumber" => "+6587654321",

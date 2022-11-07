@@ -227,6 +227,7 @@
     </script>
     <script>
         $(document).ready(function() {
+            $("#btnProceed").attr("disabled", "");
             $("input[type=checkbox]").each(function() {
                 if ($(this).is(":checked")) {
                     $(this).prop("checked", false);

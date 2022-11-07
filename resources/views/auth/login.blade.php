@@ -97,7 +97,7 @@
                             </div>
                         </div> --}}
                         <div class="flex-row-center">
-                            <div>Doesn't have an account? <a href="#" class="link"><strong>Register</strong></a>
+                            <div>Doesn't have an account? <a href="{{ route('register') }}" class="link"><strong>Register</strong></a>
                             </div>
                         </div>
                     </div>

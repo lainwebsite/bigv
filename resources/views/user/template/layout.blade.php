@@ -92,14 +92,23 @@
                     </form>
                 @endauth
                 <div class="div-block-22">
-                    <a href="{{ route('user.cart.index') }}"
-                        class="btn d-flex justify-content-center align-items-center flex-shrink-0 p-0 mr-2"
-                        style="background: transparent; padding: 10px 10px 10px 0;">
-                        <img src="{{ asset('assets/6303b31a096350fad278d3bb_cart.svg') }}" loading="lazy"
-                            alt="" />
-                    </a>
-                    <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
+                    @auth
+                        <a href="{{ route('user.cart.index') }}"
+                            class="btn d-flex justify-content-center align-items-center flex-shrink-0 p-0 mr-2"
+                            style="background: transparent; padding: 10px 10px 10px 0;">
+                            <img src="{{ asset('assets/6303b31a096350fad278d3bb_cart.svg') }}" loading="lazy"
+                                alt="" />
+                        </a>
+                        <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
                         width="40" alt="" class="image-13" />
+                    @endauth
+
+                    @guest
+                        <a href="{{ route('login') }}">
+                            <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
+                                width="40" alt="" class="image-13" />
+                        </a>
+                    @endguest
                 </div>
             </nav>
         </div>

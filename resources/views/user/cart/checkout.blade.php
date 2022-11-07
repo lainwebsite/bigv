@@ -240,7 +240,7 @@
                         </div><button id="placeOrder" type="submit" class="checkout-button oh-grow w-button"
                             disabled>Place Order</button>
                         <input id="paymentGateway" type="hidden" name="payment_gateway">
-                        <button type="button" class="text-left payment-gateway-button w-inline-block">
+                        <button type="button" onclick="changePayment('hitpay')" class="text-left payment-gateway-button w-inline-block">
                             <div class="text-weight-bold">HitPay Payment Gateway</div><img
                                 src="{{ asset('assets/6312dbbdcf1b3f0de3362511_Hitpay.png') }}" loading="lazy"
                                 alt="" />
@@ -254,7 +254,7 @@
                                     accepted.</div>
                             </div>
                         </button>
-                        <button type="button" class="text-left payment-gateway-button w-inline-block">
+                        <button type="button" onclick="changePayment('paynow')" class="text-left payment-gateway-button w-inline-block">
                             <div>
                                 <div class="text-weight-bold">PayNow</div>
                                 <div class="text-size-xtiny">How to pay using paynow payment gateway :

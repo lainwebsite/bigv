@@ -19,16 +19,6 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        // if (strpos($request->route()->uri(), "checkout") === false) {
-        //     session()->forget('checkout-items');
-        //     session()->forget('shipping-price');
-        //     session()->forget('total-checkout-price');
-        //     session()->forget('grandtotal-checkout-price');
-        //     session()->forget('total-checkout-items');
-        //     session()->save();
-        // }
-        dd($request->route()->uri());
-
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
