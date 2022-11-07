@@ -115,6 +115,11 @@
                                 </p>
                                 <div class="divider-dash mt-4 mb-4"></div>
                                 <h4 class="card-title mb-4">Product Variations</h4>
+                                <div class="form-group">
+                                    <label for="variation_named">Product Variation Name</label>
+                                    <input type="text" class="form-control" id="variation_named" name="variation_named"
+                                        placeholder="e.g Size, Flavor, Color, etc.">
+                                </div>
                                 <div id="productVariationGroup"></div>
                                 <p class="text-lg-right mt-4">
                                     <a href="javascript:void(0)" class="btn btn-primary text-white" id="addVariation">Add

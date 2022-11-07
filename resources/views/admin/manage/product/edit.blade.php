@@ -146,6 +146,12 @@
                                 </p>
                                 <div class="divider-dash mt-4 mb-4"></div>
                                 <h4 class="card-title mb-4">Product Variations</h4>
+                                <div class="form-group">
+                                    <label for="variation_named">Product Variation Name</label>
+                                    <input type="text" class="form-control" id="variation_named" name="variation_named"
+                                        value="{{ $product->variation_name }}"
+                                        placeholder="e.g Size, Flavor, Color, etc.">
+                                </div>
                                 <div id="productVariationGroup">
                                     @foreach ($product->variations as $productVariation)
                                         <div class="form-group mt-2" id="inputProductVariation{{ $loop->iteration }}">

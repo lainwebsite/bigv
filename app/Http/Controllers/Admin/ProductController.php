@@ -38,22 +38,23 @@ class ProductController extends Controller
             ->where('created_at', '>=', Carbon::now()->subDays(7))
             ->withCount('carts')
             ->get();
-        $products = Product::orderBy('created_at', 'desc')->withCount(['carts as transaction_count' => function ($query) {
-            $query->whereHas('transaction', function ($q) {
-                $q->where('created_at', '<=', Carbon::now())
-                    ->where('created_at', '>=', Carbon::now()->subDays(7));
-            })->select(DB::raw('count(distinct(transaction_id))'));
-        }])->withCount(['carts as sold_count' => function ($query) {
-            $query->whereHas('transaction', function ($q) {
-                $q->where('created_at', '<=', Carbon::now())
-                    ->where('created_at', '>=', Carbon::now()->subDays(7));
-            })->select(DB::raw('sum(quantity)'));
-        }])->withCount(['carts as total_income' => function ($query) {
-            $query->whereHas('transaction', function ($q) {
-                $q->where('created_at', '<=', Carbon::now())
-                    ->where('created_at', '>=', Carbon::now()->subDays(7));
-            })->select(DB::raw('sum(carts.price * quantity)'));
-        }])
+        $products = Product::orderBy('created_at', 'desc')
+            ->withCount(['carts as transaction_count' => function ($query) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('created_at', '<=', Carbon::now())
+                        ->where('created_at', '>=', Carbon::now()->subDays(7));
+                })->select(DB::raw('count(distinct(transaction_id))'));
+            }])->withCount(['carts as sold_count' => function ($query) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('created_at', '<=', Carbon::now())
+                        ->where('created_at', '>=', Carbon::now()->subDays(7));
+                })->select(DB::raw('sum(quantity)'));
+            }])->withCount(['carts as total_income' => function ($query) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('created_at', '<=', Carbon::now())
+                        ->where('created_at', '>=', Carbon::now()->subDays(7));
+                })->select(DB::raw('sum(carts.price * quantity)'));
+            }])
             ->paginate(10);
         $categories = ProductCategory::withCount('products')
             ->get();
@@ -87,6 +88,7 @@ class ProductController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'rating' => 0,
+            'variation_name' => $request->variation_named,
             'featured_image' => $featured,
             'vendor_id' => $request->vendor,
             'category_id' => $request->category
@@ -103,12 +105,14 @@ class ProductController extends Controller
             }
         }
 
-        foreach ($request->variation_name as $key => $variation) {
-            ProductVariation::create([
-                'name' => $request->variation_name[$key],
-                'price' => $request->variation_price[$key],
-                'product_id' => $product->id
-            ]);
+        if ($request->variation_name) {
+            foreach ($request->variation_name as $key => $variation) {
+                ProductVariation::create([
+                    'name' => $request->variation_name[$key],
+                    'price' => $request->variation_price[$key],
+                    'product_id' => $product->id
+                ]);
+            }
         }
         return redirect()->route('admin.product.index');
     }
@@ -156,6 +160,7 @@ class ProductController extends Controller
         $product->update([
             'name' => $request->name,
             'description' => $request->description,
+            'variation_name' => $request->variation_named,
             'featured_image' => $featured,
             'vendor_id' => $request->vendor,
             'category_id' => $request->category
