@@ -93,54 +93,60 @@
                                                 <div>${{ $cart->price }}</div>
                                             </div>
                                         </div>
-                                        <div class="flex" style="flex-direction: column; gap: 15px; margin-bottom: 18px;">
-                                            <div class="flex" style="justify-content:space-between; width: 100%;">
-                                                <div class="text-size-small text-color-grey">Submit your Review</div>
-                                                <div class="flex">
-                                                    @for ($j = 1; $j <= 5; $j++)
-                                                        <div class="c-product-rating__star star-review"
-                                                            style="cursor: pointer;" step="{{ $j }}">
-                                                            <div class="icon">
-                                                                <div class="fas fa-star">
-                                                                    <img src="{{ asset('assets/Star 1.svg') }}"
-                                                                        loading="lazy" alt="" />
+                                        @if ($transaction->is_reviewed == 0)
+                                            <div class="flex"
+                                                style="flex-direction: column; gap: 15px; margin-bottom: 18px;">
+                                                <div class="flex" style="justify-content:space-between; width: 100%;">
+                                                    <div class="text-size-small text-color-grey">Submit your Review</div>
+                                                    <div class="flex">
+                                                        @for ($j = 1; $j <= 5; $j++)
+                                                            <div class="c-product-rating__star star-review"
+                                                                style="cursor: pointer;" step="{{ $j }}">
+                                                                <div class="icon">
+                                                                    <div class="fas fa-star">
+                                                                        <img src="{{ asset('assets/Star 1.svg') }}"
+                                                                            loading="lazy" alt="" />
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    @endfor
+                                                        @endfor
+                                                    </div>
+                                                    <input name="rating[{{ $cart->id }}]" type="hidden"
+                                                        value="5">
                                                 </div>
-                                                <input name="rating[{{ $cart->id }}]" type="hidden" value="5">
-                                            </div>
-                                            <div class="flex" style="width: 100%; gap: 10px; flex-direction: column;">
-                                                <div class="flex" id="photo-review-container-{{ $cart->id }}"
-                                                    style="width: 100%; flex-wrap: wrap; gap: 10px;">
+                                                <div class="flex" style="width: 100%; gap: 10px; flex-direction: column;">
+                                                    <div class="flex" id="photo-review-container-{{ $cart->id }}"
+                                                        style="width: 100%; flex-wrap: wrap; gap: 10px;">
 
-                                                </div>
-                                                <div id="add-photo-button-{{ $cart->id }}" class="flex"
-                                                    style="justify-content: flex-end; width: 100%;">
-                                                    <div class="button-3 w-inline-block button-add-photo-review"
-                                                        onclick="addPhotoReview({{ $cart->id }})"
-                                                        style="height: auto !important; padding: 5px 10px !important;">
-                                                        <div class="text-color-white"
-                                                            style="font-size: 12px; white-space: nowrap;">
-                                                            Add
-                                                            Photo</div>
+                                                    </div>
+                                                    <div id="add-photo-button-{{ $cart->id }}" class="flex"
+                                                        style="justify-content: flex-end; width: 100%;">
+                                                        <div class="button-3 w-inline-block button-add-photo-review"
+                                                            onclick="addPhotoReview({{ $cart->id }})"
+                                                            style="height: auto !important; padding: 5px 10px !important;">
+                                                            <div class="text-color-white"
+                                                                style="font-size: 12px; white-space: nowrap;">
+                                                                Add
+                                                                Photo</div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <textarea name="description[{{ $cart->id }}]"
+                                                    style="width: 100%; border-radius: 10px; padding: 10px; resize: none; border: #c5c5c5 1px solid; font-size: 0.875rem;"
+                                                    rows="2"></textarea>
                                             </div>
-                                            <textarea name="description[{{ $cart->id }}]"
-                                                style="width: 100%; border-radius: 10px; padding: 10px; resize: none; border: #c5c5c5 1px solid; font-size: 0.875rem;"
-                                                rows="2"></textarea>
-                                        </div>
+                                        @endif
                                     </div>
                                 @endif
                             @endforeach
                         @endforeach
-                        <div class="flex" style="justify-content: flex-end;">
-                            <button class="button-3 button-size--small w-inline-block">
-                                <div class="text-color-white">Submit Review</div>
-                            </button>
-                        </div>
+                        @if ($transaction->is_reviewed == 0)
+                            <div class="flex" style="justify-content: flex-end;">
+                                <button class="button-3 button-size--small w-inline-block">
+                                    <div class="text-color-white">Submit Review</div>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </form>
                 <div class="vendors-card">
@@ -221,7 +227,7 @@
                     <div class="delivery-add-item">
                         <div>
                             <div class="text-size-small text-color-grey">Delivery Date</div>
-                            <h5 class="text-color-grey">{{$transaction->delivery_date}}</h5>
+                            <h5 class="text-color-grey">{{ $transaction->delivery_date }}</h5>
                         </div>
                     </div>
                     <div class="div-block-27"><a href="#" class="delivery-button w-inline-block">

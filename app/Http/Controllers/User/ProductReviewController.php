@@ -40,6 +40,9 @@ class ProductReviewController extends Controller
     {
         foreach ($request->rating as $key => $rating) {
             $cart = Cart::find($key);
+            $cart->transaction->update([
+                'is_reviewed' => 1
+            ]);
             $productReview = ProductReview::create([
                 'rating' => $rating,
                 'description' => $request->description[$key],
@@ -48,15 +51,17 @@ class ProductReviewController extends Controller
                 'user_id' => $cart->user_id
             ]);
         }
-        foreach ($request->review_photos as $keyed => $photos) {
-            $cart = Cart::find($keyed);
-            foreach ($photos as $keyd => $photo) {
-                $photod = 'review-' . $cart->product_variation->product_id . '-' . time() . '-' . $photo->getClientOriginalName();
-                $photo->move(public_path('uploads'), $photod);
-                ReviewImage::create([
-                    'link' => $photod,
-                    'review_id' => $productReview->id
-                ]);
+        if ($request->review_photos) {
+            foreach ($request->review_photos as $keyed => $photos) {
+                $cart = Cart::find($keyed);
+                foreach ($photos as $keyd => $photo) {
+                    $photod = 'review-' . $cart->product_variation->product_id . '-' . time() . '-' . $photo->getClientOriginalName();
+                    $photo->move(public_path('uploads'), $photod);
+                    ReviewImage::create([
+                        'link' => $photod,
+                        'review_id' => $productReview->id
+                    ]);
+                }
             }
         }
         return redirect()->route('user.transaction.show', $request->transaction_id);
