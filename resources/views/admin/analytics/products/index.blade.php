@@ -224,7 +224,6 @@
                 itouch: 10,
             }
             objects_sold.push(object)
-            console.log(objects_sold)
             $("#product-sold").html(null)
             $(function() {
                 "use strict";
