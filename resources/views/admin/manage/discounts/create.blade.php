@@ -269,9 +269,6 @@
                                                     id="containerSearchProductResultVoucher">
 
                                                 </div>
-                                                {{-- <div class="d-flex justify-content-end mt-4 gap-15x">
-                                                    <div class="btn btn-primary" id="addProductVoucher">Add</div>
-                                                </div> --}}
                                             </div>
                                         </div>
                                         <label for="productListVoucher" class="pt-3">Discounted Products</label>
@@ -600,7 +597,6 @@
                     <i class="fa fa-times cursor-pointer delete-product-voucher" width="20" height="20"></i>
                 </div>
                 <div class="divider-dash"></div>
-            <div>
         `);
         };
 

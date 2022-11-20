@@ -23,6 +23,7 @@ class Discount extends Model
         'duration_end',
         'visible',
         'all_products',
+        'voucher_type',
         'type_id',
         'applicable_id'
     ];
@@ -33,6 +34,10 @@ class Discount extends Model
     public function applicable()
     {
         return $this->belongsTo(DiscountApplicable::class, 'applicable_id', 'id');
+    }
+    public function variation()
+    {
+        return $this->belongsTo(ProductVariation::class, 'name', 'id');
     }
     public function transaction_discounts()
     {

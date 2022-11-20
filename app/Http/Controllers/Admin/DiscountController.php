@@ -113,7 +113,8 @@ class DiscountController extends Controller
                 'duration_start' => $request->duration_start,
                 'duration_end' => $request->duration_end,
                 'min_order' => $request->min_order,
-                'type_id' => $request->voucher_type,
+                'voucher_type' => $request->voucher_type,
+                'type_id' => 2,
                 'applicable_id' => $request->discount_applicable,
                 'visible' => $request->visible == 'on' ? 1 : 0
             ]);
@@ -188,6 +189,8 @@ class DiscountController extends Controller
     public function edit(Discount $discount)
     {
         $types = DiscountType::all();
+        $product = Product::first();
+        return view('admin.manage.discounts.edit', compact('types', 'product', 'discount'));
     }
 
     /**
@@ -199,14 +202,170 @@ class DiscountController extends Controller
      */
     public function update(Request $request, Discount $discount)
     {
-        $discount->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'amount' => $request->amount,
-            'duration_start' => $request->duration_start,
-            'duration_end' => $request->duration_end,
-            'type_id' => $request->type_id
-        ]);
+        foreach ($discount->vendor_discounts as $key => $vendor_discount) {
+            $vendor_discount->delete();
+        }
+        foreach ($discount->variation_discounts as $key => $variation_discount) {
+            $variation_discount->delete();
+        }
+        foreach ($discount->category_discounts as $key => $category_discount) {
+            $category_discount->delete();
+        }
+        if ($request->discount_type == "1") {
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'code' => 'required',
+                'description' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
+            $discount->update([
+                'name' => $request->name,
+                'code' => $request->code,
+                'description' => $request->description,
+                'amount' => $request->amount_shipping,
+                'duration_start' => $request->duration_start,
+                'duration_end' => $request->duration_end,
+                'type_id' => 1,
+                'visible' => $request->visible == 'on' ? 1 : 0,
+                'voucher_type' => 1
+            ]);
+        } else if ($request->discount_type == "3") {
+            $validator = Validator::make($request->all(), [
+                'sale_price' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
+            //product sale
+            if ($request->product_sale == $discount->name) {
+                $variation = ProductVariation::find($request->product_sale);
+                $variation->update([
+                    "discount_start_date" => $request->duration_start,
+                    "discount_end_date" => $request->duration_end,
+                    "discount" => $request->sale_price
+                ]);
+                $discount->update([
+                    'name' => $variation->id,
+                    'code' => $variation->name . '-' . (Discount::where('name', $variation->product->name . ' - ' . $variation->name)->get()->count() + 1),
+                    'amount' => $request->sale_price,
+                    'duration_start' => $request->duration_start,
+                    'duration_end' => $request->duration_end,
+                    'type_id' => 3,
+                    'visible' => $request->visible == 'on' ? 1 : 0,
+                    'voucher_type' => 1
+                ]);
+            } else {
+                if ($discount->type_id == 3) {
+                    $variation = ProductVariation::find($discount->name);
+                    $variation->update([
+                        "discount_start_date" => null,
+                        "discount_end_date" => null,
+                        "discount" => 0
+                    ]);
+                }
+                $variation = ProductVariation::find($request->product_sale);
+                $variation->update([
+                    "discount_start_date" => $request->duration_start,
+                    "discount_end_date" => $request->duration_end,
+                    "discount" => $request->sale_price
+                ]);
+
+                $discount->update([
+                    'name' => $variation->id,
+                    'code' => $variation->name . '-' . (Discount::where('name', $variation->product->name . ' - ' . $variation->name)->get()->count() + 1),
+                    'amount' => $request->sale_price,
+                    'duration_start' => $request->duration_start,
+                    'duration_end' => $request->duration_end,
+                    'type_id' => 3,
+                    'visible' => $request->visible == 'on' ? 1 : 0
+                ]);
+            }
+        } else if ($request->discount_type == "2") {
+            //product
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'code' => 'required',
+                'description' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
+            $discount->update([
+                'name' => $request->name,
+                'code' => $request->code,
+                'description' => $request->description,
+                'amount' => $request->voucher_value,
+                'duration_start' => $request->duration_start,
+                'duration_end' => $request->duration_end,
+                'min_order' => $request->min_order,
+                'voucher_type' => $request->voucher_type,
+                'type_id' => 2,
+                'applicable_id' => $request->discount_applicable,
+                'visible' => $request->visible == 'on' ? 1 : 0
+            ]);
+            if ($request->max_quota_bool == "on") {
+                $discount->update([
+                    'max_quota' => $request->max_quota
+                ]);
+            } else {
+                $discount->update([
+                    'max_quota' => null
+                ]);
+            }
+            if ($request->max_discount_bool == "on") {
+                $discount->update([
+                    'max_discount' => $request->max_discount
+                ]);
+            } else {
+                $discount->update([
+                    'max_discount' => null
+                ]);
+            }
+
+            if ($request->discount_applicable == 2) {
+                $vendor_ids = explode(",", $request->voucher_vendors);
+                $vendors = Vendor::whereIn('id', $vendor_ids)->get();
+
+                foreach ($vendors as $key => $vendor) {
+                    VendorDiscount::create([
+                        'vendor_id' => $vendor->id,
+                        'discount_id' => $discount->id
+                    ]);
+                }
+            } else if ($request->discount_applicable == 3) {
+                $category_ids = explode(",", $request->voucher_categories);
+                $categories = ProductCategory::whereIn('id', $category_ids)->get();
+
+                foreach ($categories as $key => $category) {
+                    CategoryDiscount::create([
+                        'product_category_id' => $category->id,
+                        'discount_id' => $discount->id
+                    ]);
+                }
+            } else if ($request->discount_applicable == 1) {
+                if ($request->all_products == "on") {
+                    $discount->update([
+                        'all_products' => 1
+                    ]);
+                } else {
+                    $discount->update([
+                        'all_products' => 0
+                    ]);
+                }
+                $product_ids = explode(",", $request->voucher_products);
+                $products = ProductVariation::whereIn('id', $product_ids)->get();
+
+                foreach ($products as $key => $product) {
+                    VariationDiscount::create([
+                        'product_variation_id' => $product->id,
+                        'discount_id' => $discount->id
+                    ]);
+                }
+            }
+        }
+        return redirect()->route('admin.discount.index');
     }
 
     /**

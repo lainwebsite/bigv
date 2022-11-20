@@ -27,6 +27,7 @@ return new class extends Migration
             $table->datetime('duration_end')->nullable();
             $table->tinyInteger('visible')->default(0);
             $table->tinyInteger('all_products')->default(0);
+            $table->tinyInteger('voucher_type')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
