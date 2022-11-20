@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('addons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->tinyInteger('required');
+            $table->tinyInteger('required')->default(0);
             $table->unsignedBigInteger('product_id')->index();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

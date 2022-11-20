@@ -39,4 +39,8 @@ class Product extends Model
     {
         return $this->hasManyThrough(Cart::class, ProductVariation::class);
     }
+    public function addons()
+    {
+        return $this->hasMany(Addon::class, 'product_id', 'id');
+    }
 }

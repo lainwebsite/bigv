@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Addon;
+use App\Models\AddonOption;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
@@ -112,6 +114,29 @@ class ProductController extends Controller
                     'price' => $request->variation_price[$key],
                     'product_id' => $product->id
                 ]);
+            }
+        }
+
+        if ($request->addon_name) {
+            foreach ($request->option_name as $key => $option) {
+                $addon = Addon::create([
+                    'name' => $request->addon_name[$key],
+                    'product_id' => $product->id,
+                ]);
+                if ($request->addon_required) {
+                    if (array_key_exists($key, $request->addon_required)) {
+                        $addon->update([
+                            'required' => $request->addon_required[$key] == "on" ? 1 : 0,
+                        ]);
+                    }
+                }
+                foreach ($option as $keyed => $opt) {
+                    AddonOption::create([
+                        'name' => $request->option_name[$key][$keyed],
+                        'price' => $request->option_price[$key][$keyed],
+                        'addon_id' => $addon->id
+                    ]);
+                }
             }
         }
         return redirect()->route('admin.product.index');
@@ -250,6 +275,33 @@ class ProductController extends Controller
                 'price' => $request->variation_price[$key],
                 'product_id' => $product->id
             ]);
+        }
+        if ($product->addons->count() > 0) {
+            foreach ($product->addons as $key => $addon) {
+                $addon->delete();
+            }
+        }
+        if ($request->addon_name) {
+            foreach ($request->option_name as $key => $option) {
+                $addon = Addon::create([
+                    'name' => $request->addon_name[$key],
+                    'product_id' => $product->id,
+                ]);
+                if ($request->addon_required) {
+                    if (array_key_exists($key, $request->addon_required)) {
+                        $addon->update([
+                            'required' => $request->addon_required[$key] == "on" ? 1 : 0,
+                        ]);
+                    }
+                }
+                foreach ($option as $keyed => $opt) {
+                    AddonOption::create([
+                        'name' => $request->option_name[$key][$keyed],
+                        'price' => $request->option_price[$key][$keyed],
+                        'addon_id' => $addon->id
+                    ]);
+                }
+            }
         }
         return redirect()->route('admin.product.index');
     }
