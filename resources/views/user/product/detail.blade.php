@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    <?php $shareLink = 'https://my.ubaya.ac.id'; ?>
+    @php($shareLink = url('product/' . $product->id))
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v14.0"
         nonce="7vBOYaJD"></script>
@@ -73,7 +73,7 @@
                                 &gt; </h5>
                             <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey">
                                 Chinese New Year</h5>
-                            <h2 class="product-variation heading-2 text-color-grey margin-vertical margin-xsmall"
+                            <h2 class="heading-2 text-color-grey margin-vertical margin-xsmall"
                                 variation-id="{{ $product->variations[0]->id }}">
                                 {{ count($product->variations) > 0 ? ($product->variations[0]->name == 'novariation' ? $product->name : $product->variations[0]->name) : $product->name }}
                             </h2>

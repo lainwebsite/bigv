@@ -100,7 +100,7 @@
                                 alt="" />
                         </a>
                         <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
-                        width="40" alt="" class="image-13" />
+                            width="40" alt="" class="image-13" />
                     @endauth
 
                     @guest
@@ -187,7 +187,7 @@
             if (e.keyCode == 13) {
                 page = 1;
                 keyword = $(this).val();
-                sort(page);
+                // sort(page);
                 // $.get(url + "/product/search?keyword=" + keyword)
                 //     .done(function(data) {
                 //         $('#productsList').html(data);
