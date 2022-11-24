@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Addon;
 use App\Models\Product;
 use App\Models\ProductVariation;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,9 +17,21 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $keywordSearch = $request->input('search', '');
+
+        $productCategories = ProductCategory::all();
+        $products = Product::where('name', 'LIKE', '%' . $keywordSearch . '%')->withCount(['carts as items_sold' => function ($query) {
+            $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+        }])->orderBy('items_sold', 'desc')->paginate(20);
+
+        return view('home', [
+            'search' => $keywordSearch,
+            'products' => $products,
+            'productCategories' => $productCategories,
+            'active' => 0
+        ]);
     }
 
     /**
@@ -29,11 +42,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-
-        // $product->load('vendor', 'category', 'variations', 'images');
-        // $product->vendor->load('location');
         $product = Product::withCount(['carts as items_sold' => function ($query) {
             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+        }])->withCount(['reviews as reviews_count' => function ($query) use ($product) {
+            $query->where('product_id', $product->id);
         }])->where('id', $product->id)->get()[0];
 
         $addons = Addon::where('product_id', $product->id)->with(['addons_options'])->get();
@@ -67,7 +79,8 @@ class ProductController extends Controller
     //         $products = Product::where('name', 'LIKE', '%' . $keyword . '%')->paginate(20);
     //     }
 
-    //     return view('user.product.products', compact('products'));
+    //     return redirect('/product?keyword=' . $keyword);
+    //     // return view('user.product.products', compact('products'));
     // }
 
     // public function filter(Request $request)

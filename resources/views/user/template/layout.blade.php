@@ -53,8 +53,11 @@
                         <div class="input">
                             <div class="input__reset"></div>
                             <div class="input__field-wrapper">
-                                <input type="text" class="input__field-copy w-input" maxlength="256" name="Search-2"
-                                    data-name="Search 2" placeholder="Search" id="search" />
+                                <form method="GET" action="{{ url('product') }}">
+                                    <input type="text" class="input__field-copy w-input" maxlength="256"
+                                        name="search" value="{{ isset($search) ? $search : '' }}" data-name="Search 2"
+                                        placeholder="Search" id="search" />
+                                </form>
                                 <div class="input__suggestions">
                                     <div class="input__suggestions-wrapper">
                                         <div class="suggestion">&quot;woodworking&quot;</div>
@@ -183,20 +186,20 @@
             url += ":8000";
         }
 
-        $("#search").keypress(function(e) {
-            if (e.keyCode == 13) {
-                page = 1;
-                keyword = $(this).val();
-                // sort(page);
-                // $.get(url + "/product/search?keyword=" + keyword)
-                //     .done(function(data) {
-                //         $('#productsList').html(data);
-                //     })
-                //     .fail(function(error) {
-                //         console.log(error);
-                //     });
-            }
-        });
+        // $("#search").keypress(function(e) {
+        //     if (e.keyCode == 13) {
+        //         page = 1;
+        //         keyword = $(this).val();
+        // sort(page);
+        // $.get(url + "/product/search?keyword=" + keyword)
+        //     .done(function(data) {
+        //         $('#productsList').html(data);
+        //     })
+        //     .fail(function(error) {
+        //         console.log(error);
+        //     });
+        //     }
+        // });
 
         function sort(page) {
             var param = {

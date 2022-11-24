@@ -54,10 +54,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::group(['middleware' => 'general'], function () {
     Auth::routes(['verify' => true]);
-
     Route::get('/', [PageController::class, 'home'])->name('home');
+    // Route::get('/product', [PageController::class, 'products']);
     Route::get('product/search', [ProductController::class, 'search']);
     Route::post('product/sort', [ProductController::class, 'sort']);
     Route::post('product/filter', [ProductController::class, 'filter']);

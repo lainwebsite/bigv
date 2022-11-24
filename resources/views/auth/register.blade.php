@@ -22,6 +22,17 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+
+        .invalid-feedback {
+            color: red;
+            font-size: .8rem;
+            margin-top: .4rem;
+            margin-bottom: 1rem;
+        }
+
+        input.is-invalid {
+            border-color: red !important;
+        }
     </style>
     <link href="{{ asset('assets/css/style-address-login-register.css') }}" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -49,12 +60,29 @@
                                     <div>REGISTER</div>
                                     <div class="form-div-line"></div>
                                 </div>
-                                <div class="text-field-wrapper half">
+                                <div class="text-field-wrapper half" style="margin-bottom: 0 !important;">
                                     <label for="First-Name" class="field-label">First
                                         Name</label>
-                                    <input type="text" class="text-field-3 w-input" maxlength="256" name="first_name"
-                                        data-name="First Name" placeholder="e.g. Eddy" id="First-Name"
-                                        data-ms-member="first-name" required="" />
+                                    @php($name = explode(' ', old('name')))
+                                    <input type="text"
+                                        class="text-field-3 w-input @error('name') is-invalid @enderror" maxlength="256"
+                                        data-name="First Name" placeholder="e.g. Eddy" id="firstName"
+                                        data-ms-member="first-name"
+                                        value="{{ count($name) > 1 ? (isset($name[0]) ? $name[0] : '') : '' }}"
+                                        required="" />
+                                </div>
+                                <div class="text-field-wrapper half" style="margin-bottom: 0 !important;">
+                                    <label for="Last-Name" class="field-label">Last
+                                        Name</label>
+                                    <input type="text"
+                                        class="text-field-3 w-input @error('name') is-invalid @enderror" maxlength="256"
+                                        data-name="Last Name" placeholder="e.g. Lin" id="lastName"
+                                        data-ms-member="last-name"
+                                        value="{{ count($name) > 1 ? (isset($name[1]) ? $name[1] : '') : '' }}"
+                                        required="" />
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <input type="hidden" id="inputName" name="name">
 
                                     @error('name')
                                         <span class="invalid-feedback">
@@ -62,19 +90,12 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="text-field-wrapper half">
-                                    <label for="Last-Name" class="field-label">Last
-                                        Name</label>
-                                    <input type="text" class="text-field-3 w-input" maxlength="256" name="last_name"
-                                        data-name="Last Name" placeholder="e.g. Lin" id="Last-Name"
-                                        data-ms-member="last-name" required="" />
-                                </div>
                                 <div class="text-field-wrapper">
                                     <label for="Email-2" class="field-label">Email</label>
                                     <input type="email"
-                                        class="text-field-3 w-input @error('email') is-invalid @enderror""
+                                        class="text-field-3 w-input @error('email') is-invalid @enderror"
                                         maxlength="256" name="email" data-name="Email 2"
-                                        placeholder="e.g. eddy.lin@email.com" id="Email-2" data-ms-member="email"
+                                        placeholder="e.g. eddy.lin@email.com" id="Email-2" value="{{ old('email') }}"
                                         required="" />
 
                                     @error('email')
@@ -95,7 +116,13 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                    <div class="field-description">Must be at least 8 characters</div>
+                                </div>
+                                <div class="text-field-wrapper">
+                                    <label for="Password-2" class="field-label">Confirm Password</label>
+                                    <input type="password" class="text-field-3 w-input" maxlength="256"
+                                        name="password_confirmation" data-name="Password 2"
+                                        placeholder="Confirmation Password" id="Password-2" data-ms-member="password"
+                                        required="" autocomplete="new-password" />
                                 </div>
                                 <div class="text-field-wrapper">
                                     <label for="Phone-Number" class="field-label">Phone
@@ -104,14 +131,13 @@
                                         class="text-field-3 w-input @error('phone') is-invalid @enderror"
                                         maxlength="256" name="phone" data-name="Phone Number"
                                         placeholder="e.g. 6123847502" id="Phone-Number" data-ms-member="password"
-                                        required="" />
+                                        value="{{ old('phone') }}" required="" />
 
                                     @error('phone')
                                         <span class="invalid-feedback">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                    <div class="field-description">Must be at least 8 characters</div>
                                 </div>
                                 <div class="text-field-wrapper">
                                     <label for="Birthdate-2" class="field-label">Birthdate</label>
@@ -119,17 +145,16 @@
                                         class="text-field-3 w-input @error('date_of_birth') is-invalid @enderror"
                                         maxlength="256" name="date_of_birth" data-name="Birthdate"
                                         placeholder="e.g. 19 April 2002" id="Birthdate-2" data-ms-member="password"
-                                        required="" />
+                                        value="{{ old('date_of_birth') }}" required="" />
 
                                     @error('date_of_birth')
                                         <span class="invalid-feedback">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                    <div class="field-description">Must be at least 8 characters</div>
                                 </div>
-                                <input type="submit" value="Let&#x27;s get started" data-wait="Please wait..."
-                                    class="button-4 w-button" />
+                                <input id="btnRegister" type="submit" value="Let&#x27;s get started"
+                                    data-wait="Please wait..." class="button-4 w-button" />
                             </form>
                         </div>
                         <div class="flex-row-center">
@@ -163,6 +188,11 @@
         </div>
     </div>
     <script src="{{ asset('assets/js/script-address-login-register.js') }}" type="text/javascript"></script>
+    <script>
+        $("#btnRegister").on("click", function() {
+            $("#inputName").val($("#firstName").val() + " " + $("#lastName").val());
+        });
+    </script>
 </body>
 
 </html>
