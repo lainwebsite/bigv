@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Addon;
 use App\Models\Product;
 use App\Models\ProductVariation;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +19,21 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        // $search = $request->input('search', '');
+
+        $productCategories = ProductCategory::all();
+        // $products = Product::where('name', 'LIKE', '%' . $search . '%')->withCount(['carts as items_sold' => function ($query) {
+        //     $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+        // }])->orderBy('items_sold', 'desc')->paginate(20);
+        $products = Product::withCount(['carts as items_sold' => function ($query) {
+            $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+        }])->orderBy('items_sold', 'desc')->paginate(20);
+
+        return view('home', [
+            'products' => $products,
+            'productCategories' => $productCategories,
+            'active' => 0
+        ]);
     }
 
     /**
@@ -29,11 +44,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-
-        // $product->load('vendor', 'category', 'variations', 'images');
-        // $product->vendor->load('location');
         $product = Product::withCount(['carts as items_sold' => function ($query) {
             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+        }])->withCount(['reviews as reviews_count' => function ($query) use ($product) {
+            $query->where('product_id', $product->id);
         }])->where('id', $product->id)->get()[0];
 
         $addons = Addon::where('product_id', $product->id)->with(['addons_options'])->get();
@@ -61,89 +75,111 @@ class ProductController extends Controller
     // public function search(Request $request)
     // {
     //     $keyword = $request->input('keyword', '');
-    //     $products = Product::paginate(20);
 
-    //     if ($keyword != '') {
-    //         $products = Product::where('name', 'LIKE', '%' . $keyword . '%')->paginate(20);
-    //     }
+    //     $productCategories = ProductCategory::all();
+    //     $products = Product::where('name', 'LIKE', '%' . $keyword . '%')->withCount(['carts as items_sold' => function ($query) {
+    //         $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+    //     }])->orderBy('items_sold', 'desc')->paginate(20);
 
-    //     return view('user.product.products', compact('products'));
+    //     return view('home', [
+    //         'products' => $products,
+    //         'productCategories' => $productCategories,
+    //         'active' => 0
+    //     ]);
     // }
 
-    // public function filter(Request $request)
-    // {
-    //     $products = Product::with(['vendor']);
-
-    //     if (isset($request->categories)) {
-    //         foreach ($request->categories as $category) {
-    //             $products->orWhere('category_id', $category);
-    //         }
-    //     }
-
-    //     if (isset($request->min_price)) {
-    //         $products->with(['variations' => function ($query) use ($request) {
-    //             $query->where('price', '>=', $request->min_price);
-    //         },])->whereHas('variations', function ($query) use ($request) {
-    //             $query->where('price', '>=', $request->min_price);
-    //         });
-    //     }
-
-    //     if (isset($request->max_price)) {
-    //         $products->with(['variations' => function ($query) use ($request) {
-    //             $query->where('price', '<=', $request->max_price);
-    //         },])->whereHas('variations', function ($query) use ($request) {
-    //             $query->where('price', '<=', $request->max_price);
-    //         });
-    //     }
-    //     $products = $products->get();
-
-    //     return view('user.product.products', ['products' => $products]);
-    // }
-
-    public function sort(Request $request)
+    public function filter(Request $request)
     {
+        $keyword = $request->input('keyword', '');
+        $category = $request->input('category', '');
+        $min_price = $request->input('min_price', 0);
+        $max_price = $request->input('max_price', 0);
+
+        $productCategories = ProductCategory::all();
+
         $products = Product::join('product_variations', 'products.id', '=', 'product_variations.product_id')
             ->select(DB::raw('products.*, max(price) as highest_price_variation'))
             ->groupBy('products.id');
 
-        if ($request->keyword != '') {
-            $products = $products->where('products.name', 'LIKE', '%' . $request->keyword . '%');
+        if ($keyword != '') {
+            $products = $products->where('products.name', 'LIKE', '%' . $keyword . '%');
         }
 
-        if ($request->categories) {
-            $products = $products->where(function ($query) use ($request) {
-                foreach ($request->categories as $category) {
+        if ($category != '') {
+            $categories = explode(',', $category);
+            $products = $products->where(function ($query) use ($categories) {
+                foreach ($categories as $category) {
                     $query->orWhere('category_id', $category);
                 }
             });
         }
 
-        if ($request->min_price != 0) {
+        if ($min_price != 0) {
             $products = $products->where('price', '>=', $request->min_price);
         }
 
-        if ($request->max_price != 0) {
+        if ($max_price != 0) {
             $products = $products->where('price', '<=', $request->max_price);
         }
-        if ($request->metric == 'items_sold') {
-            $products = $products->withCount(['carts as items_sold' => function ($query) {
-                $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
-            }])->orderBy('items_sold', 'desc')->paginate(20);
-        } else {
-            $products = $products->orderBy('highest_price_variation', $request->sort)
-                ->paginate(20);
-        }
 
-        // else {
-        //     $products = Product::select(DB::raw('products.*, max(price) as highest_price_variation'))
-        //         ->join('product_variations', 'products.id', '=', 'product_variations.product_id')
-        //         ->groupBy('products.id')
-        //         ->orderBy('highest_price_variation', $request->sort)
+        // if ()
+
+        $products = $products->paginate(20);
+        // if ($request->metric == 'items_sold') {
+        //     $products = $products->withCount(['carts as items_sold' => function ($query) {
+        //         $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+        //     }])->orderBy('items_sold', 'desc')->paginate(20);
+        // } else {
+        //     $products = $products->orderBy('highest_price_variation', $request->sort)
         //         ->paginate(20);
         // }
 
-
-
-        return view('user.product.products', compact('products'));
+        return view('home', [
+            'keyword' => $keyword,
+            'category' => $category,
+            'min_price' => $min_price,
+            'max_price' => $max_price,
+            'products' => $products,
+            'productCategories' => $productCategories,
+            'active' => 0
+        ]);
+        // return view('user.product.products', compact('products'));
     }
+
+    // public function sort(Request $request)
+    // {
+    //     $products = Product::join('product_variations', 'products.id', '=', 'product_variations.product_id')
+    //         ->select(DB::raw('products.*, max(price) as highest_price_variation'))
+    //         ->groupBy('products.id');
+
+    //     if ($request->keyword != '') {
+    //         $products = $products->where('products.name', 'LIKE', '%' . $request->keyword . '%');
+    //     }
+
+    //     if ($request->categories) {
+    //         $products = $products->where(function ($query) use ($request) {
+    //             foreach ($request->categories as $category) {
+    //                 $query->orWhere('category_id', $category);
+    //             }
+    //         });
+    //     }
+
+    //     if ($request->min_price != 0) {
+    //         $products = $products->where('price', '>=', $request->min_price);
+    //     }
+
+    //     if ($request->max_price != 0) {
+    //         $products = $products->where('price', '<=', $request->max_price);
+    //     }
+    //     if ($request->metric == 'items_sold') {
+    //         $products = $products->withCount(['carts as items_sold' => function ($query) {
+    //             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+    //         }])->orderBy('items_sold', 'desc')->paginate(20);
+    //     } else {
+    //         $products = $products->orderBy('highest_price_variation', $request->sort)
+    //             ->paginate(20);
+    //     }
+
+    //     return view('user.product.products', compact('products'));
+    // }
 }

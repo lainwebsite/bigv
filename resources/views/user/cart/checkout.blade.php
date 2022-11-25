@@ -239,7 +239,7 @@
                                     id="grandtotal-price">{{ $grandtotal_price }}</span></div>
                         </div><button id="placeOrder" type="submit" class="checkout-button oh-grow w-button"
                             disabled>Place Order</button>
-                        <input id="paymentGateway" type="hidden" name="payment_gateway">
+                        {{-- <input id="paymentGateway" type="hidden" name="payment_gateway">
                         <button type="button" onclick="changePayment('hitpay')" class="text-left payment-gateway-button w-inline-block">
                             <div class="text-weight-bold">HitPay Payment Gateway</div><img
                                 src="{{ asset('assets/6312dbbdcf1b3f0de3362511_Hitpay.png') }}" loading="lazy"
@@ -262,7 +262,7 @@
                                     <br />2. Pay to UEN number: 202031871R
                                 </div>
                             </div>
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
             </form>

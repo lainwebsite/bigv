@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-    <?php $shareLink = 'https://my.ubaya.ac.id'; ?>
+    @php($shareLink = url('product/' . $product->id))
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v14.0"
         nonce="7vBOYaJD"></script>
@@ -68,12 +68,12 @@
                     <div class="div-block-5 ea-up">
                         <div class="product-info">
                             <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey">
-                                Food and Beverage</h5>
+                                {{ $product->category->name }}</h5>
                             <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey">
                                 &gt; </h5>
                             <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey">
-                                Chinese New Year</h5>
-                            <h2 class="product-variation heading-2 text-color-grey margin-vertical margin-xsmall"
+                                {{ $product->name }}</h5>
+                            <h2 class="heading-2 text-color-grey margin-vertical margin-xsmall"
                                 variation-id="{{ $product->variations[0]->id }}">
                                 {{ count($product->variations) > 0 ? ($product->variations[0]->name == 'novariation' ? $product->name : $product->variations[0]->name) : $product->name }}
                             </h2>
@@ -120,7 +120,8 @@
                                             @endwhile
                                         @endif
                                     </div>
-                                    <h5 class="heading-4 p-beside-star">{{ $product->rating }} (300 rating)</h5>
+                                    <h5 class="heading-4 p-beside-star">{{ $product->rating }}
+                                        ({{ $product->reviews_count }} rating)</h5>
                                     <h5 class="heading-4 p-beside-star">
                                         {{ $product->items_sold == null ? '0' : $product->items_sold }} sold</h5>
                                 </div>
@@ -322,7 +323,8 @@
                                     @endwhile
                                 @endif
                             </div>
-                            <h5 class="heading-4 p-beside-star">{{ $product->vendor->rating }} (300 rating)</h5>
+                            <h5 class="heading-4 p-beside-star">{{ $product->vendor->rating }}
+                                ({{ $product->reviews_count }} rating)</h5>
                             <h5 class="heading-4 p-beside-star">1.000 sold</h5>
                         </div>
                     </div>
@@ -363,7 +365,7 @@
                         <h5 class="heading-4 p-beside-star">/</h5>
                         <h5 class="heading-4 p-beside-star">5</h5>
                     </div>
-                    <h5 class="heading-4 p-beside-star">300 Rating</h5>
+                    <h5 class="heading-4 p-beside-star">{{ $product->reviews_count }} Rating</h5>
                     <div class="div-block-16">
                         <div class="flex gap-small"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
                                 alt="" class="image-11" />

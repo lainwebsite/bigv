@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
-    public function home()
+    public function home(Request $request)
     {
+        // $keywordSearch = $request->input('keyword', '');
+
         $productCategories = ProductCategory::all();
         $products = Product::withCount(['carts as items_sold' => function ($query) {
             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
