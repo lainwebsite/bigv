@@ -16,10 +16,10 @@
             {{-- <div class="sort-right w-dropdown"> --}}
             <div class="sort-right">
                 <div class="text-rich-text text-size-small text-color-grey" style="margin-right: 20px;">Sort By</div>
-                <select id="sort" style="padding: 5px 15px; border-radius: 18px;">
-                    <option value="3">Items Sold</option>
-                    <option value="1">Highest Price</option>
-                    <option value="2">Lowest Price</option>
+                <select class="sort" style="padding: 5px 15px; border-radius: 18px;">
+                    <option value="items_sold">Items Sold</option>
+                    <option value="highest_price">Highest Price</option>
+                    <option value="lowest_price">Lowest Price</option>
                 </select>
                 {{-- <div class="text-color-light-grey w-dropdown-toggle">
                     <div class="w-icon-dropdown-toggle"></div>
@@ -33,20 +33,42 @@
                 </nav> --}}
             </div>
         </div>
+
+        @if (isset($category))
+            @if ($category != '')
+                @php($checkedCategories = explode(',', $category))
+            @endif
+        @endif
+
         <div>
             <div class="flex flex-center top-align relative archive-flex"
                 style="width: 100vw; min-width: 0 !important; max-width: 1200px; margin:auto;">
                 <div class="filter card27 padding-small text-color-grey sticky-filter" style="padding: 2rem;">
                     <h4>Categories</h4>
                     <div class="w-form">
-                        <form id="email-form-2" name="email-form-2" data-name="Email Form 2" method="get"
-                            class="form-2 w-clearfix">
+                        <form id="formFilter1" name="email-form-2" data-name="Email Form 2" method="GET"
+                            class="form-2 w-clearfix" action="{{ url('product/filter') }}">
                             @foreach ($productCategories as $productCategory)
                                 <label class="w-checkbox">
-                                    <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div>
+                                    @if (isset($checkedCategories))
+                                        @php($checking = false)
+                                        @foreach ($checkedCategories as $checked)
+                                            @if ($checked == $productCategory->id)
+                                                <div
+                                                    class="w-checkbox-input w-checkbox-input--inputType-custom checkbox w--redirected-checked">
+                                                </div>
+                                                @php($checking = true)
+                                            @endif
+                                        @endforeach
+
+                                        @if ($checking == false)
+                                            <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div>
+                                        @endif
+                                    @else
+                                        <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div>
+                                    @endif
                                     <input type="checkbox" id="checkbox-{{ $productCategory->id + 1 }}"
-                                        class="checkbox-category" name="category[]"
-                                        style="opacity:0;position:absolute;z-index:-1"
+                                        class="checkbox-category" style="opacity:0;position:absolute;z-index:-1"
                                         value="{{ $productCategory->id }}" /><span class="text-size-small w-form-label"
                                         for="checkbox-{{ $productCategory->id + 1 }}">{{ $productCategory->name }}</span>
                                 </label>
@@ -54,18 +76,20 @@
                             <label for="email">Price</label>
                             <div class="flex justify-left" style="gap: 5px;">
                                 <div class="relative">
-                                    <input type="number" id="min-price-1" class="quantity-pill-small price-range-filter"
-                                        min="0">
+                                    <input type="number" class="min-price quantity-pill-small price-range-filter"
+                                        min="0"
+                                        @if (isset($min_price)) value="{{ $min_price != 0 ? $min_price : '' }}" @endif>
                                     <p class="float-price">$</p>
                                 </div>
                                 <p class="margin-0">-</p>
                                 <div class="relative">
-                                    <input type="number" id="max-price-1" class="quantity-pill-small price-range-filter"
-                                        min="0">
+                                    <input type="number" class="max-price quantity-pill-small price-range-filter"
+                                        min="0"
+                                        @if (isset($max_price)) value="{{ $max_price != 0 ? $max_price : '' }}" @endif>
                                     <p class="float-price">$</p>
                                 </div>
                             </div>
-                            <button type="button" class="btn-filter submit-button atc-button margin-top w-button"
+                            <button type="submit" class="btn-filter submit-button atc-button margin-top w-button"
                                 style="margin-top: 20px;">Filter</button>
                         </form>
                     </div>
@@ -77,33 +101,47 @@
                             <div class="filter card27 padding-small text-color-grey filter-hamburger">
                                 <h3>Categories</h3>
                                 <div class="w-form">
-                                    <form id="email-form-2" name="email-form-2" data-name="Email Form 2" method="get"
-                                        class="form-2 w-clearfix">
+                                    <form id="formFilter2" name="email-form-2" data-name="Email Form 2" method="GET"
+                                        class="form-2 w-clearfix" action="{{ url('product/filter') }}">
                                         @foreach ($productCategories as $productCategory)
                                             <label class="w-checkbox">
-                                                <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox">
-                                                </div>
+                                                @if (isset($checkedCategories))
+                                                    @php($checking = false)
+                                                    @foreach ($checkedCategories as $checked)
+                                                        @if ($checked == $productCategory->id)
+                                                            <div
+                                                                class="w-checkbox-input w-checkbox-input--inputType-custom checkbox w--redirected-checked">
+                                                            </div>
+                                                            @php($checking = true)
+                                                        @endif
+                                                    @endforeach
+
+                                                    @if ($checking == false)
+                                                        <div
+                                                            class="w-checkbox-input w-checkbox-input--inputType-custom checkbox">
+                                                        </div>
+                                                    @endif
+                                                @else
+                                                    <div
+                                                        class="w-checkbox-input w-checkbox-input--inputType-custom checkbox">
+                                                    </div>
+                                                @endif
                                                 <input type="checkbox" id="checkbox-{{ $productCategory->id + 1 }}"
-                                                    class="checkbox-category" name="category[]"
-                                                    style="opacity:0;position:absolute;z-index:-1"
+                                                    class="checkbox-category" style="opacity:0;position:absolute;z-index:-1"
                                                     value="{{ $productCategory->id }}" /><span
                                                     class="text-size-small w-form-label"
                                                     for="checkbox-{{ $productCategory->id + 1 }}">{{ $productCategory->name }}</span>
                                             </label>
                                         @endforeach
-                                        <label class="w-checkbox">
-                                            <div class="w-checkbox-input w-checkbox-input--inputType-custom checkbox"></div>
-                                            <input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2"
-                                                style="opacity:0;position:absolute;z-index:-1" />
-                                            <span class="text-size-small w-form-label" for="checkbox-2">Others</span>
-                                        </label>
                                         <label for="email">Price</label>
                                         <div class="flex justify-left" style="gap: 5px;">
-                                            <input type="number" id="min-price-2"
-                                                class="quantity-pill-small price-range-filter">
+                                            <input type="number" class="min-price quantity-pill-small price-range-filter"
+                                                min="0"
+                                                @if (isset($min_price)) value="{{ $min_price != 0 ? $min_price : '' }}" @endif>
                                             <p class="margin-0">-</p>
-                                            <input type="number" id="max-price-2"
-                                                class="quantity-pill-small price-range-filter">
+                                            <input type="number" class="max-price quantity-pill-small price-range-filter"
+                                                min="0"
+                                                @if (isset($max_price)) value="{{ $max_price != 0 ? $max_price : '' }}" @endif>
                                         </div>
                                         <button type="button"
                                             class="btn-filter submit-button atc-button margin-top w-button"
@@ -120,11 +158,13 @@
                                 <div class="w-icon-dropdown-toggle"></div>
                                 <div class="text-size-medium">Sort</div>
                             </div>
-                            <nav class="sort dropdown-list w-dropdown-list">
-                                <a href="#" value="3" class="text-color-grey w-dropdown-link">Items Sold</a>
-                                <a href="#" value="1" class="text-color-grey w-dropdown-link">Highest
+                            <nav class="mini-sort dropdown-list w-dropdown-list">
+                                <a href="#" value="items_sold" class="text-color-grey w-dropdown-link">Items
+                                    Sold</a>
+                                <a href="#" value="highest_price" class="text-color-grey w-dropdown-link">Highest
                                     Price</a>
-                                <a href="#" value="2" class="text-color-grey w-dropdown-link">Lowest Price</a>
+                                <a href="#" value="lowest_price" class="text-color-grey w-dropdown-link">Lowest
+                                    Price</a>
                             </nav>
                         </div>
                     </div>
@@ -143,69 +183,86 @@
 @section('javascript-extra')
     <script src="{{ asset('assets/js/script-product-list.js') }}" type="text/javascript"></script>
     <script>
-        $(document).on('click', '.pagination a', function(event) {
-            event.preventDefault();
-            page = $(this).attr('href').split('page=')[1];
-            sort(page);
-        });
-
-        // $('.sort a').on('click', function() {
-        $('#sort').on('change', function() {
-            page = 1;
-            // switch ($(this).attr("value")) {
-            switch ($(this).val()) {
-                case "1":
-                    metric = "price";
-                    sorted = "desc";
-                    break;
-                case "2":
-                    metric = "price";
-                    sorted = "asc";
-                    break;
-                case "3":
-                    metric = "items_sold"
-                    sorted = "desc";
-                    break;
-                default:
-                    break;
+        $(".sort").on("change", function() {
+            if ($("input[type=hidden][name=sort_by]").length <= 0) {
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "sort_by",
+                    value: $(this).val()
+                }).appendTo("#formFilter1");
+            } else {
+                $("#formFilter1 input[type=hidden][name=sort_by]").val($(this).val());
             }
-            sort(page);
-            // $(this).parent().removeClass("w--open");
-            // console.log($(this).parent().prev());
-            // $(this).parent().prev().removeClass("w--open").attr("aria-expanded", false);
-            // $(this).parent().parent().removeAttr("style");
         });
 
-        $(".btn-filter").on("click", function() {
-            page = 1;
-            checkedFilter = [];
-            $(".checkbox-category").each(function() {
-                if ($(this).prev().is(".w--redirected-checked")) {
-                    checkedFilter.push($(this).val());
+        $(".mini-sort a").on("click", function() {
+            if ($("input[type=hidden][name=sort_by]").length <= 0) {
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "sort_by",
+                    value: $(this).attr("value")
+                }).appendTo("#formFilter2");
+            } else {
+                $("#formFilter2 input[type=hidden][name=sort_by]").val($(this).attr("value"));
+            }
+        });
+
+        $(".btn-filter").on("click", function(e) {
+            e.preventDefault();
+            var form = "#" + $(this).parents("form").attr("id");
+            var param = $(location).attr("search");
+            param = param.substring(1, param.length).split("&");
+            param.forEach(function(item) {
+                var items = item.split("=");
+                if ($("input[type=hidden][name=" + items[0] + "]").length <= 0) {
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: items[0],
+                        value: items[1]
+                    }).appendTo(form);
                 }
             });
 
-            min, max = 0;
-            if ($(".filter.sticky-filter:visible").length > 0) {
-                min = $("#min-price-1").val();
-                max = $("#max-price-1").val();
-            } else if ($(".filter.filter-hamburger:visible").length > 0) {
-                min = $("#min-price-2").val();
-                max = $("#max-price-2").val();
+            checkedCategory = '';
+            $(form + " .checkbox-category").each(function() {
+                if ($(this).prev().is(".w--redirected-checked")) {
+                    checkedCategory += $(this).val() + ",";
+                }
+            });
+
+            if ($(form + " input[type=hidden][name=category]").length <= 0) {
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "category",
+                    value: checkedCategory.slice(0, -1)
+                }).appendTo(form);
+            } else {
+                $(form + " input[type=hidden][name=category]").val(checkedCategory.slice(0, -1));
             }
 
-            sort(page);
+            if ($(form + " input[type=hidden][name=min_price]").length <= 0) {
+                if ($(form + " .min-price").val() != '') {
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "min_price",
+                        value: $(form + " .min-price").val()
+                    }).appendTo(form);
+                }
+            } else {
+                $(form + " input[type=hidden][name=min_price]").val($(form + " .min-price").val());
+            }
 
-            // $.post(url + "/product/filter", {
-            //     _token: CSRF_TOKEN,
-            //     categories: checkedFilter,
-            //     min_price: min,
-            //     max_price: max,
-            // }).done(function(data) {
-            //     $("#productsList").html(data);
-            // }).fail(function(error) {
-            //     console.log(error);
-            // });
+            if ($(form + " input[type=hidden][name=max_price]").length <= 0) {
+                if ($(form + " .max-price").val() != '') {
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "max_price",
+                        value: $(form + " .max-price").val()
+                    }).appendTo(form);
+                }
+            } else {
+                $(form + " input[type=hidden][name=max_price]").val($(form + " .max-price").val());
+            }
         });
     </script>
 @endsection

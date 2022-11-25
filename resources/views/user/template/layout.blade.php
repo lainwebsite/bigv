@@ -53,10 +53,10 @@
                         <div class="input">
                             <div class="input__reset"></div>
                             <div class="input__field-wrapper">
-                                <form method="GET" action="{{ url('product') }}">
+                                <form method="GET" action="{{ url('product/filter') }}">
                                     <input type="text" class="input__field-copy w-input" maxlength="256"
-                                        name="search" value="{{ isset($search) ? $search : '' }}" data-name="Search 2"
-                                        placeholder="Search" id="search" />
+                                        name="keyword" value="{{ isset($keyword) ? $keyword : '' }}"
+                                        data-name="Search 2" placeholder="Search" id="search" />
                                 </form>
                                 <div class="input__suggestions">
                                     <div class="input__suggestions-wrapper">
@@ -81,7 +81,7 @@
                     <div class="w-form-done"></div>
                     <div class="w-form-fail"></div>
                 </div><a href="#" class="text-color-grey w-nav-link">Home</a>
-                <div class="div-line-orange"></div><a href="{{ route('home') }}"
+                <div class="div-line-orange"></div><a href="{{ url('product') }}"
                     class="text-color-grey w-nav-link">Products</a>
                 <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">Shop</a>
                 <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">About</a>
@@ -169,6 +169,7 @@
     </div>
     <script>
         feather.replace();
+
         var keyword = '';
         var page = 1;
         var metric = "items_sold";
@@ -201,25 +202,25 @@
         //     }
         // });
 
-        function sort(page) {
-            var param = {
-                _token: CSRF_TOKEN,
-                sort: sorted,
-                metric: metric,
-                categories: checkedFilter,
-                min_price: min,
-                max_price: max,
-                keyword: keyword,
-            };
+        // function sort(page) {
+        //     var param = {
+        //         _token: CSRF_TOKEN,
+        //         sort: sorted,
+        //         metric: metric,
+        //         categories: checkedFilter,
+        //         min_price: min,
+        //         max_price: max,
+        //         keyword: keyword,
+        //     };
 
-            $.post(url + "/product/sort?page=" + page, param)
-                .done(function(data) {
-                    $('#productsList').html(data);
-                })
-                .fail(function(error) {
-                    console.log(error);
-                });
-        }
+        //     $.post(url + "/product/sort?page=" + page, param)
+        //         .done(function(data) {
+        //             $('#productsList').html(data);
+        //         })
+        //         .fail(function(error) {
+        //             console.log(error);
+        //         });
+        // }
     </script>
     @yield('javascript-extra')
 </body>
