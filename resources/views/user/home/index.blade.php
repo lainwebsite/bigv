@@ -23,7 +23,7 @@
 </head>
 
 <body class="body" style="overflow-x: hidden; width: 100vw !important;">
-  <div class="hero-section-w-nav wf-section" style="overflow-x: hidden;">
+  <div class="hero-section-w-nav wf-section hidden-x-small">
     <div
       style="width:80%;-webkit-transform:translate3d(0, 3em, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 3em, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 3em, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 3em, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
       data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease"
@@ -85,9 +85,22 @@
               class="nav-link w-nav-link">Event</a>
             <div class="underline"></div>
           </div>
-          <div class="nav-link-wrapper"><a href="#" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb"
-              class="nav-link w-nav-link" style="font-size: 24px; display: flex; align-items:center; height: 100%; padding:20px;"><i class="fa fa-user-circle"></i></a>
-            <div class="underline"></div>
+          <div class="nav-link-wrapper">
+            <div style="display: flex; justify-content:space-between; height: 100%;">
+              @auth
+              <a href="{{ route('user.cart.index') }}" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb" class="nav-link w-nav-link" style="font-size: 24px; margin:0 !important; display: flex; align-items:center; height: 100%; padding:20px 10px;"><i class="fa fa-shopping-cart"></i></a>
+              <a href="#" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb" class="nav-link w-nav-link" style="font-size: 24px; margin:0 !important; display: flex; align-items:center; height: 100%; padding:20px 10px;"><i class="fa fa-user-circle"></i></a>
+              @endauth
+              @guest
+              <a href="{{ route('login') }}" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb" class="nav-link w-nav-link" style="font-size: 24px; margin:0 !important; display: flex; align-items:center; height: 100%; padding:20px 10px;"><i class="fa fa-user-circle"></i></a>
+              @endguest
+              @auth
+              <a href="{{ route('logout') }}" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb" class="nav-link w-nav-link"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="font-size: 24px; margin:0 !important; display: flex; align-items:center; height: 100%; padding:20px 10px;"><i class="fa fa-sign-out"></i></a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                  @csrf
+              </form>
+              @endauth
+            </div>
           </div>
         </nav>
         <div class="w-nav-button">

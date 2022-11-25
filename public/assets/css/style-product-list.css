@@ -4763,6 +4763,10 @@ figcaption {
 }
 
 @media screen and (max-width: 479px) {
+  .product-card{
+    width:180px !important;
+  }
+
   .show-mobile-portrait {
     display: block;
   }

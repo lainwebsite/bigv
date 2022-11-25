@@ -23,6 +23,7 @@
 		-moz-osx-font-smoothing: grayscale;
 	}
 	</style>
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
@@ -49,11 +50,11 @@
 								<input type="text" class="input__field-copy w-input" maxlength="256" name="Search-2" data-name="Search 2" placeholder="Search" id="Search-2" />
 								<div class="input__suggestions">
 									<div class="input__suggestions-wrapper">
-										<div class="suggestion">&quot;woodworking&quot;</div>
-										<div class="suggestion">&quot;houseplants&quot;</div>
-										<div class="suggestion">&quot;skateboarding&quot;</div>
-										<div class="suggestion">&quot;fashion&quot;</div>
-										<div class="suggestion">&quot;woodworking&quot;</div>
+										<div class="suggestion">&quot;beauty&quot;</div>
+										<div class="suggestion">&quot;beverage&quot;</div>
+										<div class="suggestion">&quot;cooked food&quot;</div>
+										<div class="suggestion">&quot;bakery&quot;</div>
+										<div class="suggestion">&quot;vegan&quot;</div>
 									</div>
 								</div>
 								<div class="input__icon w-embed">
@@ -105,5 +106,14 @@
 		</div>
 	</div>
 	@yield('javascript-extra')
+	<script>
+		$("#Search-2").on('keyup', function(){
+        if ($(this).val() != ""){
+          $(".input__suggestions-wrapper").hide();
+        } else {
+          $(".input__suggestions-wrapper").show();
+        }
+      });
+	</script>
 </body>
 </html>

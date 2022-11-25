@@ -9492,6 +9492,9 @@ figcaption {
 }
 
 @media screen and (max-width: 991px) {
+  .hidden-x-small{
+    overflow-x: hidden;
+  }
   #w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c6-92c73a6a {
     -webkit-align-self: end;
     -ms-flex-item-align: end;
