@@ -66,4 +66,12 @@ class PageController extends Controller
             'active' => 0
         ]);
     }
+
+    public function home2(){
+        return view('user.home.index');
+        // Home
+        // Product
+        // About
+        // Event
+    }
 }

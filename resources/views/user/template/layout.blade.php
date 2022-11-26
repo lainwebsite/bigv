@@ -26,8 +26,17 @@
             -moz-osx-font-smoothing: grayscale;
         }
     </style>
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .w-nav-brand{ width: 80px !important;}
+        input#search{width: auto;}
+        @media screen and (min-width: 992px) {
+            #nav-menu{width: calc(100% - 80px) !important;}
+            .w-container{display:flex; align-items: center;}
+        }
+    </style>
 </head>
 
 <body style="background: #f7f7f7; overflow-x:hidden;">
@@ -47,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <nav role="navigation" class="dropdown-nav padding-small w-nav-menu">
+            <nav role="navigation" class="dropdown-nav padding-small w-nav-menu" id="nav-menu">
                 <div class="form-block w-form">
                     <div class="form">
                         <div class="input">
@@ -60,11 +69,11 @@
                                 </form>
                                 <div class="input__suggestions">
                                     <div class="input__suggestions-wrapper">
-                                        <div class="suggestion">&quot;woodworking&quot;</div>
-                                        <div class="suggestion">&quot;houseplants&quot;</div>
-                                        <div class="suggestion">&quot;skateboarding&quot;</div>
-                                        <div class="suggestion">&quot;fashion&quot;</div>
-                                        <div class="suggestion">&quot;woodworking&quot;</div>
+                                        <div class="suggestion">&quot;beauty&quot;</div>
+                                        <div class="suggestion">&quot;beverage&quot;</div>
+                                        <div class="suggestion">&quot;cooked food&quot;</div>
+                                        <div class="suggestion">&quot;bakery&quot;</div>
+                                        <div class="suggestion">&quot;vegan&quot;</div>
                                     </div>
                                 </div>
                                 <div class="input__icon w-embed">
@@ -82,36 +91,31 @@
                     <div class="w-form-fail"></div>
                 </div><a href="#" class="text-color-grey w-nav-link">Home</a>
                 <div class="div-line-orange"></div><a href="{{ url('product') }}"
-                    class="text-color-grey w-nav-link">Products</a>
-                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">Shop</a>
-                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">About</a>
-                @auth
-                    <div class="div-line-orange"></div>
-                    <a class="text-color-grey w-nav-link" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                            data-feather="log-out"></i></a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                @endauth
+                class="text-color-grey w-nav-link">Products</a>
+                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">About Us</a>
+                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">Event</a>
                 <div class="div-block-22">
                     @auth
-                        <a href="{{ route('user.cart.index') }}"
-                            class="btn d-flex justify-content-center align-items-center flex-shrink-0 p-0 mr-2"
-                            style="background: transparent; padding: 10px 10px 10px 0;">
-                            <img src="{{ asset('assets/6303b31a096350fad278d3bb_cart.svg') }}" loading="lazy"
-                                alt="" />
-                        </a>
-                        <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
-                            width="40" alt="" class="image-13" />
+                    <div class="div-line-orange"></div>
+                    <a href="{{ route('user.cart.index') }}" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-shopping-cart"></i></a>
+                    <a href="#" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-user-circle"></i></a>
                     @endauth
 
                     @guest
-                        <a href="{{ route('login') }}">
-                            <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
-                                width="40" alt="" class="image-13" />
-                        </a>
+                    <!-- <a href="{{ route('login') }}">
+                        <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
+                        width="40" alt="" class="image-13" />
+                    </a> -->
+                    <div class="div-line-orange"></div><a href="{{ route('login') }}" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-user-circle"></i></a>
                     @endguest
+
+                    @auth
+                        <a class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out"></i></a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    @endauth
                 </div>
             </nav>
         </div>
@@ -242,6 +246,15 @@
         // }
     </script>
     @yield('javascript-extra')
+    <script>
+		$("#search").on('keyup', function(){
+        if ($(this).val() != ""){
+          $(".input__suggestions-wrapper").hide();
+        } else {
+          $(".input__suggestions-wrapper").show();
+        }
+      });
+	</script>
 </body>
 
 </html>

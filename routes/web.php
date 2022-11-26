@@ -58,6 +58,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'general'], function () {
     Auth::routes(['verify' => true]);
     Route::get('/', [PageController::class, 'home'])->name('home');
+    Route::get('/home-2', [PageController::class, 'home2'])->name('home2');
     // Route::get('/product', [PageController::class, 'products']);
     // Route::get('product/search', [ProductController::class, 'search']);
     // Route::post('product/sort', [ProductController::class, 'sort']);
