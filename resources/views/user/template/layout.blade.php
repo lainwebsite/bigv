@@ -26,15 +26,27 @@
             -moz-osx-font-smoothing: grayscale;
         }
     </style>
-  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <style>
-        .w-nav-brand{ width: 80px !important;}
-        input#search{width: auto;}
+        .w-nav-brand {
+            width: 80px !important;
+        }
+
+        input#search {
+            width: auto;
+        }
+
         @media screen and (min-width: 992px) {
-            #nav-menu{width: calc(100% - 80px) !important;}
-            .w-container{display:flex; align-items: center;}
+            #nav-menu {
+                width: calc(100% - 80px) !important;
+            }
+
+            .w-container {
+                display: flex;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -89,29 +101,35 @@
                     </div>
                     <div class="w-form-done"></div>
                     <div class="w-form-fail"></div>
-                </div><a href="#" class="text-color-grey w-nav-link">Home</a>
+                </div><a href="{{ url('/') }}" class="text-color-grey w-nav-link">Home</a>
                 <div class="div-line-orange"></div><a href="{{ url('product') }}"
-                class="text-color-grey w-nav-link">Products</a>
+                    class="text-color-grey w-nav-link">Products</a>
                 <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">About Us</a>
                 <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">Event</a>
                 <div class="div-block-22">
                     @auth
-                    <div class="div-line-orange"></div>
-                    <a href="{{ route('user.cart.index') }}" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-shopping-cart"></i></a>
-                    <a href="#" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-user-circle"></i></a>
+                        <div class="div-line-orange"></div>
+                        <a href="{{ route('user.cart.index') }}" class="text-color-grey w-nav-link"
+                            style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-shopping-cart"></i></a>
+                        <a href="#" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i
+                                class="fa fa-user-circle"></i></a>
                     @endauth
 
                     @guest
-                    <!-- <a href="{{ route('login') }}">
-                        <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
-                        width="40" alt="" class="image-13" />
-                    </a> -->
-                    <div class="div-line-orange"></div><a href="{{ route('login') }}" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-user-circle"></i></a>
+                        <!-- <a href="{{ route('login') }}">
+                                                    <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
+                                                    width="40" alt="" class="image-13" />
+                                                </a> -->
+                        <div class="div-line-orange"></div><a href="{{ route('login') }}"
+                            class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i
+                                class="fa fa-user-circle"></i></a>
                     @endguest
 
                     @auth
-                        <a class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;" href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out"></i></a>
+                        <a class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"
+                            href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                class="fa fa-sign-out"></i></a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
@@ -174,14 +192,6 @@
     <script>
         feather.replace();
 
-        var keyword = '';
-        var page = 1;
-        var metric = "items_sold";
-        var sorted = "desc";
-        var min = 0;
-        var max = 0;
-        var checkedFilter = [];
-
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var hostname = "{{ request()->getHost() }}";
         var url = "{{ config('app.url') }}";
@@ -193,8 +203,6 @@
 
         $("#search").keypress(function(e) {
             if (e.keyCode == 13) {
-                // e.preventDefault();
-                var form = "#" + $(this).parents("form").attr("id");
                 var param = $(location).attr("search");
 
                 if (param != '') {
@@ -207,7 +215,7 @@
                                     type: "hidden",
                                     name: items[0],
                                     value: items[1]
-                                }).appendTo(form);
+                                }).appendTo("#formSearch");
                             }
                         }
                     });
@@ -247,14 +255,14 @@
     </script>
     @yield('javascript-extra')
     <script>
-		$("#search").on('keyup', function(){
-        if ($(this).val() != ""){
-          $(".input__suggestions-wrapper").hide();
-        } else {
-          $(".input__suggestions-wrapper").show();
-        }
-      });
-	</script>
+        $("#search").on('keyup', function() {
+            if ($(this).val() != "") {
+                $(".input__suggestions-wrapper").hide();
+            } else {
+                $(".input__suggestions-wrapper").show();
+            }
+        });
+    </script>
 </body>
 
 </html>
