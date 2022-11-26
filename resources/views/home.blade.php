@@ -17,9 +17,12 @@
             <div class="sort-right">
                 <div class="text-rich-text text-size-small text-color-grey" style="margin-right: 20px;">Sort By</div>
                 <select class="sort" style="padding: 5px 15px; border-radius: 18px;">
-                    <option value="items_sold">Items Sold</option>
-                    <option value="highest_price">Highest Price</option>
-                    <option value="lowest_price">Lowest Price</option>
+                    <option value="items_sold"
+                        @if (isset($sort_by)) @if ($sort_by == 'items_sold') selected @endif @endif>Items Sold</option>
+                    <option value="highest_price"
+                        @if (isset($sort_by)) @if ($sort_by == 'highest_price') selected @endif @endif>Highest Price</option>
+                    <option value="lowest_price"
+                        @if (isset($sort_by)) @if ($sort_by == 'lowest_price') selected @endif @endif>Lowest Price</option>
                 </select>
                 {{-- <div class="text-color-light-grey w-dropdown-toggle">
                     <div class="w-icon-dropdown-toggle"></div>
@@ -35,6 +38,7 @@
         </div>
 
         @if (isset($category))
+            {{-- {{ print_r($category) }} --}}
             @if ($category != '')
                 @php($checkedCategories = explode(',', $category))
             @endif
@@ -193,6 +197,8 @@
             } else {
                 $("#formFilter1 input[type=hidden][name=sort_by]").val($(this).val());
             }
+
+            $(".btn-filter").click();
         });
 
         $(".mini-sort a").on("click", function() {
@@ -205,23 +211,28 @@
             } else {
                 $("#formFilter2 input[type=hidden][name=sort_by]").val($(this).attr("value"));
             }
+
+            $(".btn-filter").click();
         });
 
         $(".btn-filter").on("click", function(e) {
-            e.preventDefault();
+            // e.preventDefault();
             var form = "#" + $(this).parents("form").attr("id");
             var param = $(location).attr("search");
-            param = param.substring(1, param.length).split("&");
-            param.forEach(function(item) {
-                var items = item.split("=");
-                if ($("input[type=hidden][name=" + items[0] + "]").length <= 0) {
-                    $("<input>").attr({
-                        type: "hidden",
-                        name: items[0],
-                        value: items[1]
-                    }).appendTo(form);
-                }
-            });
+
+            if (param != '') {
+                param = param.substring(1, param.length).split("&");
+                param.forEach(function(item) {
+                    var items = item.split("=");
+                    if ($("input[type=hidden][name=" + items[0] + "]").length <= 0) {
+                        $("<input>").attr({
+                            type: "hidden",
+                            name: items[0],
+                            value: items[1]
+                        }).appendTo(form);
+                    }
+                });
+            }
 
             checkedCategory = '';
             $(form + " .checkbox-category").each(function() {

@@ -94,6 +94,8 @@ class ProductController extends Controller
         $category = $request->input('category', '');
         $min_price = $request->input('min_price', 0);
         $max_price = $request->input('max_price', 0);
+        $sort_by = $request->input('sort_by', '');
+        // dd($category);
 
         $productCategories = ProductCategory::all();
 
@@ -122,23 +124,26 @@ class ProductController extends Controller
             $products = $products->where('price', '<=', $request->max_price);
         }
 
-        // if ()
-
-        $products = $products->paginate(20);
-        // if ($request->metric == 'items_sold') {
-        //     $products = $products->withCount(['carts as items_sold' => function ($query) {
-        //         $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
-        //     }])->orderBy('items_sold', 'desc')->paginate(20);
-        // } else {
-        //     $products = $products->orderBy('highest_price_variation', $request->sort)
-        //         ->paginate(20);
-        // }
+        if ($sort_by != '') {
+            if ($sort_by == 'highest_price') {
+                $products = $products->orderBy('highest_price_variation', 'desc')
+                    ->paginate(20);
+            } else if ($sort_by == 'lowest_price') {
+                $products = $products->orderBy('highest_price_variation', 'asc')
+                    ->paginate(20);
+            } else {
+                $products = $products->withCount(['carts as items_sold' => function ($query) {
+                    $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+                }])->orderBy('items_sold', 'desc')->paginate(20);
+            }
+        }
 
         return view('home', [
             'keyword' => $keyword,
             'category' => $category,
             'min_price' => $min_price,
             'max_price' => $max_price,
+            'sort_by' => $sort_by,
             'products' => $products,
             'productCategories' => $productCategories,
             'active' => 0

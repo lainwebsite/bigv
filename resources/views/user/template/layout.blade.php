@@ -53,7 +53,7 @@
                         <div class="input">
                             <div class="input__reset"></div>
                             <div class="input__field-wrapper">
-                                <form method="GET" action="{{ url('product/filter') }}">
+                                <form id="formSearch" method="GET" action="{{ url('product/filter') }}">
                                     <input type="text" class="input__field-copy w-input" maxlength="256"
                                         name="keyword" value="{{ isset($keyword) ? $keyword : '' }}"
                                         data-name="Search 2" placeholder="Search" id="search" />
@@ -187,10 +187,29 @@
             url += ":8000";
         }
 
-        // $("#search").keypress(function(e) {
-        //     if (e.keyCode == 13) {
-        //         page = 1;
-        //         keyword = $(this).val();
+        $("#search").keypress(function(e) {
+            if (e.keyCode == 13) {
+                // e.preventDefault();
+                var form = "#" + $(this).parents("form").attr("id");
+                var param = $(location).attr("search");
+
+                if (param != '') {
+                    param = param.substring(1, param.length).split("&");
+                    param.forEach(function(item) {
+                        var items = decodeURIComponent(item).split("=");
+                        if (items[0] != "keyword") {
+                            if ($("input[type=hidden][name=" + items[0] + "]").length <= 0) {
+                                $("<input>").attr({
+                                    type: "hidden",
+                                    name: items[0],
+                                    value: items[1]
+                                }).appendTo(form);
+                            }
+                        }
+                    });
+                }
+            }
+        });
         // sort(page);
         // $.get(url + "/product/search?keyword=" + keyword)
         //     .done(function(data) {
