@@ -32,8 +32,12 @@ class CartController extends Controller
                 ->whereNull('carts.transaction_id')
                 ->where('user_id', auth()->user()->id);
         })->get();
+        
+        $productSuggestion = Product::withCount(['carts as items_sold' => function ($query) {
+            $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
+        }])->inRandomOrder()->limit(10)->get();
 
-        return view('user.cart.index', ['carts' => $carts]);
+        return view('user.cart.index', ['carts' => $carts, 'productSuggestion'=>$productSuggestion]);
     }
 
     /**

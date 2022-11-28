@@ -12,13 +12,13 @@
     <div class="content">
         <div class="max-width flex vertical">
             <h2 class="text-color-grey ea-top">Your Cart</h2>
-            <div class="cart-wrapper">
+            <div class="cart-wrapper" style="gap: 15px;">
                 <div class="vendors-column">
                     @foreach ($carts as $cart)
                         @if (count($cart->products) > 0)
                             <div class="vendors-card ea-left">
                                 <div class="flex gap-medium"><img
-                                        src="{{ asset('assets/630193c64ebe68075a463721_profile-005.jpg') }}" loading="lazy"
+                                        src="{{asset($cart->photo)}}" loading="lazy"
                                         alt="" class="image-17" />
                                     <div>
                                         <h5 class="text-color-dark-grey">{{ $cart->name }}</h5>
@@ -31,7 +31,7 @@
                                     <div class="vendor-item" vendor-id="{{ $cart->id }}">
                                         <div class="flex gap-medium">
                                             <input type="checkbox" class="product-cart" value="{{ $product->cart_id }}">
-                                            <img src="{{ $product->featured_image }}" loading="lazy" alt=""
+                                            <img src="{{ asset($product->featured_image) }}" loading="lazy" alt=""
                                                 class="image-18" />
                                             <div>
                                                 <h5 class="text-color-dark-grey">{{ $product->product_name }}</h5>
@@ -89,35 +89,71 @@
         <div class="new-products-section padding-xxlarge ea-fade">
             <div class="heading-large text-align-center margin-bottom margin-large">Suggested Products</div>
             <div class="products-archive-grid margin-auto">
-                @for ($i = 0; $i < 10; $i++)
-                    <a href="https://www.google.com">
-                        <div id="w-node-_6b6feb56-ca1c-a712-de43-c09a32981649-fac73a6b" class="product-card padding-small">
-                            <div class="text-rich-text text-size-small text-color-grey">Cak Har</div><img
-                                src="{{ asset('assets/62fc7f0ee2b4118e2f35c5d6_image%2034.png') }}" loading="lazy"
-                                alt="" class="product-image" />
-                            <div class="product-card-stars"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
-                                    alt="" class="card-stars" /><img src="{{ asset('assets/Star 1.svg') }}"
-                                    loading="lazy" alt="" class="card-stars" /><img
-                                    src="{{ asset('assets/Star 2.svg') }}" loading="lazy" alt=""
-                                    class="card-stars" /><img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
-                                    alt="" class="card-stars" /><img src="{{ asset('assets/Star 3.svg') }}"
-                                    loading="lazy" alt="" class="card-stars" /></div>
+                @foreach ($productSuggestion as $product)
+                    <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none !important;">
+                        <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
+                            <div class="text-rich-text text-size-small text-color-orange">{{ $product->vendor->name }}</div><img
+                                src="{{ asset($product->featured_image) }}" loading="lazy" alt="" class="product-image" />
+                            <div class="product-card-stars">
+                                @php($arr_rating = explode('.', $product->rating))
+                                @php($first_num = $arr_rating[0])
+                                @while ($first_num > 0)
+                                    <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy" alt="" class="card-stars" />
+                                    @php($first_num--)
+                                @endwhile
+
+                                @if (isset($arr_rating[1]))
+                                    <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy" alt="" class="card-stars" />
+                                @endif
+
+                                @php($remaining_rating = explode('.', 5 - $product->rating)[0])
+                                @if ($remaining_rating > 0)
+                                    @while ($remaining_rating > 0)
+                                        <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy" alt="" class="card-stars" />
+                                        @php($remaining_rating--)
+                                    @endwhile
+                                @endif
+                            </div>
                             <div
-                                class="product-card-title text-rich-text text-size-regular text-weight-bold text-color-dark-grey">
-                                Macaroni</div>
+                                class="product-card-title text-rich-text text-size-regular text-weight-bold text-color-dark-grey text-center text-truncate" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">
+                                {{ $product->name }}
+                            </div>
                             <div class="product-card-low-div">
-                                <div class="card-discount">
-                                    <div class="discount">50%</div>
-                                </div>
-                                <div id="w-node-_6b6feb56-ca1c-a712-de43-c09a32981656-fac73a6b"
-                                    class="sale-price text-color-light-grey">$24.00</div>
-                                <div class="text-rich-text text-color-orange text-weight-bold">$12.00</div>
+                                @if ($product->variations[0]->name == 'novariation')
+                                    @if ($product->variations[0]->discount != 0)
+                                        <div class="card-discount">
+                                            <div class="discount">{{ $product->variations[0]->discount }}%</div>
+                                        </div>
+                                    @endif
+
+                                    @if (count($product->variations) > 1)
+                                        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                            ${{ $product->variations->min('price') }} - ${{ $product->variations->max('price') }}
+                                        </div>
+                                    @else
+                                        <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
+                                            class="sale-price text-color-light-grey" style="padding: 0.25em;">
+                                            ${{ $product->variations[0]->price }}</div>
+                                        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                            ${{ $product->variations[0]->price - $product->variations[0]->discount }}</div>
+                                    @endif
+                                @else
+                                    @if (count($product->variations) > 1)
+                                        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                            ${{ $product->variations->min('price') }} - ${{ $product->variations->max('price') }}
+                                        </div>
+                                    @else
+                                        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                            ${{ $product->variations[0]->name == 'novariation' ? $product->variations[0]->price : '' }}
+                                        </div>
+                                    @endif
+                                @endif
                             </div>
                         </div>
                     </a>
-                @endfor
+                @endforeach
             </div>
-            <a href="#" class="button margin-top margin-large ea-grow w-button">See More</a>
+            <a href="{{url('/product')}}" class="button margin-top margin-large ea-grow w-button">See More</a>
             <div data-w-id="2763fafa-9663-7a88-db5c-9d4056894d11" class="product-info"></div>
         </div>
     </div>

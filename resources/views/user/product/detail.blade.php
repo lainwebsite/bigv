@@ -20,40 +20,27 @@
                 class="absolute shape-1 ea-right" />
             <div class="product-hero margin-auto">
                 <div class="content-col col--width-50 display-none">
+                    <img src="{{asset($product->featured_image)}}" sizes="100vw" srcset="{{asset($product->featured_image)}}" alt=""
+                                class="image-9 card27" />
                     @if (count($product->images) > 0)
                         @foreach ($product->images as $image)
-                            <img src="{{ $image->link }}" sizes="100vw" srcset="{{ $image->link }}" alt=""
+                            <img src="{{asset($image->link)}}" sizes="100vw" srcset="{{asset($image->link)}}" alt=""
                                 class="image-9 card27" />
                         @endforeach
-                    @else
-                        <img src="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" sizes="100vw"
-                            srcset="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" alt=""
-                            class="image-9 card27" />
                     @endif
-                    {{-- <img src="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" sizes="100vw"
-                        srcset="{{ asset('assets/6308e8dff31701dadd206186_image%2032.jpg') }}" alt=""
-                        class="image-9 card27" />
-                    <img src="{{ asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg') }}" sizes="100vw"
-                        srcset="{{ asset('assets/6308e8ded34a4e6728a0f147_image%2031.jpg') }}" alt=""
-                        class="image-9 card27" /> --}}
                 </div>
                 <div id="productImage" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img class="d-block w-100"
-                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
-                                alt="First slide">
+                            <img src="{{asset($product->featured_image)}}" alt="Product Image" class="d-block w-100" />
                         </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100"
-                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
-                                alt="Second slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100"
-                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
-                                alt="Third slide">
-                        </div>
+                        @if (count($product->images) > 0)
+                            @foreach ($product->images as $image)
+                                <div class="carousel-item">
+                                    <img src="{{asset($image->link)}}" alt="Product Image" class="d-block w-100" />
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                     <a class="carousel-control-prev" href="#productImage" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -64,7 +51,7 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-                <div class="content-col col--width-50" id="productDetail">
+                <div class="content-col col--width-50 display-none" id="productDetail">
                     <div class="div-block-5 ea-up">
                         <div class="product-info">
                             <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey">
@@ -85,7 +72,7 @@
                                         @while ($first_num > 0)
                                             <div class="c-product-rating__star">
                                                 <div class="icon">
-                                                    <div class="fas fa-star">
+                                                    <div>
                                                         <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
                                                             alt="" />
                                                     </div>
@@ -97,7 +84,7 @@
                                         @if (isset($arr_rating[1]))
                                             <div class="c-product-rating__star">
                                                 <div class="icon">
-                                                    <div class="fas fa-star">
+                                                    <div>
                                                         <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
                                                             alt="" />
                                                     </div>
@@ -110,7 +97,7 @@
                                             @while ($remaining_rating > 0)
                                                 <div class="c-product-rating__star">
                                                     <div class="icon">
-                                                        <div class="fas fa-star">
+                                                        <div>
                                                             <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
                                                                 alt="" />
                                                         </div>
@@ -275,7 +262,7 @@
         <div class="product-vendor-n-info ea-up" style="width: 90%;">
             <div class="div-block-8">
                 <div class="vendor-product-detail">
-                    <img src="{{ $product->vendor->photo }}" loading="lazy" alt="" class="image-10" />
+                    <img src="{{asset($product->vendor->photo)}}" loading="lazy" alt="" class="image-10" />
                     <div class="vendor-detail-product-detail">
                         <h4 class="text-color-dark-grey">{{ $product->vendor->name }}</h4>
                         <div class="text-color-grey" style="font-size: 0.8rem;">Location:
@@ -288,7 +275,7 @@
                                 @while ($first_num > 0)
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div class="fas fa-star">
+                                            <div>
                                                 <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
                                                     alt="" />
                                             </div>
@@ -300,7 +287,7 @@
                                 @if (isset($arr_rating[1]))
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div class="fas fa-star">
+                                            <div>
                                                 <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
                                                     alt="" />
                                             </div>
@@ -313,7 +300,7 @@
                                     @while ($remaining_rating > 0)
                                         <div class="c-product-rating__star">
                                             <div class="icon">
-                                                <div class="fas fa-star">
+                                                <div>
                                                     <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
                                                         alt="" />
                                                 </div>
@@ -325,7 +312,7 @@
                             </div>
                             <h5 class="heading-4 p-beside-star">{{ $product->vendor->rating }}
                                 ({{ $product->reviews_count }} rating)</h5>
-                            <h5 class="heading-4 p-beside-star">1.000 sold</h5>
+                            <!--<h5 class="heading-4 p-beside-star">1.000 sold</h5>-->
                         </div>
                     </div>
                 </div>
@@ -335,7 +322,7 @@
             </div>
             <div class="div-line"></div>
             <h4 class="text-color-grey mb-2">Product Description</h4>
-            <p class="paragraph-2 text-color-grey mb-3" style="max-width: 500px;">{{ $product->description }}</p>
+            <p class="paragraph-2 text-color-grey mb-3">{{ htmlspecialchars_decode($product->description) }}</p>
             {{-- <div class="div-block-9">
         <div id="w-node-_274f20e5-cf76-d21b-b2d2-1fb0375edc27-fac73a6b">
             <h4 class="text-color-grey mb-2">Additional Information</h4>
@@ -353,7 +340,8 @@
     </div> --}}
         </div>
         <!-- END VENDOR -->
-        <div class="flex relative max-width-full align-center"><img
+        <!-- REVIEW -->
+        <div class="flex relative max-width-full align-center" style="display:none !important;"><img
                 src="{{ asset('assets/6303b7b9afc8585f7943565c_shape 2.svg') }}" loading="lazy" alt=""
                 class="absolute bottom-left ea-left" />
             <div class="flex top-align max-width relative">
@@ -451,31 +439,31 @@
                                 <div class="flex">
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}"
+                                            <div><img src="{{ asset('assets/Star 1.svg') }}"
                                                     loading="lazy" alt="" /></div>
                                         </div>
                                     </div>
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 1.svg') }}"
+                                            <div><img src="{{ asset('assets/Star 1.svg') }}"
                                                     loading="lazy" alt="" /></div>
                                         </div>
                                     </div>
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 2.svg') }}"
+                                            <div><img src="{{ asset('assets/Star 2.svg') }}"
                                                     loading="lazy" alt="" /></div>
                                         </div>
                                     </div>
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}"
+                                            <div><img src="{{ asset('assets/Star 3.svg') }}"
                                                     loading="lazy" alt="" /></div>
                                         </div>
                                     </div>
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div class="fas fa-star"><img src="{{ asset('assets/Star 3.svg') }}"
+                                            <div><img src="{{ asset('assets/Star 3.svg') }}"
                                                     loading="lazy" alt="" /></div>
                                         </div>
                                     </div>
@@ -493,7 +481,7 @@
                 </div>
             </div>
         </div>
-        <div class="pagination flex justify-center margin-large">
+        <div class="pagination flex justify-center margin-large" style="display:none !important;">
             <a href="#" class="pagination-selected text-style-none">
                 <div class="text-color-white">1</div>
             </a>
@@ -523,7 +511,7 @@
                             @while ($first_num > 0)
                                 <div class="c-product-rating__star">
                                     <div class="icon">
-                                        <div class="fas fa-star">
+                                        <div>
                                             <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy" alt="" />
                                         </div>
                                     </div>
@@ -534,7 +522,7 @@
                             @if (isset($arr_rating[1]))
                                 <div class="c-product-rating__star">
                                     <div class="icon">
-                                        <div class="fas fa-star">
+                                        <div>
                                             <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy" alt="" />
                                         </div>
                                     </div>
@@ -546,7 +534,7 @@
                                 @while ($remaining_rating > 0)
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div class="fas fa-star">
+                                            <div>
                                                 <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
                                                     alt="" />
                                             </div>
@@ -569,33 +557,69 @@
     <div class="new-products-section padding-xxlarge ea-fade">
         <div class="heading-large text-align-center margin-bottom margin-large">Suggested Products</div>
         <div class="products-archive-grid margin-auto">
-            @for ($i = 0; $i < 10; $i++)
-                <a href="https://www.google.com">
-                    <div id="w-node-_6b6feb56-ca1c-a712-de43-c09a32981649-fac73a6b" class="product-card padding-small">
-                        <div class="text-rich-text text-size-small text-color-grey">Cak Har</div><img
-                            src="{{ asset('assets/62fc7f0ee2b4118e2f35c5d6_image%2034.png') }}" loading="lazy"
-                            alt="" class="product-image" />
-                        <div class="product-card-stars"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
-                                alt="" class="card-stars" /><img src="{{ asset('assets/Star 1.svg') }}"
-                                loading="lazy" alt="" class="card-stars" /><img
-                                src="{{ asset('assets/Star 2.svg') }}" loading="lazy" alt=""
-                                class="card-stars" /><img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
-                                alt="" class="card-stars" /><img src="{{ asset('assets/Star 3.svg') }}"
-                                loading="lazy" alt="" class="card-stars" /></div>
+            @foreach ($productSuggestion as $product)
+                <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none !important;">
+                    <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
+                        <div class="text-rich-text text-size-small text-color-orange">{{ $product->vendor->name }}</div><img
+                            src="{{ asset($product->featured_image) }}" loading="lazy" alt="" class="product-image" />
+                        <div class="product-card-stars">
+                            @php($arr_rating = explode('.', $product->rating))
+                            @php($first_num = $arr_rating[0])
+                            @while ($first_num > 0)
+                                <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy" alt="" class="card-stars" />
+                                @php($first_num--)
+                            @endwhile
+
+                            @if (isset($arr_rating[1]))
+                                <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy" alt="" class="card-stars" />
+                            @endif
+
+                            @php($remaining_rating = explode('.', 5 - $product->rating)[0])
+                            @if ($remaining_rating > 0)
+                                @while ($remaining_rating > 0)
+                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy" alt="" class="card-stars" />
+                                    @php($remaining_rating--)
+                                @endwhile
+                            @endif
+                        </div>
                         <div
-                            class="product-card-title text-rich-text text-size-regular text-weight-bold text-color-dark-grey">
-                            Macaroni</div>
+                            class="product-card-title text-rich-text text-size-regular text-weight-bold text-color-dark-grey text-center text-truncate" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">
+                            {{ $product->name }}
+                        </div>
                         <div class="product-card-low-div">
-                            <div class="card-discount">
-                                <div class="discount">50%</div>
-                            </div>
-                            <div id="w-node-_6b6feb56-ca1c-a712-de43-c09a32981656-fac73a6b"
-                                class="sale-price text-color-light-grey">$24.00</div>
-                            <div class="text-rich-text text-color-orange text-weight-bold">$12.00</div>
+                            @if ($product->variations[0]->name == 'novariation')
+                                @if ($product->variations[0]->discount != 0)
+                                    <div class="card-discount">
+                                        <div class="discount">{{ $product->variations[0]->discount }}%</div>
+                                    </div>
+                                @endif
+
+                                @if (count($product->variations) > 1)
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                        ${{ $product->variations->min('price') }} - ${{ $product->variations->max('price') }}
+                                    </div>
+                                @else
+                                    <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
+                                        class="sale-price text-color-light-grey" style="padding: 0.25em;">
+                                        ${{ $product->variations[0]->price }}</div>
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                        ${{ $product->variations[0]->price - $product->variations[0]->discount }}</div>
+                                @endif
+                            @else
+                                @if (count($product->variations) > 1)
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                        ${{ $product->variations->min('price') }} - ${{ $product->variations->max('price') }}
+                                    </div>
+                                @else
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                        ${{ $product->variations[0]->name == 'novariation' ? $product->variations[0]->price : '' }}
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 </a>
-            @endfor
+            @endforeach
         </div><a href="#" class="button margin-top margin-large ea-grow w-button">See More</a>
         <div data-w-id="2763fafa-9663-7a88-db5c-9d4056894d11" class="product-info"></div>
     </div>

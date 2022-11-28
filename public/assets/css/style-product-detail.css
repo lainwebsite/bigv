@@ -4741,7 +4741,7 @@ a {
   }
 
   .product-card {
-    width: 130px;
+    width: 180px !important;
   }
 
   .product-card.padding-small {

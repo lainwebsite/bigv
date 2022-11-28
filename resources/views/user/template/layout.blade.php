@@ -26,8 +26,29 @@
             -moz-osx-font-smoothing: grayscale;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .w-nav-brand {
+            width: 80px !important;
+        }
+
+        input#search {
+            width: auto;
+        }
+
+        @media screen and (min-width: 992px) {
+            #nav-menu {
+                width: calc(100% - 80px) !important;
+            }
+
+            .w-container {
+                display: flex;
+                align-items: center;
+            }
+        }
+    </style>
 </head>
 
 <body style="background: #f7f7f7; overflow-x:hidden;">
@@ -47,24 +68,24 @@
                     </div>
                 </div>
             </div>
-            <nav role="navigation" class="dropdown-nav padding-small w-nav-menu">
+            <nav role="navigation" class="dropdown-nav padding-small w-nav-menu" id="nav-menu">
                 <div class="form-block w-form">
                     <div class="form">
                         <div class="input">
                             <div class="input__reset"></div>
                             <div class="input__field-wrapper">
-                                <form method="GET" action="{{ url('product') }}">
+                                <form id="formSearch" method="GET" action="{{ url('product/filter') }}">
                                     <input type="text" class="input__field-copy w-input" maxlength="256"
-                                        name="search" value="{{ isset($search) ? $search : '' }}" data-name="Search 2"
-                                        placeholder="Search" id="search" />
+                                        name="keyword" value="{{ isset($keyword) ? $keyword : '' }}"
+                                        data-name="Search 2" placeholder="Search" id="search" />
                                 </form>
                                 <div class="input__suggestions">
                                     <div class="input__suggestions-wrapper">
-                                        <div class="suggestion">&quot;woodworking&quot;</div>
-                                        <div class="suggestion">&quot;houseplants&quot;</div>
-                                        <div class="suggestion">&quot;skateboarding&quot;</div>
-                                        <div class="suggestion">&quot;fashion&quot;</div>
-                                        <div class="suggestion">&quot;woodworking&quot;</div>
+                                        <div class="suggestion">&quot;beauty&quot;</div>
+                                        <div class="suggestion">&quot;beverage&quot;</div>
+                                        <div class="suggestion">&quot;cooked food&quot;</div>
+                                        <div class="suggestion">&quot;bakery&quot;</div>
+                                        <div class="suggestion">&quot;vegan&quot;</div>
                                     </div>
                                 </div>
                                 <div class="input__icon w-embed">
@@ -80,38 +101,39 @@
                     </div>
                     <div class="w-form-done"></div>
                     <div class="w-form-fail"></div>
-                </div><a href="#" class="text-color-grey w-nav-link">Home</a>
-                <div class="div-line-orange"></div><a href="{{ route('home') }}"
+                </div><a href="{{ url('/') }}" class="text-color-grey w-nav-link">Home</a>
+                <div class="div-line-orange"></div><a href="{{ url('product') }}"
                     class="text-color-grey w-nav-link">Products</a>
-                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">Shop</a>
-                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">About</a>
-                @auth
-                    <div class="div-line-orange"></div>
-                    <a class="text-color-grey w-nav-link" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                            data-feather="log-out"></i></a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                @endauth
+                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">About Us</a>
+                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">Event</a>
                 <div class="div-block-22">
                     @auth
-                        <a href="{{ route('user.cart.index') }}"
-                            class="btn d-flex justify-content-center align-items-center flex-shrink-0 p-0 mr-2"
-                            style="background: transparent; padding: 10px 10px 10px 0;">
-                            <img src="{{ asset('assets/6303b31a096350fad278d3bb_cart.svg') }}" loading="lazy"
-                                alt="" />
-                        </a>
-                        <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
-                            width="40" alt="" class="image-13" />
+                        <div class="div-line-orange"></div>
+                        <a href="{{ route('user.cart.index') }}" class="text-color-grey w-nav-link"
+                            style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-shopping-cart"></i></a>
+                        <a href="#" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i
+                                class="fa fa-user-circle"></i></a>
                     @endauth
 
                     @guest
-                        <a href="{{ route('login') }}">
-                            <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
-                                width="40" alt="" class="image-13" />
-                        </a>
+                        <!-- <a href="{{ route('login') }}">
+                                                    <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
+                                                    width="40" alt="" class="image-13" />
+                                                </a> -->
+                        <div class="div-line-orange"></div><a href="{{ route('login') }}"
+                            class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i
+                                class="fa fa-user-circle"></i></a>
                     @endguest
+
+                    @auth
+                        <a class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"
+                            href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                class="fa fa-sign-out"></i></a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    @endauth
                 </div>
             </nav>
         </div>
@@ -133,10 +155,10 @@
             <div class="flex align-vertical">
                 <div class="flex flex-vertical left-align margin-small">
                     <h4>Contact Us</h4>
-                    <a href="#" class="text-color-white text-style-link">Instagram</a>
-                    <a href="#" class="text-color-white text-style-link">Facebook</a>
-                    <a href="#" class="text-color-white text-style-link">Tiktok</a>
-                    <a href="#" class="text-color-white text-style-link">Whatsapp</a>
+                    <a href="https://www.instagram.com/bigvsg.official/" target="_blank" class="text-color-white text-style-link">Instagram</a>
+                    <a href="https://www.facebook.com/BigVSG/" target="_blank" class="text-color-white text-style-link">Facebook</a>
+                    <a href="https://www.tiktok.com/@bigvsg.official" target="_blank" class="text-color-white text-style-link">Tiktok</a>
+                    <a href="https://api.whatsapp.com/send?phone=6582151509" target="_blank" class="text-color-white text-style-link">Whatsapp</a>
                 </div>
                 <div class="flex flex-vertical left-align margin-small">
                     <h4>Company</h4><a href="#" class="text-color-white text-style-link">Become a Vendor</a><a
@@ -146,7 +168,7 @@
                 </div>
             </div>
         </div>
-        <div class="footer-mid padding-small relative">
+        <!-- <div class="footer-mid padding-small relative">
             <a href="#" class="text-color-white text-style-link"><img
                     src="{{ asset('assets/62fc7f3f35498a656c756c0c_Vector-4.svg') }}" loading="lazy"
                     alt="" /></a>
@@ -162,66 +184,54 @@
             <a href="#" class="text-color-white text-style-link"><img
                     src="{{ asset('assets/62fc7f3f35498ab948756c09_Vector-2.svg') }}" loading="lazy"
                     alt="" /></a>
-        </div>
+        </div> -->
         <div class="footer-bottom background-color-grey text-align-center text-color-white padding-xsmall relative">
             <div>©2022 <span class="text-color-orange">Big V</span> | All Rights Reserved</div>
         </div>
     </div>
     <script>
         feather.replace();
-        var keyword = '';
-        var page = 1;
-        var metric = "items_sold";
-        var sorted = "desc";
-        var min = 0;
-        var max = 0;
-        var checkedFilter = [];
 
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var hostname = "{{ request()->getHost() }}";
         var url = "{{ config('app.url') }}";
-        if (hostname.includes('www')) {
-            url = "https://" + hostname
-        } else if (hostname.includes('localhost')) {
+
+        if (hostname.includes('localhost')) {
             url += ":8000";
         }
 
-        // $("#search").keypress(function(e) {
-        //     if (e.keyCode == 13) {
-        //         page = 1;
-        //         keyword = $(this).val();
-        // sort(page);
-        // $.get(url + "/product/search?keyword=" + keyword)
-        //     .done(function(data) {
-        //         $('#productsList').html(data);
-        //     })
-        //     .fail(function(error) {
-        //         console.log(error);
-        //     });
-        //     }
-        // });
+        $("#search").keypress(function(e) {
+            if (e.keyCode == 13) {
+                var param = $(location).attr("search");
 
-        function sort(page) {
-            var param = {
-                _token: CSRF_TOKEN,
-                sort: sorted,
-                metric: metric,
-                categories: checkedFilter,
-                min_price: min,
-                max_price: max,
-                keyword: keyword,
-            };
-
-            $.post(url + "/product/sort?page=" + page, param)
-                .done(function(data) {
-                    $('#productsList').html(data);
-                })
-                .fail(function(error) {
-                    console.log(error);
-                });
-        }
+                if (param != '') {
+                    param = param.substring(1, param.length).split("&");
+                    param.forEach(function(item) {
+                        var items = decodeURIComponent(item).split("=");
+                        if (items[0] != "keyword") {
+                            if ($("input[type=hidden][name=" + items[0] + "]").length <= 0) {
+                                $("<input>").attr({
+                                    type: "hidden",
+                                    name: items[0],
+                                    value: items[1]
+                                }).appendTo("#formSearch");
+                            }
+                        }
+                    });
+                }
+            }
+        });
     </script>
     @yield('javascript-extra')
+    <script>
+        $("#search").on('keyup', function() {
+            if ($(this).val() != "") {
+                $(".input__suggestions-wrapper").hide();
+            } else {
+                $(".input__suggestions-wrapper").show();
+            }
+        });
+    </script>
 </body>
 
 </html>

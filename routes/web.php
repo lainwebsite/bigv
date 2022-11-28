@@ -56,16 +56,18 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => 'general'], function () {
-    Auth::routes(['verify' => true]);
+    // Auth::routes(['verify' => false]);
+    Auth::routes();
     Route::get('/', [PageController::class, 'home'])->name('home');
     // Route::get('/product', [PageController::class, 'products']);
-    Route::get('product/search', [ProductController::class, 'search']);
-    Route::post('product/sort', [ProductController::class, 'sort']);
-    Route::post('product/filter', [ProductController::class, 'filter']);
+    // Route::get('product/search', [ProductController::class, 'search']);
+    // Route::post('product/sort', [ProductController::class, 'sort']);
+    Route::get('product/filter', [ProductController::class, 'filter']);
     Route::resource('product', ProductController::class);
 });
 
-Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
+// Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
+Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], function () {
     // Route::post('cart/{id}/{qty}', [CartController::class, 'update']);
     Route::post('cart/verify-checkout', [CheckoutController::class, 'preCheckout']);
     Route::post('cart/checkout/buy-now', [CheckoutController::class, 'buyNowCheckout']);
@@ -99,7 +101,8 @@ Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' =>
     Route::resource('vendor', VendorController::class);
 });
 
-Route::group(['middleware' => ['user', 'verified']], function () {
+// Route::group(['middleware' => ['user', 'verified']], function () {
+Route::group(['middleware' => ['user']], function () {
     Route::resource('user', UserController::class);
 
     Route::get('profile', [UserController::class, 'profile'])->name('profile');
@@ -110,7 +113,9 @@ Route::group(['middleware' => ['user', 'verified']], function () {
 Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::get('/', [AdminPageController::class, 'login'])->name('login');
 });
-Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
+
+// Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
+Route::group(['middleware' => ['admin'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [AdminPageController::class, 'dashboard'])->name('dashboard');
     Route::resource('cart', AdminCartController::class);
     Route::post('discount/sort', [AdminDiscountController::class, 'sort'])->name('user.sort');
