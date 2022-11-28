@@ -32,5 +32,14 @@ class ProductSeeder extends Seeder
         $temp->vendor_id = 1;
         $temp->category_id = 1;
         $temp->save();
+
+        $temp = new Product();
+        $temp->name = "Fries";
+        $temp->description = "French fries.";
+        $temp->rating = 4.2;
+        $temp->featured_image = "french_fries.jpeg";
+        $temp->vendor_id = 2;
+        $temp->category_id = 1;
+        $temp->save();
     }
 }

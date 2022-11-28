@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use App\Models\VendorLocation;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VendorController extends Controller
 {
@@ -19,6 +22,117 @@ class VendorController extends Controller
         $vendors = Vendor::orderBy('created_at', 'desc')->paginate(10);
         $locations = VendorLocation::all();
         return view('admin.manage.vendors.index', compact('vendors', 'locations'));
+    }
+
+    public function view_analytics()
+    {
+        $vendors = Vendor::orderBy('created_at', 'asc')
+            ->withCount(['carts as transaction_count' => function ($query) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('created_at', '<=', Carbon::now())
+                        ->where('created_at', '>=', Carbon::now()->subDays(7));
+                })->select(DB::raw('count(distinct(transaction_id))'));
+            }])->withCount(['carts as total_income' => function ($query) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('created_at', '<=', Carbon::now())
+                        ->where('created_at', '>=', Carbon::now()->subDays(7));
+                })->select(DB::raw('sum(carts.price * quantity)'));
+            }])
+            ->paginate(10);
+
+        $fdate = Carbon::now();
+        $tdate =  Carbon::now()->subDays(7);
+        $datetime1 = new DateTime($fdate);
+        $datetime2 = new DateTime($tdate);
+        $interval = $datetime1->diff($datetime2);
+        $days = $interval->format('%a');
+
+        $vendor_sales = Vendor::orderBy('created_at', 'asc');
+
+        for ($i = 0; $i < $days; $i++) {
+            $date = Carbon::now()->subDays($i - 1)->toDateString();
+            $vendor_sales = $vendor_sales->withCount(["carts as $date" => function ($query) use ($i) {
+                $query->whereHas('transaction', function ($q) use ($i) {
+                    $q->where('created_at', '<', Carbon::now()->subDays($i - 1))
+                        ->where('created_at', '>=', Carbon::now()->subDays($i));
+                })->select(DB::raw('count(distinct(transaction_id))'));
+            }]);
+        }
+
+        $vendor_sales = $vendor_sales->get();
+
+        $sales = [];
+        $sales_keys = [];
+        $sales_names = [];
+
+        foreach ($vendor_sales as $key => $vendor) {
+            array_push($sales_keys, $key);
+            array_push($sales_names, $vendor->name);
+            if (count($sales) == 0) {
+                $new_vendor = [];
+                for ($i = 0; $i < $days; $i++) {
+                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    array_push($new_vendor, [
+                        "period" => $date,
+                        $key => $vendor[$date] ?? 0,
+                        "itouch" => 10
+                    ]);
+                }
+                array_push($sales, $new_vendor);
+            } else {
+                for ($i = 0; $i < $days; $i++) {
+                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $sales[0][$i][$key] = $vendor[$date] ?? 0;
+                }
+            }
+        }
+
+        $vendor_income = Vendor::orderBy('created_at', 'asc');
+
+        for ($i = 0; $i < $days; $i++) {
+            $date = Carbon::now()->subDays($i - 1)->toDateString();
+            $vendor_income = $vendor_income->withCount(["carts as $date" => function ($query) use ($i) {
+                $query->whereHas('transaction', function ($q) use ($i) {
+                    $q->where('created_at', '<', Carbon::now()->subDays($i - 1))
+                        ->where('created_at', '>=', Carbon::now()->subDays($i));
+                })->select(DB::raw('sum(carts.price * quantity)'));
+            }]);
+        }
+
+        $vendor_income = $vendor_income->get();
+
+        $income = [];
+        $income_keys = [];
+        $income_names = [];
+
+        foreach ($vendor_income as $key => $vendor) {
+            array_push($income_keys, $key);
+            array_push($income_names, $vendor->name);
+            if (count($income) == 0) {
+                $new_vendor = [];
+                for ($i = 0; $i < $days; $i++) {
+                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    array_push($new_vendor, [
+                        "period" => $date,
+                        $key => $vendor[$date] ?? 0,
+                        "itouch" => 10
+                    ]);
+                }
+                array_push($income, $new_vendor);
+            } else {
+                for ($i = 0; $i < $days; $i++) {
+                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $income[0][$i][$key] = $vendor[$date] ?? 0;
+                }
+            }
+        }
+
+        return view('admin.analytics.vendors.index', compact('vendors', 'sales', 'income', 'sales_keys', 'income_keys', 'sales_names', 'income_names'));
+    }
+
+    public function analytics_detail(Vendor $vendor)
+    {
+        return view('admin.analytics.vendors.detail', compact('vendor'));
     }
 
     /**
@@ -43,12 +157,12 @@ class VendorController extends Controller
         $photo = 'vendor-' . time() . '-' . $request['photo']->getClientOriginalName();
         $request->photo->move(public_path('uploads'), $photo);
         $vendor = Vendor::create([
-           'name' => $request->name,
-           'phone' => $request->phone,
-           'email' => $request->email,
-           'description' => $request->description,
-           'location_id' => $request->location,
-           'photo' => $photo
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'description' => $request->description,
+            'location_id' => $request->location,
+            'photo' => $photo
         ]);
         return redirect()->route('admin.vendor.index');
     }
@@ -85,19 +199,19 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        if($request->photo){
+        if ($request->photo) {
             $photo = 'vendor-' . time() . '-' . $request['photo']->getClientOriginalName();
             $request->photo->move(public_path('uploads'), $photo);
-        }else{
+        } else {
             $photo = $vendor->photo;
         }
         $vendor->update([
-           'name' => $request->name,
-           'phone' => $request->phone,
-           'email' => $request->email,
-           'description' => $request->description,
-           'location_id' => $request->location,
-           'photo' => $photo
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'description' => $request->description,
+            'location_id' => $request->location,
+            'photo' => $photo
         ]);
         return redirect()->route('admin.vendor.index');
     }
@@ -121,5 +235,136 @@ class VendorController extends Controller
             $vendors = Vendor::orderBy('created_at', $request->sort)->paginate(10);
         }
         return view('admin.manage.vendors.inc.vendor', compact('vendors'));
+    }
+    public function date_analytics(Request $request)
+    {
+        $fdate =  date('Y-m-d', strtotime($request->end_date . ' + 1 days'));
+        $tdate = $request->start_date;
+        $datetime1 = new DateTime($fdate);
+        $datetime2 = new DateTime($tdate);
+        $interval = $datetime1->diff($datetime2);
+        $days = $interval->format('%a');
+
+        $vendor_sales = Vendor::orderBy('created_at', 'asc');
+
+        for ($i = 0; $i < $days; $i++) {
+            $x = $i + 1;
+            $date = date('Y-m-d', strtotime($fdate . " - $x days"));
+            $vendor_sales = $vendor_sales->withCount(["carts as $date" => function ($query) use ($i, $x, $fdate, $tdate) {
+                $query->whereHas('transaction', function ($q) use ($i, $x, $fdate, $tdate) {
+                    $q->where('created_at', '<', date('Y-m-d', strtotime($fdate . " - $i days")))
+                        ->where('created_at', '>=', date('Y-m-d', strtotime($fdate . " - $x days")));
+                })->select(DB::raw('count(distinct(transaction_id))'));
+            }]);
+        }
+
+        $vendor_sales = $vendor_sales->get();
+
+        $sales = [];
+        $sales_keys = [];
+        $sales_names = [];
+
+        foreach ($vendor_sales as $key => $vendor) {
+            array_push($sales_keys, $key);
+            array_push($sales_names, $vendor->name);
+            if (count($sales) == 0) {
+                $new_vendor = [];
+                for ($i = 0; $i < $days; $i++) {
+                    $x = $i + 1;
+                    $date = date('Y-m-d', strtotime($fdate . " - $x days"));
+                    array_push($new_vendor, [
+                        "period" => $date,
+                        $key => $vendor[$date] ?? 0,
+                        "itouch" => 10
+                    ]);
+                }
+                array_push($sales, $new_vendor);
+            } else {
+                for ($i = 0; $i < $days; $i++) {
+                    $x = $i + 1;
+                    $date = date('Y-m-d', strtotime($fdate . " - $x days"));
+                    $sales[0][$i][$key] = $vendor[$date] ?? 0;
+                }
+            }
+        }
+
+        $vendor_income = Vendor::orderBy('created_at', 'asc');
+
+        for ($i = 0; $i < $days; $i++) {
+            $x = $i + 1;
+            $date = date('Y-m-d', strtotime($fdate . " - $x days"));
+            $vendor_income = $vendor_income->withCount(["carts as $date" => function ($query) use ($i, $x, $fdate, $tdate) {
+                $query->whereHas('transaction', function ($q) use ($i, $x, $fdate, $tdate) {
+                    $q->where('created_at', '<', date('Y-m-d', strtotime($fdate . " - $i days")))
+                        ->where('created_at', '>=', date('Y-m-d', strtotime($fdate . " - $x days")));
+                })->select(DB::raw('sum(carts.price * quantity)'));
+            }]);
+        }
+
+        $vendor_income = $vendor_income->get();
+
+        $income = [];
+        $income_keys = [];
+        $income_names = [];
+
+        foreach ($vendor_income as $key => $vendor) {
+            array_push($income_keys, $key);
+            array_push($income_names, $vendor->name);
+            if (count($income) == 0) {
+                $new_vendor = [];
+                for ($i = 0; $i < $days; $i++) {
+                    $x = $i + 1;
+                    $date = date('Y-m-d', strtotime($fdate . " - $x days"));
+                    array_push($new_vendor, [
+                        "period" => $date,
+                        $key => $vendor[$date] ?? 0,
+                        "itouch" => 10
+                    ]);
+                }
+                array_push($income, $new_vendor);
+            } else {
+                for ($i = 0; $i < $days; $i++) {
+                    $x = $i + 1;
+                    $date = date('Y-m-d', strtotime($fdate . " - $x days"));
+                    $income[0][$i][$key] = $vendor[$date] ?? 0;
+                }
+            }
+        }
+
+        $data = [
+            "sales" => $sales,
+            "sales_keys" => $sales_keys,
+            "sales_names" => $sales_names,
+            "income" => $income,
+            "income_keys" => $income_keys,
+            "income_names" => $income_names
+        ];
+
+        return $data;
+    }
+    public function sort_analytics(Request $request)
+    {
+        $vendors = Vendor::orderBy('created_at', 'asc')
+            ->withCount(['carts as transaction_count' => function ($query) use($request) {
+                $query->whereHas('transaction', function ($q) use($request) {
+                    $q->where('created_at', '>=', $request->start_date)
+                    ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')));
+                })->select(DB::raw('count(distinct(transaction_id))'));
+            }])->withCount(['carts as total_income' => function ($query) use($request) {
+                $query->whereHas('transaction', function ($q) use($request) {
+                    $q->where('created_at', '>=', $request->start_date)
+                    ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')));
+                })->select(DB::raw('sum(carts.price * quantity)'));
+            }]);
+        if ($request->sort == "transaction_count") {
+            $vendors = $vendors->orderBy('transaction_count', 'desc')->paginate(10);
+        } else if ($request->sort == "total_income") {
+            $vendors = $vendors->orderBy('total_income', 'desc')->paginate(10);
+        } else if ($request->sort == "rating") {
+            $vendors = $vendors->orderBy('rating', 'desc')->paginate(10);
+        } else {
+            $vendors = $vendors->paginate(10);
+        }
+        return view('admin.analytics.vendors.inc.vendor', compact('vendors'));
     }
 }

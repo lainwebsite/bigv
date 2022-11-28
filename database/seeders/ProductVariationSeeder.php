@@ -19,8 +19,6 @@ class ProductVariationSeeder extends Seeder
         $temp->name = "Shortcake";
         $temp->price = 40;
         $temp->discount = 0;
-        // $temp->discount_start_date = ;
-        // $temp->discount_end_date = ;
         $temp->product_id = 1;
         $temp->save();
 
@@ -28,8 +26,6 @@ class ProductVariationSeeder extends Seeder
         $temp->name = "Chocolate Cake";
         $temp->price = 20;
         $temp->discount = 0;
-        // $temp->discount_start_date = ;
-        // $temp->discount_end_date = ;
         $temp->product_id = 1;
         $temp->save();
 
@@ -37,9 +33,28 @@ class ProductVariationSeeder extends Seeder
         $temp->name = "Vanilla";
         $temp->price = 40;
         $temp->discount = 0;
-        // $temp->discount_start_date = ;
-        // $temp->discount_end_date = ;
         $temp->product_id = 2;
+        $temp->save();
+
+        $temp = new ProductVariation();
+        $temp->name = "Salt & Pepper";
+        $temp->price = 41;
+        $temp->discount = 0;
+        $temp->product_id = 3;
+        $temp->save();
+
+        $temp = new ProductVariation();
+        $temp->name = "BBQ";
+        $temp->price = 42;
+        $temp->discount = 0;
+        $temp->product_id = 3;
+        $temp->save();
+
+        $temp = new ProductVariation();
+        $temp->name = "Cheese";
+        $temp->price = 43;
+        $temp->discount = 0;
+        $temp->product_id = 3;
         $temp->save();
     }
 }

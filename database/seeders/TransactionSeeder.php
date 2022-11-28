@@ -111,7 +111,7 @@ class TransactionSeeder extends Seeder
         $temp->shipping_fee = 10;
         $temp->product_discount_total = 0;
         $temp->shipping_discount_total = 0;
-        $temp->delivery_date = Carbon::now();
+        $temp->delivery_date = Carbon::now()->subDays(1);
         $temp->billing_address_id = 1;
         $temp->shipping_address_id = 1;
         $temp->payment_method_id = 1;
@@ -119,6 +119,39 @@ class TransactionSeeder extends Seeder
         $temp->pickup_time_id = 1;
         $temp->status_id = 7;
         $temp->user_id = 1;
+        $temp->created_at = Carbon::now()->subDays(1);
+        $temp->save();
+
+        $temp = new Transaction();
+        $temp->total_price = 82;
+        $temp->shipping_fee = 10;
+        $temp->product_discount_total = 0;
+        $temp->shipping_discount_total = 0;
+        $temp->delivery_date = Carbon::now()->subDays(1);
+        $temp->billing_address_id = 1;
+        $temp->shipping_address_id = 1;
+        $temp->payment_method_id = 1;
+        $temp->pickup_method_id = 1;
+        $temp->pickup_time_id = 1;
+        $temp->status_id = 7;
+        $temp->user_id = 1;
+        $temp->created_at = Carbon::now()->subDays(1);
+        $temp->save();
+
+        $temp = new Transaction();
+        $temp->total_price = 82;
+        $temp->shipping_fee = 10;
+        $temp->product_discount_total = 0;
+        $temp->shipping_discount_total = 0;
+        $temp->delivery_date = Carbon::now()->subDays(1);
+        $temp->billing_address_id = 1;
+        $temp->shipping_address_id = 1;
+        $temp->payment_method_id = 1;
+        $temp->pickup_method_id = 1;
+        $temp->pickup_time_id = 1;
+        $temp->status_id = 7;
+        $temp->user_id = 1;
+        $temp->created_at = Carbon::now()->subDays(1);
         $temp->save();
     }
 }

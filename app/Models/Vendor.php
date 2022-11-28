@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vendor extends Model
 {
     use HasFactory;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     protected $fillable = [
         'name',
@@ -19,11 +20,20 @@ class Vendor extends Model
         'location_id'
     ];
 
-    public function location() {
+    public function location()
+    {
         return $this->belongsTo(VendorLocation::class, 'location_id', 'id');
     }
-    public function products() {
+    public function products()
+    {
         return $this->hasMany(Product::class, 'vendor_id', 'id');
+    }
+    public function variations()
+    {
+        return $this->hasManyThrough(ProductVariation::class, Product::class);
+    }
+    public function carts() {
+        return $this->hasManyDeep(Cart::class, [Product::class, ProductVariation::class]);
     }
     public function vendor_discounts()
     {

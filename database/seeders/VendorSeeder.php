@@ -22,5 +22,13 @@ class VendorSeeder extends Seeder
         $temp->description = "desc";
         $temp->location_id = 1;
         $temp->save();
+
+        $temp = new Vendor();
+        $temp->name = "South";
+        $temp->phone = "0812312313";
+        $temp->email = "south@gmail.com";
+        $temp->description = "desc";
+        $temp->location_id = 1;
+        $temp->save();
     }
 }

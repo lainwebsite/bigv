@@ -128,5 +128,8 @@ Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' 
     Route::resource('user-tier', AdminUserTierController::class);
     Route::post('vendor/sort', [AdminVendorController::class, 'sort'])->name('vendor.sort');
     Route::get('vendor/analytics', [AdminVendorController::class, 'view_analytics'])->name('vendor.view_analytics');
+    Route::get('vendor/analytics/{vendor}', [AdminVendorController::class, 'analytics_detail'])->name('vendor.analytics.detail');
+    Route::post('vendor/sort/analytics', [AdminVendorController::class, 'sort_analytics'])->name('vendor.sort_analytics');
+    Route::post('vendor/date/analytics', [AdminVendorController::class, 'date_analytics'])->name('vendor.date_analytics');
     Route::resource('vendor', AdminVendorController::class);
 });
