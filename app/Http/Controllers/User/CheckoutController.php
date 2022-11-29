@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\PaynowController;
+use App\Http\Controllers\User\PaymentGateway\PaynowController;
 use App\Models\Cart;
 use App\Models\PickupMethod;
 use App\Models\PickupTime;
