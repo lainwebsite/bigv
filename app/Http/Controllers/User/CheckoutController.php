@@ -12,6 +12,7 @@ use App\Models\UserAddress;
 use App\Models\Transaction;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class CheckoutController extends Controller
 {
@@ -193,6 +194,13 @@ class CheckoutController extends Controller
 
     public function transition()
     {
-        return redirect()->away('https://bigvsg.com/public/user/transaction');
+        $response = Http::withHeaders([
+            'X-BUSINESS-API-KEY' => '7cf06a78a52b715c117bca86fe326e3fffdc1288b9b6c5ed2fdaf102983477b7',
+            'X-Requested-With' => 'XMLHttpRequest',
+            'accept' => 'application/json',
+            'content-type' => 'application/json'
+        ])->get('https://api.sandbox.hit-pay.com/v1/payment-requests/');
+
+        return redirect('/user/transaction');
     }
 }

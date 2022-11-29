@@ -50,6 +50,7 @@ class PaynowController extends Controller
             // ]);
 
             $responseJSON = json_decode($response->getBody()->getContents());
+            dd($responseJSON);
             return redirect()->away($responseJSON->url);
         } catch (\GuzzleHttp\Exception\RequestException $ex) {
             dd($ex->getResponse()->getBody()->getContents());
@@ -60,10 +61,10 @@ class PaynowController extends Controller
     {
         DB::beginTransaction();
         try {
-            // $output = json_encode($request->all()) . "\r\n";
-            // foreach ($request->all() as $key => $data) {
-            //     $output .= $key . " : " . ($data == null ? "null" : $data) . "\r\n";
-            // }
+            $output = json_encode($request->all()) . "\r\n";
+            foreach ($request->all() as $key => $data) {
+                $output .= $key . " : " . ($data == null ? "null" : $data) . "\r\n";
+            }
             $data = $request->all();
             unset($data["hmac"]);
 
@@ -78,7 +79,7 @@ class PaynowController extends Controller
                 DB::commit();
             }
 
-            $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number;
+            $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number . "\r\n" . $output;
             Storage::disk('local')->put('status.txt', $status);
         } catch (\Exception $e) {
             DB::rollBack();
