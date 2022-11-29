@@ -58,25 +58,32 @@ class PaynowController extends Controller
 
     public function webhook(Request $request)
     {
-        // $output = json_encode($request->all()) . "\r\n";
-        // foreach ($request->all() as $key => $data) {
-        //     $output .= $key . " : " . ($data == null ? "null" : $data) . "\r\n";
-        // }
-        $data = $request->all();
-        unset($data["hmac"]);
+        DB::beginTransaction();
+        try {
+            // $output = json_encode($request->all()) . "\r\n";
+            // foreach ($request->all() as $key => $data) {
+            //     $output .= $key . " : " . ($data == null ? "null" : $data) . "\r\n";
+            // }
+            $data = $request->all();
+            unset($data["hmac"]);
 
-        $responseSignature = $request->hmac;
-        $generatedSignature = $this->generateSignatureArray("Uh09WlzhFDWFUYUZWWvO0gwvzebEwfpFRc1fs9aul60zbjX79fP0K9bAfFqMQAEU", $data);
+            $responseSignature = $request->hmac;
+            $generatedSignature = $this->generateSignatureArray("Uh09WlzhFDWFUYUZWWvO0gwvzebEwfpFRc1fs9aul60zbjX79fP0K9bAfFqMQAEU", $data);
 
-        $status = "FAIL";
-        if ($responseSignature == $generatedSignature) {
-            $status = "SUCCESS";
+            $status = "FAIL";
+            if ($responseSignature == $generatedSignature) {
+                $status = "SUCCESS";
 
-            DB::table('transactions')->where('id', $request->reference_number)->update(['status_id' => 2]);
+                DB::table('transactions')->where('id', $request->reference_number)->update(['status_id' => 2]);
+                DB::commit();
+            }
+
+            $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number;
+            Storage::disk('local')->put('status.txt', $status);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect('/user/transaction');
         }
-
-        $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number;
-        Storage::disk('local')->put('status.txt', $status);
     }
 
     public function generateSignatureArray($secret, array $args)
