@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User\PaymentGateway;
 
+use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
