@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User\PaymentGateway;
 
 use App\Http\Controllers\Controller;
+use App\Models\Transaction;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -68,7 +69,10 @@ class PaynowController extends Controller
         $status = "FAIL";
         if ($responseSignature == $generatedSignature) {
             $status = "SUCCESS";
+
+            Transaction::where('id', $request->reference_number)->update(['status_id', 2]);
         }
+
         $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ")";
         Storage::disk('local')->put('status.txt', $status);
     }
