@@ -59,7 +59,11 @@ Route::group(['middleware' => 'general'], function () {
     // Auth::routes(['verify' => false]);
     Auth::routes();
     Route::get('/', [PageController::class, 'home'])->name('home');
-    Route::get('/home-2', [PageController::class, 'home2'])->name('home2');
+    Route::get('/profiletes', [PageController::class, 'profile'])->name('profiletes');
+    Route::get('/promotes', [PageController::class, 'promo'])->name('promotes');
+    Route::get('/addresstes', [PageController::class, 'address'])->name('addresstes');
+    Route::get('/vendortes', [PageController::class, 'vendor'])->name('vendortes');
+    Route::get('/vendordettes', [PageController::class, 'vendordetail'])->name('vendordettes');
     // Route::get('/product', [PageController::class, 'products']);
     // Route::get('product/search', [ProductController::class, 'search']);
     // Route::post('product/sort', [ProductController::class, 'sort']);
