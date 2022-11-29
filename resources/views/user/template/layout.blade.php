@@ -111,15 +111,11 @@
                         <div class="div-line-orange"></div>
                         <a href="{{ route('user.cart.index') }}" class="text-color-grey w-nav-link"
                             style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-shopping-cart"></i></a>
-                        <a href="#" class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i
-                                class="fa fa-user-circle"></i></a>
+                        <a href="{{ route('user.transaction.index') }}" class="text-color-grey w-nav-link"
+                            style="font-size: 24px; padding: 20px 10px;"><i class="fa fa-user-circle"></i></a>
                     @endauth
 
                     @guest
-                        <!-- <a href="{{ route('login') }}">
-                                                    <img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}" loading="lazy"
-                                                    width="40" alt="" class="image-13" />
-                                                </a> -->
                         <div class="div-line-orange"></div><a href="{{ route('login') }}"
                             class="text-color-grey w-nav-link" style="font-size: 24px; padding: 20px 10px;"><i
                                 class="fa fa-user-circle"></i></a>
@@ -155,10 +151,14 @@
             <div class="flex align-vertical">
                 <div class="flex flex-vertical left-align margin-small">
                     <h4>Contact Us</h4>
-                    <a href="https://www.instagram.com/bigvsg.official/" target="_blank" class="text-color-white text-style-link">Instagram</a>
-                    <a href="https://www.facebook.com/BigVSG/" target="_blank" class="text-color-white text-style-link">Facebook</a>
-                    <a href="https://www.tiktok.com/@bigvsg.official" target="_blank" class="text-color-white text-style-link">Tiktok</a>
-                    <a href="https://api.whatsapp.com/send?phone=6582151509" target="_blank" class="text-color-white text-style-link">Whatsapp</a>
+                    <a href="https://www.instagram.com/bigvsg.official/" target="_blank"
+                        class="text-color-white text-style-link">Instagram</a>
+                    <a href="https://www.facebook.com/BigVSG/" target="_blank"
+                        class="text-color-white text-style-link">Facebook</a>
+                    <a href="https://www.tiktok.com/@bigvsg.official" target="_blank"
+                        class="text-color-white text-style-link">Tiktok</a>
+                    <a href="https://api.whatsapp.com/send?phone=6582151509" target="_blank"
+                        class="text-color-white text-style-link">Whatsapp</a>
                 </div>
                 <div class="flex flex-vertical left-align margin-small">
                     <h4>Company</h4><a href="#" class="text-color-white text-style-link">Become a Vendor</a><a
@@ -229,6 +229,22 @@
                 $(".input__suggestions-wrapper").hide();
             } else {
                 $(".input__suggestions-wrapper").show();
+            }
+        });
+
+        $(".page").on("click", function(e) {
+            var param = $(location).attr("search");
+
+            if (param != "") {
+                param = param.substring(1, param.length).split("&");
+                current_param = "";
+                param.forEach(function(item) {
+                    var items = item.split("=");
+                    if (items[0] != "page") {
+                        current_param += "&" + items[0] + "=" + items[1];
+                    }
+                });
+                $(this).attr("href", $(this).attr("href") + current_param);
             }
         });
     </script>

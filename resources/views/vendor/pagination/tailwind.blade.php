@@ -1,6 +1,7 @@
 <div class="pagination flex justify-center margin-large" style="gap: 10px; flex-wrap:wrap;">
     @if (!$paginator->onFirstPage())
-        <a href="{{ $paginator->previousPageUrl() }}" class="pagination-not-selected text-style-none" style="width: auto; border-radius: 0;">
+        <a href="{{ $paginator->previousPageUrl() }}" class="page pagination-not-selected text-style-none"
+            style="width: auto; border-radius: 0;">
             <div class="orange-text">Previous</div>
         </a>
     @endif
@@ -17,11 +18,11 @@
         @if (is_array($element))
             @foreach ($element as $page => $url)
                 @if ($page == $paginator->currentPage())
-                    <a href="#" class="pagination-selected text-style-none">
+                    <a href="#" class="page pagination-selected text-style-none">
                         <div class="text-color-white">{{ $page }}</div>
                     </a>
                 @else
-                    <a href="{{ $url }}" class="pagination-not-selected text-style-none">
+                    <a href="{{ $url }}" class="page pagination-not-selected text-style-none">
                         <div class="orange-text">{{ $page }}</div>
                     </a>
                 @endif
@@ -30,7 +31,8 @@
     @endforeach
 
     @if ($paginator->hasMorePages())
-        <a href="{{ $paginator->nextPageUrl() }}" class="pagination-not-selected text-style-none" style="width: auto; border-radius: 0;">
+        <a href="{{ $paginator->nextPageUrl() }}" class="page pagination-not-selected text-style-none"
+            style="width: auto; border-radius: 0;">
             <div class="orange-text">Next</div>
         </a>
     @endif

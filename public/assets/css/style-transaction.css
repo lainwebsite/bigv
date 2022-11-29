@@ -2973,6 +2973,46 @@ figcaption {
   justify-content: center;
 }
 
+.pagination-selected {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 20px;
+  background-color: #ff8000;
+  cursor: default;
+}
+
+.pagination-not-selected {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 20px;
+}
+
 .calculator-slider-input {
   display: none;
 }
@@ -3919,6 +3959,10 @@ figcaption {
   display: flex;
 }
 
+.text-style-none{
+  text-decoration: none;
+}
+
 .delivery-button {
   display: -webkit-box;
   display: -webkit-flex;
@@ -3945,17 +3989,7 @@ figcaption {
   background-color: #dadada;
 }
 
-.delivery-button:active {
-  background-color: #93bf4c;
-  color: #fff;
-}
-
-.delivery-button:focus {
-  background-color: #93bf4c;
-  color: #fff;
-}
-
-.delivery-button:visited {
+.delivery-button.selected {
   background-color: #93bf4c;
   color: #fff;
 }
@@ -4496,6 +4530,7 @@ figcaption {
 
 .transaction-card:hover {
   background-color: #f1f1f1;
+  cursor: pointer !important;
 }
 
 .new-products-text-div {

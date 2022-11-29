@@ -1,4 +1,4 @@
-@extends('template.layout')
+@extends('user.template.layout')
 
 @section('page-title')
     Transaction - Big V
@@ -265,14 +265,6 @@
                     <div class="inline text-weight-bold">Total</div>
                     <div class="inline text-weight-bold">$228</div>
                 </div>
-            </div>
-        </div>
-        <div class="pagination flex justify-center margin-large">
-            <div class="div-block-21">
-                <div class="text-color-white">1</div>
-            </div>
-            <div class="div-block-21-copy">
-                <div class="orange-text">1</div>
             </div>
         </div>
     </div>

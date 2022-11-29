@@ -69,7 +69,6 @@ Route::group(['middleware' => 'general'], function () {
 
 // Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
 Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], function () {
-    // Route::post('cart/{id}/{qty}', [CartController::class, 'update']);
     Route::post('cart/verify-checkout', [CheckoutController::class, 'preCheckout']);
     Route::post('cart/checkout/buy-now', [CheckoutController::class, 'buyNowCheckout']);
     Route::get('cart/checkout', [CheckoutController::class, 'getCheckout']);
@@ -90,6 +89,7 @@ Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], fu
     Route::resource('product-image', ProductImageController::class);
     Route::resource('product-review', ProductReviewController::class);
     Route::resource('product-variation', ProductVariationController::class);
+    Route::get('transaction/filter', [TransactionController::class, 'filter']);
     Route::resource('transaction', TransactionController::class);
     Route::resource('transaction-discount', TransactionDiscountController::class);
     Route::resource('transaction-status', TransactionStatusController::class);

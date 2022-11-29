@@ -30,20 +30,23 @@
             <div class="transactions-column">
                 <div class="flex gap-small column-responsive">
                     <div>Status</div>
-                    <div class="div-block-27 wrap-responsive"><a href="#" class="delivery-button w-inline-block">
-                            <div>Order Pending</div>
-                        </a><a href="#" class="delivery-button w-inline-block">
-                            <div>Paid</div>
-                        </a><a href="#" class="delivery-button w-inline-block">
-                            <div>Delivered</div>
-                        </a><a href="#" class="delivery-button w-inline-block">
-                            <div>Success</div>
-                        </a><a href="#" class="delivery-button w-inline-block">
-                            <div>Refund</div>
-                        </a></div>
+                    <div class="div-block-27 wrap-responsive">
+                        <a href="{{ url('user/transaction') }}"
+                            class="delivery-button w-inline-block @if (!isset($status_selected)) selected @endif">
+                            <div>All</div>
+                        </a>
+                        @foreach ($transaction_status as $status)
+                            <a href="{{ url('user/transaction/filter?status=' . $status->id) }}"
+                                class="delivery-button w-inline-block @if (isset($status_selected)) @if ($status_selected == $status->id) selected @endif @endif">
+                                <div>{{ $status->name }}</div>
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
                 @foreach ($transactions as $transaction)
                     <div class="transaction-card">
+                        <a class="transaction-detail" href="{{ url('user/transaction/' . $transaction->id) }}"
+                            style="text-decoration: none; display: none;"></a>
                         <div class="flex space-between">
                             <div class="flex gap-small">
                                 <div>
@@ -103,17 +106,42 @@
                 @endforeach
             </div>
         </div>
-        <div class="pagination flex justify-center margin-large" style="display:none;">
-            <div class="div-block-21">
-                <div class="text-color-white">1</div>
-            </div>
-            <div class="div-block-21-copy">
-                <div class="orange-text">1</div>
-            </div>
-        </div>
+        {{ $transactions->links() }}
     </div>
 @endsection
 
 @section('javascript-extra')
     <script src="{{ asset('assets/js/script-transaction.js') }}" type="text/javascript"></script>
+    <script>
+        var form = "#" + $(this).parents("form").attr("id");
+        var param = $(location).attr("search");
+
+        if (param != "") {
+            param = param.substring(1, param.length).split("&");
+            param.forEach(function(item) {
+                var items = item.split("=");
+                if (items[0] != "page") {
+                    if ($("input[type=hidden][name=" + items[0] + "]").length <= 0) {
+                        $("<input>").attr({
+                            type: "hidden",
+                            name: items[0],
+                            value: items[1]
+                        }).appendTo(form);
+                    }
+                }
+            });
+        }
+
+        $(".delivery-button").on("click", function() {
+            $(".delivery-button").each(function() {
+                $(this).removeClass("selected");
+            });
+            $(this).addClass("selected");
+        });
+
+        $(".transaction-card").on("click", function() {
+            window.location = $(this).find(".transaction-detail").attr("href");
+            return false;
+        });
+    </script>
 @endsection

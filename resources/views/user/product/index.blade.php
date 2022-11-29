@@ -93,7 +93,7 @@
                                     <p class="float-price">$</p>
                                 </div>
                             </div>
-                            <button type="submit" class="btn-filter submit-button atc-button margin-top w-button"
+                            <button type="submit" class="btn-filter-1 submit-button atc-button margin-top w-button"
                                 style="margin-top: 20px;">Filter</button>
                         </form>
                     </div>
@@ -147,8 +147,8 @@
                                                 min="0"
                                                 @if (isset($max_price)) value="{{ $max_price != 0 ? $max_price : '' }}" @endif>
                                         </div>
-                                        <button type="button"
-                                            class="btn-filter submit-button atc-button margin-top w-button"
+                                        <button type="submit"
+                                            class="btn-filter-2 submit-button atc-button margin-top w-button"
                                             style="margin-top: 20px;">Filter</button>
                                     </form>
                                 </div>
@@ -173,7 +173,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 @include('user.product.products')
             </div>
         </div>
@@ -197,7 +197,7 @@
                 $("#formFilter1 input[type=hidden][name=sort_by]").val($(this).val());
             }
 
-            $(".btn-filter").click();
+            $(".btn-filter-1").click();
         });
 
         $(".mini-sort a").on("click", function() {
@@ -211,42 +211,47 @@
                 $("#formFilter2 input[type=hidden][name=sort_by]").val($(this).attr("value"));
             }
 
-            $(".btn-filter").click();
+            $(".btn-filter-2").click();
         });
 
-        $(".btn-filter").on("click", function(e) {
+        $(".btn-filter-1, .btn-filter-2").on("click", function(e) {
             var form = "#" + $(this).parents("form").attr("id");
             var param = $(location).attr("search");
 
-            if (param != '') {
+            if (param != "") {
                 param = param.substring(1, param.length).split("&");
                 param.forEach(function(item) {
                     var items = item.split("=");
-                    if ($("input[type=hidden][name=" + items[0] + "]").length <= 0) {
-                        $("<input>").attr({
-                            type: "hidden",
-                            name: items[0],
-                            value: items[1]
-                        }).appendTo(form);
+                    if (items[0] != "page") {
+                        if ($("input[type=hidden][name=" + items[0] + "]").length <= 0) {
+                            $("<input>").attr({
+                                type: "hidden",
+                                name: items[0],
+                                value: items[1]
+                            }).appendTo(form);
+                        }
                     }
                 });
             }
 
-            checkedCategory = '';
+            checkedCategory = "";
             $(form + " .checkbox-category").each(function() {
                 if ($(this).prev().is(".w--redirected-checked")) {
                     checkedCategory += $(this).val() + ",";
                 }
             });
 
-            if ($(form + " input[type=hidden][name=category]").length <= 0) {
-                $("<input>").attr({
-                    type: "hidden",
-                    name: "category",
-                    value: (checkedCategory != '') ? checkedCategory.slice(0, -1) : ""
-                }).appendTo(form);
-            } else {
-                $(form + " input[type=hidden][name=category]").val((checkedCategory != '') ? checkedCategory.slice(0, -1) : "");
+            if ($(".checkbox-category").prev().is(".w--redirected-checked")) {
+                if ($(form + " input[type=hidden][name=category]").length <= 0) {
+                    $("<input>").attr({
+                        type: "hidden",
+                        name: "category",
+                        value: (checkedCategory != '') ? checkedCategory.slice(0, -1) : ""
+                    }).appendTo(form);
+                } else {
+                    $(form + " input[type=hidden][name=category]").val((checkedCategory != '') ? checkedCategory
+                        .slice(0, -1) : "");
+                }
             }
 
             if ($(form + " input[type=hidden][name=min_price]").length <= 0) {
