@@ -63,7 +63,7 @@ class PaynowController extends Controller
         unset($data["hmac"]);
 
         $responseSignature = $request->hmac;
-        $generatedSignature = $this->generateSignatureArray("7cf06a78a52b715c117bca86fe326e3fffdc1288b9b6c5ed2fdaf102983477b7", $data);
+        $generatedSignature = $this->generateSignatureArray("Uh09WlzhFDWFUYUZWWvO0gwvzebEwfpFRc1fs9aul60zbjX79fP0K9bAfFqMQAEU", $data);
 
         $status = "FAIL";
         if ($responseSignature == $generatedSignature) {
