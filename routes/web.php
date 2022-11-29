@@ -79,6 +79,7 @@ Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], fu
     Route::post('cart/checkout/buy-now', [CheckoutController::class, 'buyNowCheckout']);
     Route::get('cart/checkout', [CheckoutController::class, 'getCheckout']);
     // Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
+    Route::get('transition/transaction', [CheckoutController::class, 'transition']);
     Route::post('cart/checkout/place-order', function () {
         return redirect('/');
     });
