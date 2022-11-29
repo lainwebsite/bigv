@@ -102,7 +102,9 @@ class TransactionController extends Controller
                     'carts.quantity as qty',
                     'vendor_id',
                     'vendors.name as vendor_name',
+                    'vendors.photo as vendor_photo',
                     'products.name as product_name',
+                    'products.featured_image as product_featured_image',
                     'product_variations.name as product_variation_name',
                     'carts.price as product_price',
                 )

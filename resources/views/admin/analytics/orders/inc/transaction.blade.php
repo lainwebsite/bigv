@@ -16,7 +16,7 @@
                             <a href="{{ route('admin.transaction.show', $transaction->id) }}">{{ $transaction->id }}</a>
                         </td>
                         <td>{{ date_format(date_create($transaction->created_at), 'd/m/Y') }}</td>
-                        <td class="align-middle">{{ $transaction->carts->count() }}</td>
+                        <td class="align-middle">{{ $transaction->sold_count }}</td>
                         <td class="align-middle">${{ $transaction->total_price }}</td>
                     </tr>
                 @endforeach

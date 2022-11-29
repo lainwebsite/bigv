@@ -145,55 +145,57 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
-        if ($request->payment_gateway == 'atome') {
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json'
-            ])->post('https://api.apaylater.net/v2/payments', [
-                "referenceId" => "123456789",
-                "currency" => "SGD",
-                "amount" => 12010,
-                "callbackUrl" => "https://api.merchant-site.com/apaylater-callback",
-                "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
-                "customerInfo" => [
-                    "mobileNumber" => "+6587654321",
-                    "fullName" => "Atome Developer",
-                    "email" => "developer@atome.sg"
-                ],
-                "shippingAddress" => [
-                    "countryCode" => "SG",
-                    "lines" => [
-                        "80 Robinson Road",
-                        "#09-01",
-                        "Singapore, 068898"
-                    ],
-                    "postCode" => "068898"
-                ],
-                "items" => [
-                    [
-                        "itemId" => "P100",
-                        "name" => "iPhone",
-                        "price" => 11020,
-                        "quantity" => 1,
-                        "variationName" => "Black, 128GB",
-                        "originalPrice" => 12020,
-                        "categories" => [
-                            "Electronics"
-                        ]
-                    ],
-                    [
-                        "itemId" => "P101",
-                        "name" => "iPhone SE case",
-                        "price" => 1000,
-                        "quantity" => 1,
-                        "variationName" => "White",
-                        "categories" => [
-                            "Accessories"
-                        ]
-                    ]
-                ]
-            ]);
-            dd($response->status());
-        }
+        return redirect('/');
+        // if ($request->payment_gateway == 'atome') {
+        //     $response = Http::withHeaders([
+        //         'Content-Type' => 'application/json'
+        //     ])->post('https://api.apaylater.net/v2/payments', [
+        //         "referenceId" => "123456789",
+        //         "currency" => "SGD",
+        //         "amount" => 12010,
+        //         "callbackUrl" => "https://api.merchant-site.com/apaylater-callback",
+        //         "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
+        //         "customerInfo" => [
+        //             "mobileNumber" => "+6587654321",
+        //             "fullName" => "Atome Developer",
+        //             "email" => "developer@atome.sg"
+        //         ],
+        //         "shippingAddress" => [
+        //             "countryCode" => "SG",
+        //             "lines" => [
+        //                 "80 Robinson Road",
+        //                 "#09-01",
+        //                 "Singapore, 068898"
+        //             ],
+        //             "postCode" => "068898"
+        //         ],
+        //         "items" => [
+        //             [
+        //                 "itemId" => "P100",
+        //                 "name" => "iPhone",
+        //                 "price" => 11020,
+        //                 "quantity" => 1,
+        //                 "variationName" => "Black, 128GB",
+        //                 "originalPrice" => 12020,
+        //                 "categories" => [
+        //                     "Electronics"
+        //                 ]
+        //             ],
+        //             [
+        //                 "itemId" => "P101",
+        //                 "name" => "iPhone SE case",
+        //                 "price" => 1000,
+        //                 "quantity" => 1,
+        //                 "variationName" => "White",
+        //                 "categories" => [
+        //                     "Accessories"
+        //                 ]
+        //             ]
+        //         ]
+        //     ]);
+        //     dd($response->status());
+        // }
+
         // $request->validate([
         //     'delivery_date' => 'required|string|date_format:Y-m-h',
         //     // 'payment_method_id' => 'required|numeric',
