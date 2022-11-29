@@ -58,7 +58,7 @@
                             <div class="flex gap-small">
                                 <h5 class="text-color-dark-grey">Status</h5><a href="#"
                                     class="status-button-like w-inline-block">
-                                    <div>{{ $transaction->transaction_status->name }}</div>
+                                    <div>{{ $transaction->status->name }}</div>
                                 </a>
                             </div>
                         </div>
