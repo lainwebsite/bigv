@@ -167,11 +167,28 @@ class CartSeeder extends Seeder
                 $temp->product_variation_id = 2;
                 $temp->save();
 
-                $temp = new Cart();
-                $temp->price = 40;
-                $temp->quantity = 1;
-                $temp->user_id = 1;
-                $temp->product_variation_id = 3;
-                $temp->save();
-        }
+        $temp = new Cart();
+        $temp->price = 40;
+        $temp->quantity = 1;
+        $temp->user_id = 1;
+        $temp->product_variation_id = 3;
+        $temp->transaction_id = 7;
+        $temp->save();
+
+        $temp = new Cart();
+        $temp->price = 41;
+        $temp->quantity = 2;
+        $temp->user_id = 1;
+        $temp->product_variation_id = 4;
+        $temp->transaction_id = 8;
+        $temp->save();
+
+        $temp = new Cart();
+        $temp->price = 42;
+        $temp->quantity = 2;
+        $temp->user_id = 1;
+        $temp->product_variation_id = 5;
+        $temp->transaction_id = 9;
+        $temp->save();
+    }
 }

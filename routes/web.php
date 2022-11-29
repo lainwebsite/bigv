@@ -142,6 +142,8 @@ Route::group(['middleware' => ['admin'], 'as' => 'admin.', 'prefix' => 'admin'],
     Route::post('product/sort/analytics', [AdminProductController::class, 'sort_analytics'])->name('product.sort_analytics');
     Route::post('product/date/analytics', [AdminProductController::class, 'date_analytics'])->name('product.date_analytics');
     Route::get('product/analytics/{product}', [AdminProductController::class, 'analytics_detail'])->name('product.analytics.detail');
+    Route::post('product/sort/analytics/{product}', [AdminProductController::class, 'sort_analytics_detail'])->name('product.sort_analytics.detail');
+    Route::post('product/date/analytics/{product}', [AdminProductController::class, 'date_analytics_detail'])->name('product.date_analytics.detail');
     Route::resource('product', AdminProductController::class);
     Route::post('product-category/sort', [AdminProductCategoryController::class, 'sort'])->name('product-category.sort');
     Route::resource('product-category', AdminProductCategoryController::class);
@@ -166,5 +168,8 @@ Route::group(['middleware' => ['admin'], 'as' => 'admin.', 'prefix' => 'admin'],
     Route::resource('user-tier', AdminUserTierController::class);
     Route::post('vendor/sort', [AdminVendorController::class, 'sort'])->name('vendor.sort');
     Route::get('vendor/analytics', [AdminVendorController::class, 'view_analytics'])->name('vendor.view_analytics');
+    Route::get('vendor/analytics/{vendor}', [AdminVendorController::class, 'analytics_detail'])->name('vendor.analytics.detail');
+    Route::post('vendor/sort/analytics', [AdminVendorController::class, 'sort_analytics'])->name('vendor.sort_analytics');
+    Route::post('vendor/date/analytics', [AdminVendorController::class, 'date_analytics'])->name('vendor.date_analytics');
     Route::resource('vendor', AdminVendorController::class);
 });

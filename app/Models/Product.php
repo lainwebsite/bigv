@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'rating', 'featured_image',
+        'name', 'description', 'rating', 'featured_image', 'variation_name',
         'vendor_id', 'category_id'
     ];
 
@@ -43,5 +43,9 @@ class Product extends Model
     public function carts()
     {
         return $this->hasManyThrough(Cart::class, ProductVariation::class);
+    }
+    public function addons()
+    {
+        return $this->hasMany(Addon::class, 'product_id', 'id');
     }
 }

@@ -83,6 +83,22 @@
                                         </h4>
                                     </div>
                                     <p class="m-0">{{ $product->description }}</p>
+                                    <!-- Addon -->
+                                    <div class="divider-dash mt-4 mb-4"></div>
+                                    @foreach ($product->addons as $addon)
+                                        <h4 class="card-title">{{ $addon->name }} @if ($addon->required == 1)
+                                                (required)
+                                            @endif
+                                        </h4>
+                                        <p class="mb-3">
+                                            @foreach ($addon->options as $addon_option)
+                                                {{ $addon_option->name }} (${{ $addon_option->price }}) @if (!$loop->last)
+                                                    ,
+                                                @endif
+                                            @endforeach
+                                        </p>
+                                    @endforeach
+                                    <!-- Addon -->
                                 </div>
                             </div>
                         </div>

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('variation_name');
             $table->text('description')->nullable();
+            $table->text('variation_name')->nullable();
             $table->text('featured_image');
             $table->double('rating')->default(0);
             $table->timestamps();

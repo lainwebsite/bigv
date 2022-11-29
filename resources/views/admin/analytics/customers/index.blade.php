@@ -110,26 +110,26 @@ selected
                 </div>
             </div>
         </div>
+        <div class="row ml-2 mb-4">
+            <div class="col-lg-6 col-sm-12 d-flex align-items-center">
+                <h4 class="card-title m-0">Customer Analytics of the Specified Dates</h4>
+            </div>
+            <div class="col-lg-6 col-sm-12 d-flex justify-content-end">
+                <div class="d-flex align-items-center">
+                    <p class="mr-4 mb-0">Sort By</p>
+                    <div class="customize-input float-right mr-4">
+                        <select class="custom-select rounded-pill custom-select-set form-control bg-white custom-shadow custom-radius">
+                            <option value="1" selected="">Number of Transaction</option>
+                            <option value="2">Total Spent</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row mb-4">
-                            <div class="col-lg-6 col-sm-12 d-flex align-items-center">
-                                <h4 class="card-title m-0">Customer Analytics of the Specified Dates</h4>
-                            </div>
-                            <div class="col-lg-6 col-sm-12 d-flex justify-content-end">
-                                <div class="d-flex align-items-center">
-                                    <p class="mr-4 mb-0">Sort By</p>
-                                    <div class="customize-input float-right mr-4">
-                                        <select class="custom-select rounded-pill custom-select-set form-control bg-white custom-shadow custom-radius">
-                                            <option value="1" selected="">Number of Transaction</option>
-                                            <option value="2">Total Spent</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="table-responsive">
                             <table id="zero_config" class="table table-striped">
                                 <thead>

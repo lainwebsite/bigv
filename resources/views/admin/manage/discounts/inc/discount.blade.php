@@ -27,7 +27,7 @@
                                 discount(s)</small>
                         </td>
                         <td class="align-middle">
-                            @if ($discount->type_id == 2)
+                            @if ($discount->voucher_type == 2)
                                 {{ $discount->amount }}%
                             @else
                                 ${{ $discount->amount }}
