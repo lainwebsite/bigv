@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\User\PaymentGateway\PaynowController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('response-atome', [CheckoutController::class, 'responseAtome']);
+Route::post('h/p/y/webhook', [PaynowController::class, 'webhook']);

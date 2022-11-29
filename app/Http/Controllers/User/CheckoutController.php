@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PaynowController;
 use App\Models\Cart;
 use App\Models\PickupMethod;
 use App\Models\PickupTime;
@@ -145,202 +146,38 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
-        return redirect('/');
-        // if ($request->payment_gateway == 'atome') {
-        //     $response = Http::withHeaders([
-        //         'Content-Type' => 'application/json'
-        //     ])->post('https://api.apaylater.net/v2/payments', [
-        //         "referenceId" => "123456789",
-        //         "currency" => "SGD",
-        //         "amount" => 12010,
-        //         "callbackUrl" => "https://api.merchant-site.com/apaylater-callback",
-        //         "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
-        //         "customerInfo" => [
-        //             "mobileNumber" => "+6587654321",
-        //             "fullName" => "Atome Developer",
-        //             "email" => "developer@atome.sg"
-        //         ],
-        //         "shippingAddress" => [
-        //             "countryCode" => "SG",
-        //             "lines" => [
-        //                 "80 Robinson Road",
-        //                 "#09-01",
-        //                 "Singapore, 068898"
-        //             ],
-        //             "postCode" => "068898"
-        //         ],
-        //         "items" => [
-        //             [
-        //                 "itemId" => "P100",
-        //                 "name" => "iPhone",
-        //                 "price" => 11020,
-        //                 "quantity" => 1,
-        //                 "variationName" => "Black, 128GB",
-        //                 "originalPrice" => 12020,
-        //                 "categories" => [
-        //                     "Electronics"
-        //                 ]
-        //             ],
-        //             [
-        //                 "itemId" => "P101",
-        //                 "name" => "iPhone SE case",
-        //                 "price" => 1000,
-        //                 "quantity" => 1,
-        //                 "variationName" => "White",
-        //                 "categories" => [
-        //                     "Accessories"
-        //                 ]
-        //             ]
-        //         ]
-        //     ]);
-        //     dd($response->status());
-        // }
-
-        // $request->validate([
-        //     'delivery_date' => 'required|string|date_format:Y-m-h',
-        //     // 'payment_method_id' => 'required|numeric',
-        //     'pickup_method_id' => 'required|numeric',
-        //     'pickup_time_id' => 'required|numeric',
-        //     'billing_address_id' => 'required_without:self_collection_address_id|numeric',
-        //     'self_collection_address_id' => 'required_without:billing_address_id|numeric',
-        //     'shipping_address_id' => 'sometimes|required|numeric',
-        // ]);
-
-        // $data = $request->all();
-        // $data += [
-        //     'total_price' => session()->get('total-checkout-price'),
-        //     'shipping_fee' => session()->get('shipping-price'),
-        //     'user_id' => auth()->user()->id,
-        //     'status_id' => 1, // default "Order Pending"
-        //     'payment_method_id' => 1, // contoh
-        // ];
-
-        // $transaction = Transaction::create($data);
-
-        // // update transaction id in cart
-        // $checkout_items = session()->get('checkout-items');
-        // foreach ($checkout_items as $item) {
-        //     Cart::where('id', $item)->update(['transaction_id' => $transaction->id]);
-        // }
-
-        // return redirect()->route('home');
-    }
-
-    public function responseAtome(Request $request)
-    {
-        dd($request);
-        // $response = Http::withHeaders([
-        //     'Content-Type' => 'application/json'
-        // ])->post('https://api.apaylater.net/v2/payments', [
-        //     "referenceId" => "123456789",
-        // ]);
-
-        // dd($response->status());
-    }
-
-    public function atomePayment(Request $request)
-    {
-        $response = Http::post('https://api.apaylater.net/v2/payments', [
-            "referenceId" => "123456789",
-            "currency" => "SGD",
-            "amount" => 12010,
-            "callbackUrl" => "https://api.merchant-site.com/response-atome",
-            "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
-            "customerInfo" => [
-                "mobileNumber" => "+6587654321",
-                "fullName" => "Atome Developer",
-                "email" => "developer@atome.sg"
-            ],
-            "shippingAddress" => [
-                "countryCode" => "SG",
-                "lines" => [
-                    "80 Robinson Road",
-                    "#09-01",
-                    "Singapore, 068898"
-                ],
-                "postCode" => "068898"
-            ],
-            "items" => [
-                [
-                    "itemId" => "P100",
-                    "name" => "iPhone",
-                    "price" => 11020,
-                    "quantity" => 1,
-                    "variationName" => "Black, 128GB",
-                    "originalPrice" => 12020,
-                    "categories" => [
-                        "Electronics"
-                    ]
-                ],
-                [
-                    "itemId" => "P101",
-                    "name" => "iPhone SE case",
-                    "price" => 1000,
-                    "quantity" => 1,
-                    "variationName" => "White",
-                    "categories" => [
-                        "Accessories"
-                    ]
-                ]
-            ]
+        $request->validate([
+            'delivery_date' => 'required|string|date_format:Y-m-h',
+            // 'payment_method_id' => 'required|numeric',
+            'pickup_method_id' => 'required|numeric',
+            'pickup_time_id' => 'required|numeric',
+            'billing_address_id' => 'required_without:self_collection_address_id|numeric',
+            'self_collection_address_id' => 'required_without:billing_address_id|numeric',
+            'shipping_address_id' => 'sometimes|required|numeric',
         ]);
-        // $response = Http::post('https://api.apaylater.net/v2/payments', [
-        //     "referenceId" => "123456789",
-        //     "currency" => "SGD",
-        //     "amount" => 12010,
-        //     "callbackUrl" => "https://api.merchant-site.com/apaylater-callback",
-        //     "paymentResultUrl" => "https://www.merchant-site.com/orders/2382178728179823",
-        //     "paymentCancelUrl" => "https://www.merchant-site.com/checkout",
-        //     "merchantReferenceId" => "P1293201980299030",
-        //     "customerInfo" => [
-        //         "mobileNumber" => "+6587654321",
-        //         "fullName" => "Atome Developer",
-        //         "email" => "developer@atome.sg"
-        //     ],
-        //     "shippingAddress" => [
-        //         "countryCode" => "SG",
-        //         "lines" => [
-        //             "80 Robinson Road",
-        //             "#09-01",
-        //             "Singapore, 068898"
-        //         ],
-        //         "postCode" => "068898"
-        //     ],
-        //     "billingAddress" => [
-        //         "countryCode" => "SG",
-        //         "lines" => [
-        //             "80 Robinson Road",
-        //             "#09-01",
-        //             "Singapore, 068898"
-        //         ],
-        //         "postCode" => "068898"
-        //     ],
-        //     "taxAmount" => 655,
-        //     "shippingAmount" => 1020,
-        //     "originalAmount" => 13020,
-        //     "items" => [
-        //         [
-        //             "itemId" => "P100",
-        //             "name" => "iPhone",
-        //             "price" => 11020,
-        //             "quantity" => 1,
-        //             "variationName" => "Black, 128GB",
-        //             "originalPrice" => 12020,
-        //             "categories" => [
-        //                 "Electronics"
-        //             ]
-        //         ],
-        //         [
-        //             "itemId" => "P101",
-        //             "name" => "iPhone SE case",
-        //             "price" => 1000,
-        //             "quantity" => 1,
-        //             "variationName" => "White",
-        //             "categories" => [
-        //                 "Accessories"
-        //             ]
-        //         ]
-        //     ]
-        // ]);
+
+        $data = $request->all();
+        $data += [
+            'total_price' => session()->get('total-checkout-price'),
+            'shipping_fee' => session()->get('shipping-price'),
+            'user_id' => auth()->user()->id,
+            'status_id' => 1, // default "Order Pending"
+            'payment_method_id' => 1, // contoh
+        ];
+
+        $transaction = Transaction::create($data);
+
+        // update transaction id in cart
+        $checkout_items = session()->get('checkout-items');
+        foreach ($checkout_items as $item) {
+            Cart::where('id', $item)->update(['transaction_id' => $transaction->id]);
+        }
+
+        if ($request->payment_gateway == 'paynow') {
+            $paynow = new PaynowController();
+            $paynow->pay($transaction->id);
+        }
+
+        return redirect('/');
     }
 }
