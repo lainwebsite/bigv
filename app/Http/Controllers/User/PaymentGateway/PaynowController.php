@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,7 +27,7 @@ class PaynowController extends Controller
                 'amount' => $total_price,
                 'payment_methods' => ['paynow_online'],
                 'currency' => 'SGD',
-                'redirect_url' => 'https://bigvsg.com/public/user/transition/transaction',
+                'redirect_url' => 'https://bigvsg.com/public/user/transaction',
                 'webhook' => 'https://bigvsg.com/public/api/h/p/y/webhook'
             ]);
 
@@ -71,7 +72,7 @@ class PaynowController extends Controller
         if ($responseSignature == $generatedSignature) {
             $status = "SUCCESS";
 
-            Transaction::where('id', $request->reference_number)->update(['status_id' => 2]);
+            DB::table('transactions')->where('id', $request->reference_number)->update(['status_id' => 2]);
         }
 
         $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number;

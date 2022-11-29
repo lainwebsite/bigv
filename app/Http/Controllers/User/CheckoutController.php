@@ -190,9 +190,4 @@ class CheckoutController extends Controller
 
         // return redirect('/');
     }
-
-    public function transition()
-    {
-        return redirect('/user/transaction');
-    }
 }
