@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PaynowController extends Controller
 {
-    public function pay($transaction_id = 0)
+    public function pay($total_price, $transaction_id = 0)
     {
         try {
             $response = Http::withHeaders([
@@ -20,7 +20,7 @@ class PaynowController extends Controller
             ])->post('https://api.sandbox.hit-pay.com/v1/payment-requests', [
                 'reference_number' => $transaction_id,
                 'phone' => auth()->user()->phone,
-                'amount' => '0.5',
+                'amount' => $total_price,
                 'payment_methods' => ['paynow_online'],
                 'currency' => 'SGD',
                 'redirect_url' => 'http://bigvsg.com/public/user/transaction',
