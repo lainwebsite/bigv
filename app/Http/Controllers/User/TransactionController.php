@@ -79,7 +79,7 @@ class TransactionController extends Controller
                 $query->with(['product_variation']);
             }, 'transaction_discounts' => function ($query) {
                 $query->with(['discount']);
-            }, 'billing_address', 'shipping_address', 'payment_method', 'pickup_method', 'pickup_time', 'transaction_status',
+            }, 'billing_address', 'shipping_address', 'payment_method', 'pickup_method', 'pickup_time', 'status',
             'transaction_discounts' => function ($query) {
                 $query->with(['discount']);
             }
@@ -115,17 +115,6 @@ class TransactionController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Transaction $transaction)
-    {
-        //
-    }
-
     public function filter(Request $request)
     {
         $status = $request->get('status', '');
@@ -150,7 +139,7 @@ class TransactionController extends Controller
                     ->orderBy('products.vendor_id', 'ASC')
                     ->get();
             }])
-            ->whereHas('transaction_status', function ($query) use ($status) {
+            ->whereHas('status', function ($query) use ($status) {
                 $query->where('id', $status);
             })->orderBy('created_at', 'DESC')->paginate(10);
         $transaction_statuses = TransactionStatus::all();

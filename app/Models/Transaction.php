@@ -58,7 +58,7 @@ class Transaction extends Model
     {
         return $this->belongsTo(PickupTime::class, 'pickup_time_id', 'id');
     }
-    public function transaction_status()
+    public function status()
     {
         return $this->belongsTo(TransactionStatus::class, 'status_id', 'id');
     }

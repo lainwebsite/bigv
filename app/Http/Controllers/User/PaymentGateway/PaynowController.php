@@ -24,8 +24,8 @@ class PaynowController extends Controller
                 'amount' => $total_price,
                 'payment_methods' => ['paynow_online'],
                 'currency' => 'SGD',
-                'redirect_url' => 'http://bigvsg.com/public/user/transaction',
-                'webhook' => 'http://bigvsg.com/public/api/h/p/y/webhook'
+                'redirect_url' => 'https://bigvsg.com/public/user/transaction',
+                'webhook' => 'https://bigvsg.com/public/api/h/p/y/webhook'
             ]);
 
             // $client = new Client();
