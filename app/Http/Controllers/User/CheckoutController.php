@@ -12,8 +12,6 @@ use App\Models\UserAddress;
 use App\Models\Transaction;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
-use Paynow\Payments\Paynow;
-use Illuminate\Support\Facades\Http;
 
 class CheckoutController extends Controller
 {

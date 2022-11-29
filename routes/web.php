@@ -24,6 +24,7 @@ use App\Http\Controllers\PickupAddressController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\DiscountController;
+use App\Http\Controllers\User\PaymentGateway\PaynowController;
 use App\Http\Controllers\User\PaymentMethodController;
 use App\Http\Controllers\User\PickupMethodController;
 use App\Http\Controllers\User\ProductCategoryController;
@@ -56,6 +57,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => 'general'], function () {
+    Route::get('coba', [PaynowController::class, 'coba']);
     // Auth::routes(['verify' => false]);
     Auth::routes();
     Route::get('/', [PageController::class, 'home'])->name('home');

@@ -93,4 +93,9 @@ class PaynowController extends Controller
 
         return $calculatedHmac;
     }
+
+    public function coba()
+    {
+        dd(Transaction::where('id', '21')->update(['status_id', 2]));
+    }
 }
