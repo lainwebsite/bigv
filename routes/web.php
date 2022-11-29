@@ -57,7 +57,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => 'general'], function () {
-    Route::get('coba', [PaynowController::class, 'coba']);
     // Auth::routes(['verify' => false]);
     Auth::routes();
     Route::get('/', [PageController::class, 'home'])->name('home');
