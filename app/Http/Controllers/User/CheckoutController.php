@@ -190,4 +190,9 @@ class CheckoutController extends Controller
 
         // return redirect('/');
     }
+
+    public function transition()
+    {
+        return redirect()->away('https://bigvsg.com/public/user/transaction');
+    }
 }
