@@ -1,7 +1,7 @@
 @extends('user.template.layout')
 
 @section('page-title')
-    Product Name - Big V
+{{ $product->name }} - Big V
 @endsection
 
 @section('head-extra')

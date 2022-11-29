@@ -55,17 +55,12 @@
     <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease"
         role="banner" class="navbar-3 sticky w-nav">
         <div class="w-container">
-            <a href="#" class="w-nav-brand"><img
+            <a href="{{url('/')}}" class="w-nav-brand"><img
                     src="{{ asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png') }}" loading="lazy"
                     width="80" alt="" /></a>
             <div class="menu-button w-nav-button">
                 <div data-w-id="a94f6aff-cf03-9ce6-7aab-1fe8609b45f0" class="d-117-menu-trigger-wrapper">
-                    <div data-w-id="a94f6aff-cf03-9ce6-7aab-1fe8609b45f1" class="d-117-line-wrapper">
-                        <div data-w-id="a94f6aff-cf03-9ce6-7aab-1fe8609b45f2" class="d-117-first-line"></div>
-                    </div>
-                    <div data-w-id="a94f6aff-cf03-9ce6-7aab-1fe8609b45f3" class="d-117-line-wrapper">
-                        <div data-w-id="a94f6aff-cf03-9ce6-7aab-1fe8609b45f4" class="d-117-second-line"></div>
-                    </div>
+                    <i class="fa fa-bars" style="color:#ff8000 !important;"></i>
                 </div>
             </div>
             <nav role="navigation" class="dropdown-nav padding-small w-nav-menu" id="nav-menu">

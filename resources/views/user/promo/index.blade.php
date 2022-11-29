@@ -1,7 +1,7 @@
 @extends('user.template.layout')
 
 @section('page-title')
-Transaction - Big V
+Promos - Big V
 @endsection
 
 @section('head-extra')
@@ -15,41 +15,42 @@ Transaction - Big V
     </div>
     <div class="transactions-page-wrapper">
       <div class="profile-page-menu">
-        <div class="flex gap-small"><img
-            src="{{asset('assets/630193c64ebe686851463727_profile-002.jpg')}}"
-            loading="lazy" width="40" alt="" class="image-13" />
-          <div>John Doe</div>
+        <div class="flex gap-small">
+          <div><b>{{auth()->user()->name}}</b></div>
         </div>
+        <div class="div-line" style="margin:0 !important;"></div>
         <div class="w-form">
-          <form id="email-form-2" name="email-form-2" data-name="Email Form 2" method="get" class="form-2"><label
-              for="email" class="transaction-menus">Transactions</label><label for="email"
-              class="transaction-menus">Profile Settings</label><label for="email"
-              class="transaction-menus">Addresses</label><label for="email" class="transaction-menus">Promos</label>
-          </form>
+          <div class="form-2">
+              <a href="{{url('/user/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Profile Settings</a>
+              <a href="{{url('/user/transaction')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Transactions</a>
+              <a href="{{url('/user/address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
+              <a href="{{url('/user/promo')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
+          </div>
         </div>
       </div>
       <div class="promo-column-profile">
         <div class="promo-row-top">
           <div class="text-size-small text-color-grey">Here are the Promos available for you</div>
-          <div class="promo-div">
-            <div id="w-node-_431f4a13-fa2b-44ca-bc6f-d5a892166bff-48a9ac08"><img
-                src="{{asset('assets/62fc7f0235498a4fb875692e_Rectangle 37.webp')}}"
-                loading="lazy" id="w-node-_431f4a13-fa2b-44ca-bc6f-d5a892166c00-48a9ac08" height="410"
-                sizes="(max-width: 479px) 46vw, (max-width: 767px) 52vw, (max-width: 991px) 54vw, 534.265625px"
-                srcset="{{asset('assets/62fc7f0235498a4fb875692e_Rectangle%2037.webp')}}"
-                alt="" class="image-26" /></div>
-            <div id="w-node-_431f4a13-fa2b-44ca-bc6f-d5a892166c01-48a9ac08" class="div-block"><img
-                src="{{asset('assets/62fc7f0235498a5404756931_Rectangle 38.webp')}}"
-                loading="lazy" id="w-node-_431f4a13-fa2b-44ca-bc6f-d5a892166c02-48a9ac08" alt="" class="ea-top" /></div>
-            <div id="w-node-_431f4a13-fa2b-44ca-bc6f-d5a892166c03-48a9ac08" class="div-block-2"><img
-                src="{{asset('assets/62fc7f0235498a3850756933_Rectangle 39.webp')}}"
-                loading="lazy" id="w-node-_431f4a13-fa2b-44ca-bc6f-d5a892166c04-48a9ac08" alt="" class="ea-right" />
+            <div class="promo-div">
+                <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c4-92c73a6a"><img
+                        src="{{ asset('assets/diskon1.jpg') }}" loading="lazy"
+                        id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c5-92c73a6a" height="410"
+                        sizes="(max-width: 479px) 46vw, (max-width: 767px) 41vw, (max-width: 991px) 50vw, 46vw"
+                        srcset="{{ asset('assets/diskon1.jpg') }}" alt=""
+                        class="ea-left" /></div>
+                <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c6-92c73a6a" class="div-block-2"><img
+                        src="{{ asset('assets/diskon2.webp') }}" loading="lazy"
+                        id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c7-92c73a6a" alt="" class="ea-top" />
+                </div>
+                <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c8-92c73a6a" class="div-block-2"><img
+                        src="{{ asset('assets/diskon3.jpg') }}" width="351" height="183" loading="lazy"
+                        id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c9-92c73a6a" alt="" class="ea-right" />
+                </div>
             </div>
-          </div>
         </div>
-        <div class="promo-row-bottom">
+        <div class="promo-row-bottom" style="margin-bottom: 5vh;">
           <div class="div-block-29">
-            <h4 class="heading-7">Apply Code</h4>
+            <h4 class="heading-7"><b>Apply Code</b></h4>
             <div class="form-block-2 w-form">
               <form id="email-form-2" name="email-form-2" data-name="Email Form 2" method="get"><input type="text"
                   class="text-field-2 w-input" maxlength="256" name="Code-2" data-name="Code 2" placeholder="Enter Code"
@@ -66,14 +67,6 @@ Transaction - Big V
           </div>
           @endfor
         </div>
-      </div>
-    </div>
-    <div class="pagination flex justify-center margin-large">
-      <div class="div-block-21">
-        <div class="text-color-white">1</div>
-      </div>
-      <div class="div-block-21-copy">
-        <div class="orange-text">1</div>
       </div>
     </div>
 </div>
