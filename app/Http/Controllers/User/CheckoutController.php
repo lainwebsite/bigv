@@ -186,7 +186,7 @@ class CheckoutController extends Controller
         ]);
 
         $paynow = new PaynowController();
-        $paynow->pay(0.8, $transaction->id);
+        return $paynow->pay(0.8, $transaction->id);
         // if ($request->payment_gateway == 'paynow') {
         // }
 
