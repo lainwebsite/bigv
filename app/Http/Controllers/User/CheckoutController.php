@@ -146,6 +146,7 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
+        dd("halo");
         // $request->validate([
         //     'delivery_date' => 'required|string|date_format:Y-m-h',
         //     // 'payment_method_id' => 'required|numeric',
