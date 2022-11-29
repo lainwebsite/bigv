@@ -71,7 +71,7 @@ class PaynowController extends Controller
         if ($responseSignature == $generatedSignature) {
             $status = "SUCCESS";
 
-            // Transaction::where('id', $request->reference_number)->update(['status_id', 2]);
+            Transaction::where('id', $request->reference_number)->update(['status_id' => 2]);
         }
 
         $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number;
@@ -96,6 +96,6 @@ class PaynowController extends Controller
 
     public function coba()
     {
-        dd(Transaction::where('id', '21')->update(['status_id', 2]));
+        dd(Transaction::where('id', '21')->update(['status_id' => 2]));
     }
 }
