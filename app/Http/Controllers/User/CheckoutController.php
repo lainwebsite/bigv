@@ -184,7 +184,6 @@ class CheckoutController extends Controller
             'status_id' => 1,
             'payment_method_id' => 1,
         ]);
-        dd($transaction);
 
         $paynow = new PaynowController();
         $paynow->pay(0.8, $transaction->id);
