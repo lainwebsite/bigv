@@ -22,3 +22,6 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 public/uploads
+public/index.php
+public/main
+.htaccess
