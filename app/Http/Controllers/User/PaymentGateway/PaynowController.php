@@ -45,8 +45,9 @@ class PaynowController extends Controller
             //         'content-type' => 'application/json',
             //     ]
             // ]);
-            dd($response->getBody());
-            // $responseJSON = json_decode($response->getBody()->getContents());
+
+            $responseJSON = json_decode($response->getBody()->getContents());
+            dd($responseJSON->url);
             // return redirect()->away($responseJSON->url);
         } catch (\GuzzleHttp\Exception\RequestException $ex) {
             dd($ex->getResponse()->getBody()->getContents());
