@@ -21,6 +21,7 @@ class PaynowController extends Controller
                 'content-type' => 'application/json'
             ])->post('https://api.sandbox.hit-pay.com/v1/payment-requests', [
                 'reference_number' => $transaction_id,
+                'email' => auth()->user()->email,
                 'phone' => auth()->user()->phone,
                 'amount' => $total_price,
                 'payment_methods' => ['paynow_online'],
@@ -73,7 +74,7 @@ class PaynowController extends Controller
             Transaction::where('id', $request->reference_number)->update(['status_id', 2]);
         }
 
-        $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ")";
+        $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number;
         Storage::disk('local')->put('status.txt', $status);
     }
 
