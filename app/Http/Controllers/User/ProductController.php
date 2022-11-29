@@ -45,7 +45,7 @@ class ProductController extends Controller
         }])->where('id', $product->id)->get()[0];
 
         $addons = Addon::where('product_id', $product->id)->with(['addons_options'])->get();
-        
+
         $productSuggestion = Product::withCount(['carts as items_sold' => function ($query) {
             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
         }])->inRandomOrder()->limit(10)->get();
@@ -60,7 +60,7 @@ class ProductController extends Controller
                     'minProductPrice' => $min,
                     'maxProductPrice' => $max,
                     'addons' => $addons,
-                    'productSuggestion'=>$productSuggestion
+                    'productSuggestion' => $productSuggestion
                 ]);
             }
         }
@@ -68,7 +68,7 @@ class ProductController extends Controller
         return view('user.product.detail', [
             'product' => $product,
             'addons' => $addons,
-            'productSuggestion'=>$productSuggestion
+            'productSuggestion' => $productSuggestion
         ]);
     }
 

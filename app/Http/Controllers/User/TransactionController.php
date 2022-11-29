@@ -152,7 +152,7 @@ class TransactionController extends Controller
             }])
             ->whereHas('transaction_status', function ($query) use ($status) {
                 $query->where('id', $status);
-            })->orderBy('created_at', 'DESC')->get();
+            })->orderBy('created_at', 'DESC')->paginate(10);
         $transaction_statuses = TransactionStatus::all();
 
         return view('user.transaction.history', [
