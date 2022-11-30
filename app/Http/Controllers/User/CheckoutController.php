@@ -11,6 +11,7 @@ use App\Models\ProductVariation;
 use App\Models\UserAddress;
 use App\Models\Transaction;
 use App\Models\Vendor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -192,15 +193,19 @@ class CheckoutController extends Controller
         // return redirect('/');
     }
 
-    public function transition()
+    public function transitStatusPayment(Request $request)
     {
-        // $response = Http::withHeaders([
-        //     'X-BUSINESS-API-KEY' => '7cf06a78a52b715c117bca86fe326e3fffdc1288b9b6c5ed2fdaf102983477b7',
-        //     'X-Requested-With' => 'XMLHttpRequest',
-        //     'accept' => 'application/json',
-        //     'content-type' => 'application/json'
-        // ])->get('https://api.sandbox.hit-pay.com/v1/payment-requests/');
+        $target = Carbon::now()->addMinute();
+        $transaction_id = $request->get('id');
+        do {
+            $now = Carbon::now();
+            $timeDiff = $target->diffInRealSeconds($now);
+            $transaction = Transaction::where('id', $transaction_id)->get();
+            if ($transaction->status_id == 2) {
+                break;
+            }
+        } while ($timeDiff > 0);
 
-        // return redirect('/user/transaction');
+        return redirect('/user/transaction');
     }
 }

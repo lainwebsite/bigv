@@ -27,8 +27,8 @@ class PaynowController extends Controller
                 'amount' => $total_price,
                 'payment_methods' => ['paynow_online'],
                 'currency' => 'SGD',
-                'redirect_url' => 'https://bigvsg.com/public/user/transaction',
-                // 'redirect_url' => 'https://bigvsg.com/public/user/transition/transaction',
+                // 'redirect_url' => 'https://bigvsg.com/public/user/transaction',
+                'redirect_url' => 'https://bigvsg.com/public/user/transit/transaction?id=' . $transaction_id,
                 'webhook' => 'https://bigvsg.com/public/api/h/p/y/webhook'
             ]);
 
@@ -82,10 +82,8 @@ class PaynowController extends Controller
 
             $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number . "\r\n" . $output;
             Storage::disk('local')->put('status.txt', $status);
-            return redirect()->away('https://bigvsg.com/public/user/transaction');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect('/user/transaction');
         }
     }
 
