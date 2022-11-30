@@ -18,7 +18,7 @@
                         @if (count($cart->products) > 0)
                             <div class="vendors-card ea-left">
                                 <div class="flex gap-medium"><img
-                                        src="{{asset($cart->photo)}}" loading="lazy"
+                                        src="{{asset('uploads/'.$cart->photo)}}" loading="lazy"
                                         alt="" class="image-17" />
                                     <div>
                                         <h5 class="text-color-dark-grey">{{ $cart->name }}</h5>
@@ -31,7 +31,7 @@
                                     <div class="vendor-item" vendor-id="{{ $cart->id }}">
                                         <div class="flex gap-medium">
                                             <input type="checkbox" class="product-cart" value="{{ $product->cart_id }}">
-                                            <img src="{{ asset($product->featured_image) }}" loading="lazy" alt=""
+                                            <img src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt=""
                                                 class="image-18" />
                                             <div>
                                                 <h5 class="text-color-dark-grey">{{ $product->product_name }}</h5>
@@ -93,7 +93,7 @@
                     <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none !important;">
                         <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
                             <div class="text-rich-text text-size-small text-color-orange">{{ $product->vendor->name }}</div><img
-                                src="{{ asset($product->featured_image) }}" loading="lazy" alt="" class="product-image" />
+                                src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt="" class="product-image" />
                             <div class="product-card-stars">
                                 @php($arr_rating = explode('.', $product->rating))
                                 @php($first_num = $arr_rating[0])

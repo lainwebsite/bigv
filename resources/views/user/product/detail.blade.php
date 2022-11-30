@@ -20,11 +20,11 @@
                 class="absolute shape-1 ea-right" />
             <div class="product-hero margin-auto">
                 <div class="content-col col--width-50 display-none">
-                    <img src="{{ asset($product->featured_image) }}" sizes="100vw"
-                        srcset="{{ asset($product->featured_image) }}" alt="" class="image-9 card27" />
+                    <img src="{{ asset('uploads/'.$product->featured_image) }}" sizes="100vw"
+                        srcset="{{ asset('uploads/'.$product->featured_image) }}" alt="" class="image-9 card27" />
                     @if (count($product->images) > 0)
                         @foreach ($product->images as $image)
-                            <img src="{{ asset($image->link) }}" sizes="100vw" srcset="{{ asset($image->link) }}"
+                            <img src="{{ asset('uploads/'.$image->link) }}" sizes="100vw" srcset="{{ asset('uploads/'.$image->link) }}"
                                 alt="" class="image-9 card27" />
                         @endforeach
                     @endif
@@ -32,12 +32,12 @@
                 <div id="productImage" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="{{ asset($product->featured_image) }}" alt="Product Image" class="d-block w-100" />
+                            <img src="{{ asset('uploads/'.$product->featured_image) }}" alt="Product Image" class="d-block w-100" />
                         </div>
                         @if (count($product->images) > 0)
                             @foreach ($product->images as $image)
                                 <div class="carousel-item">
-                                    <img src="{{ asset($image->link) }}" alt="Product Image" class="d-block w-100" />
+                                    <img src="{{ asset('uploads/'.$image->link) }}" alt="Product Image" class="d-block w-100" />
                                 </div>
                             @endforeach
                         @endif
@@ -262,7 +262,7 @@
         <div class="product-vendor-n-info ea-up" style="width: 90%;">
             <div class="div-block-8">
                 <div class="vendor-product-detail">
-                    <img src="{{ asset($product->vendor->photo) }}" loading="lazy" alt="" class="image-10" />
+                    <img src="{{ asset('uploads/'.$product->vendor->photo) }}" loading="lazy" alt="" class="image-10" />
                     <div class="vendor-detail-product-detail">
                         <h4 class="text-color-dark-grey">{{ $product->vendor->name }}</h4>
                         <div class="text-color-grey" style="font-size: 0.8rem;">Location:
@@ -560,7 +560,7 @@
                 <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none !important;">
                     <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
                         <div class="text-rich-text text-size-small text-color-orange">{{ $product->vendor->name }}</div>
-                        <img src="{{ asset($product->featured_image) }}" loading="lazy" alt=""
+                        <img src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt=""
                             class="product-image" />
                         <div class="product-card-stars">
                             @php($arr_rating = explode('.', $product->rating))
@@ -629,7 +629,7 @@
                     </div>
                 </a>
             @endforeach
-        </div><a href="#" class="button margin-top margin-large ea-grow w-button">See More</a>
+        </div><a href="{{url('product')}}" class="button margin-top margin-large ea-grow w-button">See More</a>
         <div data-w-id="2763fafa-9663-7a88-db5c-9d4056894d11" class="product-info"></div>
     </div>
     <div class="cursor">

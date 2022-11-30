@@ -4,7 +4,7 @@
         <a href="{{ route('product.show', $product->id) }}" class="text-style-none">
             <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
                 <div class="text-rich-text text-size-small text-color-grey">{{ $product->vendor->name }}</div><img
-                    src="{{ asset($product->featured_image) }}" loading="lazy" alt="" class="product-image" />
+                    src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt="" class="product-image" />
                 <div class="product-card-stars">
                     @php($arr_rating = explode('.', $product->rating))
                     @php($first_num = $arr_rating[0])

@@ -27,10 +27,10 @@
                     </form>
                 </div>
             </div>
-            <div class="transactions-column">
+            <div class="transactions-column" style="padding: 20px;">
                 <div class="flex gap-small column-responsive">
                     <div>Status</div>
-                    <div class="div-block-27 wrap-responsive">
+                    <div class="div-block-27 wrap-responsive" style="flex-wrap:wrap; gap: 9px;">
                         <a href="{{ url('user/transaction') }}"
                             class="delivery-button w-inline-block @if (!isset($status_selected)) selected @endif">
                             <div>All</div>

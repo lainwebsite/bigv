@@ -85,12 +85,12 @@
                             data-w-id="bca3a5c8-7269-035c-5884-488e78117e57" class="nav-link w-nav-link">Products</a>
                         <div class="underline"></div>
                     </div>
-                    <div class="nav-link-wrapper"><a href="#" data-w-id="bca3a5c8-7269-035c-5884-488e78117e5b"
-                            class="nav-link w-nav-link">About Us</a>
+                    <div class="nav-link-wrapper"><a href="{{url('vendor')}}" data-w-id="bca3a5c8-7269-035c-5884-488e78117e5b"
+                            class="nav-link w-nav-link">Vendors</a>
                         <div class="underline"></div>
                     </div>
                     <div class="nav-link-wrapper"><a href="#" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb"
-                            class="nav-link w-nav-link">Event</a>
+                            class="nav-link w-nav-link">About Us</a>
                         <div class="underline"></div>
                     </div>
                     <div class="nav-link-wrapper">
@@ -199,7 +199,7 @@
                     <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none !important;">
                         <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
                             <div class="text-rich-text text-size-small text-color-orange">{{ $product->vendor->name }}</div><img
-                                src="{{ asset($product->featured_image) }}" loading="lazy" alt="" class="product-image" />
+                                src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt="" class="product-image" />
                             <div class="product-card-stars">
                                 @php($arr_rating = explode('.', $product->rating))
                                 @php($first_num = $arr_rating[0])
@@ -274,7 +274,7 @@
                     <a href="{{ route('product.show', $product->id) }}" style="text-decoration: none !important;">
                         <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
                             <div class="text-rich-text text-size-small text-color-orange">{{ $product->vendor->name }}</div><img
-                                src="{{ asset($product->featured_image) }}" loading="lazy" alt="" class="product-image" />
+                                src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt="" class="product-image" />
                             <div class="product-card-stars">
                                 @php($arr_rating = explode('.', $product->rating))
                                 @php($first_num = $arr_rating[0])
@@ -409,10 +409,10 @@
             class="image-25" /></div>
     <div class="soft-sell-section">
         <div class="soft-sell-left d-flex">
-            <div class="heading-xlarge ea-top">Fun<span class="orange-text"> Cooking</span><br />with <span
-                    class="orange-text">Catherine</span></div>
-            <div class="heading-medium orange-text ea-left">9th October</div>
-            <div class="text-size-regular text-color-grey ea-left character-limit">Come and cook together with the infamous Chef Catherine, and level up your cooking skills, and your homecook meals will taste no different from a 5 star restaurant. Sign up Now!</div><a
+            <div class="heading-xlarge ea-top">Join us at<span class="orange-text"> Albert Street Pasar Malan </span> at <span
+                    class="orange-text">Tekka Place</span></div>
+            <!--<div class="heading-medium orange-text ea-left">9th October</div>-->
+            <div class="text-size-regular text-color-grey ea-left character-limit">Sign up Now!</div><a
                 href="#" class="button ea-bottom w-button">Enroll Now</a>
         </div>
         <div class="soft-sell-right"><img src="{{ asset('assets/62fc7f2786b3fffd6833776d_BigV Woman V (1).webp') }}"
@@ -450,9 +450,9 @@
                 src="{{ asset('assets/636a8676e25120c679da870b_5_SupermarketGuide_Poster.png') }}" loading="lazy"
                 alt="" class="image-8 ea-left" /></div>
     </div>
-    <div class="testimonial-section">
-        <div class="heading-large text-align-center text-color-white ea-top">What People Say</div>
-        <div class="testimonial-grid">
+    <div class="testimonial-section" style="min-height: 20vh;">
+        <div class="heading-large text-align-center text-color-white ea-top" style="display: none;">What People Say</div>
+        <div class="testimonial-grid" style="display: none;">
             <div class="testimonial-card"><img
                     src="{{ asset('assets/62fc7f3686b3ffedc7337819_Rectangle%2040.jpg') }}" loading="lazy"
                     alt="" class="testimonial-image" />

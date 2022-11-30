@@ -99,8 +99,8 @@
                 </div><a href="{{ url('/') }}" class="text-color-grey w-nav-link">Home</a>
                 <div class="div-line-orange"></div><a href="{{ url('product') }}"
                     class="text-color-grey w-nav-link">Products</a>
+                <div class="div-line-orange"></div><a href="{{url('vendor')}}" class="text-color-grey w-nav-link">Vendors</a>
                 <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">About Us</a>
-                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">Event</a>
                 <div class="div-block-22">
                     @auth
                         <div class="div-line-orange"></div>

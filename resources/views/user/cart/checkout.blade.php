@@ -171,7 +171,7 @@
                     </div>
                     @foreach ($checkouts as $checkout)
                         <div class="vendors-card ea-left">
-                            <div class="flex gap-medium"><img src="{{ asset($checkout->photo) }}" loading="lazy"
+                            <div class="flex gap-medium"><img src="{{ asset('uploads/'.$checkout->photo) }}" loading="lazy"
                                     alt="" class="image-17" />
                                 <div>
                                     <h5 class="text-color-dark-grey">{{ $checkout->name }}</h5>
@@ -183,7 +183,7 @@
                             @foreach ($checkout->products as $product)
                                 <div class="vendor-item">
                                     <div class="flex gap-medium">
-                                        <img loading="lazy" srcset="{{ asset($product->featured_image) }}" alt=""
+                                        <img loading="lazy" srcset="{{ asset('uploads/'.$product->featured_image) }}" alt=""
                                             class="image-18" />
                                         <div>
                                             <h5 class="text-color-dark-grey">{{ $product->product_name }}</h5>

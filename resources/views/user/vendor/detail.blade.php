@@ -14,7 +14,7 @@
         <div class="vendor-details row" style="gap:0 !important; margin: 0 !important; width: 100%;">
             <div class="vendor-left-column col-sm-12 col-md-4 mb-4 ">
                 <div class="w-100 d-flex justify-content-center">
-                    <img src="{{ asset($vendor->photo) }}" class="w-100" style="max-width:300px; border-radius: 27px;"
+                    <img src="{{ asset('uploads/'.$vendor->photo) }}" class="w-100" style="max-width:300px; border-radius: 27px;"
                         alt="">
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <a href="{{ route('product.show', $product->id) }}" class="text-style-none">
                         <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
                             <div class="text-rich-text text-size-small text-color-grey">{{ $product->vendor->name }}</div>
-                            <img src="{{ asset($product->featured_image) }}" loading="lazy" alt=""
+                            <img src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt=""
                                 class="product-image" />
                             <div class="product-card-stars">
                                 @php($arr_rating = explode('.', $product->rating))
