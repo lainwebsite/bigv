@@ -82,7 +82,7 @@ class PaynowController extends Controller
 
             $status .= "(response hitpay: " . $responseSignature . ", generated: " . $generatedSignature . ") - " . $request->reference_number . "\r\n" . $output;
             Storage::disk('local')->put('status.txt', $status);
-            return redirect('/user/transaction');
+            return redirect()->away('https://bigvsg.com/public/user/transaction');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect('/user/transaction');
