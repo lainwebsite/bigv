@@ -70,6 +70,7 @@ Route::group(['middleware' => 'general'], function () {
     // Route::post('product/sort', [ProductController::class, 'sort']);
     Route::get('product/filter', [ProductController::class, 'filter']);
     Route::resource('product', ProductController::class);
+    Route::resource('vendor', VendorController::class);
 });
 
 // Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
@@ -109,7 +110,6 @@ Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], fu
     Route::resource('user-address', UserAddressController::class);
     Route::resource('user-role', UserRoleController::class);
     Route::resource('user-tier', UserTierController::class);
-    Route::resource('vendor', VendorController::class);
 });
 
 // Route::group(['middleware' => ['user', 'verified']], function () {
