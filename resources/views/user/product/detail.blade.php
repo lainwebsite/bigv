@@ -315,8 +315,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{ url('user/vendor/' . $product->vendor->id) }}"
-                    class="text-style-link margin-right div-block-7">
+                <a href="{{ url('vendor/' . $product->vendor->id) }}" class="text-style-link margin-right div-block-7">
                     <div class="text-color-grey">Visit Vendor</div>
                 </a>
             </div>
