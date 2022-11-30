@@ -196,11 +196,12 @@ class CheckoutController extends Controller
     public function transitStatusPayment(Request $request)
     {
         $target = Carbon::now()->addMinute();
-        $transaction_id = $request->get('id');
+        $transaction_id = $request->get('id', 0);
         do {
             $now = Carbon::now();
             $timeDiff = $target->diffInRealSeconds($now);
             $transaction = Transaction::where('id', $transaction_id)->get();
+            dd($transaction);
             if ($transaction->status_id == 2) {
                 break;
             }
