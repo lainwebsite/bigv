@@ -200,8 +200,8 @@ class CheckoutController extends Controller
         do {
             $now = Carbon::now();
             $timeDiff = $target->diffInRealSeconds($now);
-            $transaction = Transaction::where('id', $transaction_id)->get();
-            dd($transaction);
+            $transaction = Transaction::where('id', $transaction_id)->first();
+
             if ($transaction->status_id == 2) {
                 break;
             }
