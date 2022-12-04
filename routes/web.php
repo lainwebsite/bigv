@@ -129,12 +129,12 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
 Route::group(['middleware' => ['admin'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [AdminPageController::class, 'dashboard'])->name('dashboard');
     Route::resource('cart', AdminCartController::class);
-    Route::post('discount/sort', [AdminDiscountController::class, 'sort'])->name('user.sort');
-    Route::post('discount/search', [AdminDiscountController::class, 'search'])->name('user.search');
-    Route::post('discount/get_variations', [AdminDiscountController::class, 'get_variations'])->name('user.get_variations');
-    Route::post('discount/search_voucher_product', [AdminDiscountController::class, 'search_voucher_product'])->name('user.search_voucher_product');
-    Route::post('discount/search_voucher_vendor', [AdminDiscountController::class, 'search_voucher_vendor'])->name('user.search_voucher_vendor');
-    Route::post('discount/search_voucher_category', [AdminDiscountController::class, 'search_voucher_category'])->name('user.search_voucher_category');
+    Route::post('discount/sort', [AdminDiscountController::class, 'sort'])->name('discount.sort');
+    Route::post('discount/search', [AdminDiscountController::class, 'search'])->name('discount.search');
+    Route::post('discount/get_variations', [AdminDiscountController::class, 'get_variations'])->name('discount.get_variations');
+    Route::post('discount/search_voucher_product', [AdminDiscountController::class, 'search_voucher_product'])->name('discount.search_voucher_product');
+    Route::post('discount/search_voucher_vendor', [AdminDiscountController::class, 'search_voucher_vendor'])->name('discount.search_voucher_vendor');
+    Route::post('discount/search_voucher_category', [AdminDiscountController::class, 'search_voucher_category'])->name('discount.search_voucher_category');
     Route::resource('discount', AdminDiscountController::class);
     Route::resource('payment-method', AdminPaymentMethodController::class);
     Route::resource('pickup-method', AdminPickupMethodController::class);
