@@ -21,10 +21,13 @@
                 </div>
                 <div class="w-form">
                     <form id="email-form-2" name="email-form-2" data-name="Email Form 2" method="get" class="form-2">
-                        <label for="email" class="transaction-menus">Transactions</label><label for="email"
-                            class="transaction-menus">Profile Settings</label><label for="email"
-                            class="transaction-menus">Addresses</label><label for="email"
-                            class="transaction-menus">Promos</label>
+                        <a href="{{ route('user.transaction.index') }}" class="text-color-gray"
+                            style="text-decoration: none;">Transactions</a>
+                        <a href="{{ route('user.index') }}" class="text-color-gray" style="text-decoration: none;">Profile
+                            Settings</a>
+                        <a href="{{ route('user.user-address.index') }}" class="text-color-gray"
+                            style="text-decoration: none;">Addresses</a>
+                        <a href="#" class="text-color-gray" style="text-decoration: none;">Promos</a>
                     </form>
                 </div>
             </div>
@@ -238,32 +241,32 @@
                 </div>
             </div>
             <div class="cart-summary">
-                <h4 class="text-color-dark-grey">Discount</h4><a href="#"
-                    class="payment-gateway-button w-inline-block">
-                    <div>
-                        <div class="text-weight-bold">Discount Name</div>
-                        <div class="text-size-xtiny">Discount terms and conditions like Discount 50% with minimum order $30
-                            and
-                            maximum discount $10</div>
-                    </div>
-                </a>
+                <h4 class="text-color-dark-grey">Discount</h4>
+                @foreach ($transaction->transaction_discounts as $td)
+                    <a href="#" class="payment-gateway-button w-inline-block">
+                        <div>
+                            <div class="text-weight-bold">{{$td->discount->name}}</div>
+                            <div class="text-size-xtiny">{{$td->discount->description}}</div>
+                        </div>
+                    </a>
+                @endforeach
                 <h4 class="heading-8 text-color-dark-grey">Summary</h4>
                 <div class="div-block-24 text-color-grey">
-                    <div class="inline">Total Price (30 items)</div>
-                    <div class="inline">$201</div>
+                    <div class="inline">Total Price ({{$transaction->carts->count()}} items)</div>
+                    <div class="inline">${{$transaction->total_price}}</div>
                 </div>
                 <div class="div-block-24 text-color-grey">
                     <div class="inline">Shipping Price</div>
-                    <div class="inline">$30</div>
+                    <div class="inline">${{$transaction->shipping_fee}}</div>
                 </div>
                 <div class="div-block-24 text-color-grey">
                     <div class="inline">Discounts</div>
-                    <div class="inline">- $3</div>
+                    <div class="inline">- ${{$transaction->product_discount_total + $transaction->shipping_discount_total}}</div>
                 </div>
                 <div class="div-line-sumarry"></div>
                 <div class="div-block-24 text-color-dark-grey">
                     <div class="inline text-weight-bold">Total</div>
-                    <div class="inline text-weight-bold">$228</div>
+                    <div class="inline text-weight-bold">${{$transaction->total_price + $transaction->shipping_fee - ($transaction->product_discount_total + $transaction->shipping_discount_total)}}</div>
                 </div>
             </div>
         </div>
