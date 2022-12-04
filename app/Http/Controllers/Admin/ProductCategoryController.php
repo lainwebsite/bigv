@@ -37,7 +37,7 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $image = 'categaory-' . time() . '-' . $request->image->getClientOriginalName();
+        $image = 'category-' . time() . '-' . $request->image->getClientOriginalName();
         $request->image->move(public_path('uploads'), $image);
 
         $category = ProductCategory::create([
