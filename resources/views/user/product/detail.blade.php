@@ -647,18 +647,18 @@
     </script>
     <script>
         $(".product-variation").on("click", function() {
-            if ($(this).hasClass("selected")) {
-                $(this).removeClass("selected");
+            if ($(this).hasClass("button-secondary-copy-selected")) {
+                $(this).removeClass("button-secondary-copy-selected");
                 $(".product-price").html("$" + $(".product-price").attr("min-price") + " - $" + $(".product-price")
                     .attr("max-price")).removeAttr("product-id");
                 $(".btn-add-cart").attr("disabled", "").addClass("btn-secondary");
                 $(".btn-buy-now").attr("disabled", "").addClass("btn-outline-secondary text-secondary");
             } else {
                 $(".product-variation").each(function() {
-                    $(this).removeClass("selected");
+                    $(this).removeClass("button-secondary-copy-selected");
                 });
 
-                $(this).addClass("selected");
+                $(this).addClass("button-secondary-copy-selected");
                 $(".product-price").html("$" + $(this).attr("price")).attr("variation-id", $(this).attr(
                     "variation-id"));
                 $(".btn-add-cart").removeAttr("disabled").removeClass("btn-secondary");

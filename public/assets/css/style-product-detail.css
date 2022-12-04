@@ -2889,7 +2889,7 @@ figcaption {
   color: #f7f7f7 !important;
 }
 
-.button-secondary-copy:focus {
+.button-secondary-copy-selected {
   background-color: #ff8000;
   color: #f7f7f7 !important;
 }

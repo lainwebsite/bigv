@@ -76,7 +76,7 @@ class UserController extends Controller
 
     public function profile()
     {
-        return view('user.profile');
+        return view('user.profile.index');
     }
 
     public function showEditProfile()
@@ -87,7 +87,9 @@ class UserController extends Controller
     public function editProfile(Request $request)
     {
         $request->validate([
-            'name' => 'sometimes|required|string|max:255',
+            'first_name' => 'sometimes|required|string|max:255',
+            'last_name' => 'sometimes|required|string|max:255',
+            'email' => 'required|string|max:255',
             'phone' => ['sometimes', 'required', 'regex:/^((\+65)|(65)|0)\d{7,10}$/', 'min:10', 'max:15'],
             'date_of_birth' => 'sometimes|required|date_format:Y-m-d',
         ]);

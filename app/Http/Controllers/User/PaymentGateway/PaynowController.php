@@ -16,11 +16,13 @@ class PaynowController extends Controller
     {
         try {
             $response = Http::withHeaders([
-                'X-BUSINESS-API-KEY' => '7cf06a78a52b715c117bca86fe326e3fffdc1288b9b6c5ed2fdaf102983477b7',
+                'X-BUSINESS-API-KEY' => '7cf06a78a52b715c117bca86fe326e3fffdc1288b9b6c5ed2fdaf102983477b7', //Test
+                // 'X-BUSINESS-API-KEY' => 'b17440ac8264ee31eead33c6ae3846d2c13b1d4a368d43af84ec39d643162270',
                 'X-Requested-With' => 'XMLHttpRequest',
                 'accept' => 'application/json',
                 'content-type' => 'application/json'
-            ])->post('https://api.sandbox.hit-pay.com/v1/payment-requests', [
+            ])->post('https://api.sandbox.hit-pay.com/v1/payment-requests', [ //Test
+            // ])->post('https://api.hit-pay.com/v1/payment-requests', [
                 'reference_number' => $transaction_id,
                 'email' => auth()->user()->email,
                 'phone' => auth()->user()->phone,
@@ -51,7 +53,6 @@ class PaynowController extends Controller
             // ]);
 
             $responseJSON = json_decode($response->getBody()->getContents());
-            // dd($responseJSON);
             return redirect()->away($responseJSON->url);
         } catch (\GuzzleHttp\Exception\RequestException $ex) {
             dd($ex->getResponse()->getBody()->getContents());
@@ -70,13 +71,14 @@ class PaynowController extends Controller
             unset($data["hmac"]);
 
             $responseSignature = $request->hmac;
-            $generatedSignature = $this->generateSignatureArray("Uh09WlzhFDWFUYUZWWvO0gwvzebEwfpFRc1fs9aul60zbjX79fP0K9bAfFqMQAEU", $data);
+            $generatedSignature = $this->generateSignatureArray("Uh09WlzhFDWFUYUZWWvO0gwvzebEwfpFRc1fs9aul60zbjX79fP0K9bAfFqMQAEU", $data); //Test
+            // $generatedSignature = $this->generateSignatureArray("qXVb5fXWszYn1AI7pYiVkGOlqWMnFmxkGqomi3igeuAZ67vdWOLoYRQytgvCvjZm", $data);
 
             $status = "FAIL";
             if ($responseSignature == $generatedSignature) {
                 $status = "SUCCESS";
 
-                DB::table('transactions')->where('id', $request->reference_number)->update(['status_id' => 2]);
+                // DB::table('transactions')->where('id', $request->reference_number)->update(['status_id' => 2]);
                 DB::commit();
             }
 

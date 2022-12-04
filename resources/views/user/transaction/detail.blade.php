@@ -106,7 +106,7 @@
                                                             <div class="c-product-rating__star star-review"
                                                                 style="cursor: pointer;" step="{{ $j }}">
                                                                 <div class="icon">
-                                                                    <div class="fas fa-star">
+                                                                    <div>
                                                                         <img src="{{ asset('assets/Star 1.svg') }}"
                                                                             loading="lazy" alt="" />
                                                                     </div>

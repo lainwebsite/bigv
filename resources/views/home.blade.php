@@ -165,7 +165,7 @@
             </div>
         </div>
     </div>
-    <div class="promo-section">
+    <div class="promo-section" style="margin-top: 20vh;">
         <div class="todays-pick-promo-container">
             <div class="heading-large margin-bottom margin-large ea-bottom">Latest Promos</div>
             <div class="promo-div" style="display:none;">

@@ -65,7 +65,7 @@ class CartController extends Controller
             ]);
 
             $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
-            $cart = Cart::whereNull('transaction_id')->where('product_variation_id', $request->product_variation_id)->first();
+            $cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('product_variation_id', $request->product_variation_id)->first();
 
             if ($request->quantity > 0) {
                 if ($cart == null) {

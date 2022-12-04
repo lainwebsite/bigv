@@ -4488,7 +4488,6 @@ figcaption {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 1170px;
   -webkit-box-pack: start;
   -webkit-justify-content: flex-start;
   -ms-flex-pack: start;

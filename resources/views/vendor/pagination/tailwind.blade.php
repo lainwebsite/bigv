@@ -1,13 +1,8 @@
-<ul class="pagination justify-content-center">
-
-    @if ($paginator->onFirstPage())
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-    @else
-        <li class="page-item">
-            <a class="page-link" href="{{ $paginator->previousPageUrl() }}">Previous</a>
-        </li>
+<div class="pagination justify-center margin-large" style="display: flex; gap: 10px; flex-wrap:wrap;">
+    @if (!$paginator->onFirstPage())
+        <a href="{{ $paginator->previousPageUrl() }}" class="page pagination-not-selected text-style-none" style="width: auto; border-radius: 0;">
+                    <div class="orange-text">Previous</div>
+        </a>
     @endif
     @foreach ($elements as $element)
         {{-- "Three Dots" Separator --}}
@@ -22,21 +17,21 @@
         @if (is_array($element))
             @foreach ($element as $page => $url)
                 @if ($page == $paginator->currentPage())
-                    <li class="page-item active"><a class="page-link" href="#">{{ $page }}</a></li>
+                    <a href="#" class="page pagination-selected text-style-none">
+                        <div class="text-color-white">{{ $page }}</div>
+                    </a>
                 @else
-                    <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                    </li>
+                    <a href="{{ $url }}" class="page pagination-not-selected text-style-none">
+                         <div class="orange-text">{{ $page }}</div>
+                    </a>
                 @endif
             @endforeach
         @endif
     @endforeach
     @if ($paginator->hasMorePages())
-        <li class="page-item">
-            <a class="page-link" href="{{ $paginator->nextPageUrl() }}">Next</a>
-        </li>
-    @else
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Next</a>
-        </li>
+        <a href="{{ $paginator->nextPageUrl() }}" class="page pagination-not-selected text-style-none"
+            style="width: auto; border-radius: 0;">
+            <div class="orange-text">Next</div>
+        </a>
     @endif
-</ul>
+</div>

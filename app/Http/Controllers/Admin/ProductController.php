@@ -85,16 +85,49 @@ class ProductController extends Controller
     {
         $featured = 'product-' . time() . '-' . $request->featured_image->getClientOriginalName();
         $request->featured_image->move(public_path('uploads'), $featured);
+        
+        $useVariations = $request->with_variation;
+        if ($useVariations == "on"){
+            $product = Product::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'rating' => 0,
+                'variation_name' => $request->variation_named,
+                'featured_image' => $featured,
+                'vendor_id' => $request->vendor,
+                'category_id' => $request->category
+            ]);
+            
+            if ($request->variation_name) {
+                foreach ($request->variation_name as $key => $variation) {
+                    ProductVariation::create([
+                        'name' => $request->variation_name[$key],
+                        'price' => $request->variation_price[$key],
+                        'product_id' => $product->id
+                    ]);
+                }
+            }
+        }
+        else {
+            $product = Product::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'rating' => 0,
+                'variation_name' => "novariation",
+                'featured_image' => $featured,
+                'vendor_id' => $request->vendor,
+                'category_id' => $request->category
+            ]);
+            
+            if ($request->variation_name) {
+                ProductVariation::create([
+                    'name' => "novariation",
+                    'price' => $request->product_price_no_var,
+                    'product_id' => $product->id
+                ]);
+            }
+        }
 
-        $product = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'rating' => 0,
-            'variation_name' => $request->variation_named,
-            'featured_image' => $featured,
-            'vendor_id' => $request->vendor,
-            'category_id' => $request->category
-        ]);
 
         if ($request->productImage) {
             foreach ($request->productImage as $key => $image) {
@@ -107,15 +140,6 @@ class ProductController extends Controller
             }
         }
 
-        if ($request->variation_name) {
-            foreach ($request->variation_name as $key => $variation) {
-                ProductVariation::create([
-                    'name' => $request->variation_name[$key],
-                    'price' => $request->variation_price[$key],
-                    'product_id' => $product->id
-                ]);
-            }
-        }
 
         if ($request->addon_name) {
             foreach ($request->option_name as $key => $option) {

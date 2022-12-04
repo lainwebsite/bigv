@@ -71,6 +71,7 @@ Route::group(['middleware' => 'general'], function () {
     Route::get('product/filter', [ProductController::class, 'filter']);
     Route::resource('product', ProductController::class);
     Route::resource('vendor', VendorController::class);
+    Route::get('/about', [PageController::class, 'about']);
 });
 
 // Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
@@ -81,9 +82,10 @@ Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], fu
     Route::get('cart/checkout', [CheckoutController::class, 'getCheckout']);
     // Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
     Route::get('transit/transaction', [CheckoutController::class, 'transitStatusPayment']);
-    Route::post('cart/checkout/place-order', function () {
-        return redirect('/');
-    });
+    // Route::post('cart/checkout/place-order', function () {
+    //     return redirect('/');
+    // });
+    Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
     Route::post('cart/checkout/atome', [CheckoutController::class, 'atomePayment']);
     Route::resource('cart', CartController::class);
     Route::get('checkout/product-discount/search', [DiscountController::class, 'productSearch']);
@@ -116,9 +118,9 @@ Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], fu
 Route::group(['middleware' => ['user']], function () {
     Route::resource('user', UserController::class);
 
-    Route::get('profile', [UserController::class, 'profile'])->name('profile');
-    Route::get('profile/edit', [UserController::class, 'showEditProfile'])->name('editProfileForm');
-    Route::post('profile/edit', [UserController::class, 'editProfile'])->name('editProfile');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    // Route::get('profile/edit', [UserController::class, 'showEditProfile'])->name('editProfileForm');
+    Route::post('/profile/edit', [UserController::class, 'editProfile'])->name('editProfile');
 });
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
