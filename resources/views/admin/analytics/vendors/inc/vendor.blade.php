@@ -15,7 +15,8 @@
                     <tr>
                         <td class="align-middle">{{ $loop->iteration }}</td>
                         <td>
-                            <a href="{{ route('admin.vendor.analytics.detail', $vendor->id) }}"
+                            <a
+                            {{-- href="{{ route('admin.vendor.analytics.detail', $vendor->id) }}" --}}
                                 class="a-normal d-flex align-items-center">
                                 <img class="d-flex br-18 mr-3" src="{{ asset('uploads/' . $vendor->photo) }}"
                                     width="60" alt="Generic placeholder image">

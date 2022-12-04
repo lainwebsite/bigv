@@ -164,6 +164,9 @@ Route::group(['middleware' => ['admin'], 'as' => 'admin.', 'prefix' => 'admin'],
     Route::post('user/sort', [AdminUserController::class, 'sort'])->name('user.sort');
     Route::post('user/analytics', [AdminUserController::class, 'analytics'])->name('user.analytics');
     Route::get('user/analytics', [AdminUserController::class, 'view_analytics'])->name('user.view_analytics');
+    Route::get('user/analytics/{user}', [AdminUserController::class, 'analytics_detail'])->name('user.analytics.detail');
+    Route::post('user/sort/analytics', [AdminUserController::class, 'sort_analytics'])->name('user.sort_analytics');
+    Route::post('user/date/analytics', [AdminUserController::class, 'date_analytics'])->name('user.date_analytics');
     Route::resource('user', AdminUserController::class);
     Route::resource('user-address', AdminUserAddressController::class);
     Route::resource('user-role', AdminUserRoleController::class);
