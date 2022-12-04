@@ -155,16 +155,31 @@
                                                         [{{ $transaction->billing_address->postal_code }}]</p>
                                                     <small>{{ $transaction->billing_address->additional_info }}</small>
                                                 </div>
-                                                <div class="col-6">
-                                                    <h4 class="card-title mb-4">Shipping Address</h4>
-                                                    <p class="m-0">{{ $transaction->shipping_address->name }}</p>
-                                                    <p class="m-0">{{ $transaction->shipping_address->phone }}</p>
-                                                    <p class="mb-2">[{{ $transaction->shipping_address->block_number }}]
-                                                        [{{ $transaction->shipping_address->street }}]<br>#[{{ $transaction->shipping_address->unit_level }}]-[{{ $transaction->shipping_address->unit_number }}]
-                                                        [{{ $transaction->shipping_address->building_name }}]<br>Singapore
-                                                        [{{ $transaction->shipping_address->postal_code }}]</p>
-                                                    <small>{{ $transaction->shipping_address->additional_info }}</small>
-                                                </div>
+                                                @if ($transaction->shipping_address)
+                                                    <div class="col-6">
+                                                        <h4 class="card-title mb-4">Shipping Address</h4>
+                                                        <p class="m-0">{{ $transaction->shipping_address->name }}</p>
+                                                        <p class="m-0">{{ $transaction->shipping_address->phone }}</p>
+                                                        <p class="mb-2">
+                                                            [{{ $transaction->shipping_address->block_number }}]
+                                                            [{{ $transaction->shipping_address->street }}]<br>#[{{ $transaction->shipping_address->unit_level }}]-[{{ $transaction->shipping_address->unit_number }}]
+                                                            [{{ $transaction->shipping_address->building_name }}]<br>Singapore
+                                                            [{{ $transaction->shipping_address->postal_code }}]</p>
+                                                        <small>{{ $transaction->shipping_address->additional_info }}</small>
+                                                    </div>
+                                                @else
+                                                    <div class="col-6">
+                                                        <h4 class="card-title mb-4">Shipping Address</h4>
+                                                        <p class="m-0">{{ $transaction->billing_address->name }}</p>
+                                                        <p class="m-0">{{ $transaction->billing_address->phone }}</p>
+                                                        <p class="mb-2">
+                                                            [{{ $transaction->billing_address->block_number }}]
+                                                            [{{ $transaction->billing_address->street }}]<br>#[{{ $transaction->billing_address->unit_level }}]-[{{ $transaction->billing_address->unit_number }}]
+                                                            [{{ $transaction->billing_address->building_name }}]<br>Singapore
+                                                            [{{ $transaction->billing_address->postal_code }}]</p>
+                                                        <small>{{ $transaction->billing_address->additional_info }}</small>
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div class="divider-dash mt-4 mb-4"></div>
                                             <div class="row">
