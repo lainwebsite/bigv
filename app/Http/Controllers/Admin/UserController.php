@@ -126,7 +126,11 @@ class UserController extends Controller
     public function sort(Request $request)
     {
         if ($request->filter) {
-            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('tier_id', $request->filter)->paginate(10);
+            if ($request->filter != "ban") {
+                $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('tier_id', $request->filter)->paginate(10);
+            } else {
+                $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('ban', 1)->paginate(10);
+            }
         } else {
             $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->paginate(10);
         }

@@ -62,6 +62,12 @@
                         </div>
                     </div>
                 @endforeach
+                <div id="status-filter-ban" class="card-not-selected pr-3 pl-3 pt-2 pb-2 status-filter"
+                    onclick="changeFilter('ban');">
+                    <div class="d-flex">
+                        <h6 class="m-0">Banned</h6>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-12">
