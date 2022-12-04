@@ -1,515 +1,351 @@
 @extends('admin.layout')
 
 @section('dashboard-selected')
-selected
+    selected
 @endsection
 
 @section('dashboard-link-active')
-active
+    active
 @endsection
 
 @section('content')
-<!-- ============================================================== -->
-<!-- Page wrapper  -->
-<!-- ============================================================== -->
-<div class="page-wrapper">
     <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
+    <!-- Page wrapper  -->
     <!-- ============================================================== -->
-    <div class="page-breadcrumb">
-        <div class="row">
-            <div class="col-7 align-self-center">
-                <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Good Morning Jason!</h3>
-                <div class="d-flex align-items-center">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb m-0 p-0">
-                            <li class="breadcrumb-item"><a href="index-2.html">Dashboard</a>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-            <div class="col-5 align-self-center">
-                <div class="customize-input float-right">
-                    <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
-                        <option selected>Aug 19</option>
-                        <option value="1">July 19</option>
-                        <option value="2">Jun 19</option>
-                    </select>
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-12 align-self-center">
+                    <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Welcome, {{ Auth::user()->name }}!
+                    </h3>
+                    <div class="d-flex align-items-center">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb m-0 p-0">
+                                <li class="breadcrumb-item"><a href="index-2.html">Dashboard</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
-    <div class="container-fluid">
-        <!-- *************************************************************** -->
-        <!-- Start First Cards -->
-        <!-- *************************************************************** -->
-        <div class="card-group">
-            <div class="card border-right">
-                <div class="card-body">
-                    <div class="d-flex d-lg-flex d-md-block align-items-center">
-                        <div>
-                            <div class="d-inline-flex align-items-center">
-                                <h2 class="text-dark mb-1 font-weight-medium">236</h2>
-                                <span
-                                    class="badge bg-primary font-12 text-white font-weight-medium badge-pill ml-2 d-lg-block d-md-none">+18.33%</span>
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- *************************************************************** -->
+            <!-- Start First Cards -->
+            <!-- *************************************************************** -->
+            <!-- Semua data disini di filter khusus hari ini saja kecuali yang total order pake all time -->
+            <div class="card-group">
+                <div class="card border-right">
+                    <div class="card-body">
+                        <div class="d-flex d-lg-flex d-md-block align-items-center">
+                            <div>
+                                <div class="d-inline-flex align-items-center">
+                                    <h2 class="text-dark mb-1 font-weight-medium">{{ $newusers->count() }}</h2>
+                                </div>
+                                <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Customers</h6>
                             </div>
-                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Clients</h6>
+                            <div class="ml-auto mt-md-3 mt-lg-0">
+                                <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
+                            </div>
                         </div>
-                        <div class="ml-auto mt-md-3 mt-lg-0">
-                            <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
+                    </div>
+                </div>
+                <div class="card border-right">
+                    <div class="card-body">
+                        <div class="d-flex d-lg-flex d-md-block align-items-center">
+                            <!-- Total income pake total nominal order semua orderan hari ini -->
+                            <div>
+                                <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
+                                        class="set-doller">$</sup>{{ $total_income }}</h2>
+                                <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Total Income</h6>
+                            </div>
+                            <div class="ml-auto mt-md-3 mt-lg-0">
+                                <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-right">
+                    <div class="card-body">
+                        <div class="d-flex d-lg-flex d-md-block align-items-center">
+                            <div>
+                                <div class="d-inline-flex align-items-center">
+                                    <h2 class="text-dark mb-1 font-weight-medium">{{ $transactions_daily->count() }}</h2>
+                                </div>
+                                <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Order</h6>
+                            </div>
+                            <div class="ml-auto mt-md-3 mt-lg-0">
+                                <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex d-lg-flex d-md-block align-items-center">
+                            <div>
+                                <h2 class="text-dark mb-1 font-weight-medium">{{ $transactions->count() }}</h2>
+                                <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Total Order</h6>
+                            </div>
+                            <div class="ml-auto mt-md-3 mt-lg-0">
+                                <span class="opacity-7 text-muted"><i data-feather="globe"></i></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card border-right">
+            <!-- *************************************************************** -->
+            <!-- End First Cards -->
+            <!-- *************************************************************** -->
+            <div class="card">
                 <div class="card-body">
-                    <div class="d-flex d-lg-flex d-md-block align-items-center">
-                        <div>
-                            <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                    class="set-doller">$</sup>18,306</h2>
-                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Earnings of Month
-                            </h6>
-                        </div>
-                        <div class="ml-auto mt-md-3 mt-lg-0">
-                            <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card border-right">
-                <div class="card-body">
-                    <div class="d-flex d-lg-flex d-md-block align-items-center">
-                        <div>
-                            <div class="d-inline-flex align-items-center">
-                                <h2 class="text-dark mb-1 font-weight-medium">1538</h2>
-                                <span
-                                    class="badge bg-danger font-12 text-white font-weight-medium badge-pill ml-2 d-md-none d-lg-block">-18.33%</span>
+                    <h4 class="card-title mb-4">Today Order(s) Report</h4>
+                    <!-- Filter buat hari ini saja -->
+                    <div class="row">
+                        <!-- Column -->
+                        <div class="col-md-6 col-lg-13 col-xlg-2">
+                            <div class="card card-hover">
+                                <div class="p-2 br-18 bg-danger text-center">
+                                    <h1 class="font-light text-white">
+                                        {{ $transactions_daily->where('status_id', 1)->count() }}</h1>
+                                    <h6 class="text-white">Order Pending</h6>
+                                </div>
                             </div>
-                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Projects</h6>
                         </div>
-                        <div class="ml-auto mt-md-3 mt-lg-0">
-                            <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
+                        <!-- Column -->
+                        <div class="col-md-6 col-lg-13 col-xlg-2">
+                            <div class="card card-hover">
+                                <div class="p-2 br-18 bg-primary text-center">
+                                    <h1 class="font-light text-white">
+                                        {{ $transactions_daily->where('status_id', 2)->count() }}</h1>
+                                    <h6 class="text-white">Paid</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Column -->
+                        <div class="col-md-6 col-lg-13 col-xlg-2">
+                            <div class="card card-hover">
+                                <div class="p-2 br-18 bg-cyan text-center">
+                                    <h1 class="font-light text-white">
+                                        {{ $transactions_daily->where('status_id', 3)->count() }}</h1>
+                                    <h6 class="text-white">Delivered</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Column -->
+                        <div class="col-md-6 col-lg-13 col-xlg-2">
+                            <div class="card card-hover">
+                                <div class="p-2 br-18 bg-success text-center">
+                                    <h1 class="font-light text-white">
+                                        {{ $transactions_daily->where('status_id', 4)->count() }}</h1>
+                                    <h6 class="text-white">Success</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Column -->
+                        <div class="col-md-6 col-lg-13 col-xlg-2">
+                            <div class="card card-hover">
+                                <div class="p-2 br-18 bg-dark text-center">
+                                    <h1 class="font-light text-white">
+                                        {{ $transactions_daily->where('status_id', 7)->count() }}</h1>
+                                    <h6 class="text-white">Refunded</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card">
+                <!-- DIbuat sama kaya yang di order analytics (seminggu / 7 hari terakhir aja) -->
                 <div class="card-body">
-                    <div class="d-flex d-lg-flex d-md-block align-items-center">
-                        <div>
-                            <h2 class="text-dark mb-1 font-weight-medium">864</h2>
-                            <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Projects</h6>
+                    <h4 class="card-title">Number of Orders</h4>
+                    <ul class="list-inline text-right">
+                        <li class="list-inline-item">
+                            <h5><i class="fa fa-circle mr-1 text-purple"></i>New Orders</h5>
+                        </li>
+                    </ul>
+                    <div id="number-of-order"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <!-- 5 orderan terakhir all time nggak harus hari ini -->
+                    <h4 class="card-title mb-4">Latest Order</h4>
+                    <div class="row">
+                        <div class="col pt-0 pb-0 pr-4 pl-4">
+                            <ul class="list-unstyled mb-5">
+                                @foreach ($transactions->take(5) as $transaction)
+                                    <li>
+                                        <div class="w-100 card custom-border my-2">
+                                            <div @class([
+                                                'card-header d-flex justify-content-between flex-column',
+                                                'bg-danger' => $transaction->status_id == 1,
+                                                'bg-primary' => $transaction->status_id == 2,
+                                                'bg-cyan' => $transaction->status_id == 3,
+                                                'bg-success' => $transaction->status_id == 4,
+                                                'bg-secondary' => $transaction->status_id == 5,
+                                                'bg-dark' => $transaction->status_id == 6,
+                                                'bg-dark' => $transaction->status_id == 7,
+                                            ])>
+                                                <div class="d-flex justify-content-between">
+                                                    <p class="m-0 text-white">
+                                                        {{ $transaction->billing_address->user->name }}</p>
+                                                    <p class="m-0 text-white">{{ $transaction->status->name }}
+                                                    </p>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="m-0 text-white">{{ $transaction->id }}</h6>
+                                                    <h6 class="m-0 text-white">{{ $transaction->created_at }}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                            <div class="card-body d-flex align-items-center" style="gap: 18px;">
+                                                <a href="{{ route('admin.transaction.show', $transaction->id) }}"
+                                                    class="w-100 a-normal">
+                                                    <div class="card-body p-0">
+                                                        <ul class="list-unstyled">
+                                                            <li class="media align-items-center">
+                                                                <img class="d-flex mr-3 br-18"
+                                                                    src="{{ asset('uploads/' . $transaction->carts->first()->product_variation->product->featured_image) }}"
+                                                                    width="60" alt="Generic placeholder image">
+                                                                <div class="media-body">
+                                                                    <h5 class="mt-0 mb-1">
+                                                                        <b>{{ $transaction->carts->first()->product_variation->product->name }}</b>
+                                                                    </h5>
+                                                                    <h6 class="m-0">
+                                                                        {{ $transaction->carts->first()->product_variation->name }}
+                                                                    </h6>
+                                                                    <h6 class="m-0">
+                                                                        {{ $transaction->carts->first()->price }}</h6>
+                                                                </div>
+                                                                <p class="m-0">
+                                                                    x{{ $transaction->carts->first()->quantity }}</p>
+                                                            </li>
+                                                        </ul>
+                                                        @if ($transaction->carts->count() > 1)
+                                                            <h6 class="text-right mt-1">+
+                                                                {{ $transaction->carts->count() - 1 }} other products
+                                                            </h6>
+                                                        @endif
+                                                        <div class="divider-dash"></div>
+                                                        <div class="d-flex justify-content-between">
+                                                            <p class="m-0"><b>Total Payment using
+                                                                    {{ $transaction->payment_method->name }}</b></p>
+                                                            <p class="m-0"><b>${{ $transaction->total_price }}</b>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
-                        <div class="ml-auto mt-md-3 mt-lg-0">
-                            <span class="opacity-7 text-muted"><i data-feather="globe"></i></span>
-                        </div>
+
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-primary text-white pr-4 pl-4" href="{{route('admin.transaction.index')}}">See More</a>
+                        <!-- ke halaman manage order -->
                     </div>
                 </div>
             </div>
         </div>
-        <!-- *************************************************************** -->
-        <!-- End First Cards -->
-        <!-- *************************************************************** -->
-        <!-- *************************************************************** -->
-        <!-- Start Sales Charts Section -->
-        <!-- *************************************************************** -->
-        <div class="row">
-            <div class="col-lg-4 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Total Sales</h4>
-                        <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
-                        <ul class="list-style-none mb-0">
-                            <li>
-                                <i class="fas fa-circle text-primary font-10 mr-2"></i>
-                                <span class="text-muted">Direct Sales</span>
-                                <span class="text-dark float-right font-weight-medium">$2346</span>
-                            </li>
-                            <li class="mt-3">
-                                <i class="fas fa-circle text-danger font-10 mr-2"></i>
-                                <span class="text-muted">Referral Sales</span>
-                                <span class="text-dark float-right font-weight-medium">$2108</span>
-                            </li>
-                            <li class="mt-3">
-                                <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                <span class="text-muted">Affiliate Sales</span>
-                                <span class="text-dark float-right font-weight-medium">$1204</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Net Income</h4>
-                        <div class="net-income mt-4 position-relative" style="height:294px;"></div>
-                        <ul class="list-inline text-center mt-5 mb-2">
-                            <li class="list-inline-item text-muted font-italic">Sales for this month</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title mb-4">Earning by Location</h4>
-                        <div class="" style="height:180px">
-                            <div id="visitbylocate" style="height:100%"></div>
-                        </div>
-                        <div class="row mb-3 align-items-center mt-1 mt-5">
-                            <div class="col-4 text-right">
-                                <span class="text-muted font-14">India</span>
-                            </div>
-                            <div class="col-5">
-                                <div class="progress" style="height: 5px;">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"
-                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                            <div class="col-3 text-right">
-                                <span class="mb-0 font-14 text-dark font-weight-medium">28%</span>
-                            </div>
-                        </div>
-                        <div class="row mb-3 align-items-center">
-                            <div class="col-4 text-right">
-                                <span class="text-muted font-14">UK</span>
-                            </div>
-                            <div class="col-5">
-                                <div class="progress" style="height: 5px;">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 74%"
-                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                            <div class="col-3 text-right">
-                                <span class="mb-0 font-14 text-dark font-weight-medium">21%</span>
-                            </div>
-                        </div>
-                        <div class="row mb-3 align-items-center">
-                            <div class="col-4 text-right">
-                                <span class="text-muted font-14">USA</span>
-                            </div>
-                            <div class="col-5">
-                                <div class="progress" style="height: 5px;">
-                                    <div class="progress-bar bg-cyan" role="progressbar" style="width: 60%"
-                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                            <div class="col-3 text-right">
-                                <span class="mb-0 font-14 text-dark font-weight-medium">18%</span>
-                            </div>
-                        </div>
-                        <div class="row align-items-center">
-                            <div class="col-4 text-right">
-                                <span class="text-muted font-14">China</span>
-                            </div>
-                            <div class="col-5">
-                                <div class="progress" style="height: 5px;">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
-                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                            <div class="col-3 text-right">
-                                <span class="mb-0 font-14 text-dark font-weight-medium">12%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- *************************************************************** -->
-        <!-- End Sales Charts Section -->
-        <!-- *************************************************************** -->
-        <!-- *************************************************************** -->
-        <!-- Start Location and Earnings Charts Section -->
-        <!-- *************************************************************** -->
-        <div class="row">
-            <div class="col-md-6 col-lg-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-start">
-                            <h4 class="card-title mb-0">Earning Statistics</h4>
-                            <div class="ml-auto">
-                                <div class="dropdown sub-dropdown">
-                                    <button class="btn btn-link text-muted dropdown-toggle" type="button"
-                                        id="dd1" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        <i data-feather="more-vertical"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd1">
-                                        <a class="dropdown-item" href="#">Insert</a>
-                                        <a class="dropdown-item" href="#">Update</a>
-                                        <a class="dropdown-item" href="#">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pl-4 mb-5">
-                            <div class="stats ct-charts position-relative" style="height: 315px;"></div>
-                        </div>
-                        <ul class="list-inline text-center mt-4 mb-0">
-                            <li class="list-inline-item text-muted font-italic">Earnings for this month</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Recent Activity</h4>
-                        <div class="mt-4 activity">
-                            <div class="d-flex align-items-start border-left-line pb-3">
-                                <div>
-                                    <a href="javascript:void(0)" class="btn btn-info btn-circle mb-2 btn-item">
-                                        <i data-feather="shopping-cart"></i>
-                                    </a>
-                                </div>
-                                <div class="ml-3 mt-2">
-                                    <h5 class="text-dark font-weight-medium mb-2">New Product Sold!</h5>
-                                    <p class="font-14 mb-2 text-muted">John Musa just purchased <br> Cannon 5M
-                                        Camera.
-                                    </p>
-                                    <span class="font-weight-light font-14 text-muted">10 Minutes Ago</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-start border-left-line pb-3">
-                                <div>
-                                    <a href="javascript:void(0)"
-                                        class="btn btn-danger btn-circle mb-2 btn-item">
-                                        <i data-feather="message-square"></i>
-                                    </a>
-                                </div>
-                                <div class="ml-3 mt-2">
-                                    <h5 class="text-dark font-weight-medium mb-2">New Support Ticket</h5>
-                                    <p class="font-14 mb-2 text-muted">Richardson just create support <br>
-                                        ticket</p>
-                                    <span class="font-weight-light font-14 text-muted">25 Minutes Ago</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-start border-left-line">
-                                <div>
-                                    <a href="javascript:void(0)" class="btn btn-cyan btn-circle mb-2 btn-item">
-                                        <i data-feather="bell"></i>
-                                    </a>
-                                </div>
-                                <div class="ml-3 mt-2">
-                                    <h5 class="text-dark font-weight-medium mb-2">Notification Pending Order!
-                                    </h5>
-                                    <p class="font-14 mb-2 text-muted">One Pending order from Ryne <br> Doe</p>
-                                    <span class="font-weight-light font-14 mb-1 d-block text-muted">2 Hours
-                                        Ago</span>
-                                    <a href="javascript:void(0)" class="font-14 border-bottom pb-1 border-info">Load More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- *************************************************************** -->
-        <!-- End Location and Earnings Charts Section -->
-        <!-- *************************************************************** -->
-        <!-- *************************************************************** -->
-        <!-- Start Top Leader Table -->
-        <!-- *************************************************************** -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-4">
-                            <h4 class="card-title">Top Leaders</h4>
-                            <div class="ml-auto">
-                                <div class="dropdown sub-dropdown">
-                                    <button class="btn btn-link text-muted dropdown-toggle" type="button"
-                                        id="dd1" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        <i data-feather="more-vertical"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd1">
-                                        <a class="dropdown-item" href="#">Insert</a>
-                                        <a class="dropdown-item" href="#">Update</a>
-                                        <a class="dropdown-item" href="#">Delete</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table no-wrap v-middle mb-0">
-                                <thead>
-                                    <tr class="border-0">
-                                        <th class="border-0 font-14 font-weight-medium text-muted">Team Lead
-                                        </th>
-                                        <th class="border-0 font-14 font-weight-medium text-muted px-2">Project
-                                        </th>
-                                        <th class="border-0 font-14 font-weight-medium text-muted">Team</th>
-                                        <th class="border-0 font-14 font-weight-medium text-muted text-center">
-                                            Status
-                                        </th>
-                                        <th class="border-0 font-14 font-weight-medium text-muted text-center">
-                                            Weeks
-                                        </th>
-                                        <th class="border-0 font-14 font-weight-medium text-muted">Budget</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="border-top-0 px-2 py-4">
-                                            <div class="d-flex no-block align-items-center">
-                                                <div class="mr-3"><img
-                                                        src="../assets/images/users/widget-table-pic1.jpg"
-                                                        alt="user" class="rounded-circle" width="45"
-                                                        height="45" /></div>
-                                                <div class="">
-                                                    <h5 class="text-dark mb-0 font-16 font-weight-medium">Hanna
-                                                        Gover</h5>
-                                                    <span class="text-muted font-14">hgover@gmail.com</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="border-top-0 text-muted px-2 py-4 font-14">Elite Admin</td>
-                                        <td class="border-top-0 px-2 py-4">
-                                            <div class="popover-icon">
-                                                <a class="btn btn-primary rounded-circle btn-circle font-12"
-                                                    href="javascript:void(0)">DS</a>
-                                                <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
-                                                    href="javascript:void(0)">SS</a>
-                                                <a class="btn btn-cyan rounded-circle btn-circle font-12 popover-item"
-                                                    href="javascript:void(0)">RP</a>
-                                                <a class="btn btn-success text-white rounded-circle btn-circle font-20"
-                                                    href="javascript:void(0)">+</a>
-                                            </div>
-                                        </td>
-                                        <td class="border-top-0 text-center px-2 py-4"><i
-                                                class="fa fa-circle text-primary font-12" data-toggle="tooltip"
-                                                data-placement="top" title="In Testing"></i></td>
-                                        <td
-                                            class="border-top-0 text-center font-weight-medium text-muted px-2 py-4">
-                                            35
-                                        </td>
-                                        <td class="font-weight-medium text-dark border-top-0 px-2 py-4">$96K
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-2 py-4">
-                                            <div class="d-flex no-block align-items-center">
-                                                <div class="mr-3"><img
-                                                        src="../assets/images/users/widget-table-pic2.jpg"
-                                                        alt="user" class="rounded-circle" width="45"
-                                                        height="45" /></div>
-                                                <div class="">
-                                                    <h5 class="text-dark mb-0 font-16 font-weight-medium">Daniel
-                                                        Kristeen
-                                                    </h5>
-                                                    <span class="text-muted font-14">Kristeen@gmail.com</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-muted px-2 py-4 font-14">Real Homes WP Theme</td>
-                                        <td class="px-2 py-4">
-                                            <div class="popover-icon">
-                                                <a class="btn btn-primary rounded-circle btn-circle font-12"
-                                                    href="javascript:void(0)">DS</a>
-                                                <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
-                                                    href="javascript:void(0)">SS</a>
-                                                <a class="btn btn-success text-white rounded-circle btn-circle font-20"
-                                                    href="javascript:void(0)">+</a>
-                                            </div>
-                                        </td>
-                                        <td class="text-center px-2 py-4"><i
-                                                class="fa fa-circle text-success font-12" data-toggle="tooltip"
-                                                data-placement="top" title="Done"></i>
-                                        </td>
-                                        <td class="text-center text-muted font-weight-medium px-2 py-4">32</td>
-                                        <td class="font-weight-medium text-dark px-2 py-4">$85K</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-2 py-4">
-                                            <div class="d-flex no-block align-items-center">
-                                                <div class="mr-3"><img
-                                                        src="../assets/images/users/widget-table-pic3.jpg"
-                                                        alt="user" class="rounded-circle" width="45"
-                                                        height="45" /></div>
-                                                <div class="">
-                                                    <h5 class="text-dark mb-0 font-16 font-weight-medium">Julian
-                                                        Josephs
-                                                    </h5>
-                                                    <span class="text-muted font-14">Josephs@gmail.com</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-muted px-2 py-4 font-14">MedicalPro WP Theme</td>
-                                        <td class="px-2 py-4">
-                                            <div class="popover-icon">
-                                                <a class="btn btn-primary rounded-circle btn-circle font-12"
-                                                    href="javascript:void(0)">DS</a>
-                                                <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
-                                                    href="javascript:void(0)">SS</a>
-                                                <a class="btn btn-cyan rounded-circle btn-circle font-12 popover-item"
-                                                    href="javascript:void(0)">RP</a>
-                                                <a class="btn btn-success text-white rounded-circle btn-circle font-20"
-                                                    href="javascript:void(0)">+</a>
-                                            </div>
-                                        </td>
-                                        <td class="text-center px-2 py-4"><i
-                                                class="fa fa-circle text-primary font-12" data-toggle="tooltip"
-                                                data-placement="top" title="Done"></i>
-                                        </td>
-                                        <td class="text-center text-muted font-weight-medium px-2 py-4">29</td>
-                                        <td class="font-weight-medium text-dark px-2 py-4">$81K</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-2 py-4">
-                                            <div class="d-flex no-block align-items-center">
-                                                <div class="mr-3"><img
-                                                        src="../assets/images/users/widget-table-pic4.jpg"
-                                                        alt="user" class="rounded-circle" width="45"
-                                                        height="45" /></div>
-                                                <div class="">
-                                                    <h5 class="text-dark mb-0 font-16 font-weight-medium">Jan
-                                                        Petrovic
-                                                    </h5>
-                                                    <span class="text-muted font-14">hgover@gmail.com</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-muted px-2 py-4 font-14">Hosting Press HTML</td>
-                                        <td class="px-2 py-4">
-                                            <div class="popover-icon">
-                                                <a class="btn btn-primary rounded-circle btn-circle font-12"
-                                                    href="javascript:void(0)">DS</a>
-                                                <a class="btn btn-success text-white font-20 rounded-circle btn-circle"
-                                                    href="javascript:void(0)">+</a>
-                                            </div>
-                                        </td>
-                                        <td class="text-center px-2 py-4"><i
-                                                class="fa fa-circle text-danger font-12" data-toggle="tooltip"
-                                                data-placement="top" title="In Progress"></i></td>
-                                        <td class="text-center text-muted font-weight-medium px-2 py-4">23</td>
-                                        <td class="font-weight-medium text-dark px-2 py-4">$80K</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- *************************************************************** -->
-        <!-- End Top Leader Table -->
-        <!-- *************************************************************** -->
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
-    <!-- End Container fluid  -->
+    <!-- End Page wrapper  -->
     <!-- ============================================================== -->
-</div>
-<!-- ============================================================== -->
-<!-- End Page wrapper  -->
-<!-- ============================================================== -->
+@endsection
+
+@section('javascript-extra')
+    <script src="{{ asset('assets/libs/chartist/dist/chartist.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/raphael/raphael.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/morris.js/morris.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/chart.js/dist/Chart.min.js') }}"></script>
+    <script>
+        const date = new Date();
+        var first_date = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate() - 6}`
+        var second_date = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+        var transactions = @json($transactiones);
+        var objects_noo = []
+        var current_period = ""
+        var object_count = 0
+        var total_per_period = 0
+
+        function refactArray(array) {
+            array.forEach(element => {
+                element.created_at = element.created_at.substring(0, element.created_at.indexOf("T"))
+            });
+        }
+
+        function setupArray(array) {
+            refactArray(array);
+            array.forEach(function callback(value, index) {
+                if (index == 0) {
+                    object_count = 0;
+                    total_per_period = 0;
+                    objects_noo = []
+                }
+                if (current_period != value.created_at) {
+                    if (current_period != "") {
+                        var object = {
+                            period: current_period,
+                            order: object_count,
+                            itouch: 10,
+                        }
+                        objects_noo.push(object)
+                    }
+                    current_period = value.created_at
+                    object_count = 1
+                    total_per_period = value.total_price
+                } else {
+                    object_count += 1;
+                    total_per_period += value.total_price
+                }
+            });
+            var object = {
+                period: current_period,
+                order: object_count,
+                itouch: 10,
+            }
+            objects_noo.push(object)
+            $("#number-of-order").html(null)
+            $(function() {
+                "use strict";
+                Morris.Area({
+                    element: 'number-of-order',
+                    data: objects_noo,
+                    xkey: 'period',
+                    ykeys: ['order'],
+                    labels: ['New Order'],
+                    xLabels: 'day',
+                    xLabelFormat: function(x) {
+                        return x.getDate() + "/" + (x.getMonth() + 1).toString().padStart(2, '0')
+                    },
+                    pointSize: 3,
+                    fillOpacity: 0,
+                    pointStrokeColors: ['#5f76e8'],
+                    behaveLikeLine: true,
+                    gridLineColor: '#e0e0e0',
+                    lineWidth: 3,
+                    hideHover: 'auto',
+                    lineColors: ['#5f76e8'],
+                    resize: true,
+                });
+            });
+        }
+        setupArray(transactions)
+    </script>
 @endsection

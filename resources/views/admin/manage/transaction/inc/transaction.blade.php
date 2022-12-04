@@ -10,6 +10,8 @@
                         'bg-cyan' => $transaction->status_id == 3,
                         'bg-success' => $transaction->status_id == 4,
                         'bg-secondary' => $transaction->status_id == 5,
+                        'bg-dark' => $transaction->status_id == 6,
+                        'bg-dark' => $transaction->status_id == 7,
                     ])>
                         <div class="d-flex justify-content-between">
                             <p class="m-0 text-white">
