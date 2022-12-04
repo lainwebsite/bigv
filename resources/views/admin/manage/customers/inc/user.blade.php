@@ -35,8 +35,8 @@
                                     <a onclick="deleteData({{ $user->id }}, '{{ $user->name }}','ban');"
                                         class="a-normal text-danger"><i class="fa fa-ban"></i></a>
                                 @else
-                                    <a onclick="deleteData({{ $user->id }}, '{{ $user->name }}','unban');"
-                                        class="a-normal text-light"><i class="fa fa-ban"></i></a>
+                                    <a href="#" onclick="deleteData({{ $user->id }}, '{{ $user->name }}','unban');"
+                                        class="a-normal">Unban</a>
                                 @endif
                             </div>
                         </td>
