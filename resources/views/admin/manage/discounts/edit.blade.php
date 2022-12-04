@@ -761,13 +761,12 @@
             <div>
         `);
         };
-
         $(document).on('click', '.delete-product-voucher', function() {
-            var index = voucher_products.indexOf($(this).parent().parent().data("id"));
+            var index = voucher_products.indexOf(String($(this).parent().parent().data("id")));
             if (index > -1) { // only splice array when item is found
                 voucher_products.splice(index, 1); // 2nd parameter means remove one item only
             }
-            $('#voucher-products').val(voucher_products)
+            $('#voucher-products').val(voucher_products);
             $(this).parent().parent().remove();
         });
 
@@ -845,11 +844,11 @@
 
 
         $(document).on('click', '.delete-vendor-voucher', function() {
-            var index = voucher_vendors.indexOf($(this).parent().parent().data("id"));
+            var index = voucher_vendors.indexOf(String($(this).parent().parent().data("id")));
             if (index > -1) { // only splice array when item is found
                 voucher_vendors.splice(index, 1); // 2nd parameter means remove one item only
             }
-            $('#voucher-vendors').val(voucher_vendors)
+            $('#voucher-vendors').val(voucher_vendors);
             $(this).parent().parent().remove();
         });
 
@@ -904,11 +903,11 @@
         };
 
         $(document).on('click', '.delete-category-voucher', function() {
-            var index = voucher_categories.indexOf($(this).parent().parent().data("id"));
+            var index = voucher_categories.indexOf(String($(this).parent().parent().data("id")));
             if (index > -1) { // only splice array when item is found
                 voucher_categories.splice(index, 1); // 2nd parameter means remove one item only
             }
-            $('#voucher-vendors').val(voucher_categories)
+            $('#voucher-vendors').val(voucher_categories);
             $(this).parent().parent().remove();
         });
 
