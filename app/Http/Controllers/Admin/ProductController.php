@@ -86,8 +86,8 @@ class ProductController extends Controller
         $featured = 'product-' . time() . '-' . $request->featured_image->getClientOriginalName();
         $request->featured_image->move(public_path('uploads'), $featured);
         
-        $useVariations = $request->with_variation;
-        if ($useVariations == "on"){
+        // $useVariations = ;
+        if ($request->with_variation){
             $product = Product::create([
                 'name' => $request->name,
                 'description' => $request->description,

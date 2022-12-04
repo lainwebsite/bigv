@@ -62,7 +62,8 @@
                                 {{ $product->name }}</h5>
                             <h2 class="heading-2 text-color-grey margin-vertical margin-xsmall"
                                 variation-id="{{ $product->variations[0]->id }}">
-                                {{ count($product->variations) > 0 ? ($product->variations[0]->name == 'novariation' ? $product->name : $product->variations[0]->name) : $product->name }}
+                                <!--{{ count($product->variations) > 0 ? ($product->variations[0]->name == 'novariation' ? $product->name : $product->variations[0]->name) : $product->name }}-->
+                                {{ $product->name }}
                             </h2>
                             <div class="flex" style="justify-content: space-between; gap: 10px;">
                                 <div class="c-product-rating">
