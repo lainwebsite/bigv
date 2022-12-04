@@ -78,8 +78,15 @@ class DiscountController extends Controller
             if ($validator->fails()) {
                 return Redirect::back()->withErrors($validator);
             }
-            //product sale
             $variation = ProductVariation::find($request->product_sale);
+            if (
+                Discount::where('name', $variation->id)
+                ->where('duration_end', '>=', Carbon::now())
+                ->get()->count() > 0
+            ) {
+                return redirect()->route('admin.discount.create')->with('wrong', 'An active Sale Price of that product already exists!');
+            }
+            //product sale
             $variation->update([
                 "discount_start_date" => $request->duration_start,
                 "discount_end_date" => $request->duration_end,
@@ -87,7 +94,7 @@ class DiscountController extends Controller
             ]);
             $discount = Discount::create([
                 'name' => $variation->id,
-                'code' => $variation->name . '-' . (Discount::where('name', $variation->product->name . ' - ' . $variation->name)->get()->count() + 1),
+                'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id),
                 'amount' => $request->sale_price,
                 'duration_start' => $request->duration_start,
                 'duration_end' => $request->duration_end,
@@ -248,7 +255,7 @@ class DiscountController extends Controller
                 ]);
                 $discount->update([
                     'name' => $variation->id,
-                    'code' => $variation->name . '-' . (Discount::where('name', $variation->product->name . ' - ' . $variation->name)->get()->count() + 1),
+                    'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id),
                     'amount' => $request->sale_price,
                     'duration_start' => $request->duration_start,
                     'duration_end' => $request->duration_end,
@@ -257,6 +264,15 @@ class DiscountController extends Controller
                     'voucher_type' => 1
                 ]);
             } else {
+                $variation = ProductVariation::find($request->product_sale);
+                if (
+                    Discount::where('name', $variation->id)
+
+                    ->where('duration_end', '>=', Carbon::now())
+                    ->get()->count() > 0
+                ) {
+                    return redirect()->route('admin.discount.create')->with('wrong', 'An active Sale Price of that product already exists!');
+                }
                 if ($discount->type_id == 3) {
                     $variation = ProductVariation::find($discount->name);
                     $variation->update([
@@ -274,7 +290,7 @@ class DiscountController extends Controller
 
                 $discount->update([
                     'name' => $variation->id,
-                    'code' => $variation->name . '-' . (Discount::where('name', $variation->product->name . ' - ' . $variation->name)->get()->count() + 1),
+                    'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id),
                     'amount' => $request->sale_price,
                     'duration_start' => $request->duration_start,
                     'duration_end' => $request->duration_end,

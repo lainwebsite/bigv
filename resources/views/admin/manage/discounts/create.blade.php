@@ -60,6 +60,11 @@
                         </div>
                     @endforeach
                 @endif
+                @if (session('wrong'))
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Error - </strong> {{ session('wrong') }}
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
