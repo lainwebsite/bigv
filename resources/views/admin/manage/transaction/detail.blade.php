@@ -94,14 +94,37 @@
                             @foreach ($transaction->carts as $cart)
                                 @if (!in_array($cart->product_variation->product->vendor_id, $vendors))
                                     <div class="d-flex gap-15x">
-                                        <button
+                                        @php
+                                            $wa_string = 'https://wa.me/' . $cart->product_variation->product->vendor->phone . '?text=Hello%20Vendor%20' . $cart->product_variation->product->vendor->name . '%0AThere%20is%20a%20new%20order%20with%20the%20ID%20' . $cart->transaction->id;
+                                        @endphp
+                                        @foreach ($transaction->carts as $carted)
+                                            @if ($carted->product_variation->product->vendor_id == $cart->product_variation->product->vendor_id)
+                                                @php
+                                                    $wa_string = $wa_string . '%0A' . $carted->product_variation->product->name . '%20' . $carted->product_variation->name . '%20x%20' . $carted->quantity;
+                                                @endphp
+                                                @foreach ($carted->addon_options as $key => $addon)
+                                                    @if ($loop->first)
+                                                        @php
+                                                            $wa_string = $wa_string . '%20with';
+                                                        @endphp
+                                                    @endif
+                                                    @php
+                                                        $wa_string = $wa_string . '%20' . $addon->options->name;
+                                                    @endphp
+                                                @endforeach
+                                            @endif
+                                        @endforeach
+                                        @php
+                                            $wa_string = $wa_string . '%0Ato%20be%20prepared%20by%20' . $transaction->delivery_date . '%0A%0AOrder%20Date%20%3A%20' . $transaction->created_at . '%0A%0AThank%20You%20';
+                                        @endphp
+                                        <a target="_blank" href="{{ $wa_string }}"
                                             class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><img
                                                 src="{{ asset('assets/images/whatsapp.svg') }}" width="24"
-                                                height="24" />{{ $cart->product_variation->product->vendor->name }}</button>
-                                        <button
+                                                height="24" />{{ $cart->product_variation->product->vendor->name }}</a>
+                                        <a href="mailto:{{ $cart->product_variation->product->vendor->email }}"
                                             class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><i
                                                 data-feather="mail"
-                                                class="feather-icon"></i>{{ $cart->product_variation->product->vendor->name }}</button>
+                                                class="feather-icon"></i>{{ $cart->product_variation->product->vendor->name }}</a>
                                     </div>
                                     @php
                                         array_push($vendors, $cart->product_variation->product->vendor_id);
