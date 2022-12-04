@@ -71,13 +71,14 @@
                                     <p class="m-0">{{ $vendor->email }}</p>
                                     <p class="m-0">{{ $vendor->phone }}</p>
                                     <div class="d-flex gap-15x justify-content-end">
-                                        <button
+                                        <a target="_blank"
+                                            href="{{ 'https://wa.me/' . $vendor->phone . '?text=Hello%20Vendor%20%22vendor%20name%22' }}"
                                             class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><img
                                                 src="{{ asset('assets/images/whatsapp.svg') }}" width="24"
-                                                height="24" />Whatsapp</button>
-                                        <button
+                                                height="24" />Whatsapp</a>
+                                        <a href="mailto:{{$vendor->email}}"
                                             class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><i
-                                                data-feather="mail" class="feather-icon"></i>Mail</button>
+                                                data-feather="mail" class="feather-icon"></i>Mail</a>
                                     </div>
                                 </div>
                             </div>
