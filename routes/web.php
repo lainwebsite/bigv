@@ -75,15 +75,16 @@ Route::group(['middleware' => 'general'], function () {
 
 // Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
 Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], function () {
-    Route::get('h/p/y/coba-pay', [CheckoutController::class, 'placeOrder']);
+    // Route::get('h/p/y/coba-pay', [CheckoutController::class, 'placeOrder']);
     Route::post('cart/verify-checkout', [CheckoutController::class, 'preCheckout']);
     Route::post('cart/checkout/buy-now', [CheckoutController::class, 'buyNowCheckout']);
     Route::get('cart/checkout', [CheckoutController::class, 'getCheckout']);
     // Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
     Route::get('transit/transaction', [CheckoutController::class, 'transitStatusPayment']);
-    Route::post('cart/checkout/place-order', function () {
-        return redirect('/');
-    });
+    Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
+    // Route::post('cart/checkout/place-order', function () {
+    //     return redirect('/');
+    // });
     Route::post('cart/checkout/atome', [CheckoutController::class, 'atomePayment']);
     Route::resource('cart', CartController::class);
     Route::get('checkout/product-discount/search', [DiscountController::class, 'productSearch']);

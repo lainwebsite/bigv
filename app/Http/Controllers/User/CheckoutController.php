@@ -146,56 +146,52 @@ class CheckoutController extends Controller
 
     public function placeOrder(Request $request)
     {
-        // $request->validate([
-        //     'delivery_date' => 'required|string|date_format:Y-m-h',
-        //     // 'payment_method_id' => 'required|numeric',
-        //     'pickup_method_id' => 'required|numeric',
-        //     'pickup_time_id' => 'required|numeric',
-        //     'billing_address_id' => 'required_without:self_collection_address_id|numeric',
-        //     'self_collection_address_id' => 'required_without:billing_address_id|numeric',
-        //     'shipping_address_id' => 'sometimes|required|numeric',
-        // ]);
-
-        // $data = $request->all();
-        // $data += [
-        //     'total_price' => session()->get('total-checkout-price'),
-        //     'shipping_fee' => session()->get('shipping-price'),
-        //     'user_id' => auth()->user()->id,
-        //     'status_id' => 1, // default "Order Pending"
-        //     'payment_method_id' => 1, // contoh
-        // ];
-
-        // $transaction = Transaction::create($data);
-
-        // // update transaction id in cart
-        // $checkout_items = session()->get('checkout-items');
-        // foreach ($checkout_items as $item) {
-        //     Cart::where('id', $item)->update(['transaction_id' => $transaction->id]);
-        // }
-
-        $transaction = Transaction::create([
-            'delivery_date' => '2022-11-29',
-            'pickup_method_id' => '1',
-            'pickup_time_id' => '1',
-            'billing_address_id' => '1',
-            'total_price' => 0.8,
-            'shipping_fee' => 25,
-            'user_id' => 1,
-            'status_id' => 1,
-            'payment_method_id' => 1,
+        $request->validate([
+            'delivery_date' => 'required|string|date_format:Y-m-h',
+            // 'payment_method_id' => 'required|numeric',
+            'pickup_method_id' => 'required|numeric',
+            'pickup_time_id' => 'required|numeric',
+            'billing_address_id' => 'required_without:self_collection_address_id|numeric',
+            'self_collection_address_id' => 'required_without:billing_address_id|numeric',
+            'shipping_address_id' => 'sometimes|required|numeric',
         ]);
 
-        $paynow = new PaynowController();
-        return $paynow->pay(0.8, $transaction->id);
-        // if ($request->payment_gateway == 'paynow') {
-        // }
+        $data = $request->all();
+        $data += [
+            'total_price' => session()->get('total-checkout-price'),
+            'shipping_fee' => session()->get('shipping-price'),
+            'user_id' => auth()->user()->id,
+            'status_id' => 1, // default "Order Pending"
+            'payment_method_id' => 1, // contoh
+        ];
 
-        // return redirect('/');
+        $transaction = Transaction::create($data);
+
+        // update transaction id in cart
+        $checkout_items = session()->get('checkout-items');
+        foreach ($checkout_items as $item) {
+            Cart::where('id', $item)->update(['transaction_id' => $transaction->id]);
+        }
+
+        // $transaction = Transaction::create([
+        //     'delivery_date' => '2022-11-29',
+        //     'pickup_method_id' => '1',
+        //     'pickup_time_id' => '1',
+        //     'billing_address_id' => '1',
+        //     'total_price' => 0.8,
+        //     'shipping_fee' => 25,
+        //     'user_id' => 1,
+        //     'status_id' => 1,
+        //     'payment_method_id' => 1,
+        // ]);
+
+        $paynow = new PaynowController();
+        return $paynow->pay(session()->get('total-checkout-price'), $transaction->id);
     }
 
     public function transitStatusPayment(Request $request)
     {
-        $target = Carbon::now()->addMinute();
+        $target = Carbon::now()->addSeconds(10);
         $transaction_id = $request->get('id', 0);
         do {
             $now = Carbon::now();
