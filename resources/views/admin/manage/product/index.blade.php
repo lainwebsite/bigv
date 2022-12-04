@@ -175,4 +175,12 @@
                 });
         }
     </script>
+    <script>
+        function deleteData(id, name) {
+            event.preventDefault();
+            if (confirm(`Are you sure you want to delete ${name}?`)) {
+                document.getElementById(`delete-product-form-${id}`).submit();
+            }
+        }
+    </script>
 @endsection

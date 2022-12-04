@@ -13,7 +13,7 @@
                 @foreach ($categories as $category)
                     <tr>
                         <td>
-                            <a href="{{route('admin.product-category.show', $category->id)}}" class="a-normal">
+                            <a href="{{ route('admin.product-category.show', $category->id) }}" class="a-normal">
                                 <div class="d-flex align-items-start flex-column">
                                     <h5 class="m-0"><b>{{ $category->name }}</b></h5>
                                 </div>
@@ -25,8 +25,7 @@
                             <div class="d-flex" style="gap: 10px;">
                                 <a href="{{ route('admin.product-category.edit', $category->id) }}"
                                     class="a-normal text-info"><i data-feather="edit" class="feather-icon"></i></a>
-                                <a onclick="event.preventDefault();
-                                                        document.getElementById('delete-category-form-{{ $category->id }}').submit();"
+                                <a onclick="deleteData({{ $category->id }}, '{{ $category->name }}');"
                                     class="a-normal text-danger">@include('admin.icons.delete')</a>
                             </div>
                         </td>

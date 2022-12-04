@@ -136,4 +136,12 @@
             sort(page);
         });
     </script>
+    <script>
+        function deleteData(id, name, detail) {
+            event.preventDefault();
+            if (confirm(`Are you sure you want to ${detail} ${name}?`)) {
+                document.getElementById(`delete-user-form-${id}`).submit();
+            }
+        }
+    </script>
 @endsection

@@ -36,7 +36,7 @@
                     <a href="{{ route('admin.vendor.edit', $vendor->id) }}"
                         class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 text-white"><i
                             class="fa fa-edit text-white"></i>Edit</a>
-                    <a onclick="event.preventDefault(); document.getElementById('delete-vendor-form-{{ $vendor->id }}').submit();"
+                    <a onclick="deleteData({{ $vendor->id }}, '{{ $vendor->name }}');"
                         class="btn btn-danger d-flex gap-15x align-items-center pr-4 pl-4 text-white"><i
                             class="fa fa-trash text-white"></i>Delete</a>
                 </div>
@@ -143,5 +143,13 @@
     </script>
     <script>
         sort(page);
+    </script>
+    <script>
+        function deleteData(id, name) {
+            event.preventDefault();
+            if (confirm(`Are you sure you want to delete ${name}?`)) {
+                document.getElementById(`delete-vendor-form-${id}`).submit();
+            }
+        }
     </script>
 @endsection

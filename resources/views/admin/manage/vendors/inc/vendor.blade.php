@@ -29,8 +29,9 @@
                         <td class="align-middle">{{ $vendor->products->count() }}</td>
                         <td class="align-middle">
                             <div class="d-flex" style="gap: 10px;">
-                                <a href="{{ route('admin.vendor.edit', $vendor->id) }}" class="a-normal text-info">@include('admin.icons.edit')</a>
-                                <a onclick="event.preventDefault(); document.getElementById('delete-vendor-form-{{ $vendor->id }}').submit();"
+                                <a href="{{ route('admin.vendor.edit', $vendor->id) }}"
+                                    class="a-normal text-info">@include('admin.icons.edit')</a>
+                                <a onclick="deleteData({{ $vendor->id }}, '{{ $vendor->name }}');"
                                     class="a-normal text-danger">@include('admin.icons.delete')</a>
                             </div>
                         </td>

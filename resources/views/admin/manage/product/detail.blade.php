@@ -36,7 +36,7 @@
                     <a href="{{ route('admin.product.edit', $product->id) }}"
                         class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 text-white"><i
                             class="fa fa-edit text-white"></i>Edit</a>
-                    <a onclick="event.preventDefault(); document.getElementById('delete-product-form-{{ $product->id }}').submit();"
+                    <a onclick="deleteData({{ $product->id }}, '{{ $product->name }}');"
                         class="btn btn-danger d-flex gap-15x align-items-center pr-4 pl-4 text-white"><i
                             class="fa fa-trash text-white"></i>Delete</a>
                 </div>
@@ -79,7 +79,8 @@
                                     <h2 class="card-title mb-2">{{ $product->name }}</h2>
                                     <div class="d-flex mb-3">
                                         <i style="margin-top: 1px;" class="fas fa-star mr-1"></i>
-                                        <h4 class="m-0">{{ $product->rating }} ({{ $product->reviews->count() }} rating)
+                                        <h4 class="m-0">{{ $product->rating }} ({{ $product->reviews->count() }}
+                                            rating)
                                         </h4>
                                     </div>
                                     <p class="m-0">{{ $product->description }}</p>
@@ -263,6 +264,14 @@
                 .fail(function(error) {
                     console.log(error);
                 });
+        }
+    </script>
+    <script>
+        function deleteData(id, name) {
+            event.preventDefault();
+            if (confirm(`Are you sure you want to delete ${name}?`)) {
+                document.getElementById(`delete-product-form-${id}`).submit();
+            }
         }
     </script>
 @endsection

@@ -36,8 +36,7 @@
                     <a href="{{ route('admin.product-category.edit', $productCategory->id) }}"
                         class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 text-white"><i
                             class="fa fa-edit text-white"></i>Edit</a>
-                    <a onclick="event.preventDefault();
-                document.getElementById('delete-category-form').submit();"
+                    <a href="#" onclick="deleteData({{ $productCategory->id }}, '{{ $productCategory->name }}');"
                         class="btn btn-danger d-flex gap-15x align-items-center pr-4 pl-4 text-white"><i
                             class="fa fa-trash text-white"></i>Delete</a>
                     <form action="{{ route('admin.product-category.destroy', $productCategory->id) }}"
@@ -65,8 +64,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12 d-flex flex-column justify-content-center">
-                                    <h2 class="card-title mb-4">{{$productCategory->name}}</h2>
-                                    <p class="m-0">{{$productCategory->description}}</p>
+                                    <h2 class="card-title mb-4">{{ $productCategory->name }}</h2>
+                                    <p class="m-0">{{ $productCategory->description }}</p>
                                 </div>
                             </div>
                         </div>
@@ -81,4 +80,15 @@
     <!-- ============================================================== -->
     <!-- End Page wrapper  -->
     <!-- ============================================================== -->
+@endsection
+
+@section('javascript-extra')
+    <script>
+        function deleteData(id, name) {
+            event.preventDefault();
+            if (confirm(`Are you sure you want to delete ${name}?`)) {
+                document.getElementById(`delete-category-form-${id}`).submit();
+            }
+        }
+    </script>
 @endsection

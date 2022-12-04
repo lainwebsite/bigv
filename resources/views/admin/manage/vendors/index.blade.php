@@ -139,4 +139,12 @@
             sort(page);
         });
     </script>
+    <script>
+        function deleteData(id, name) {
+            event.preventDefault();
+            if (confirm(`Are you sure you want to delete ${name}?`)) {
+                document.getElementById(`delete-vendor-form-${id}`).submit();
+            }
+        }
+    </script>
 @endsection

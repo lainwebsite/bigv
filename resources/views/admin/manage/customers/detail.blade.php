@@ -33,15 +33,20 @@
                     </div>
                 </div>
                 <div class="col-4 d-flex justify-content-end">
-                    <form action="{{ route('admin.user.destroy', $user->id) }}" method="post">
+                    <form action="{{ route('admin.user.destroy', $user->id) }}" id="delete-user-form-{{ $user->id }}"
+                        method="post">
                         @method('DELETE')
                         @csrf
                         @if ($user->ban == 0)
-                            <button class="btn btn-danger d-flex gap-15x align-items-center pr-4 pl-4"><i
-                                    class="fa fa-ban"></i>Ban User</button>
+                            <div onclick="deleteData({{ $user->id }}, '{{ $user->name }}', 'ban')"
+                                class="btn btn-danger d-flex gap-15x align-items-center pr-4 pl-4">
+                                <i class="fa fa-ban"></i>Ban User
+                            </div>
                         @else
-                            <button class="btn btn-light d-flex gap-15x align-items-center pr-4 pl-4"><i
-                                    class="fa fa-ban"></i>Unban User</button>
+                            <div onclick="deleteData({{ $user->id }}, '{{ $user->name }}', 'unban')"
+                                class="btn btn-light d-flex gap-15x align-items-center pr-4 pl-4">
+                                <i class="fa fa-ban"></i>Unban User
+                            </div>
                         @endif
                     </form>
                 </div>
@@ -74,7 +79,8 @@
                                 <div class="col-6 d-flex justify-content-end">
                                     <div class="m-0">
                                         <h4 class="card-title m-0 text-white text-lg-right">{{ $user->visits }} Visits</h4>
-                                        <p class="m-0 text-white"><b>{{ $user->transactions->count() }} Transactions</b></p>
+                                        <p class="m-0 text-white"><b>{{ $user->transactions->count() }} Transactions</b>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -136,10 +142,6 @@
     </script>
     <script>
         function analytics() {
-            console.log("dor")
-            console.log($('#filter_start_date').val())
-            console.log($('#filter_end_date').val())
-            console.log(@json($user->id))
             var hostname = "{{ request()->getHost() }}"
             var url = ""
             if (hostname.includes('www')) {
@@ -159,6 +161,14 @@
                 .fail(function(error) {
                     console.log(error);
                 });
+        }
+    </script>
+    <script>
+        function deleteData(id, name, detail) {
+            event.preventDefault();
+            if (confirm(`Are you sure you want to ${detail} ${name}?`)) {
+                document.getElementById(`delete-user-form-${id}`).submit();
+            }
         }
     </script>
 @endsection
