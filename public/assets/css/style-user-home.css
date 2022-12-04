@@ -562,7 +562,7 @@ figcaption {
 }
 
 .heading-xlarge {
-  font-size: 4.9rem;
+  font-size: 3.9rem;
   line-height: 1.1;
   font-weight: 700;
 }
@@ -1687,6 +1687,7 @@ figcaption {
 }
 
 .soft-sell-section {
+  justify-content: space-between;
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -1744,7 +1745,7 @@ figcaption {
   -webkit-box-align: start;
   -webkit-align-items: flex-start;
   -ms-flex-align: start;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .body-1 {
@@ -7164,7 +7165,7 @@ figcaption {
 
 @media screen and (max-width: 479px) {
     .product-card {
-        width: 180px !important;
+        width: 172px !important;
     }
   .show-mobile-portrait {
     display: block;
@@ -9503,7 +9504,7 @@ figcaption {
 
 @media screen and (max-width: 991px) {
   .hidden-x-small{
-    overflow-x: hidden;
+    display:none;
   }
   #w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c6-92c73a6a {
     -webkit-align-self: end;
@@ -10661,8 +10662,54 @@ figcaption {
   align-items: center;
 }
 
+.four-promo-container{
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    row-gap: 15px;
+}
+
+.promo-image{
+    max-width:450px;
+    height: 100%;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.promo-content{
+    display: flex;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.promo-content{
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+@media screen and (max-width: 479px) {
+    #column-reverse-responsive{
+        flex-direction: column-reverse;
+    }
+    .promo-content{
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .value-section{
+        margin-top: 10vh !important;
+        margin-bottom: 10vh !important;
+    }
+}
+
 .heading-xlarge {
-  font-size: 4.9rem;
+  font-size: 3.9rem;
   line-height: 1.1;
   font-weight: 700;
 }
@@ -19593,7 +19640,7 @@ figcaption {
 
 @media screen and (max-width: 991px) {
   .hidden-x-small{
-    overflow-x: hidden;
+    display:none;
   }
   #w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c6-92c73a6a {
     -webkit-align-self: end;

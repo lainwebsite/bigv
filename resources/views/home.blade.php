@@ -30,7 +30,7 @@
 </head>
 
 <body class="body" style="overflow-x: hidden; width: 100vw !important;">
-    <div class="hero-section-w-nav wf-section hidden-x-small">
+    <div class="hero-section-w-nav wf-section">
         <div style="width:80%;-webkit-transform:translate3d(0, 3em, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 3em, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 3em, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 3em, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
             data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease"
             role="banner" class="navbar w-nav">
@@ -157,7 +157,7 @@
                     loading="lazy" width="201" data-w-id="47b878b6-5fd4-a8e3-a242-6bf091c1819c" alt=""
                     class="image-4" /></div>
         </div>
-        <div data-w-id="14ca08aa-f598-2259-1a4a-17cce45a4822" class="bg-parallax">
+        <div data-w-id="14ca08aa-f598-2259-1a4a-17cce45a4822" class="bg-parallax hidden-x-small">
             <div class="content-2 mod--bg-parallax">
                 <div class="bg-circle-wrap"><img src="{{ asset('assets/631d3741341fb5b1f8884c93_Union (1).svg') }}"
                         loading="eager" data-w-id="14ca08aa-f598-2259-1a4a-17cce45a4825" alt=""
@@ -165,10 +165,10 @@
             </div>
         </div>
     </div>
-    <div class="promo-section" style="display:none;">
+    <div class="promo-section">
         <div class="todays-pick-promo-container">
-            <div class="heading-large margin-bottom margin-large ea-bottom">Today’s Promo</div>
-            <div class="promo-div">
+            <div class="heading-large margin-bottom margin-large ea-bottom">Latest Promos</div>
+            <div class="promo-div" style="display:none;">
                 <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c4-92c73a6a"><img
                         src="{{ asset('assets/diskon1.jpg') }}" loading="lazy"
                         id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c5-92c73a6a" height="410"
@@ -182,6 +182,20 @@
                 <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c8-92c73a6a" class="div-block-2"><img
                         src="{{ asset('assets/diskon3.jpg') }}" width="351" height="183" loading="lazy"
                         id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c9-92c73a6a" alt="" class="ea-right" />
+                </div>
+            </div>
+            <div class="four-promo-container">
+                <div class="promo-content" style="justify-content: flex-end;">
+                    <img src="{{ asset('promo/promo-1.png') }}" loading="lazy" alt="" class="promo-image"  />
+                </div>
+                <div class="promo-content">
+                    <img src="{{ asset('promo/promo-2.png') }}" loading="lazy" alt="" class="promo-image" />
+                </div>
+                <div class="promo-content" style="justify-content: flex-end;">
+                    <img src="{{ asset('promo/promo-3.png') }}" loading="lazy" alt="" class="promo-image" />
+                </div>
+                <div class="promo-content">
+                    <img src="{{ asset('promo/promo-4.png') }}" loading="lazy" alt="" class="promo-image" />
                 </div>
             </div>
         </div>
@@ -407,18 +421,32 @@
             loading="lazy" alt="" class="ea-bottom" /><img
             src="{{ asset('assets/6336580aa13203333deff644_Intersect (2).svg') }}" loading="lazy" alt=""
             class="image-25" /></div>
-    <div class="soft-sell-section">
+    <!-- <div class="soft-sell-section">
         <div class="soft-sell-left d-flex">
             <div class="heading-xlarge ea-top">Join us at<span class="orange-text"> Albert Street Pasar Malan </span> at <span
                     class="orange-text">Tekka Place</span></div>
-            <!--<div class="heading-medium orange-text ea-left">9th October</div>-->
-            <div class="text-size-regular text-color-grey ea-left character-limit">Sign up Now!</div><a
-                href="#" class="button ea-bottom w-button">Enroll Now</a>
+            <div class="heading-medium orange-text ea-left">9th December 2022</div>
+            <div class="text-size-regular text-color-grey ea-left character-limit">Join us and reminisce good old memories at Albert Street Pasar Malam! Place where Home Based Business could expand their business & explore their market. In 1970’s – 80’s Albert Street at Selegie House used to accommodate many hampers, alcohol and fresh fruits suppliers. Many of them are home based businesses who would open up their hawkers stalls during the night time along Albert Street. Are you an HBB owner? Sign Up Now!</div>
+            <a href="#" class="button ea-bottom w-button">Enroll Now</a>
         </div>
-        <div class="soft-sell-right"><img src="{{ asset('assets/62fc7f2786b3fffd6833776d_BigV Woman V (1).webp') }}"
+        <div class="soft-sell-right"><img src="{{ asset('assets/Tekka Place.jpg') }}"
                 loading="lazy" sizes="(max-width: 479px) 94vw, 53vw"
-                srcset="{{ asset('assets/62fc7f2786b3fffd6833776d_BigV%20Woman%20V%20(1).webp') }}" alt=""
+                srcset="{{ asset('assets/Tekka Place.jpg') }}" alt=""
                 class="image-6 ea-right" /></div>
+    </div> -->
+    <div class="value-section" id="column-reverse-responsive" style="z-index:4;">
+        <div class="value-right">
+            <div class="heading-xlarge ea-top">Join us at<span class="orange-text"> Albert Street Pasar Malan </span> at <span
+                    class="orange-text">Tekka Place</span></div>
+            <div class="heading-medium orange-text ea-right">9th December 2022</div>
+            <div class="text-size-regular text-color-grey ea-right">Join us and reminisce good old memories at Albert Street Pasar Malam! Place where Home Based Business could expand their business & explore their market. In 1970’s – 80’s Albert Street at Selegie House used to accommodate many hampers, alcohol and fresh fruits suppliers. Many of them are home based businesses who would open up their hawkers stalls during the night time along Albert Street. Are you an HBB owner? Sign Up Now!
+            </div><!--<a href="#" class="button ea-bottom w-button">Enroll Now</a>-->
+        </div>
+        <div class="value-left max-width-medium"><img
+            src="{{ asset('assets/Tekka Place.jpg') }}" loading="lazy"
+            srcset="{{ asset('assets/Tekka Place.jpg') }}"
+            sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
+            class="image-8 ea-left" style="border-radius:10px;" /></div>
     </div>
     <div class="value-section"><img src="{{ asset('assets/633652c3764cda2b58895a36_Intersect.svg') }}"
             loading="lazy" data-w-id="d482b9a8-9984-a9ec-8860-e4973c48c7e1" alt="" class="image-24" />
@@ -450,7 +478,7 @@
                 src="{{ asset('assets/636a8676e25120c679da870b_5_SupermarketGuide_Poster.png') }}" loading="lazy"
                 alt="" class="image-8 ea-left" /></div>
     </div>
-    <div class="testimonial-section" style="min-height: 20vh;">
+    <div class="testimonial-section" style="min-height: 30vh;">
         <div class="heading-large text-align-center text-color-white ea-top" style="display: none;">What People Say</div>
         <div class="testimonial-grid" style="display: none;">
             <div class="testimonial-card"><img
