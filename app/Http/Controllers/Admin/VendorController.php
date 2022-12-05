@@ -230,9 +230,11 @@ class VendorController extends Controller
     public function sort(Request $request)
     {
         if ($request->filter) {
-            $vendors = Vendor::orderBy('created_at', $request->sort)->where('location_id', $request->filter)->paginate(10);
+            $vendors = Vendor::orderBy('created_at', $request->sort)->where('location_id', $request->filter)
+                ->where('name', 'LIKE', '%' . $request->search . '%')->paginate(10);
         } else {
-            $vendors = Vendor::orderBy('created_at', $request->sort)->paginate(10);
+            $vendors = Vendor::orderBy('created_at', $request->sort)
+                ->where('name', 'LIKE', '%' . $request->search . '%')->paginate(10);
         }
         return view('admin.manage.vendors.inc.vendor', compact('vendors'));
     }
@@ -345,15 +347,15 @@ class VendorController extends Controller
     public function sort_analytics(Request $request)
     {
         $vendors = Vendor::orderBy('created_at', 'asc')
-            ->withCount(['carts as transaction_count' => function ($query) use($request) {
-                $query->whereHas('transaction', function ($q) use($request) {
+            ->withCount(['carts as transaction_count' => function ($query) use ($request) {
+                $query->whereHas('transaction', function ($q) use ($request) {
                     $q->where('created_at', '>=', $request->start_date)
-                    ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')));
+                        ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')));
                 })->select(DB::raw('count(distinct(transaction_id))'));
-            }])->withCount(['carts as total_income' => function ($query) use($request) {
-                $query->whereHas('transaction', function ($q) use($request) {
+            }])->withCount(['carts as total_income' => function ($query) use ($request) {
+                $query->whereHas('transaction', function ($q) use ($request) {
                     $q->where('created_at', '>=', $request->start_date)
-                    ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')));
+                        ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')));
                 })->select(DB::raw('sum(carts.price * quantity)'));
             }]);
         if ($request->sort == "transaction_count") {

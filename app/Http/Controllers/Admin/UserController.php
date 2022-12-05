@@ -213,12 +213,15 @@ class UserController extends Controller
     {
         if ($request->filter) {
             if ($request->filter != "ban") {
-                $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('tier_id', $request->filter)->paginate(10);
+                $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('tier_id', $request->filter)
+                    ->where('name', 'LIKE', '%' . $request->search . '%')->paginate(10);
             } else {
-                $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('ban', 1)->paginate(10);
+                $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->where('ban', 1)
+                    ->where('name', 'LIKE', '%' . $request->search . '%')->paginate(10);
             }
         } else {
-            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)->paginate(10);
+            $users = User::where('role_id', 1)->orderBy('created_at', $request->sort)
+                ->where('name', 'LIKE', '%' . $request->search . '%')->paginate(10);
         }
         return view('admin.manage.customers.inc.user', compact('users'));
     }

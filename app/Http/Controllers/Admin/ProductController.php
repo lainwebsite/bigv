@@ -85,9 +85,9 @@ class ProductController extends Controller
     {
         $featured = 'product-' . time() . '-' . $request->featured_image->getClientOriginalName();
         $request->featured_image->move(public_path('uploads'), $featured);
-        
+
         // $useVariations = ;
-        if ($request->with_variation){
+        if ($request->with_variation) {
             $product = Product::create([
                 'name' => $request->name,
                 'description' => $request->description,
@@ -97,7 +97,7 @@ class ProductController extends Controller
                 'vendor_id' => $request->vendor,
                 'category_id' => $request->category
             ]);
-            
+
             if ($request->variation_name) {
                 foreach ($request->variation_name as $key => $variation) {
                     ProductVariation::create([
@@ -107,8 +107,7 @@ class ProductController extends Controller
                     ]);
                 }
             }
-        }
-        else {
+        } else {
             $product = Product::create([
                 'name' => $request->name,
                 'description' => $request->description,
@@ -118,7 +117,7 @@ class ProductController extends Controller
                 'vendor_id' => $request->vendor,
                 'category_id' => $request->category
             ]);
-            
+
             ProductVariation::create([
                 'name' => "novariation",
                 'price' => $request->product_price_no_var,
@@ -348,9 +347,13 @@ class ProductController extends Controller
         } else {
             $vendor = false;
             if ($request->filter) {
-                $products = Product::orderBy($request->metric, $request->sort)->where('category_id', $request->filter)->paginate(10);
+                $products = Product::orderBy($request->metric, $request->sort)
+                    ->where('name', 'LIKE', '%' . $request->search . '%')
+                    ->where('category_id', $request->filter)->paginate(10);
             } else {
-                $products = Product::orderBy($request->metric, $request->sort)->paginate(10);
+                $products = Product::orderBy($request->metric, $request->sort)
+                    ->where('name', 'LIKE', '%' . $request->search . '%')
+                    ->paginate(10);
             }
             return view('admin.manage.product.inc.product', compact('products', 'vendor'));
         }

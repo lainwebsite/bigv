@@ -54,6 +54,16 @@
             <!-- Start Page Content -->
             <!-- ============================================================== -->
             <!-- basic table -->
+            <div class="d-flex mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchName" name="search_name"
+                        placeholder="Search here..">
+                    <div class="input-group-append">
+                        <div style="border-radius: 0 10px 10px 0 !important;" onclick="searchData()"
+                            class="btn btn-outline-secondary border-lightgray">Search</div>
+                    </div>
+                </div>
+            </div>
             <div class="d-flex gap-15x mb-3">
                 <div id="status-filter-active" class="card-not-selected pr-3 pl-3 pt-2 pb-2 status-filter"
                     onclick="changeFilter('active');">
@@ -98,11 +108,19 @@
     <script>
         var page = 1;
         var filter = null;
+        var search = null;
         $(document).on('click', '.pagination a', function(event) {
             event.preventDefault();
             page = $(this).attr('href').split('page=')[1];
             sort(page);
         });
+    </script>
+    <script>
+        function searchData() {
+            page = 1;
+            search = $("#searchName").val();
+            sort(page);
+        }
     </script>
     <script>
         function changeFilter(selected) {
@@ -132,9 +150,9 @@
                     _token: CSRF_TOKEN,
                     sort: $('#sort').val(),
                     filter: filter,
+                    search: search
                 })
                 .done(function(data) {
-                    console.log(data)
                     $('#discount-list').html(data);
                 })
                 .fail(function(error) {

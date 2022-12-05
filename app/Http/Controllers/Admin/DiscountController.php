@@ -399,13 +399,17 @@ class DiscountController extends Controller
     public function sort(Request $request)
     {
         if ($request->filter == "upcoming") {
-            $discounts = Discount::where('duration_start', '>', Carbon::now())->orderBy('created_at', $request->sort)->paginate(10);
+            $discounts = Discount::where('duration_start', '>', Carbon::now())->orderBy('created_at', $request->sort)
+                ->where('code', 'LIKE', '%' . $request->search . '%')->paginate(10);
         } else if ($request->filter == "active") {
-            $discounts = Discount::where('duration_start', '<=', Carbon::now())->where('duration_end', '>=', Carbon::now())->orderBy('created_at', $request->sort)->paginate(10);
+            $discounts = Discount::where('duration_start', '<=', Carbon::now())->where('duration_end', '>=', Carbon::now())->orderBy('created_at', $request->sort)
+                ->where('code', 'LIKE', '%' . $request->search . '%')->paginate(10);
         } else if ($request->filter == "ended") {
-            $discounts = Discount::where('duration_end', '<', Carbon::now())->orderBy('created_at', $request->sort)->paginate(10);
+            $discounts = Discount::where('duration_end', '<', Carbon::now())->orderBy('created_at', $request->sort)
+                ->where('code', 'LIKE', '%' . $request->search . '%')->paginate(10);
         } else {
-            $discounts = Discount::orderBy('created_at', $request->sort)->paginate(10);
+            $discounts = Discount::orderBy('created_at', $request->sort)
+                ->where('code', 'LIKE', '%' . $request->search . '%')->paginate(10);
         }
         return view('admin.manage.discounts.inc.discount', compact('discounts'));
     }

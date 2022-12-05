@@ -109,9 +109,18 @@ class TransactionController extends Controller
     public function sort(Request $request)
     {
         if ($request->filter) {
-            $transactions = Transaction::orderBy('created_at', $request->sort)->where('status_id', $request->filter)->paginate(10);
+            $transactions = Transaction::orderBy('created_at', $request->sort)
+                ->where('status_id', $request->filter)
+                ->whereHas('user', function ($q) use ($request) {
+                    $q->where('name', 'LIKE', '%' . $request->search . '%');
+                })
+                ->paginate(10);
         } else {
-            $transactions = Transaction::orderBy('created_at', $request->sort)->paginate(10);
+            $transactions = Transaction::orderBy('created_at', $request->sort)
+                ->whereHas('user', function ($q) use ($request) {
+                    $q->where('name', 'LIKE', '%' . $request->search . '%');
+                })
+                ->paginate(10);
         }
         return view('admin.manage.transaction.inc.transaction', compact('transactions'));
     }
