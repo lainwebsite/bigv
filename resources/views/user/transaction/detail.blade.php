@@ -106,7 +106,7 @@
                                                             <div class="c-product-rating__star star-review"
                                                                 style="cursor: pointer;" step="{{ $j }}">
                                                                 <div class="icon">
-                                                                    <div class="fas fa-star">
+                                                                    <div>
                                                                         <img src="{{ asset('assets/Star 1.svg') }}"
                                                                             loading="lazy" alt="" />
                                                                     </div>
@@ -152,15 +152,13 @@
                         @endif
                     </div>
                 </form>
-                <div class="vendors-card">
+                <div class="vendors-card" style="margin-bottom: 30px;">
                     <div>
                         <h4>Shipping Method</h4>
                         <div>
                             <div class="checkout-buttons">
-                                <a href="#" @class([
-                                    'delivery-button w-inline-block',
-                                    'active' => $transaction->pickup_method_id == 1,
-                                ])>
+                                @if ($transaction->pickup_method_id == 1)
+                                <a href="#" class='delivery-button w-inline-block'>
                                     <svg width="33" height="33" viewBox="0 0 33 33" class="shipping-icon"
                                         fill="#444349" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -172,10 +170,9 @@
                                     </svg>
                                     <div class="text-size-small">Delivery</div>
                                 </a>
-                                <a href="#" @class([
-                                    'self-collection-button w-inline-block',
-                                    'active' => $transaction->pickup_method_id == 2,
-                                ])>
+                                @endif
+                                @if ($transaction->pickup_method_id == 2)
+                                <a href="#" class='delivery-button w-inline-block'>
                                     <svg width="24" height="24" viewBox="0 0 24 24" class="shipping-icon"
                                         fill="#444349" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -184,6 +181,7 @@
                                     </svg>
                                     <div class="text-size-small">Self Collection</div>
                                 </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -202,15 +200,16 @@
                             </div>
                         </div>
                     </div>
+                    @if ($transaction->shipping_address_id != null)
                     <div class="different-add-div">
-                        @if ($transaction->billing_address_id != $transaction->shipping_address_id)
+                        
                             <div class="div-block-26">
                                 <h4 class="heading-7">Shipped to Different Address</h4><img
                                     src="{{ asset('assets/630b960db00126d372dcaef4_check.svg') }}" loading="lazy"
                                     alt="" />
                             </div>
                             <div class="div-line"></div>
-                        @endif
+                        
                         <div class="div-block-26">
                             <div>
                                 <h4 class="heading-7">{{ $transaction->user->name }}</h4>
@@ -225,6 +224,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     <div class="div-line"></div>
                     <h4 class="heading-6 margin-vertical margin-small text-color-dark-grey">Shipping/Pickup Time</h4>
                     <div class="delivery-add-item">
@@ -233,11 +233,17 @@
                             <h5 class="text-color-grey">{{ $transaction->delivery_date }}</h5>
                         </div>
                     </div>
-                    <div class="div-block-27"><a href="#" class="delivery-button w-inline-block">
+                    <div class="div-block-27">
+                        @if ($transaction->pickup_time_id == 1)
+                        <a href="#" class="delivery-button w-inline-block">
                             <div>AM</div>
-                        </a><a href="#" class="delivery-button w-inline-block">
+                        </a>
+                        @else
+                        <a href="#" class="delivery-button w-inline-block">
                             <div>PM</div>
-                        </a></div>
+                        </a>
+                        @endif
+                    </div>
                 </div>
             </div>
             <div class="cart-summary">

@@ -45,4 +45,8 @@ class PageController extends Controller
         }])->where('vendor_id', 1)->orderBy('created_at', 'desc')->paginate(20); // Tolong dirubah filter vendornya
         return view('user.vendor.detail', ["products"=>$products]);
     }
+    
+    public function about(){
+        return view('user.about.index');
+    }
 }

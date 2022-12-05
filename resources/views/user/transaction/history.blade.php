@@ -16,15 +16,16 @@
         <div class="transactions-page-wrapper">
             <div class="profile-page-menu">
                 <div class="flex gap-small">
-                    <div><b>{{ auth()->user()->name }}</b></div>
+                  <div><b>{{auth()->user()->name}}</b></div>
                 </div>
+                <div class="div-line" style="margin:0 !important;"></div>
                 <div class="w-form">
-                    <form id="email-form-2" name="email-form-2" data-name="Email Form 2" method="get" class="form-2">
-                        <label for="email" class="transaction-menus">Transactions</label><label for="email"
-                            class="transaction-menus">Profile Settings</label><label for="email"
-                            class="transaction-menus">Addresses</label><label for="email"
-                            class="transaction-menus">Promos</label>
-                    </form>
+                  <div class="form-2">
+                      <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Profile Settings</a>
+                      <a href="{{url('/user/transaction')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Transactions</a>
+                      <a href="{{url('/user/address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
+                      <a href="{{url('/user/promo')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
+                  </div>
                 </div>
             </div>
             <div class="transactions-column" style="padding: 20px;">
@@ -67,7 +68,7 @@
                         @foreach ($transaction->carts as $cart)
                             @if ($current_vendor != $cart->vendor_id)
                                 <div class="flex space-between">
-                                    <div class="flex gap-small"><img src="{{ asset($cart->vendor_photo) }}" loading="lazy"
+                                    <div class="flex gap-small"><img src="{{ asset('uploads/'.$cart->vendor_photo) }}" loading="lazy"
                                             alt="" class="vendor-image" />
                                         <div>
                                             <h5 class="text-color-dark-grey">{{ $cart->vendor_name }}</h5>
@@ -77,7 +78,7 @@
                                 @php($current_vendor = $cart->vendor_id)
                             @endif
                             <div class="vendor-item">
-                                <div class="flex gap-medium"><img src="{{ asset($cart->product_featured_image) }}"
+                                <div class="flex gap-medium"><img src="{{ asset('uploads/'.$cart->product_featured_image) }}"
                                         loading="lazy" sizes="(max-width: 479px) 61vw, 70px" alt=""
                                         class="image-18" />
                                     <div>

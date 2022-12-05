@@ -89,7 +89,7 @@
                             class="nav-link w-nav-link">Vendors</a>
                         <div class="underline"></div>
                     </div>
-                    <div class="nav-link-wrapper"><a href="#" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb"
+                    <div class="nav-link-wrapper"><a href="{{url('about')}}" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb"
                             class="nav-link w-nav-link">About Us</a>
                         <div class="underline"></div>
                     </div>
@@ -165,7 +165,7 @@
             </div>
         </div>
     </div>
-    <div class="promo-section">
+    <div class="promo-section" style="margin-top: 20vh;">
         <div class="todays-pick-promo-container">
             <div class="heading-large margin-bottom margin-large ea-bottom">Latest Promos</div>
             <div class="promo-div" style="display:none;">

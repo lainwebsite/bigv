@@ -53,7 +53,6 @@ class PaynowController extends Controller
             // ]);
 
             $responseJSON = json_decode($response->getBody()->getContents());
-            // dd($responseJSON);
             return redirect()->away($responseJSON->url);
         } catch (\GuzzleHttp\Exception\RequestException $ex) {
             dd($ex->getResponse()->getBody()->getContents());
@@ -79,7 +78,7 @@ class PaynowController extends Controller
             if ($responseSignature == $generatedSignature) {
                 $status = "SUCCESS";
 
-                DB::table('transactions')->where('id', $request->reference_number)->update(['status_id' => 2]);
+                // DB::table('transactions')->where('id', $request->reference_number)->update(['status_id' => 2]);
                 DB::commit();
             }
 

@@ -62,7 +62,8 @@
                                 {{ $product->name }}</h5>
                             <h2 class="heading-2 text-color-grey margin-vertical margin-xsmall"
                                 variation-id="{{ $product->variations[0]->id }}">
-                                {{ count($product->variations) > 0 ? ($product->variations[0]->name == 'novariation' ? $product->name : $product->variations[0]->name) : $product->name }}
+                                <!--{{ count($product->variations) > 0 ? ($product->variations[0]->name == 'novariation' ? $product->name : $product->variations[0]->name) : $product->name }}-->
+                                {{ $product->name }}
                             </h2>
                             <div class="flex" style="justify-content: space-between; gap: 10px;">
                                 <div class="c-product-rating">
@@ -180,28 +181,70 @@
                                     </defs>
                                 </svg>
                             </div>
+                            <!-- @if ($product->variations[0]->name == 'novariation')-->
+                            <!--    @if ($product->variations[0]->discount != 0)-->
+                            <!--        <div class="card-discount">-->
+                            <!--            <div class="discount">{{ $product->variations[0]->discount }}%</div>-->
+                            <!--        </div>-->
+                            <!--    @endif-->
+        
+                            <!--    @if (count($product->variations) > 1)-->
+                            <!--        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">-->
+                            <!--            ${{ $minProductPrice }} - ${{ $maxProductPrice }}-->
+                            <!--        </div>-->
+                            <!--    @else-->
+                            <!--        <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"-->
+                            <!--            class="sale-price text-color-light-grey" style="padding: 0.25em;">-->
+                            <!--            ${{ $product->variations[0]->price }}</div>-->
+                            <!--        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">-->
+                            <!--            ${{ $product->variations[0]->price - $product->variations[0]->discount }}</div>-->
+                            <!--    @endif-->
+                            <!--@else-->
+                            <!--    @if (count($product->variations) > 1)-->
+                            <!--        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">-->
+                            <!--            ${{ $minProductPrice }} - ${{ $maxProductPrice }}-->
+                            <!--        </div>-->
+                            <!--    @else-->
+                            <!--        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">-->
+                            <!--            ${{ $product->variations[0]->name == 'novariation' ? $product->variations[0]->price : '' }}-->
+                            <!--        </div>-->
+                            <!--    @endif-->
+                            <!--@endif-->
 
                             @if ($product->variations[0]->name == 'novariation')
-                                <!-- NO VARIATIONS -->
-                                <h3 class="product-price heading-3 margin-vertical margin-xsmall"
-                                    price="{{ $product->variations[0]->price }}"
-                                    variation-id="{{ $product->variations[0]->id }}">
-                                    ${{ $product->variations[0]->price }}</h3>
-                                <div class="div-line"></div>
+                                <!--NO VARIATIONS -->
+                                @if ($product->variations[0]->discount != 0)
+                                    <!--<div class="card-discount">-->
+                                    <!--    <div class="discount">- ${{ $product->variations[0]->discount }}</div>-->
+                                    <!--</div>-->
+                                    <h3 class="heading-3 margin-vertical margin-xsmall" style="display: inline-block;">
+                                        ${{ $product->variations[0]->price }}</h3>
+                                    <h3 class="product-price heading-3 text-color-light-grey margin-vertical margin-xsmall"
+                                        price="${{ $product->variations[0]->price - $product->variations[0]->discount }}"
+                                        variation-id="{{ $product->variations[0]->id }}" style="display: inline-block;">
+                                        ${{ $product->variations[0]->price - $product->variations[0]->discount }}</h3>
+                                    <div class="div-line"></div>
+                                @else
+                                    <h3 class="product-price heading-3 margin-vertical margin-xsmall"
+                                        price="{{ $product->variations[0]->price }}"
+                                        variation-id="{{ $product->variations[0]->id }}">
+                                        ${{ $product->variations[0]->price }}</h3>
+                                    <div class="div-line"></div>
+                                @endif
                             @else
-                                <!-- VARIATIONS -->
-                                <h3 class="product-price heading-3 margin-vertical margin-xsmall"
-                                    min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}">
-                                    ${{ $minProductPrice }} - ${{ $maxProductPrice }}</h3>
-                                <div class="div-line"></div>
-                                <h5 class="heading-4 mb-2">{{ ucwords($product->variation_name) }}</h5>
-                                <div class="flex flex-wrap mb-3">
-                                    @foreach ($product->variations as $productVariation)
-                                        <button class="product-variation button-secondary-copy w-button"
-                                            variation-id="{{ $productVariation->id }}"
-                                            price="{{ $productVariation->price }}">{{ $productVariation->name }}</button>
-                                    @endforeach
-                                </div>
+                                 <!--VARIATIONS -->
+                                <!--<h3 class="product-price heading-3 margin-vertical margin-xsmall"-->
+                                <!--    min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}">-->
+                                <!--    ${{ $minProductPrice }} - ${{ $maxProductPrice }}</h3>-->
+                                <!--<div class="div-line"></div>-->
+                                <!--<h5 class="heading-4 mb-2">{{ ucwords($product->variation_name) }}</h5>-->
+                                <!--<div class="flex flex-wrap mb-3">-->
+                                <!--    @foreach ($product->variations as $productVariation)-->
+                                <!--        <button class="product-variation button-secondary-copy w-button"-->
+                                <!--            variation-id="{{ $productVariation->id }}"-->
+                                <!--            price="{{ $productVariation->price }}">{{ $productVariation->name }}</button>-->
+                                <!--    @endforeach-->
+                                <!--</div>-->
                             @endif
 
                             <!-- ADDONS -->
@@ -214,7 +257,7 @@
                                                 id="" @if ($addon->required) required @endif>
                                                 @foreach ($addon->addons_options as $addons_option)
                                                     <option price="{{ $addons_option->price }}"
-                                                        value="{{ $addons_option->id }}">{{ $addons_option->name }}
+                                                        value="{{ $addons_option->id }}">{{ $addons_option->name }} (+ ${{$addons_option->price}})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -239,6 +282,7 @@
                                         @csrf
 
                                         <input id="productVariationId" type="hidden" name="product_variation_id">
+                                        <!--<input id="productAddonsId" type="hidden" name="addons_id">-->
                                         <input id="quantity" type="hidden" name="quantity">
                                         <button type="submit" class="btn-buy-now button-secondary oh-grow w-button"
                                             style="width: 100%;">Buy
@@ -646,6 +690,35 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
     </script>
     <script>
+        function calculatePrice() {
+            var price = $(".product-price").attr("price");
+            console.log("price sebelum");
+            console.log(price);
+            if ($(".product-variation").length > 0) {
+                if ($(".product-variation").is(".selected")) {
+                    price = parseFloat($(".product-variation.selected").attr("price"));
+                } else {
+                    price = $(".product-price").attr("min-price") + " - $" + $(".product-price").attr("max-price");
+                    alert("Please select one of variation product first!");
+                    return price;
+                }
+            }
+
+            if (price != undefined && $(".addons-option").length > 0) {
+                console.log("masuk addons");
+                console.log(price);
+                console.log($(".addons-option option:selected"));
+                $(".addons-option option:selected").each(function() {
+                    price += parseFloat($(this).attr("price"));
+                })
+                console.log("ditambah addons");
+                console.log(price);
+            }
+            console.log("price sesudah");
+            console.log(price);
+            return price;
+        }
+
         $(".product-variation").on("click", function() {
             if ($(this).hasClass("selected")) {
                 $(this).removeClass("selected");
@@ -659,7 +732,7 @@
                 });
 
                 $(this).addClass("selected");
-                $(".product-price").html("$" + $(this).attr("price")).attr("variation-id", $(this).attr(
+                $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
                     "variation-id"));
                 $(".btn-add-cart").removeAttr("disabled").removeClass("btn-secondary");
                 $(".btn-buy-now").removeAttr("disabled").removeClass("btn-outline-secondary text-secondary");
@@ -667,11 +740,9 @@
         });
 
         $(".addons-option option").on("click", function() {
-            var price = parseFloat($(".product-price").attr("price"));
-            var addons_price = parseFloat($(this).attr("price"));
-
-            $(".product-price").html("$" + (price + addons_price));
+            $(".product-price").html("$" + calculatePrice());
         });
+
 
         $(".quantity-change").on('click', function() {
             var qty = parseInt($(".product-quantity").val());
@@ -708,8 +779,10 @@
                     var product_variation_id = ($(".product-variation.selected").length > 0) ?
                         $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
                             "variation-id");
+                    // var product_addons_id = $(".")
 
                     $("#productVariationId").val(product_variation_id);
+                    // $("#productAddonsId").val(product_variation_id);
                     $("#quantity").val($(".product-quantity").val());
                 });
             @endif

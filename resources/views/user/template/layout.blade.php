@@ -100,7 +100,7 @@
                 <div class="div-line-orange"></div><a href="{{ url('product') }}"
                     class="text-color-grey w-nav-link">Products</a>
                 <div class="div-line-orange"></div><a href="{{url('vendor')}}" class="text-color-grey w-nav-link">Vendors</a>
-                <div class="div-line-orange"></div><a href="#" class="text-color-grey w-nav-link">About Us</a>
+                <div class="div-line-orange"></div><a href="{{url('about')}}" style="white-space: nowrap;" class="text-color-grey w-nav-link">About Us</a>
                 <div class="div-block-22">
                     @auth
                         <div class="div-line-orange"></div>

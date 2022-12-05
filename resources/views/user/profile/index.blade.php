@@ -11,7 +11,7 @@ Profile Settings - Big V
 @section('content')
 <div class="content">
     <div class="header-section">
-      <h2 class="orange-text">Promos</h2>
+      <h2 class="orange-text">Profile</h2>
     </div>
     <div class="transactions-page-wrapper">
       <div class="profile-page-menu">
@@ -33,36 +33,34 @@ Profile Settings - Big V
           <h1 class="signup-header">Your Profile</h1>
           <div class="margin-bottom-2">Change to edit your information</div>
           <div class="w-form">
-            <form id="wf-form-signup" name="wf-form-signup" data-name="signup" method="get" data-ms-form="signup"
-              class="form-field-wrapper-2">
+            <form method="POST" class="form-field-wrapper-2" action="{{url('/profile/edit')}}">
+                @csrf
               <div class="text-field-wrapper">
-                <label for="First-Name-2" class="field-label">First Name</label>
-                <input type="text" class="text-field-3 w-input" maxlength="256" name="First-Name-2" data-name="First Name 2" placeholder="e.g. Eddy" id="First-Name-2" data-ms-member="first-name" required="" />
+                <label class="field-label">First Name</label>
+                <input type="text" class="text-field-3 w-input" maxlength="256" name="first-name" placeholder="e.g. Eddy" required="" />
               </div>
               <div class="text-field-wrapper">
-                <label for="Last-Name-2" class="field-label">Last Name</label>
-                <input type="text" class="text-field-3 w-input" maxlength="256" name="Last-Name-2" data-name="Last Name 2" placeholder="e.g. Lin" id="Last-Name-2" data-ms-member="last-name" required="" />
+                <label class="field-label">Last Name</label>
+                <input type="text" class="text-field-3 w-input" maxlength="256" name="last-name" placeholder="e.g. Lin" required="" />
               </div>
               <div class="text-field-wrapper">
-                <label for="Email-3" class="field-label">Email</label>
-                <input type="email" class="text-field-3 w-input" maxlength="256" name="Email-2" data-name="Email 2" placeholder="e.g. eddy.lin@email.com" id="Email-2" data-ms-member="email" required="" />
+                <label class="field-label">Email</label>
+                <input type="email" class="text-field-3 w-input" maxlength="256" name="email" placeholder="e.g. eddy.lin@email.com" required="" />
               </div>
               <div class="text-field-wrapper">
-                <label for="Password-3" class="field-label">Password</label>
-                <input type="password" class="text-field-3 w-input" maxlength="256" name="Password-2" data-name="Password 2" placeholder="Password" id="Password-2" data-ms-member="password" required="" />
-                <label for="Password-3" class="field-label">Confirm Password</label>
-                <input type="password" class="text-field-3 w-input" maxlength="256" name="Password-2" data-name="Password 2" placeholder="Password" id="Password-2" data-ms-member="password" required="" />
+                <label class="field-label">Password</label>
+                <input type="password" class="text-field-3 w-input" maxlength="256" name="password" placeholder="Password" />
+                <label class="field-label">Confirm Password</label>
+                <input type="password" class="text-field-3 w-input" maxlength="256" name="password-confirm" placeholder="Password" />
                 <div class="field-description">Must be at least 8 characters</div>
               </div>
               <div class="text-field-wrapper">
-                <label for="Phone-Number-2" class="field-label">Phone Number</label>
-                <input type="tel" class="text-field-3 w-input" maxlength="256" name="Phone-Number-2" data-name="Phone Number 2" placeholder="e.g. 6123847502" id="Phone-Number-2" data-ms-member="password" required="" />
-                <div class="field-description">Must be at least 8 characters</div>
+                <label class="field-label">Phone Number</label>
+                <input type="tel" class="text-field-3 w-input" maxlength="256" name="phone" placeholder="e.g. 6123847502" required="" />
               </div>
               <div class="text-field-wrapper">
-                <label for="Birthdate-3" class="field-label">Birthdate</label>
-                <input type="text" class="text-field-3 w-input" maxlength="256" name="Birthdate-3" data-name="Birthdate 3" placeholder="e.g. 19 April 2002" id="Birthdate-3" data-ms-member="password" required="" />
-                <div class="field-description">Must be at least 8 characters</div>
+                <label class="field-label">Birthdate</label>
+                <input type="date" class="text-field-3 w-input" maxlength="256" name="date_of_birth" placeholder="e.g. 19 April 2002" required="" />
               </div>
               <input type="submit" value="Save" data-wait="Please wait..." class="button-4 w-button" />
             </form>

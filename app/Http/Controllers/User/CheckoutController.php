@@ -84,7 +84,7 @@ class CheckoutController extends Controller
                 }
 
                 if (count($cart_checkout_id) > 0) {
-                    $shipping_price = 30;
+                    $shipping_price = 25;
 
                     session()->put('total-checkout-items', $total_items);
                     session()->put('total-checkout-price', $total_price);
@@ -147,7 +147,7 @@ class CheckoutController extends Controller
     public function placeOrder(Request $request)
     {
         $request->validate([
-            'delivery_date' => 'required|string|date_format:Y-m-h',
+            'delivery_date' => 'string|date_format:Y-m-d',
             // 'payment_method_id' => 'required|numeric',
             'pickup_method_id' => 'required|numeric',
             'pickup_time_id' => 'required|numeric',
@@ -173,6 +173,9 @@ class CheckoutController extends Controller
             Cart::where('id', $item)->update(['transaction_id' => $transaction->id]);
         }
 
+        $paynow = new PaynowController();
+        return $paynow->pay(session()->get('total-checkout-price'), $transaction->id);
+
         // $transaction = Transaction::create([
         //     'delivery_date' => '2022-11-29',
         //     'pickup_method_id' => '1',
@@ -184,9 +187,6 @@ class CheckoutController extends Controller
         //     'status_id' => 1,
         //     'payment_method_id' => 1,
         // ]);
-
-        $paynow = new PaynowController();
-        return $paynow->pay(session()->get('total-checkout-price'), $transaction->id);
     }
 
     public function transitStatusPayment(Request $request)

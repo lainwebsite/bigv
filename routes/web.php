@@ -71,6 +71,7 @@ Route::group(['middleware' => 'general'], function () {
     Route::get('product/filter', [ProductController::class, 'filter']);
     Route::resource('product', ProductController::class);
     Route::resource('vendor', VendorController::class);
+    Route::get('/about', [PageController::class, 'about']);
 });
 
 // Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
@@ -117,9 +118,9 @@ Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], fu
 Route::group(['middleware' => ['user']], function () {
     Route::resource('user', UserController::class);
 
-    Route::get('profile', [UserController::class, 'profile'])->name('profile');
-    Route::get('profile/edit', [UserController::class, 'showEditProfile'])->name('editProfileForm');
-    Route::post('profile/edit', [UserController::class, 'editProfile'])->name('editProfile');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    // Route::get('profile/edit', [UserController::class, 'showEditProfile'])->name('editProfileForm');
+    Route::post('/profile/edit', [UserController::class, 'editProfile'])->name('editProfile');
 });
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {

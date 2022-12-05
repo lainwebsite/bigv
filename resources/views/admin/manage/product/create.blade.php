@@ -59,6 +59,11 @@
                                     <input type="text" class="form-control" id="name" name="name" required
                                         placeholder="Product Name">
                                 </div>
+                                <div class="form-group" id="productPriceNoVariation">
+                                    <label for="productPriceNoVar">Product Price</label>
+                                    <input type="number" class="form-control" id="productPriceNoVar" name="product_price_no_var"
+                                        placeholder="Product Price">
+                                </div>
                                 <div class="form-group">
                                     <label for="description">Product Description</label>
                                     <textarea class="form-control" id="description" name="description" required placeholder="Product Description"
@@ -114,17 +119,25 @@
                                         an Image</a>
                                 </p>
                                 <div class="divider-dash mt-4 mb-4"></div>
-                                <h4 class="card-title mb-4">Product Variations</h4>
-                                <div class="form-group">
-                                    <label for="variation_named">Product Variation Name</label>
-                                    <input type="text" class="form-control" id="variation_named" name="variation_named"
-                                        placeholder="e.g Size, Flavor, Color, etc.">
+                                <div class="form-check form-check-inline mb-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="addVariationCheckbox" name="with_variation">
+                                        <label class="custom-control-label" for="addVariationCheckbox">Add Variation</label>
+                                    </div>
                                 </div>
-                                <div id="productVariationGroup"></div>
-                                <p class="text-lg-right mt-4">
-                                    <a href="javascript:void(0)" class="btn btn-primary text-white" id="addVariation">Add
-                                        a Variation</a>
-                                </p>
+                                <div id="addProductVariationGroup" style="display:none;">
+                                    <h4 class="card-title mb-4">Product Variations</h4>
+                                    <div class="form-group">
+                                        <label for="variation_named">Product Variation Name</label>
+                                        <input type="text" class="form-control" id="variation_named" name="variation_named"
+                                            placeholder="e.g Size, Flavor, Color, etc.">
+                                    </div>
+                                    <div id="productVariationGroup"></div>
+                                    <p class="text-lg-right mt-4">
+                                        <a href="javascript:void(0)" class="btn btn-primary text-white" id="addVariation">Add
+                                            a Variation</a>
+                                    </p>
+                                </div>
                                 <div class="divider-dash mt-4 mb-4"></div>
                                 <!-- PRODUCT ADDON -->
                                 <h4 class="card-title mb-4">Product Addon</h4>
@@ -191,6 +204,17 @@
         $(document).on('click', '.deleteImage', function() {
             var id = $(this).attr("count");
             $("#inputProductImage" + id).remove();
+        });
+
+        $("#addVariationCheckbox").on('change', function(){
+            if ($(this).is(':checked')){
+                $("#addProductVariationGroup").slideDown();
+                $("#productPriceNoVariation").slideUp();
+            } 
+            else {
+                $("#addProductVariationGroup").slideUp();
+                $("#productPriceNoVariation").slideDown();
+            }
         });
 
         var countVariation = 0;
