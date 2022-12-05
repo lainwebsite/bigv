@@ -15,7 +15,7 @@
                     ])>
                         <div class="d-flex justify-content-between">
                             <p class="m-0 text-white">
-                                {{ $transaction->billing_address->user->name }}</p>
+                                {{ $transaction->user->name }}</p>
                             <p class="m-0 text-white">{{ $transaction->status->name }}
                             </p>
                         </div>
