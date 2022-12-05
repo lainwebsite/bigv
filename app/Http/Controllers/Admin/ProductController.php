@@ -119,13 +119,11 @@ class ProductController extends Controller
                 'category_id' => $request->category
             ]);
             
-            if ($request->variation_name) {
-                ProductVariation::create([
-                    'name' => "novariation",
-                    'price' => $request->product_price_no_var,
-                    'product_id' => $product->id
-                ]);
-            }
+            ProductVariation::create([
+                'name' => "novariation",
+                'price' => $request->product_price_no_var,
+                'product_id' => $product->id
+            ]);
         }
 
 

@@ -134,13 +134,17 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <h4 class="card-title mb-4">Shipping Address</h4>
-                                                    <p class="m-0">{{ $transaction->shipping_address->name }}</p>
-                                                    <p class="m-0">{{ $transaction->shipping_address->phone }}</p>
-                                                    <p class="mb-2">[{{ $transaction->shipping_address->block_number }}]
-                                                        [{{ $transaction->shipping_address->street }}]<br>#[{{ $transaction->shipping_address->unit_level }}]-[{{ $transaction->shipping_address->unit_number }}]
-                                                        [{{ $transaction->shipping_address->building_name }}]<br>Singapore
-                                                        [{{ $transaction->shipping_address->postal_code }}]</p>
-                                                    <small>{{ $transaction->shipping_address->additional_info }}</small>
+                                                    @if ($transaction->shipping_address != null)
+                                                        <p class="m-0">{{ $transaction->shipping_address->name }}</p>
+                                                        <p class="m-0">{{ $transaction->shipping_address->phone }}</p>
+                                                        <p class="mb-2">[{{ $transaction->shipping_address->block_number }}]
+                                                            [{{ $transaction->shipping_address->street }}]<br>#[{{ $transaction->shipping_address->unit_level }}]-[{{ $transaction->shipping_address->unit_number }}]
+                                                            [{{ $transaction->shipping_address->building_name }}]<br>Singapore
+                                                            [{{ $transaction->shipping_address->postal_code }}]</p>
+                                                        <small>{{ $transaction->shipping_address->additional_info }}</small>
+                                                    @else
+                                                        <p class="m-0">Same as Billing Address</p>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="divider-dash mt-4 mb-4"></div>

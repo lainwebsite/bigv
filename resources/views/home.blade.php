@@ -89,7 +89,7 @@
                             class="nav-link w-nav-link">Vendors</a>
                         <div class="underline"></div>
                     </div>
-                    <div class="nav-link-wrapper"><a href="#" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb"
+                    <div class="nav-link-wrapper"><a href="{{url('about')}}" data-w-id="33ebaa1d-c890-4ed1-df4b-2410c2296afb"
                             class="nav-link w-nav-link">About Us</a>
                         <div class="underline"></div>
                     </div>
