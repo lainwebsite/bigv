@@ -28,7 +28,7 @@ class PageController extends Controller
         foreach ($transactions_daily as $key => $transaction) {
             $total_income += $transaction->sold_price;
         }
-        $transactions = Transaction::all();
+        $transactions = Transaction::orderBy('created_at', 'desc')->get();
         $transactiones = Transaction::orderBy('created_at', 'asc')
             ->where('created_at', '<=', Carbon::now())->where('created_at', '>=', Carbon::now()->subDays(7))
             ->withCount(['carts as sold_count' => function ($query) {
