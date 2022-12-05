@@ -15,20 +15,17 @@
         </div>
         <div class="transactions-page-wrapper">
             <div class="profile-page-menu">
-                <div class="flex gap-small"><img src="{{ asset('assets/630193c64ebe686851463727_profile-002.jpg') }}"
-                        loading="lazy" width="40" alt="" class="image-13" />
-                    <div>{{ Auth::user()->name }}</div>
+                <div class="flex gap-small">
+                  <div><b>{{auth()->user()->name}}</b></div>
                 </div>
+                <div class="div-line" style="margin:0 !important;"></div>
                 <div class="w-form">
-                    <form id="email-form-2" name="email-form-2" data-name="Email Form 2" method="get" class="form-2">
-                        <a href="{{ route('user.transaction.index') }}" class="text-color-gray"
-                            style="text-decoration: none;">Transactions</a>
-                        <a href="{{ route('user.index') }}" class="text-color-gray" style="text-decoration: none;">Profile
-                            Settings</a>
-                        <a href="{{ route('user.user-address.index') }}" class="text-color-gray"
-                            style="text-decoration: none;">Addresses</a>
-                        <a href="#" class="text-color-gray" style="text-decoration: none;">Promos</a>
-                    </form>
+                  <div class="form-2">
+                      <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Profile Settings</a>
+                      <a href="{{url('/user/transaction')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Transactions</a>
+                      <a href="{{url('/user/address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
+                      <a href="{{url('/user/promo')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
+                  </div>
                 </div>
             </div>
             @php
@@ -192,10 +189,10 @@
                             <h4 class="heading-7">{{ $transaction->user->name }}</h4>
                             <div class="text-size-small">{{ $transaction->billing_address->phone }}</div>
                             <div class="text-size-small">
-                                <p class="mb-2">[{{ $transaction->billing_address->block_number }}]
-                                    [{{ $transaction->billing_address->street }}]<br>#[{{ $transaction->billing_address->unit_level }}]-[{{ $transaction->billing_address->unit_number }}]
-                                    [{{ $transaction->billing_address->building_name }}]<br>Singapore
-                                    [{{ $transaction->billing_address->postal_code }}]</p>
+                                <p class="mb-2">{{ $transaction->billing_address->block_number }}
+                                    {{ $transaction->billing_address->street }}<br>#{{ $transaction->billing_address->unit_level }}-{{ $transaction->billing_address->unit_number }}
+                                    {{ $transaction->billing_address->building_name }}<br>Singapore
+                                    {{ $transaction->billing_address->postal_code }}</p>
                                 <small>{{ $transaction->billing_address->additional_info }}</small>
                             </div>
                         </div>

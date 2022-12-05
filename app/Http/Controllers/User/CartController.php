@@ -62,6 +62,7 @@ class CartController extends Controller
             $request->validate([
                 'quantity' => 'required|numeric',
                 'product_variation_id' => 'required|numeric',
+                'product_addons_id' => 'required|array',
             ]);
 
             $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();

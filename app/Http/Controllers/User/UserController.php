@@ -76,7 +76,8 @@ class UserController extends Controller
 
     public function profile()
     {
-        return view('user.profile.index');
+        $user = auth()->user();
+        return view('user.profile.index', ["user"=>$user]);
     }
 
     public function showEditProfile()
@@ -86,20 +87,19 @@ class UserController extends Controller
 
     public function editProfile(Request $request)
     {
-        $request->validate([
-            'first_name' => 'sometimes|required|string|max:255',
-            'last_name' => 'sometimes|required|string|max:255',
-            'email' => 'required|string|max:255',
-            'phone' => ['sometimes', 'required', 'regex:/^((\+65)|(65)|0)\d{7,10}$/', 'min:10', 'max:15'],
-            'date_of_birth' => 'sometimes|required|date_format:Y-m-d',
+        $validator = $request->validate([
+            'name' => 'bail|sometimes|required|string|max:255',
+            'phone' => ['bail', 'sometimes', 'required', 'regex:/^((\+65)|(65)|0)\d{7,10}$/', 'min:10', 'max:15'],
+            'date_of_birth' => 'bail|sometimes|required|date_format:Y-m-d',
         ]);
 
+        
         $user = auth()->user();
         if ($request->password != null) {
-            $request->validate([
+            $validator = $request->validate([
                 'password' => 'required|confirmed|min:8'
             ]);
-
+            
             $data = $request->except('email');
             $data['password'] = bcrypt($request->password);
 

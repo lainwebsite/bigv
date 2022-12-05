@@ -3589,6 +3589,11 @@ figcaption {
   justify-content: flex-start;
 }
 
+.sale-price-detail {
+    display: inline-block;
+    text-decoration: line-through;
+}
+
 .sale-price {
   font-size: 0.9rem;
   line-height: 1.1;
@@ -3642,7 +3647,7 @@ figcaption {
 }
 
 .text-color-light-grey {
-  color: #a8a8a8;
+  color: #a8a8a8 !important;
 }
 
 .card-discount {

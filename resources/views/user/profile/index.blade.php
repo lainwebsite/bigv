@@ -21,7 +21,7 @@ Profile Settings - Big V
         <div class="div-line" style="margin:0 !important;"></div>
         <div class="w-form">
           <div class="form-2">
-              <a href="{{url('/user/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Profile Settings</a>
+              <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Profile Settings</a>
               <a href="{{url('/user/transaction')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Transactions</a>
               <a href="{{url('/user/address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
               <a href="{{url('/user/promo')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
@@ -32,36 +32,42 @@ Profile Settings - Big V
         <div class="form-wrapper-profile">
           <h1 class="signup-header">Your Profile</h1>
           <div class="margin-bottom-2">Change to edit your information</div>
+          @if(session('success'))
+            <p style="font-size:14px; color: #00ab41; margin: 15px 0;"><b>{{session('success')}}</b></p>
+          @endif
           <div class="w-form">
             <form method="POST" class="form-field-wrapper-2" action="{{url('/profile/edit')}}">
                 @csrf
               <div class="text-field-wrapper">
                 <label class="field-label">First Name</label>
-                <input type="text" class="text-field-3 w-input" maxlength="256" name="first-name" placeholder="e.g. Eddy" required="" />
-              </div>
-              <div class="text-field-wrapper">
-                <label class="field-label">Last Name</label>
-                <input type="text" class="text-field-3 w-input" maxlength="256" name="last-name" placeholder="e.g. Lin" required="" />
+                <input type="text" class="text-field-3 w-input" maxlength="256" name="name" value="{{$user->name}}" placeholder="e.g. Eddy" required="" />
               </div>
               <div class="text-field-wrapper">
                 <label class="field-label">Email</label>
-                <input type="email" class="text-field-3 w-input" maxlength="256" name="email" placeholder="e.g. eddy.lin@email.com" required="" />
+                <input type="email" class="text-field-3 w-input" maxlength="256" value="{{$user->email}}" placeholder="e.g. eddy.lin@email.com" readonly />
               </div>
               <div class="text-field-wrapper">
                 <label class="field-label">Password</label>
-                <input type="password" class="text-field-3 w-input" maxlength="256" name="password" placeholder="Password" />
+                <input type="password" class="text-field-3 w-input" style="margin-bottom:10px;" maxlength="256" name="password" placeholder="Password" />
                 <label class="field-label">Confirm Password</label>
-                <input type="password" class="text-field-3 w-input" maxlength="256" name="password-confirm" placeholder="Password" />
+                <input type="password" class="text-field-3 w-input" maxlength="256" name="password_confirmation" placeholder="Password" />
                 <div class="field-description">Must be at least 8 characters</div>
+                <div class="field-description">*Input a new Password to change the old Password!</div>
               </div>
               <div class="text-field-wrapper">
                 <label class="field-label">Phone Number</label>
-                <input type="tel" class="text-field-3 w-input" maxlength="256" name="phone" placeholder="e.g. 6123847502" required="" />
+                <input type="tel" class="text-field-3 w-input" maxlength="256" value="{{$user->phone}}" name="phone" placeholder="e.g. 6123847502" required="" />
               </div>
               <div class="text-field-wrapper">
                 <label class="field-label">Birthdate</label>
-                <input type="date" class="text-field-3 w-input" maxlength="256" name="date_of_birth" placeholder="e.g. 19 April 2002" required="" />
+                <input type="date" class="text-field-3 w-input" maxlength="256" name="date_of_birth" value="{{$user->date_of_birth}}" placeholder="e.g. 19 April 2002" required="" />
               </div>
+              @if ($errors->any())
+              @foreach ($errors->all() as $error)
+              <p style="font-size:14px; color: #ed3419; margin-bottom: 15px;"><b>{{$error}}</b></p>
+              <?php break; ?>
+              @endforeach
+              @endif
               <input type="submit" value="Save" data-wait="Please wait..." class="button-4 w-button" />
             </form>
           </div>

@@ -62,9 +62,6 @@
             </div>
         </div>
     </div>
-    <div class="cursor">
-        <div data-w-id="f4b78bbc-ea93-bb5a-a490-cac406bb401d" class="dot"></div>
-    </div>
 @endsection
 
 @section('javascript-extra')

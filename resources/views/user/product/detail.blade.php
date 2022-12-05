@@ -217,9 +217,9 @@
                                     <!--<div class="card-discount">-->
                                     <!--    <div class="discount">- ${{ $product->variations[0]->discount }}</div>-->
                                     <!--</div>-->
-                                    <h3 class="heading-3 margin-vertical margin-xsmall" style="display: inline-block;">
+                                    <h3 class="sale-price-detail heading-3 text-color-light-grey margin-vertical margin-xsmall">
                                         ${{ $product->variations[0]->price }}</h3>
-                                    <h3 class="product-price heading-3 text-color-light-grey margin-vertical margin-xsmall"
+                                    <h3 class="product-price heading-3 margin-vertical margin-xsmall"
                                         price="${{ $product->variations[0]->price - $product->variations[0]->discount }}"
                                         variation-id="{{ $product->variations[0]->id }}" style="display: inline-block;">
                                         ${{ $product->variations[0]->price - $product->variations[0]->discount }}</h3>
@@ -227,24 +227,26 @@
                                 @else
                                     <h3 class="product-price heading-3 margin-vertical margin-xsmall"
                                         price="{{ $product->variations[0]->price }}"
-                                        variation-id="{{ $product->variations[0]->id }}">
+                                        variation-id="{{ $product->variations[0]->id }}" style="display: inline-block;">
                                         ${{ $product->variations[0]->price }}</h3>
                                     <div class="div-line"></div>
                                 @endif
                             @else
-                                 <!--VARIATIONS -->
-                                <!--<h3 class="product-price heading-3 margin-vertical margin-xsmall"-->
-                                <!--    min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}">-->
-                                <!--    ${{ $minProductPrice }} - ${{ $maxProductPrice }}</h3>-->
-                                <!--<div class="div-line"></div>-->
-                                <!--<h5 class="heading-4 mb-2">{{ ucwords($product->variation_name) }}</h5>-->
-                                <!--<div class="flex flex-wrap mb-3">-->
-                                <!--    @foreach ($product->variations as $productVariation)-->
-                                <!--        <button class="product-variation button-secondary-copy w-button"-->
-                                <!--            variation-id="{{ $productVariation->id }}"-->
-                                <!--            price="{{ $productVariation->price }}">{{ $productVariation->name }}</button>-->
-                                <!--    @endforeach-->
-                                <!--</div>-->
+                                <!--VARIATIONS -->
+                                <h3 class="sale-price-detail heading-3 text-color-light-grey margin-vertical margin-xsmall" style="display: none;">$0</h3>
+                                <h3 class="product-price heading-3 margin-vertical margin-xsmall"
+                                    min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}" style="display: inline-block;">
+                                    ${{ $minProductPrice }} - ${{ $maxProductPrice }}</h3>
+                                <div class="div-line"></div>
+                                <h5 class="heading-4 mb-2">{{ ucwords($product->variation_name) }}</h5>
+                                <div class="flex flex-wrap mb-3">
+                                    @foreach ($product->variations as $productVariation)
+                                        <button class="product-variation button-secondary-copy w-button"
+                                            variation-id="{{ $productVariation->id }}"
+                                            price="{{ $productVariation->price }}"
+                                            @if ($productVariation->discount != 0) after-sale-price="{{ $productVariation->price - $productVariation->discount }}" @endif>{{ $productVariation->name }}</button>
+                                    @endforeach
+                                </div>
                             @endif
 
                             <!-- ADDONS -->
@@ -257,7 +259,7 @@
                                                 id="" @if ($addon->required) required @endif>
                                                 @foreach ($addon->addons_options as $addons_option)
                                                     <option price="{{ $addons_option->price }}"
-                                                        value="{{ $addons_option->id }}">{{ $addons_option->name }} (+ ${{$addons_option->price}})
+                                                        value="{{ $addons_option->id }}">{{ $addons_option->name }} (${{$addons_option->price}})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -282,7 +284,7 @@
                                         @csrf
 
                                         <input id="productVariationId" type="hidden" name="product_variation_id">
-                                        <!--<input id="productAddonsId" type="hidden" name="addons_id">-->
+                                        <input id="productAddonsId" type="hidden" name="addons_id">
                                         <input id="quantity" type="hidden" name="quantity">
                                         <button type="submit" class="btn-buy-now button-secondary oh-grow w-button"
                                             style="width: 100%;">Buy
@@ -692,11 +694,14 @@
     <script>
         function calculatePrice() {
             var price = $(".product-price").attr("price");
-            console.log("price sebelum");
-            console.log(price);
+            
             if ($(".product-variation").length > 0) {
                 if ($(".product-variation").is(".selected")) {
-                    price = parseFloat($(".product-variation.selected").attr("price"));
+                    if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
+                        price = parseFloat($(".product-variation.selected").attr("after-sale-price"));
+                    } else {
+                        price = parseFloat($(".product-variation.selected").attr("price"));
+                    }
                 } else {
                     price = $(".product-price").attr("min-price") + " - $" + $(".product-price").attr("max-price");
                     alert("Please select one of variation product first!");
@@ -705,17 +710,19 @@
             }
 
             if (price != undefined && $(".addons-option").length > 0) {
-                console.log("masuk addons");
-                console.log(price);
-                console.log($(".addons-option option:selected"));
+                var total_normal_price = ($(".product-variation.selected").attr("after-sale-price") != undefined) ? parseFloat($(".product-variation.selected").attr("price")) : 0;
                 $(".addons-option option:selected").each(function() {
+                    if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
+                        total_normal_price += parseFloat($(this).attr("price"));
+                    }
                     price += parseFloat($(this).attr("price"));
-                })
-                console.log("ditambah addons");
-                console.log(price);
+                });
+                
+                if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
+                    $(".sale-price-detail").html("$" + total_normal_price);
+                }
             }
-            console.log("price sesudah");
-            console.log(price);
+            
             return price;
         }
 
@@ -726,14 +733,22 @@
                     .attr("max-price")).removeAttr("product-id");
                 $(".btn-add-cart").attr("disabled", "").addClass("btn-secondary");
                 $(".btn-buy-now").attr("disabled", "").addClass("btn-outline-secondary text-secondary");
+                $(".sale-price-detail").css("display", "none");
             } else {
                 $(".product-variation").each(function() {
                     $(this).removeClass("selected");
                 });
 
                 $(this).addClass("selected");
-                $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
-                    "variation-id"));
+                if ($(this).attr("after-sale-price") != undefined) {
+                    $(".sale-price-detail").css("display", "").html("$" + $(this).attr("price"));
+                    $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
+                        "variation-id"));
+                } else {
+                    $(".sale-price-detail").css("display", "none").html(0);
+                    $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
+                        "variation-id"));
+                }
                 $(".btn-add-cart").removeAttr("disabled").removeClass("btn-secondary");
                 $(".btn-buy-now").removeAttr("disabled").removeClass("btn-outline-secondary text-secondary");
             }
@@ -763,10 +778,17 @@
                     var product_variation_id = ($(".product-variation.selected").length > 0) ?
                         $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
                             "variation-id");
+                    var product_addons_id = [];
+                    $(".addons-option").each(function() {
+                        if ($(this).val() > 0) {
+                            product_addons_id.push($(this).val());
+                        }
+                    });
 
                     $.post(url + "/user/cart", {
                         _token: CSRF_TOKEN,
                         product_variation_id: product_variation_id,
+                        product_addons_id: product_addons_id,
                         quantity: $(".product-quantity").val()
                     }).done(function(data) {
                         alert(data);
@@ -779,10 +801,17 @@
                     var product_variation_id = ($(".product-variation.selected").length > 0) ?
                         $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
                             "variation-id");
-                    // var product_addons_id = $(".")
+                    var product_addons_id = [];
+                    $(".addons-option").each(function() {
+                        if ($(this).val() > 0) {
+                            product_addons_id.push($(this).val());
+                        }
+                    });
 
                     $("#productVariationId").val(product_variation_id);
-                    // $("#productAddonsId").val(product_variation_id);
+                    if (product_addons_id.length > 0) {
+                        $("#productAddonsId").val(product_addons_id);
+                    }
                     $("#quantity").val($(".product-quantity").val());
                 });
             @endif
