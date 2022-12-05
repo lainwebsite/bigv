@@ -95,6 +95,7 @@ Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], fu
     Route::post('checkout/discount/apply-voucher', [DiscountController::class, 'applyVoucher']);
     Route::get('checkout/discount/cancel-voucher', [DiscountController::class, 'cancelVoucher']);
     Route::resource('discount', DiscountController::class);
+    Route::post('discount/search', [DiscountController::class, 'search']);
     Route::resource('payment-method', PaymentMethodController::class);
     Route::resource('pickup-method', PickupMethodController::class);
     Route::post('checkout/pickup-address/search', [PickupAddressController::class, 'search']);
