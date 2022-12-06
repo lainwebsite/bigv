@@ -50,7 +50,7 @@ class VendorController extends Controller
         $vendor_sales = Vendor::orderBy('created_at', 'asc');
 
         for ($i = 0; $i < $days; $i++) {
-            $date = Carbon::now()->subDays($i - 1)->toDateString();
+            $date = Carbon::now()->subDays($i)->toDateString();
             $vendor_sales = $vendor_sales->withCount(["carts as $date" => function ($query) use ($i) {
                 $query->whereHas('transaction', function ($q) use ($i) {
                     $q->where('created_at', '<', Carbon::now()->subDays($i - 1))
@@ -71,7 +71,7 @@ class VendorController extends Controller
             if (count($sales) == 0) {
                 $new_vendor = [];
                 for ($i = 0; $i < $days; $i++) {
-                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $date = Carbon::now()->subDays($i)->toDateString();
                     array_push($new_vendor, [
                         "period" => $date,
                         $key => $vendor[$date] ?? 0,
@@ -81,7 +81,7 @@ class VendorController extends Controller
                 array_push($sales, $new_vendor);
             } else {
                 for ($i = 0; $i < $days; $i++) {
-                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $date = Carbon::now()->subDays($i)->toDateString();
                     $sales[0][$i][$key] = $vendor[$date] ?? 0;
                 }
             }
@@ -90,7 +90,7 @@ class VendorController extends Controller
         $vendor_income = Vendor::orderBy('created_at', 'asc');
 
         for ($i = 0; $i < $days; $i++) {
-            $date = Carbon::now()->subDays($i - 1)->toDateString();
+            $date = Carbon::now()->subDays($i)->toDateString();
             $vendor_income = $vendor_income->withCount(["carts as $date" => function ($query) use ($i) {
                 $query->whereHas('transaction', function ($q) use ($i) {
                     $q->where('created_at', '<', Carbon::now()->subDays($i - 1))
@@ -111,7 +111,7 @@ class VendorController extends Controller
             if (count($income) == 0) {
                 $new_vendor = [];
                 for ($i = 0; $i < $days; $i++) {
-                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $date = Carbon::now()->subDays($i)->toDateString();
                     array_push($new_vendor, [
                         "period" => $date,
                         $key => $vendor[$date] ?? 0,
@@ -121,7 +121,7 @@ class VendorController extends Controller
                 array_push($income, $new_vendor);
             } else {
                 for ($i = 0; $i < $days; $i++) {
-                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $date = Carbon::now()->subDays($i)->toDateString();
                     $income[0][$i][$key] = $vendor[$date] ?? 0;
                 }
             }

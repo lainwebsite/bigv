@@ -15,8 +15,7 @@
                     <tr>
                         <td class="align-middle">{{ $loop->iteration }}</td>
                         <td>
-                            <a
-                            {{-- href="{{ route('admin.user.analytics.detail', $user->id) }}" --}}
+                            <a href="{{ route('admin.user.analytics.detail', $user->id) }}"
                                 class="a-normal d-flex align-items-center">
                                 <div class="d-flex align-items-start flex-column">
                                     <h5 class="m-0"><b>{{ $user->name }}</b></h5>
@@ -25,7 +24,7 @@
                             </a>
                         </td>
                         <td class="align-middle">{{ $user->transaction_count }}</td>
-                        <td class="align-middle">${{ $user->total_spent ?? 0 }}</td>
+                        <td class="align-middle">${{ $user->total_spent }}</td>
                         <td class="align-middle">{{ date('Y-m-d', strtotime($user->created_at)) }}</td>
                     </tr>
                 @endforeach
