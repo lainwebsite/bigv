@@ -196,7 +196,7 @@
                                 </p>
                                 <div class="divider-dash mt-4 mb-4"></div>
                                 <!-- PRODUCT ADDON -->
-                                <h4 class="card-title mb-4">Product Addon</h4>
+                                <h4 class="card-title mb-4">Product Add-on</h4>
                                 <div id="productAddonGroup" class="d-flex flex-column" style="gap:30px;">
                                     @foreach ($product->addons as $key => $addon)
                                         <div class="d-flex flex-column" style="gap: 12px;"
@@ -205,7 +205,7 @@
                                             <div class="row align-items-center">
                                                 <div class="col-12 col-md-4 d-flex">
                                                     <p style="white-space: nowrap;" class="m-0">
-                                                        <b>Addon
+                                                        <b>Add-on
                                                             <span class="addon-number">{{ $loop->iteration }}</span>
                                                         </b>
                                                     </p>
@@ -213,7 +213,7 @@
                                                 <div class="col-12 col-md-8">
                                                     <input type="text" class="form-control w-100" id="addonName"
                                                         name="addon_name[{{ $key + 1 }}]" required
-                                                        value="{{ $addon->name }}" placeholder="Addon Name">
+                                                        value="{{ $addon->name }}" placeholder="Add-on Name">
                                                 </div>
                                             </div>
                                             <div class="form-check form-check-inline">
@@ -221,7 +221,7 @@
                                                     <input type="checkbox" class="custom-control-input"
                                                         @checked($addon->required == 1) id="addon-required-{{$key+1}}"
                                                         name="addon_required[{{ $key + 1 }}]">
-                                                    <label class="custom-control-label" for="addon-required-{{$key+1}}">Addon
+                                                    <label class="custom-control-label" for="addon-required-{{$key+1}}">Add-on
                                                         Required</label>
                                                 </div>
                                             </div>
@@ -277,14 +277,14 @@
                                                     Option</a>
                                                 <a href="javascript:void(0)"
                                                     class="btn btn-secondary font-12 text-white delete-addon">Delete
-                                                    Addon</a>
+                                                    Add-on</a>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                                 <p class="text-lg-right mt-4">
                                     <a href="javascript:void(0)" class="btn btn-primary text-white" id="addAddon">Add
-                                        Addon</a>
+                                        Add-on</a>
                                 </p>
                                 <!-- PRODUCT ADDON -->
                                 <div class="d-flex mt-4 gap-15x">
@@ -395,19 +395,19 @@
                                         <div class="row align-items-center">
                                             <div class="col-12 col-md-4 d-flex">
                                                 <p style="white-space: nowrap;" class="m-0">
-                                                    <b>Addon <span class="addon-number">${countAddon}</span></b>
+                                                    <b>Add-on <span class="addon-number">${countAddon}</span></b>
                                                 </p>
                                             </div>
                                             <div class="col-12 col-md-8">
                                                 <input type="text" class="form-control w-100" id="addonName"
-                                                    name="addon_name[${countAddon}]" required placeholder="Addon Name">
+                                                    name="addon_name[${countAddon}]" required placeholder="Add-on Name">
                                             </div>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input" id="addon-required-${countAddon}"
                                                     name="addon_required[${countAddon}]">
-                                                <label class="custom-control-label" for="addon-required-${countAddon}">Addon
+                                                <label class="custom-control-label" for="addon-required-${countAddon}">Add-on
                                                     Required</label>
                                             </div>
                                         </div>
@@ -416,7 +416,7 @@
                                             <a href="javascript:void(0)"
                                                 class="btn btn-primary font-12 text-white add-addon-option">Add Option</a>
                                             <a href="javascript:void(0)"
-                                                class="btn btn-secondary font-12 text-white delete-addon">Delete Addon</a>
+                                                class="btn btn-secondary font-12 text-white delete-addon">Delete Add-on</a>
                                         </div>
                                     </div>
         `);

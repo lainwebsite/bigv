@@ -15,8 +15,10 @@
                 @foreach ($discounts as $discount)
                     <tr>
                         <td>
-                            <a href="/discountdet" class="a-normal d-flex flex-column justify-content-center">
+                            <a href="{{ route('admin.discount.edit', $discount->id) }}"
+                                class="a-normal d-flex flex-column justify-content-center">
                                 <h5 class="m-0">{{ $discount->code }}</h5>
+                                <h6 class="m-0">{{ $discount->name }}</h5>
                                 <small class="m-0">ID: <b>{{ $discount->id }}</b></small>
                             </a>
                         </td>

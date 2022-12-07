@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Discount;
 use App\Models\ProductCategory;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -23,30 +24,37 @@ class PageController extends Controller
         ]);
     }
 
-    public function profile() {
+    public function profile()
+    {
         return view('user.profile.index');
     }
 
-    public function promo() {
-        return view('user.promo.index');
+    public function promo()
+    {
+        $discounts = Discount::where('visible', 1)->get();
+        return view('user.promo.index', compact('discounts'));
     }
 
-    public function address() {
+    public function address()
+    {
         return view('user.address-manage.index');
     }
 
-    public function vendor() {
+    public function vendor()
+    {
         return view('user.vendor.index');
     }
 
-    public function vendordetail() {
+    public function vendordetail()
+    {
         $products = Product::withCount(['carts as items_sold' => function ($query) {
             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
         }])->where('vendor_id', 1)->orderBy('created_at', 'desc')->paginate(20); // Tolong dirubah filter vendornya
-        return view('user.vendor.detail', ["products"=>$products]);
+        return view('user.vendor.detail', ["products" => $products]);
     }
-    
-    public function about(){
+
+    public function about()
+    {
         return view('user.about.index');
     }
 }

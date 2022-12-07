@@ -95,6 +95,7 @@ Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], fu
     Route::post('checkout/discount/apply-voucher', [DiscountController::class, 'applyVoucher']);
     Route::get('checkout/discount/cancel-voucher', [DiscountController::class, 'cancelVoucher']);
     Route::resource('discount', DiscountController::class);
+    Route::post('discount/search', [DiscountController::class, 'search']);
     Route::resource('payment-method', PaymentMethodController::class);
     Route::resource('pickup-method', PickupMethodController::class);
     Route::post('checkout/pickup-address/search', [PickupAddressController::class, 'search']);
@@ -168,7 +169,9 @@ Route::group(['middleware' => ['admin'], 'as' => 'admin.', 'prefix' => 'admin'],
     Route::get('user/analytics', [AdminUserController::class, 'view_analytics'])->name('user.view_analytics');
     Route::get('user/analytics/{user}', [AdminUserController::class, 'analytics_detail'])->name('user.analytics.detail');
     Route::post('user/sort/analytics', [AdminUserController::class, 'sort_analytics'])->name('user.sort_analytics');
+    Route::post('user/{user}/sort/analytics', [AdminUserController::class, 'sort_analytics_detail'])->name('user.sort_analytics_detail');
     Route::post('user/date/analytics', [AdminUserController::class, 'date_analytics'])->name('user.date_analytics');
+    Route::post('user/{user}/date/analytics', [AdminUserController::class, 'date_analytics_detail'])->name('user.date_analytics_detail');
     Route::resource('user', AdminUserController::class);
     Route::resource('user-address', AdminUserAddressController::class);
     Route::resource('user-role', AdminUserRoleController::class);
@@ -177,6 +180,8 @@ Route::group(['middleware' => ['admin'], 'as' => 'admin.', 'prefix' => 'admin'],
     Route::get('vendor/analytics', [AdminVendorController::class, 'view_analytics'])->name('vendor.view_analytics');
     Route::get('vendor/analytics/{vendor}', [AdminVendorController::class, 'analytics_detail'])->name('vendor.analytics.detail');
     Route::post('vendor/sort/analytics', [AdminVendorController::class, 'sort_analytics'])->name('vendor.sort_analytics');
+    Route::post('vendor/{vendor}/sort/analytics', [AdminVendorController::class, 'sort_analytics_detail'])->name('vendor.sort_analytics_detail');
     Route::post('vendor/date/analytics', [AdminVendorController::class, 'date_analytics'])->name('vendor.date_analytics');
+    Route::post('vendor/{vendor}/date/analytics', [AdminVendorController::class, 'date_analytics_detail'])->name('vendor.date_analytics_detail');
     Route::resource('vendor', AdminVendorController::class);
 });

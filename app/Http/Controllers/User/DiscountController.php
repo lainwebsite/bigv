@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Discount;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller
@@ -15,7 +16,27 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        return view("user.promo.index");
+        $discounts = Discount::where('visible', 1)
+            ->where('duration_start', '<=', Carbon::now())
+            ->where('duration_end', '>=', Carbon::now())
+            ->get();
+        return view('user.promo.index', compact('discounts'));
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->code) {
+            $discounts = Discount::where('code', $request->code)
+                ->where('duration_start', '<=', Carbon::now())
+                ->where('duration_end', '>=', Carbon::now())
+                ->get();
+        } else {
+            $discounts = Discount::where('visible', 1)
+                ->where('duration_start', '<=', Carbon::now())
+                ->where('duration_end', '>=', Carbon::now())
+                ->get();
+        }
+        return view('user.promo.inc.discount', compact('discounts'));
     }
 
     /**

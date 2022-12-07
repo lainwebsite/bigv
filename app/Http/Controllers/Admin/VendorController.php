@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\Product;
 use App\Models\Vendor;
 use App\Models\VendorLocation;
 use Carbon\Carbon;
@@ -50,7 +52,7 @@ class VendorController extends Controller
         $vendor_sales = Vendor::orderBy('created_at', 'asc');
 
         for ($i = 0; $i < $days; $i++) {
-            $date = Carbon::now()->subDays($i - 1)->toDateString();
+            $date = Carbon::now()->subDays($i)->toDateString();
             $vendor_sales = $vendor_sales->withCount(["carts as $date" => function ($query) use ($i) {
                 $query->whereHas('transaction', function ($q) use ($i) {
                     $q->where('created_at', '<', Carbon::now()->subDays($i - 1))
@@ -71,7 +73,7 @@ class VendorController extends Controller
             if (count($sales) == 0) {
                 $new_vendor = [];
                 for ($i = 0; $i < $days; $i++) {
-                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $date = Carbon::now()->subDays($i)->toDateString();
                     array_push($new_vendor, [
                         "period" => $date,
                         $key => $vendor[$date] ?? 0,
@@ -81,7 +83,7 @@ class VendorController extends Controller
                 array_push($sales, $new_vendor);
             } else {
                 for ($i = 0; $i < $days; $i++) {
-                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $date = Carbon::now()->subDays($i)->toDateString();
                     $sales[0][$i][$key] = $vendor[$date] ?? 0;
                 }
             }
@@ -90,7 +92,7 @@ class VendorController extends Controller
         $vendor_income = Vendor::orderBy('created_at', 'asc');
 
         for ($i = 0; $i < $days; $i++) {
-            $date = Carbon::now()->subDays($i - 1)->toDateString();
+            $date = Carbon::now()->subDays($i)->toDateString();
             $vendor_income = $vendor_income->withCount(["carts as $date" => function ($query) use ($i) {
                 $query->whereHas('transaction', function ($q) use ($i) {
                     $q->where('created_at', '<', Carbon::now()->subDays($i - 1))
@@ -111,7 +113,7 @@ class VendorController extends Controller
             if (count($income) == 0) {
                 $new_vendor = [];
                 for ($i = 0; $i < $days; $i++) {
-                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $date = Carbon::now()->subDays($i)->toDateString();
                     array_push($new_vendor, [
                         "period" => $date,
                         $key => $vendor[$date] ?? 0,
@@ -121,7 +123,7 @@ class VendorController extends Controller
                 array_push($income, $new_vendor);
             } else {
                 for ($i = 0; $i < $days; $i++) {
-                    $date = Carbon::now()->subDays($i - 1)->toDateString();
+                    $date = Carbon::now()->subDays($i)->toDateString();
                     $income[0][$i][$key] = $vendor[$date] ?? 0;
                 }
             }
@@ -132,7 +134,58 @@ class VendorController extends Controller
 
     public function analytics_detail(Vendor $vendor)
     {
-        return view('admin.analytics.vendors.detail', compact('vendor'));
+        $products = Product::orderBy('created_at', 'desc')
+            ->where('vendor_id', $vendor->id)
+            ->withCount(['carts as transaction_count' => function ($query) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('created_at', '<=', Carbon::now())
+                        ->where('created_at', '>=', Carbon::now()->subDays(7));
+                })->select(DB::raw('count(distinct(transaction_id))'));
+            }])->withCount(['carts as sold_count' => function ($query) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('created_at', '<=', Carbon::now())
+                        ->where('created_at', '>=', Carbon::now()->subDays(7));
+                })->select(DB::raw('sum(quantity)'));
+            }])->withCount(['carts as total_income' => function ($query) {
+                $query->whereHas('transaction', function ($q) {
+                    $q->where('created_at', '<=', Carbon::now())
+                        ->where('created_at', '>=', Carbon::now()->subDays(7));
+                })->select(DB::raw('sum(carts.price * quantity)'));
+            }])
+            ->paginate(10);
+
+        $fdate = Carbon::now();
+        $tdate =  Carbon::now()->subDays(7);
+        $datetime1 = new DateTime($fdate);
+        $datetime2 = new DateTime($tdate);
+        $interval = $datetime1->diff($datetime2);
+        $days = $interval->format('%a');
+
+        $product_sold = [];
+
+        for ($i = 0; $i < $days; $i++) {
+            $date = Carbon::now()->subDays($i)->toDateString();
+            $cartes = Cart::where('transaction_id', '!=', null)
+                ->whereHas('product_variation', function ($q) use ($vendor) {
+                    $q->whereHas('product', function ($q) use ($vendor) {
+                        $q->where('vendor_id', $vendor->id);
+                    });
+                })
+                ->where('created_at', '<', Carbon::now()->subDays(($i - 1)))
+                ->where('created_at', '>=', Carbon::now()->subDays($i))
+                ->get();
+            $sold_count = 0;
+            foreach ($cartes as $key => $cart) {
+                $sold_count += $cart->quantity;
+            }
+            array_push($product_sold, [
+                'period' => $date,
+                'sold' => $sold_count,
+                'itouch' => 10,
+            ]);
+        }
+
+        return view('admin.analytics.vendors.detail', compact('vendor', 'products', 'product_sold'));
     }
 
     /**
@@ -368,5 +421,69 @@ class VendorController extends Controller
             $vendors = $vendors->paginate(10);
         }
         return view('admin.analytics.vendors.inc.vendor', compact('vendors'));
+    }
+
+    public function date_analytics_detail(Vendor $vendor, Request $request)
+    {
+        $fdate =  date('Y-m-d', strtotime($request->end_date . ' + 1 days'));
+        $tdate = $request->start_date;
+        $datetime1 = new DateTime($fdate);
+        $datetime2 = new DateTime($tdate);
+        $interval = $datetime1->diff($datetime2);
+        $days = $interval->format('%a');
+
+        $product_sold = [];
+
+        for ($i = 0; $i < $days; $i++) {
+            $x = $i + 1;
+            $date = date('Y-m-d', strtotime($fdate . " - $x days"));
+            $cartes = Cart::where('transaction_id', '!=', null)
+                ->whereHas('product_variation', function ($q) use ($vendor) {
+                    $q->whereHas('product', function ($q) use ($vendor) {
+                        $q->where('vendor_id', $vendor->id);
+                    });
+                })
+                ->where('created_at', '<', date('Y-m-d', strtotime($fdate . " - $i days")))
+                ->where('created_at', '>=', date('Y-m-d', strtotime($fdate . " - $x days")))
+                ->get();
+            $sold_count = 0;
+            foreach ($cartes as $key => $cart) {
+                $sold_count += $cart->quantity;
+            }
+            array_push($product_sold, [
+                'period' => $date,
+                'sold' => $sold_count,
+                'itouch' => 10,
+            ]);
+        }
+
+        $data = [
+            "product_sold" => $product_sold,
+        ];
+
+        return $data;
+    }
+    public function sort_analytics_detail(Vendor $vendor, Request $request)
+    {
+        $products = Product::where('vendor_id', $vendor->id)
+            ->withCount(['carts as transaction_count' => function ($query) use ($request) {
+                $query->whereHas('transaction', function ($q) use ($request) {
+                    $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                        ->where('created_at', '>=', $request->start_date);
+                })->select(DB::raw('count(distinct(transaction_id))'));
+            }])->withCount(['carts as sold_count' => function ($query) use ($request) {
+                $query->whereHas('transaction', function ($q) use ($request) {
+                    $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                        ->where('created_at', '>=', $request->start_date);
+                })->select(DB::raw('sum(quantity)'));
+            }])->withCount(['carts as total_income' => function ($query) use ($request) {
+                $query->whereHas('transaction', function ($q) use ($request) {
+                    $q->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+                        ->where('created_at', '>=', $request->start_date);
+                })->select(DB::raw('sum(carts.price * quantity)'));
+            }])
+            ->orderBy($request->sort == "-" ? 'created_at' : $request->sort, 'desc')
+            ->paginate(10);
+        return view('admin.analytics.vendors.inc.detail', compact('products'));
     }
 }
