@@ -10,10 +10,12 @@ use App\Models\PickupTime;
 use App\Models\ProductVariation;
 use App\Models\UserAddress;
 use App\Models\Transaction;
+use App\Models\OptionCart;
 use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use DB;
 
 class CheckoutController extends Controller
 {
@@ -28,29 +30,87 @@ class CheckoutController extends Controller
         ) {
             $addresses = UserAddress::where('user_id', auth()->user()->id)->get();
 
-            $checkout_items = Vendor::with(['products' => function ($q1) {
-                $q1->select('vendor_id', 'carts.id as cart_id', 'products.featured_image', 'products.name as product_name', 'product_variations.name as product_variation_name', 'carts.price', 'carts.quantity', 'carts.user_id')
+            // $checkout_items = Vendor::with(['products' => function ($q1) {
+            //     $q1->select('vendor_id', 'carts.id as cart_id', 'products.featured_image', 'products.name as product_name', 'product_variations.name as product_variation_name', 'carts.price', 'carts.quantity', 'carts.user_id')
+            //         ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
+            //         ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+            //         ->whereIn('carts.id', session()->get('checkout-items'))
+            //         ->whereNull('carts.transaction_id')
+            //         ->where('user_id', auth()->user()->id);
+            // }, 'location'])->whereHas('products', function ($q1) {
+            //     $q1->select('vendor_id')
+            //         ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
+            //         ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+            //         ->whereIn('carts.id', session()->get('checkout-items'))
+            //         ->whereNull('carts.transaction_id')
+            //         ->where('user_id', auth()->user()->id);
+            // })->orderBy('id', 'ASC')->get();
+            
+            $sub = OptionCart::join('addon_options', 'addon_options.id', '=', 'option_carts.addon_option_id')
+                ->select('addon_options.name as addon_name', 'addon_options.price as addon_price', 'option_carts.cart_id')
+                ->toSql();
+                
+            $checkout_items = Vendor::with(['products' => function ($q1) use ($sub) {
+                $q1->select(
+                    'vendor_id',
+                    'products.featured_image',
+                    'products.name as product_name',
+                    'product_variations.name as product_variation_name',
+                    'product_variations.discount',
+                    'product_variations.discount_start_date',
+                    'product_variations.discount_end_date',
+                    'carts.id as cart_id',
+                    'carts.price',
+                    'carts.quantity',
+                    'carts.user_id',
+                    'addon_carts.addon_name',
+                    'addon_carts.addon_price'
+                )
                     ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
                     ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+                    ->leftJoin(DB::raw('(' . $sub . ') as addon_carts'), 'addon_carts.cart_id', '=', 'carts.id')
                     ->whereIn('carts.id', session()->get('checkout-items'))
                     ->whereNull('carts.transaction_id')
                     ->where('user_id', auth()->user()->id);
-            }, 'location'])->whereHas('products', function ($q1) {
+            }, 'location'])->whereHas('products', function ($q1) use ($sub) {
                 $q1->select('vendor_id')
                     ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
                     ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+                    ->leftJoin(DB::raw('(' . $sub . ') as addon_carts'), 'addon_carts.cart_id', '=', 'carts.id')
                     ->whereIn('carts.id', session()->get('checkout-items'))
                     ->whereNull('carts.transaction_id')
                     ->where('user_id', auth()->user()->id);
-            })->orderBy('id', 'ASC')->get();
-
+            })->orderBy('id', 'ASC')->get()->map(function ($vendor) {
+                $addons_name = $vendor->products->mapToGroups(function ($item, $key) {
+                    return [$item['cart_id'] => $item['addon_name']];
+                });
+                $addons_price = $vendor->products->groupBy('cart_id')
+                    ->map(function ($item) {
+                        return $item->sum('addon_price');
+                    });
+                return (object) [
+                    'vendor' => (object) $vendor,
+                    'products' => $vendor->products->mapToGroups(function ($item, $key) use ($addons_name, $addons_price) {
+                        $product = collect($item)->except(['addon_name', 'addon_price'])->toArray();
+                        $product['price'] = $product['price'] + $addons_price[$product['cart_id']];
+                        $product += [
+                            'addons' => $addons_name[$product['cart_id']][0] == null ? [] : $addons_name[$product['cart_id']]->toArray()
+                        ];
+                        return (object) [$item['cart_id'] => $product];
+                    })->map(function ($product) {
+                        return (object) collect($product)->unique('cart_id')->all()[0];
+                    })
+                ];
+            });
+            
             $pickup_methods = PickupMethod::all();
             $pickup_times = PickupTime::all();
 
+            $first_address_id = (count($addresses) > 0) ? $addresses[0]->id : 0;
             return view('user.cart.checkout', [
                 'pickup_methods' => $pickup_methods,
                 'pickup_times' => $pickup_times,
-                'addresses' => $addresses,
+                'first_address_id' => $first_address_id,
                 'checkouts' => $checkout_items,
                 'total_price' => session()->get('total-checkout-price'),
                 'total_items' => session()->get('total-checkout-items'),
@@ -103,28 +163,45 @@ class CheckoutController extends Controller
 
     public function buyNowCheckout(Request $request)
     {
+        $request['product_addons_id'] = json_decode($request->product_addons_id);
+        
         $request->validate([
             'quantity' => 'required|numeric',
             'product_variation_id' => 'required|numeric',
+            'product_addons_id' => 'sometimes|nullable|array',
         ]);
-
+        
         $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
-        $cart = Cart::whereNull('transaction_id')->where('product_variation_id', $request->product_variation_id)->first();
-
         if ($request->quantity > 0) {
-            if ($cart == null) {
-                $data = $request->all();
-                $data += [
-                    'price' => $productVariation->price,
-                    'user_id' => auth()->user()->id,
-                ];
-                $cart = Cart::create($data);
-            } else {
-                $qty = $cart->quantity + $request->quantity;
-                $cart->update([
-                    'quantity' => $qty
-                ]);
+            if ($productVariation == null) {
+                return redirect()->back();
             }
+                
+            $data = $request->except('product_addons_id');
+            $data += [
+                'price' => $productVariation->price,
+                'user_id' => auth()->user()->id,
+            ];
+            
+            $cart = Cart::create($data);
+            if ($request->product_addons_id) {
+                if (count($request->product_addons_id) > 0) {
+                    foreach ($request->product_addons_id as $addons_id) {
+                        OptionCart::create([
+                            'addon_option_id' => $addons_id,
+                            'cart_id' => $cart->id
+                        ]);
+                    }
+                }
+            }
+            
+            $addons_price = OptionCart::join('carts', 'carts.id', '=', 'option_carts.cart_id')
+                                ->join('addon_options', 'addon_options.id', '=', 'option_carts.addon_option_id')
+                                ->where('option_carts.cart_id', $cart->id)
+                                ->select('addon_options.price as addon_price')
+                                ->sum('addon_options.price');
+                                
+            $cart['price'] = $cart['price'] + $addons_price;
 
             $shipping_price = 25;
 

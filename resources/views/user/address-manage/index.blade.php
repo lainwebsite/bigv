@@ -15,7 +15,7 @@ Addresses - Big V
     <div class="header-section">
       <h2 class="orange-text">Addresses</h2>
     </div>
-    <div class="transactions-page-wrapper" style="width: 100%;">
+    <div class="transactions-page-wrapper" style="width: 100%; min-height: 55vh;">
       <div class="profile-page-menu">
         <div class="flex gap-small">
           <div><b>{{auth()->user()->name}}</b></div>
@@ -23,10 +23,10 @@ Addresses - Big V
         <div class="div-line" style="margin:0 !important;"></div>
         <div class="w-form">
           <div class="form-2">
-              <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Profile Settings</a>
+              <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none; white-space: nowrap;">Profile Settings</a>
               <a href="{{url('/user/transaction')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Transactions</a>
               <a href="{{url('/user/user-address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
-              <a href="{{url('/user/promo')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
+              <a href="{{url('/user/discount')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
           </div>
         </div>
       </div>

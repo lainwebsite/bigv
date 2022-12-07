@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Models\UserAddress;
 use App\Models\TransactionStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -69,7 +70,13 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         $statuses = TransactionStatus::all();
-        return view('admin.manage.transaction.detail', compact('transaction', 'statuses'));
+        $billingAddress = UserAddress::withTrashed()->where('id', $transaction->billing_address_id)->get()[0];
+        if ($transaction->shipping_address_id != null){
+            $shippingAddress = UserAddress::withTrashed()->where('id', $transaction->shipping_address_id)->get()[0];
+        } else {
+            $shippingAddress = null;
+        }
+        return view('admin.manage.transaction.detail', compact('transaction', 'billingAddress', 'shippingAddress', 'statuses'));
     }
 
     /**

@@ -96,10 +96,10 @@
                                         Password</strong></a>
                             </div>
                         </div> --}}
-                        <div class="flex-row-center">
+                        {{--<div class="flex-row-center">
                             <div>Doesn't have an account? <a href="{{ route('register') }}" class="link"><strong>Register</strong></a>
                             </div>
-                        </div>
+                        </div>--}}
                     </div>
                 </div>
                 <footer id="footer" class="footer-2 wf-section">

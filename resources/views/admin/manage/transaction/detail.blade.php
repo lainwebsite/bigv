@@ -82,7 +82,7 @@
                     <h4 class="card-title mb-4">Message</h4>
                     <div class="row">
                         <div class="col-3">
-                            <a href="https://api.whatsapp.com/send?phone={{ $transaction->billing_address->user->phone ?? '#' }}"
+                            <a href="https://api.whatsapp.com/send?phone={{ $billingAddress->user->phone ?? '#' }}"
                                 class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2">
                                 <img src="{{ asset('assets/images/whatsapp.svg') }}" width="24"
                                     height="24" />Customer</a>
@@ -140,32 +140,48 @@
                                     <div class="row">
                                         <div class="col">
                                             <h4 class="card-title mb-4">Customer Info</h4>
-                                            <p class="m-0">{{ $transaction->billing_address->name }}</p>
-                                            <p class="m-0">{{ $transaction->billing_address->phone }}</p>
-                                            <p class="m-0">{{ $transaction->billing_address->user->tier->name }}</p>
+                                            <p class="m-0">{{ $billingAddress->name }}</p>
+                                            <p class="m-0">{{ $billingAddress->phone }}</p>
+                                            <p class="m-0">{{ $billingAddress->user->tier->name }}</p>
                                             <div class="divider-dash mt-4 mb-4"></div>
                                             <div class="row">
                                                 <div class="col-6">
                                                     <h4 class="card-title mb-4">Billing Address</h4>
-                                                    <p class="m-0">{{ $transaction->billing_address->name }}</p>
-                                                    <p class="m-0">{{ $transaction->billing_address->phone }}</p>
-                                                    <p class="mb-2">[{{ $transaction->billing_address->block_number }}]
-                                                        [{{ $transaction->billing_address->street }}]<br>#[{{ $transaction->billing_address->unit_level }}]-[{{ $transaction->billing_address->unit_number }}]
-                                                        [{{ $transaction->billing_address->building_name }}]<br>Singapore
-                                                        [{{ $transaction->billing_address->postal_code }}]</p>
-                                                    <small>{{ $transaction->billing_address->additional_info }}</small>
+                                                    <p class="m-0">{{ $billingAddress->name }}</p>
+                                                    <p class="m-0">{{ $billingAddress->phone }}</p>
+                                                    @if ($billingAddress->building_name != null)
+                                                        <p class="mb-2">{{ $billingAddress->block_number }}
+                                                            {{ $billingAddress->street }}<br>#{{ $billingAddress->unit_level }}-{{ $billingAddress->unit_number }}
+                                                            {{ $billingAddress->building_name }}<br>Singapore
+                                                            {{ $billingAddress->postal_code }}</p>
+                                                        <small>{{ $billingAddress->additional_info }}</small>
+                                                    @else
+                                                        <p class="mb-2">
+                                                            {{ $billingAddress->unit_number }}
+                                                            {{ $billingAddress->street }}<br>Singapore
+                                                            {{ $billingAddress->postal_code }}</p>
+                                                            <small>{{ $billingAddress->additional_info }}</small>
+                                                    @endif
                                                 </div>
                                                 <div class="col-6">
-                                                    @if ($transaction->shipping_address)
+                                                    @if ($transaction->shipping_address_id != null)
                                                         <h4 class="card-title mb-4">Shipping Address</h4>
-                                                        <p class="m-0">{{ $transaction->shipping_address->name }}</p>
-                                                        <p class="m-0">{{ $transaction->shipping_address->phone }}</p>
-                                                        <p class="mb-2">
-                                                            [{{ $transaction->shipping_address->block_number }}]
-                                                            [{{ $transaction->shipping_address->street }}]<br>#[{{ $transaction->shipping_address->unit_level }}]-[{{ $transaction->shipping_address->unit_number }}]
-                                                            [{{ $transaction->shipping_address->building_name }}]<br>Singapore
-                                                            [{{ $transaction->shipping_address->postal_code }}]</p>
-                                                        <small>{{ $transaction->shipping_address->additional_info }}</small>
+                                                        <p class="m-0">{{ $shippingAddress->name }}</p>
+                                                        <p class="m-0">{{ $shippingAddress->phone }}</p>
+                                                        @if ($shippingAddress->building_name != null)
+                                                            <p class="mb-2">
+                                                            {{ $shippingAddress->block_number }}
+                                                            {{ $shippingAddress->street }}<br>#{{ $shippingAddress->unit_level }}-{{ $shippingAddress->unit_number }}
+                                                            {{ $shippingAddress->building_name }}<br>Singapore
+                                                            {{ $shippingAddress->postal_code }}</p>
+                                                            <small>{{ $shippingAddress->additional_info }}</small>
+                                                        @else
+                                                            <p class="mb-2">
+                                                            {{ $shippingAddress->unit_number }}
+                                                            {{ $shippingAddress->street }}<br>Singapore
+                                                            {{ $shippingAddress->postal_code }}</p>
+                                                            <small>{{ $shippingAddress->additional_info }}</small>
+                                                        @endif
                                                     @else
                                                         <p class="m-0">Same as Billing Address</p>
                                                     @endif

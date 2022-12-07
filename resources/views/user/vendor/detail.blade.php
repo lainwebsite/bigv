@@ -112,16 +112,16 @@
                                             </div>
                                             <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
                                                 class="sale-price text-color-light-grey" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price }}</div>
+                                                ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                             <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price - $product->variations[0]->discount }}</div>
+                                                ${{ number_format($product->variations[0]->discount, 2, ".", ",") }}</div>
                                         @else
                                             <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price }}</div>
+                                                ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                         @endif
                                     @else
                                         <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                            ${{ $product->variations[0]->price }}</div>
+                                            ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                     @endif
                                 @else
                                     @php($salePriceAvailable = false)
@@ -145,7 +145,7 @@
                                     @endif
                                     
                                     <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                    ${{ $product->variations->min('price') }} - ${{ $product->variations->max('price') }}
+                                                    ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
                                 @endif
                             </div>

@@ -58,7 +58,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'general'], function () {
     // Auth::routes(['verify' => false]);
-    Auth::routes();
+    // Auth::routes();
+    Auth::routes([
+      'register' => false,
+      'reset' => false,
+      'verify' => false,
+    ]);
     Route::get('/', [PageController::class, 'home'])->name('home');
     Route::get('/profiletes', [PageController::class, 'profile'])->name('profiletes');
     Route::get('/promotes', [PageController::class, 'promo'])->name('promotes');

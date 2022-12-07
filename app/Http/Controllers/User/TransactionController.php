@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\UserAddress;
 use App\Models\Transaction;
 use App\Models\TransactionStatus;
 use Illuminate\Http\Request;
@@ -79,17 +80,24 @@ class TransactionController extends Controller
                 $query->with(['product_variation']);
             }, 'transaction_discounts' => function ($query) {
                 $query->with(['discount']);
-            }, 'billing_address', 'shipping_address', 'payment_method', 'pickup_method', 'pickup_time', 'status',
+            }, 'payment_method', 'pickup_method', 'pickup_time', 'status',
             'transaction_discounts' => function ($query) {
                 $query->with(['discount']);
             }
         ]);
+        
+        $billingAddress = UserAddress::withTrashed()->where('id', $transaction->billing_address_id)->get()[0];
+        if ($transaction->shipping_address_id != null){
+            $shippingAddress = UserAddress::withTrashed()->where('id', $transaction->shipping_address_id)->get()[0];
+        } else {
+            $shippingAddress = null;
+        }
 
         $discounts = [];
         foreach ($transaction->transaction_discounts as $discount)
             $discounts[] = $discount->discount->name;
         $discounts = implode(", ", $discounts);
-        return view('user.transaction.detail', ['transaction' => $transaction, 'discounts' => $discounts]);
+        return view('user.transaction.detail', ['transaction' => $transaction, 'billingAddress'=>$billingAddress, 'shippingAddress'=>$shippingAddress, 'discounts' => $discounts]);
     }
 
     /**

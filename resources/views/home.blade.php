@@ -147,7 +147,7 @@
                         class="text-color-orange">Love</span></div>
                 <div class="text-align-center text-color-grey ea-bottom">Shop and help Small Medium Enterprises all around Singapore. Made with love. Sign up to become a Vendor and Rise with BigV.</div>
                 <div class="hero-button ea-bottom"><a href="{{url('/product')}}" class="button w-button">Shop Now</a><a
-                        href="#" class="button w-button">Join Now</a></div>
+                        href="https://wa.me/6582151509?text=Hello%20BigV!%20I'm%20interested%20to%20become%20a%20vendor" class="button w-button">Join Now</a></div>
             </div>
             <div class="hero-right"><img src="{{ asset('assets/63365a23566e80a62a58f972_Rectangle 60 (1).webp') }}"
                     loading="lazy" width="385" data-w-id="11418749-c043-2a0d-68a6-46d1a59afeeb"
@@ -253,16 +253,16 @@
                                             </div>
                                             <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
                                                 class="sale-price text-color-light-grey" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price }}</div>
+                                                ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                             <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price - $product->variations[0]->discount }}</div>
+                                                ${{ number_format($product->variations[0]->discount, 2, ".", ",") }}</div>
                                         @else
                                             <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price }}</div>
+                                                ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                         @endif
                                     @else
                                         <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                            ${{ $product->variations[0]->price }}</div>
+                                            ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                     @endif
                                 @else
                                     @php($salePriceAvailable = false)
@@ -286,7 +286,7 @@
                                     @endif
                                     
                                     <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                    ${{ $product->variations->min('price') }} - ${{ $product->variations->max('price') }}
+                                                    ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
                                 @endif
                             </div>
@@ -347,16 +347,16 @@
                                             </div>
                                             <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
                                                 class="sale-price text-color-light-grey" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price }}</div>
+                                                ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                             <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price - $product->variations[0]->discount }}</div>
+                                                ${{ number_format($product->variations[0]->discount, 2, ".", ",") }}</div>
                                         @else
                                             <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                ${{ $product->variations[0]->price }}</div>
+                                                ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                         @endif
                                     @else
                                         <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                            ${{ $product->variations[0]->price }}</div>
+                                            ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                     @endif
                                 @else
                                     @php($salePriceAvailable = false)
@@ -380,7 +380,7 @@
                                     @endif
                                     
                                     <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                    ${{ $product->variations->min('price') }} - ${{ $product->variations->max('price') }}
+                                                    ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
                                 @endif
                             </div>
@@ -498,7 +498,7 @@
             <div class="heading-xlarge ea-top">Meet with Vincent</div>
             <div class="heading-medium orange-text ea-right">27th November</div>
             <div class="text-size-regular text-color-grey ea-right">Join our BigV Gathering with Vincent to learn more about the insights and benefits of becoming a vendor. Vincent will also show the tips and tricks to excell in your home-based business with social media. Click the button bellow to sign up!
-            </div><a href="#" class="button ea-bottom w-button">Enroll Now</a>
+            </div><a href="#" class="button ea-bottom w-button" style="display:none;">Enroll Now</a>
         </div><img src="{{ asset('assets/633652c5de27787915ec9b2f_Intersect (1).svg') }}" loading="lazy"
             data-w-id="55107afb-6f21-606b-b271-a1ff35a970cf" alt="" class="image-23" />
     </div>
@@ -511,7 +511,7 @@
                 partnered with PM Haze which is a Singapore registered charity and local environmental organization
                 formed in
                 2014 that deals with the transboundary haze crisis in Singapore, Malaysia, and Indonesia.</div><a
-                href="#" class="button ea-bottom w-button">Learn more</a>
+                href="#"  style="display:none;" class="button ea-bottom w-button">Learn more</a>
         </div>
         <div class="value-left"><img
                 src="{{ asset('assets/636a8676e25120c679da870b_5_SupermarketGuide_Poster.png') }}" loading="lazy"
@@ -566,10 +566,10 @@
                         class="text-color-white text-style-link">Whatsapp</a>
                 </div>
                 <div class="flex flex-vertical left-align margin-small">
-                    <h4>Company</h4><a href="#" class="text-color-white text-style-link">Become a Vendor</a><a
-                        href="#" class="text-color-white text-style-link">About Us</a><a href="#"
+                    <h4>Company</h4><a href="https://wa.me/6582151509?text=Hello%20BigV!%20I'm%20interested%20to%20become%20a%20vendor" class="text-color-white text-style-link">Become a Vendor</a><a
+                        href="{{url('/about')}}" class="text-color-white text-style-link">About Us</a><a style="display:none;" href="#"
                         class="text-color-white text-style-link">Terms &amp; Conditions</a><a href="#"
-                        class="text-color-white text-style-link">Privacy Policy</a>
+                        class="text-color-white text-style-link" style="display:none;">Privacy Policy</a>
                 </div>
             </div>
         </div>

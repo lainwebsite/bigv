@@ -12,7 +12,13 @@
     <div class="content" style="width: 100vw; min-width: 0 !important; max-width: 1200px; margin:auto;">
         <div class="flex flex-vertical row-gap margin-large" style="width: 85%; min-width: 980px; position:relative;">
             <div class="text-align-center orange-text">Showing search result for</div>
-            <h3 class="text-align-center">Search Result Name</h3>
+            <h3 class="text-align-center">
+                @if (app('request')->input('keyword') != "")
+                "{{ app('request')->input('keyword') }}"
+                @else
+                Products
+                @endif
+            </h3>
             {{-- <div class="sort-right w-dropdown"> --}}
             <div class="sort-right">
                 <div class="text-rich-text text-size-small text-color-grey" style="margin-right: 20px;">Sort By</div>

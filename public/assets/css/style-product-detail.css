@@ -896,6 +896,10 @@ figcaption {
   text-align: center;
 }
 
+.button-secondary:disabled{
+    border-color: #6c757d !important;
+}
+
 .button-secondary.text-rich-text.text-size-small.variants-button {
   margin-bottom: 9px;
 }
