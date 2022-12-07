@@ -18,17 +18,17 @@
                         @if (count($cart->products) > 0)
                             <div class="vendors-card ea-left">
                                 <div class="flex gap-medium"><img
-                                        src="{{asset('uploads/'.$cart->photo)}}" loading="lazy"
+                                        src="{{asset('uploads/'.$cart->vendor->photo)}}" loading="lazy"
                                         alt="" class="image-17" />
                                     <div>
-                                        <h5 class="text-color-dark-grey">{{ $cart->name }}</h5>
-                                        <div class="text-size-small text-color-grey">Location: {{ $cart->location->name }}
+                                        <h5 class="text-color-dark-grey">{{ $cart->vendor->name }}</h5>
+                                        <div class="text-size-small text-color-grey">Location: {{ $cart->vendor->location->name }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="div-line"></div>
                                 @foreach ($cart->products as $product)
-                                    <div class="vendor-item" vendor-id="{{ $cart->id }}">
+                                    <div class="vendor-item" vendor-id="{{ $cart->vendor->id }}">
                                         <div class="flex gap-medium">
                                             <input type="checkbox" class="product-cart" value="{{ $product->cart_id }}">
                                             <img src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt=""
@@ -39,7 +39,21 @@
                                                     <div class="text-size-small text-color-grey">Variant:
                                                         {{ $product->product_variation_name }}</div>
                                                 @endif
-                                                <div class="text-size-small text-color-grey">${{ $product->price }}</div>
+                                                @if (count($product->addons) > 0)
+                                                    <div class="text-size-small text-color-grey">Addons:
+                                                        {{ implode(", ", $product->addons) }}</div>
+                                                @endif
+                                                <div class="text-size-small text-color-grey">
+                                                    @php ($now = \Carbon\Carbon::now())
+                                                    @if ($product->discount > 0 && 
+                                                         $now->format("Y-m-d H:i:s") >= $product->discount_start_date &&
+                                                         $now->format("Y-m-d H:i:s") < $product->discount_end_date)
+                                                        <span style="text-decoration: line-through;">${{ $product->price }}</span>
+                                                        <span>${{ $product->price - $product->discount }}</span>
+                                                    @else
+                                                        <span>${{ $product->price }}</span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="flex gap-small">

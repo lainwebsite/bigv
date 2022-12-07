@@ -146,7 +146,7 @@
                         class="text-color-orange">Community</span><br />with <span
                         class="text-color-orange">Love</span></div>
                 <div class="text-align-center text-color-grey ea-bottom">Shop and help Small Medium Enterprises all around Singapore. Made with love. Sign up to become a Vendor and Rise with BigV.</div>
-                <div class="hero-button ea-bottom"><a href="{{url('/product')}}" class="button w-button">Order Now</a><a
+                <div class="hero-button ea-bottom"><a href="{{url('/product')}}" class="button w-button">Shop Now</a><a
                         href="#" class="button w-button">Join Now</a></div>
             </div>
             <div class="hero-right"><img src="{{ asset('assets/63365a23566e80a62a58f972_Rectangle 60 (1).webp') }}"

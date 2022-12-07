@@ -20,6 +20,14 @@
   grid-row-start: 1;
 }
 
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align:center !important;
+}
+
 .w-checkbox::after {
   content: ' ';
   display: table;

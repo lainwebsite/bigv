@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    <div class="content" style="min-height:100vh;">
+    <div class="content" style="min-height:100vh; width: 100%;">
         <div class="header-section">
             <h2 class="orange-text">Transactions</h2>
         </div>
@@ -21,14 +21,14 @@
                 <div class="div-line" style="margin:0 !important;"></div>
                 <div class="w-form">
                   <div class="form-2">
-                      <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Profile Settings</a>
+                      <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none; white-space:nowrap;">Profile Settings</a>
                       <a href="{{url('/user/transaction')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Transactions</a>
-                      <a href="{{url('/user/address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
+                      <a href="{{url('/user/user-address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
                       <a href="{{url('/user/promo')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
                   </div>
                 </div>
             </div>
-            <div class="transactions-column" style="padding: 20px;">
+            <div class="transactions-column">
                 <div class="flex gap-small column-responsive">
                     <div>Status</div>
                     <div class="div-block-27 wrap-responsive" style="flex-wrap:wrap; gap: 9px;">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 @foreach ($transactions as $transaction)
-                    <div class="transaction-card">
+                    <div class="transaction-card" style="width: 100%;">
                         <a class="transaction-detail" href="{{ url('user/transaction/' . $transaction->id) }}"
                             style="text-decoration: none; display: none;"></a>
                         <div class="flex space-between">
@@ -58,7 +58,7 @@
                             </div>
                             <div class="flex gap-small">
                                 <h5 class="text-color-dark-grey">Status</h5><a href="#"
-                                    class="status-button-like w-inline-block">
+                                    class="status-button-like w-inline-block" style="font-size:12px;">
                                     <div>{{ $transaction->status->name }}</div>
                                 </a>
                             </div>

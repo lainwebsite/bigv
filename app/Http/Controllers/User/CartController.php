@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Vendor;
 use App\Models\ProductVariation;
 use App\Models\Product;
+use App\Models\OptionCart;
 use Illuminate\Http\Request;
 use DB;
 
@@ -19,19 +20,80 @@ class CartController extends Controller
      */
     public function index()
     {
-        $carts = Vendor::with(['products' => function ($q1) {
-            $q1->select('vendor_id', 'carts.id as cart_id', 'products.featured_image', 'products.name as product_name', 'product_variations.name as product_variation_name', 'carts.price', 'carts.quantity', 'carts.user_id')
+        // // $sub = OptionCart::join('addon_options', 'addon_options.id', '=', 'option_carts.cart_id')
+        // //         ->select('addon_options.name as addon_name', 'option_carts.cart_id as cart_id')
+        // //         ->toSql();
+        
+        // // $carts = Vendor::with(['products' => function ($q1) use ($sub) {
+        // $carts = Vendor::with(['products' => function ($q1) {
+        //     $q1->select('vendor_id', 'products.featured_image', 'products.name as product_name', 'product_variations.name as product_variation_name', 'carts.id as cart_id', 'carts.price', 'carts.quantity', 'carts.user_id'
+        //         )
+        //         // ,'addon_carts.addon_name')
+        //         ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
+        //         ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+        //         // ->leftJoin(DB::raw('('. $sub .') as addon_carts'), 'addon_carts.cart_id', '=', 'carts.id')
+        //         ->whereNull('carts.transaction_id')
+        //         ->where('user_id', auth()->user()->id);
+        // // }, 'location'])->whereHas('products', function ($q1) use ($sub) {
+        // }, 'location'])->whereHas('products', function ($q1) {
+        //     $q1->select('vendor_id')
+        //         ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
+        //         ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+        //         // ->leftJoin(DB::raw('('. $sub .') as addon_carts'), 'addon_carts.cart_id', '=', 'carts.id')
+        //         ->whereNull('carts.transaction_id')
+        //         ->where('user_id', auth()->user()->id);
+        // })->get();
+        
+        $sub = OptionCart::join('addon_options', 'addon_options.id', '=', 'option_carts.addon_option_id')
+            ->select('addon_options.name as addon_name', 'option_carts.cart_id')
+            ->toSql();
+        // dd($sub);
+
+        $carts = Vendor::with(['products' => function ($q1) use ($sub) {
+            // $carts = Vendor::with(['products' => function ($q1) {
+            $q1->select(
+                'vendor_id',
+                'products.featured_image',
+                'products.name as product_name',
+                'product_variations.name as product_variation_name',
+                'product_variations.discount',
+                'product_variations.discount_start_date',
+                'product_variations.discount_end_date',
+                'carts.id as cart_id',
+                'carts.price',
+                'carts.quantity',
+                'carts.user_id',
+                'addon_carts.addon_name'
+            )
                 ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
                 ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+                ->leftJoin(DB::raw('(' . $sub . ') as addon_carts'), 'addon_carts.cart_id', '=', 'carts.id')
                 ->whereNull('carts.transaction_id')
                 ->where('user_id', auth()->user()->id);
-        }, 'location'])->whereHas('products', function ($q1) {
+        }, 'location'])->whereHas('products', function ($q1) use ($sub) {
             $q1->select('vendor_id')
                 ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
                 ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
+                ->leftJoin(DB::raw('(' . $sub . ') as addon_carts'), 'addon_carts.cart_id', '=', 'carts.id')
                 ->whereNull('carts.transaction_id')
                 ->where('user_id', auth()->user()->id);
-        })->get();
+        })->get()->map(function ($vendor) {
+            $vendor_products = $vendor->products->mapToGroups(function ($item, $key) {
+                return [$item['cart_id'] => $item['addon_name']];
+            });
+            return (object) [
+                'vendor' => (object) $vendor,
+                'products' => $vendor->products->mapToGroups(function ($item, $key) use ($vendor_products) {
+                    $product = collect($item)->except(['addon_name'])->toArray();
+                    $product += [
+                        'addons' => $vendor_products[$product['cart_id']][0] == null ? [] : $vendor_products[$product['cart_id']]->toArray()
+                    ];
+                    return (object) [$item['cart_id'] => $product];
+                })->map(function ($product) {
+                    return (object) collect($product)->unique('cart_id')->all()[0];
+                })
+            ];
+        });
         
         $productSuggestion = Product::withCount(['carts as items_sold' => function ($query) {
             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
@@ -62,7 +124,7 @@ class CartController extends Controller
             $request->validate([
                 'quantity' => 'required|numeric',
                 'product_variation_id' => 'required|numeric',
-                'product_addons_id' => 'required|array',
+                'product_addons_id' => 'sometimes|array',
             ]);
 
             $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
@@ -70,7 +132,7 @@ class CartController extends Controller
 
             if ($request->quantity > 0) {
                 if ($cart == null) {
-                    $data = $request->all();
+                    $data = $request->except('product_addons_id');
                     $data += [
                         'price' => $productVariation->price,
                         'user_id' => auth()->user()->id,
@@ -81,6 +143,17 @@ class CartController extends Controller
                     $cart->update([
                         'quantity' => $qty
                     ]);
+                }
+                
+                if ($request->product_addons_id) {
+                    if (count($request->product_addons_id) > 0) {
+                        foreach ($request->product_addons_id as $addons_id) {
+                            OptionCart::create([
+                                'addon_option_id' => $addons_id,
+                                'cart_id' => $cart->id
+                            ]);
+                        }
+                    }
                 }
             } else {
                 return "Please choose at least one product.";
@@ -168,12 +241,6 @@ class CartController extends Controller
     {
         $cart->product_variation->product->vendor;
 
-        try {
-            $cart->delete();
-        } catch (\Illuminate\Database\QueryException $exception) {
-            $errorInfo = $exception->errorInfo;
-        }
-
         $currentCartProduct = Vendor::where('id', $cart->product_variation->product->vendor->id)->with(['products' => function ($q1) {
             $q1->select('vendor_id', 'carts.id as cart_id', 'products.featured_image', 'products.name as product_name', 'product_variations.name as product_variation_name', 'carts.price', 'carts.quantity', 'carts.user_id')
                 ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
@@ -187,6 +254,12 @@ class CartController extends Controller
                 ->whereNull('carts.transaction_id')
                 ->where('user_id', auth()->user()->id);
         })->get();
+        
+        try {
+            $cart->delete();
+        } catch (\Illuminate\Database\QueryException $exception) {
+            $errorInfo = $exception->errorInfo;
+        }
 
         return json_encode(isset($errorInfo) ? [
             'message' => "Error when delete this product. Please try again or contact our developer."

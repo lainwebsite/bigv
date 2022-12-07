@@ -8,6 +8,14 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
   padding-left: 20px;
 }
 
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align:center !important;
+}
+
 .cursor {
   position: fixed;
   left: 0%;

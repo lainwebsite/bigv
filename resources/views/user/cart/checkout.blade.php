@@ -68,7 +68,7 @@
                                             <a href="#" pickup-method-id="{{ $pickup_method->id }}"
                                                 class="shipping-button w-inline-block" id="pickupShippingButton">
                                                 <svg width="33" height="33" viewBox="0 0 33 33" class="shipping-icon"
-                                                    fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                                    fill="#444444" xmlns="http://www.w3.org/2000/svg">
                                                     <path
                                                         d="M26.125 9.625C26.125 8.1125 24.8875 6.875 23.375 6.875H19.25V9.625H23.375V13.2687L18.59 19.25H13.75V12.375H8.25C5.21125 12.375 2.75 14.8362 2.75 17.875V22H5.5C5.5 24.2825 7.3425 26.125 9.625 26.125C11.9075 26.125 13.75 24.2825 13.75 22H19.91L26.125 14.2313V9.625ZM9.625 23.375C8.86875 23.375 8.25 22.7563 8.25 22H11C11 22.7563 10.3812 23.375 9.625 23.375Z" />
                                                     <path
@@ -337,6 +337,7 @@
                                 </svg>
                                 <div class="text-size-small">Landed Properties</div>
                             </a>
+                            <input type="hidden" value="building" name="type" id="addressType">
                         </div>
                         <div>
                             <div class="mb-3" id="blockNumber">
@@ -629,6 +630,7 @@
                 unit_number: $("#unitNumber:visible input").val(),
                 building_name: $("#buildingName:visible input").val(),
                 postal_code: $("#postalCode:visible input").val(),
+                type: $("#addressType").val()
             }).done(function(data) {
                 // clear keyword search address
                 $("#keywordAddress").val("");
@@ -875,6 +877,7 @@
             $("#blockNumber").removeClass("d-none");
             $("#unitLevel").removeClass("d-none");
             $("#buildingName").removeClass("d-none");
+            $("#addressType").val("building");
         });
 
         $("#newAddressProperties").on("click", function() {
@@ -883,6 +886,7 @@
             $("#blockNumber").addClass("d-none");
             $("#unitLevel").addClass("d-none");
             $("#buildingName").addClass("d-none");
+            $("#addressType").val("property");
         });
     </script>
 @endsection

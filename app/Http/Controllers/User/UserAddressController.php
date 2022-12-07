@@ -16,7 +16,7 @@ class UserAddressController extends Controller
     public function index()
     {
         $addresses = UserAddress::where('user_id', auth()->user()->id)->get();
-        return view('user.address.index', ['addresses' => $addresses]);
+        return view('user.address-manage.index', ['addresses' => $addresses]);
     }
 
     /**
@@ -153,9 +153,16 @@ class UserAddressController extends Controller
             'block_number' => 'nullable|string|max:255',
             'unit_number' => 'nullable|string|max:255',
             'postal_code' => 'required|string|max:6',
+            'type' => 'required|string'
         ]);
-
-        $data = $request->all();
+        $type = $request->type;
+        if ($type == "building"){
+            $data = $request->only(['name', 'phone', 'additional_info', 'street', 'unit_level', 'block_number', 'unit_number', 'building_name', 'postal_code']);
+        }
+        else {
+            $data = $request->only(['name', 'phone', 'additional_info', 'street', 'unit_number', 'postal_code']);
+        }
+        // $data = $request->all();
         $data += ['user_id' => auth()->user()->id];
 
         UserAddress::create($data);

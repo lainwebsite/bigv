@@ -126,7 +126,7 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            $shipping_price = 30;
+            $shipping_price = 25;
 
             $total_price = $cart->quantity * $cart->price; // WARNING (price can be updated by user)
             session()->put('total-checkout-items', $cart->quantity);
@@ -174,7 +174,8 @@ class CheckoutController extends Controller
         }
 
         $paynow = new PaynowController();
-        return $paynow->pay(session()->get('total-checkout-price'), $transaction->id);
+        return $paynow->pay(session()->get('grandtotal-checkout-price'), $transaction->id);
+        // return $paynow->pay(session()->get('total-checkout-price'), $transaction->id);
 
         // $transaction = Transaction::create([
         //     'delivery_date' => '2022-11-29',

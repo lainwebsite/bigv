@@ -21,6 +21,11 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
   grid-row-start: 1;
 }
 
+.transactions-page-wrapper{
+    max-width: 1120px;
+    padding: 20px;
+}
+
 .w-checkbox::after {
   content: ' ';
   display: table;
