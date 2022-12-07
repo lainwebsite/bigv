@@ -404,6 +404,8 @@ class UserController extends Controller
     public function sort_analytics_detail(User $user, Request $request)
     {
         $carts = Cart::orderBy('created_at', $request->sort)
+            ->where('created_at', '<=', date('Y-m-d', strtotime($request->end_date . ' + 1 days')))
+            ->where('created_at', '>=', $request->start_date)
             ->where('transaction_id', '!=', null)
             ->where('user_id', $user->id)
             ->paginate(10);
