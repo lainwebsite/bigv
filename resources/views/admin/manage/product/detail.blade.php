@@ -133,7 +133,7 @@
                         <div class="card-body">
                             <h4 class="card-title mb-4">Vendor</h4>
                             <div class="d-flex justify-content-between">
-                                <div class="d-flex align-items-center">
+                                <a href="{{route('admin.vendor.show', $product->vendor_id)}}" class="d-flex align-items-center">
                                     <img width="60" height="60"
                                         src="{{ asset('uploads/' . $product->vendor->photo) }}" alt=""
                                         class="br-18 mr-4">
@@ -142,15 +142,16 @@
                                         <small class="mb-2"><b>Location:
                                                 {{ $product->vendor->location->name }}</b></small>
                                     </div>
-                                </div>
-                                <div class="d-flex gap-15x">
-                                    <button
-                                        class="h-75 btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><img
+                                </a>
+                                <div class="d-flex gap-15x justify-content-end">
+                                    <a target="_blank"
+                                        href="{{ 'https://wa.me/' . $product->vendor->phone . '?text=Hello%20Vendor%20%22vendor%20name%22' }}"
+                                        class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><img
                                             src="{{ asset('assets/images/whatsapp.svg') }}" width="24"
-                                            height="24" />Whatsapp</button>
-                                    <button
-                                        class="h-75 btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><i
-                                            data-feather="mail" class="feather-icon"></i>Email</button>
+                                            height="24" />Whatsapp</a>
+                                    <a href="mailto:{{ $product->vendor->email }}"
+                                        class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><i
+                                            data-feather="mail" class="feather-icon"></i>Mail</a>
                                 </div>
                             </div>
                         </div>
