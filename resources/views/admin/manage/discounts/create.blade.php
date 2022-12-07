@@ -125,12 +125,12 @@
                                     <label>Active Period</label>
                                     <div class="align-self-center d-flex align-items-center flex-wrap">
                                         <p class="mr-4 mb-0 text-nowrap">Start Datetime</p>
-                                        <input type="datetime-local" class="form-control w-auto" name="duration_start"
-                                            required>
+                                        <input type="datetime-local" class="form-control w-auto" id="duration-start"
+                                            name="duration_start" required>
                                         <p class="ml-4 mr-4 mb-0">-</p>
                                         <p class="mr-4 mb-0 text-nowrap">End Datetime</p>
-                                        <input type="datetime-local" class="form-control w-auto mr-4" name="duration_end"
-                                            required>
+                                        <input type="datetime-local" class="form-control w-auto mr-4" id="duration-end"
+                                            name="duration_end" required>
                                     </div>
                                 </div>
                             </div>
@@ -788,6 +788,14 @@
             }
             if ($(this).val() == 1) $("#expandableCheckboxMaxDiscountProductVoucher").slideUp();
             else $("#expandableCheckboxMaxDiscountProductVoucher").slideDown();
+        });
+    </script>
+    <script>
+        $('#duration-start').change(function() {
+            $('#duration-end').attr('min', $('#duration-start').val());
+        });
+        $('#duration-end').change(function() {
+            $('#duration-start').attr('max', $('#duration-end').val());
         });
     </script>
 @endsection

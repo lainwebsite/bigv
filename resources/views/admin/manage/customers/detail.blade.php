@@ -114,10 +114,10 @@
                             <h4 class="card-title mb-4">Analytics</h4>
                             <div class="align-self-center d-flex align-items-center">
                                 <p class="mr-4 mb-0 text-nowrap">Start Date</p>
-                                <input id="filter_start_date" type="date" class="form-control w-auto">
+                                <input id="filter_start_date" type="date" id="start-date" class="form-control w-auto">
                                 <p class="ml-4 mr-4 mb-0">-</p>
                                 <p class="mr-4 mb-0 text-nowrap">End Date</p>
-                                <input id="filter_end_date" type="date" class="form-control w-auto mr-4">
+                                <input id="filter_end_date" type="date" id="end-date" class="form-control w-auto mr-4">
                                 <a class="btn btn-primary text-white pr-4 pl-4" onclick="analytics();">Filter</a>
                             </div>
                             <div class="row mt-5" id="analytics-data">
