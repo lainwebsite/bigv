@@ -109,7 +109,6 @@ class DiscountController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'code' => 'required',
-                'description' => 'required',
                 'code' => 'unique:discounts,code',
             ]);
             if ($validator->fails()) {
@@ -225,7 +224,6 @@ class DiscountController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'code' => 'required',
-                'description' => 'required',
             ]);
             if ($validator->fails()) {
                 return Redirect::back()->withErrors($validator);
@@ -306,7 +304,6 @@ class DiscountController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'code' => 'required',
-                'description' => 'required',
             ]);
             if ($validator->fails()) {
                 return Redirect::back()->withErrors($validator);
