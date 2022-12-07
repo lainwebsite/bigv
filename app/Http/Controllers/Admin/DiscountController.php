@@ -77,29 +77,33 @@ class DiscountController extends Controller
             if ($validator->fails()) {
                 return Redirect::back()->withErrors($validator);
             }
-            $variation = ProductVariation::find($request->product_sale);
-            if (
-                Discount::where('name', $variation->id)
-                ->where('duration_end', '>=', Carbon::now())
-                ->get()->count() > 0
-            ) {
-                return redirect()->route('admin.discount.create')->with('wrong', 'An active Sale Price of that product already exists!');
+            $variations = ProductVariation::whereIn('id', array_keys($request->sale_price))->get();
+            foreach ($variations as $key => $variation) {
+                if ($request->sale_price[$variation->id] > 0) {
+                    if (
+                        Discount::where('name', $variation->id)
+                        ->where('duration_end', '>=', Carbon::now())
+                        ->get()->count() > 0
+                    ) {
+                        return redirect()->route('admin.discount.create')->with('wrong', 'An active Sale Price of that product already exists!');
+                    }
+                    $variation->update([
+                        "discount_start_date" => $request->duration_start,
+                        "discount_end_date" => $request->duration_end,
+                        "discount" => $request->sale_price
+                    ]);
+                    $discount = Discount::create([
+                        'name' => $variation->id,
+                        'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id + 1),
+                        'amount' => $request->sale_price[$variation->id],
+                        'duration_start' => $request->duration_start,
+                        'duration_end' => $request->duration_end,
+                        'type_id' => 3,
+                        'visible' => $request->visible == 'on' ? 1 : 0
+                    ]);
+                }
             }
             //product sale
-            $variation->update([
-                "discount_start_date" => $request->duration_start,
-                "discount_end_date" => $request->duration_end,
-                "discount" => $request->sale_price
-            ]);
-            $discount = Discount::create([
-                'name' => $variation->id,
-                'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id + 1),
-                'amount' => $request->sale_price,
-                'duration_start' => $request->duration_start,
-                'duration_end' => $request->duration_end,
-                'type_id' => 3,
-                'visible' => $request->visible == 'on' ? 1 : 0
-            ]);
         } else if ($request->discount_type == "2") {
             //product
             $validator = Validator::make($request->all(), [
@@ -422,7 +426,7 @@ class DiscountController extends Controller
     public function get_variations(Request $request)
     {
         $product = Product::find($request->id);
-        return $product->variations;
+        return view('admin.manage.discounts.inc.variation', compact('product'));
     }
 
     public function search_voucher_product(Request $request)
