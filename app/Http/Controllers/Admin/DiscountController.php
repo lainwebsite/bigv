@@ -93,7 +93,7 @@ class DiscountController extends Controller
             ]);
             $discount = Discount::create([
                 'name' => $variation->id,
-                'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id),
+                'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id + 1),
                 'amount' => $request->sale_price,
                 'duration_start' => $request->duration_start,
                 'duration_end' => $request->duration_end,
