@@ -55,7 +55,6 @@ class DiscountController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'code' => 'required',
-                'description' => 'required',
                 'code' => 'unique:discounts,code',
             ]);
             if ($validator->fails()) {
