@@ -61,6 +61,16 @@
                                     <input type="text" class="form-control" id="name" name="name" required
                                         value="{{ $product->name }}" placeholder="Product Name">
                                 </div>
+                                <div class="form-group" id="productPriceNoVariation" @class([
+                                    'd-none' =>
+                                        $product->variations->count() == 1 &&
+                                        $product->variations[0]->name == 'novariation',
+                                ])>
+                                    <label for="productPriceNoVar">Product Price</label>
+                                    <input type="number" class="form-control" id="productPriceNoVar"
+                                        value="{{ $product->variations[0]->price }}" name="product_price_no_var"
+                                        placeholder="Product Price">
+                                </div>
                                 <div class="form-group">
                                     <label for="description">Product Description</label>
                                     <textarea class="form-control" id="description" name="description" required placeholder="Product Description"
@@ -145,55 +155,71 @@
                                         an Image</a>
                                 </p>
                                 <div class="divider-dash mt-4 mb-4"></div>
-                                <h4 class="card-title mb-4">Product Variations</h4>
-                                <div class="form-group">
-                                    <label for="variation_named">Product Variation Name</label>
-                                    <input type="text" class="form-control" id="variation_named"
-                                        name="variation_named" value="{{ $product->variation_name }}"
-                                        placeholder="e.g Size, Flavor, Color, etc.">
+                                <div class="form-check form-check-inline mb-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="addVariationCheckbox"
+                                            name="with_variation" @checked($product->variations[0]->name != 'novariation')>
+                                        <label class="custom-control-label" for="addVariationCheckbox">Add
+                                            Variation</label>
+                                    </div>
                                 </div>
-                                <div id="productVariationGroup">
-                                    @foreach ($product->variations as $productVariation)
-                                        <div class="form-group mt-2" id="inputProductVariation{{ $loop->iteration }}">
-                                            <div class="row">
-                                                <div class="col-1 d-flex align-items-center">
-                                                    <p style="white-space: nowrap;" class="m-0 mr-3">Variation</p>
-                                                </div>
-                                                <div class="col-6">
-                                                    <input type="text" class="form-control" id="name"
-                                                        name="variation_name[{{ $loop->iteration }}]" required
-                                                        value="{{ $productVariation->name }}" placeholder="Name">
-                                                </div>
-                                                <div class="col-3">
-                                                    <input type="number" class="form-control" id="name"
-                                                        name="variation_price[{{ $loop->iteration }}]" required
-                                                        value="{{ $productVariation->price }}" placeholder="Price">
-                                                </div>
-                                                <div class="col-1">
-                                                    <div class="d-flex h-100">
-                                                        <div class="pl-2 pr-2 d-flex align-items-center justify-content-center custom-border deleteVariation cursor-pointer border-danger"
-                                                            count="{{ $loop->iteration }}">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round"
-                                                                class="feather feather-x feather-icon text-danger">
-                                                                <line x1="18" y1="6" x2="6"
-                                                                    y2="18"></line>
-                                                                <line x1="6" y1="6" x2="18"
-                                                                    y2="18"></line>
-                                                            </svg>
+                                <div id="addProductVariationGroup" @class([
+                                    'd-none' =>
+                                        $product->variations->count() == 1 &&
+                                        $product->variations[0]->name == 'novariation',
+                                ])>
+                                    <h4 class="card-title mb-4">Product Variations</h4>
+                                    <div class="form-group">
+                                        <label for="variation_named">Product Variation Name</label>
+                                        <input type="text" class="form-control" id="variation_named"
+                                            name="variation_named" value="{{ $product->variation_name }}"
+                                            placeholder="e.g Size, Flavor, Color, etc.">
+                                    </div>
+                                    <div id="productVariationGroup">
+                                        @foreach ($product->variations as $productVariation)
+                                            <div class="form-group mt-2"
+                                                id="inputProductVariation{{ $loop->iteration }}">
+                                                <div class="row">
+                                                    <div class="col-1 d-flex align-items-center">
+                                                        <p style="white-space: nowrap;" class="m-0 mr-3">Variation</p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="text" class="form-control" id="name"
+                                                            name="variation_name[{{ $loop->iteration }}]" required
+                                                            value="{{ $productVariation->name }}" placeholder="Name">
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <input type="number" class="form-control" id="name"
+                                                            name="variation_price[{{ $loop->iteration }}]" required
+                                                            value="{{ $productVariation->price }}" placeholder="Price">
+                                                    </div>
+                                                    <div class="col-1">
+                                                        <div class="d-flex h-100">
+                                                            <div class="pl-2 pr-2 d-flex align-items-center justify-content-center custom-border deleteVariation cursor-pointer border-danger"
+                                                                count="{{ $loop->iteration }}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                    height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="feather feather-x feather-icon text-danger">
+                                                                    <line x1="18" y1="6" x2="6"
+                                                                        y2="18"></line>
+                                                                    <line x1="6" y1="6" x2="18"
+                                                                        y2="18"></line>
+                                                                </svg>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
+                                    <p class="text-lg-right mt-4">
+                                        <a href="javascript:void(0)" class="btn btn-primary text-white"
+                                            id="addVariation">Add
+                                            a Variation</a>
+                                    </p>
                                 </div>
-                                <p class="text-lg-right mt-4">
-                                    <a href="javascript:void(0)" class="btn btn-primary text-white" id="addVariation">Add
-                                        a Variation</a>
-                                </p>
                                 <div class="divider-dash mt-4 mb-4"></div>
                                 <!-- PRODUCT ADDON -->
                                 <h4 class="card-title mb-4">Product Add-on</h4>
@@ -219,9 +245,11 @@
                                             <div class="form-check form-check-inline">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                        @checked($addon->required == 1) id="addon-required-{{$key+1}}"
+                                                        @checked($addon->required == 1)
+                                                        id="addon-required-{{ $key + 1 }}"
                                                         name="addon_required[{{ $key + 1 }}]">
-                                                    <label class="custom-control-label" for="addon-required-{{$key+1}}">Add-on
+                                                    <label class="custom-control-label"
+                                                        for="addon-required-{{ $key + 1 }}">Add-on
                                                         Required</label>
                                                 </div>
                                             </div>
@@ -351,7 +379,17 @@
             $("#inputProductImage" + id).remove();
         });
 
-        var countVariation = 0;
+        $("#addVariationCheckbox").on('change', function() {
+            if ($(this).is(':checked')) {
+                $("#addProductVariationGroup").removeClass('d-none').addClass('d-block');
+                $("#productPriceNoVariation").removeClass('d-block').addClass('d-none');
+            } else {
+                $("#addProductVariationGroup").removeClass('d-block').addClass('d-none');
+                $("#productPriceNoVariation").removeClass('d-none').addClass('d-block');
+            }
+        });
+
+        var countVariation = @json($product->variations->count());
         $("#addVariation").on('click', function() {
             countVariation++;
             $("#productVariationGroup").append(`

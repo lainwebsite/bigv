@@ -20,24 +20,26 @@
                 class="absolute shape-1 ea-right" />
             <div class="product-hero margin-auto">
                 <div class="content-col col--width-50 display-none">
-                    <img src="{{ asset('uploads/'.$product->featured_image) }}" sizes="100vw"
-                        srcset="{{ asset('uploads/'.$product->featured_image) }}" alt="" class="image-9 card27" />
+                    <img src="{{ asset('uploads/' . $product->featured_image) }}" sizes="100vw"
+                        srcset="{{ asset('uploads/' . $product->featured_image) }}" alt="" class="image-9 card27" />
                     @if (count($product->images) > 0)
                         @foreach ($product->images as $image)
-                            <img src="{{ asset('uploads/'.$image->link) }}" sizes="100vw" srcset="{{ asset('uploads/'.$image->link) }}"
-                                alt="" class="image-9 card27" />
+                            <img src="{{ asset('uploads/' . $image->link) }}" sizes="100vw"
+                                srcset="{{ asset('uploads/' . $image->link) }}" alt="" class="image-9 card27" />
                         @endforeach
                     @endif
                 </div>
                 <div id="productImage" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="{{ asset('uploads/'.$product->featured_image) }}" alt="Product Image" class="d-block w-100" />
+                            <img src="{{ asset('uploads/' . $product->featured_image) }}" alt="Product Image"
+                                class="d-block w-100" />
                         </div>
                         @if (count($product->images) > 0)
                             @foreach ($product->images as $image)
                                 <div class="carousel-item">
-                                    <img src="{{ asset('uploads/'.$image->link) }}" alt="Product Image" class="d-block w-100" />
+                                    <img src="{{ asset('uploads/' . $image->link) }}" alt="Product Image"
+                                        class="d-block w-100" />
                                 </div>
                             @endforeach
                         @endif
@@ -181,9 +183,9 @@
                                 </svg>
                             </div>
 
-                            @php ($now = \Carbon\Carbon::now())
-                            
-                            
+                            @php($now = \Carbon\Carbon::now())
+
+
                             @if ($product->variations[0]->name == 'novariation')
                                 <!--NO VARIATIONS -->
                                 @if ($product->variations[0]->discount > 0 && 
@@ -205,9 +207,11 @@
                                 @endif
                             @else
                                 <!--VARIATIONS -->
-                                <h3 class="sale-price-detail heading-3 text-color-light-grey margin-vertical margin-xsmall" style="display: none;">$0</h3>
+                                <h3 class="sale-price-detail heading-3 text-color-light-grey margin-vertical margin-xsmall"
+                                    style="display: none;">$0</h3>
                                 <h3 class="product-price heading-3 margin-vertical margin-xsmall"
-                                    min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}" style="display: inline-block;">
+                                    min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}"
+                                    style="display: inline-block;">
                                     ${{ $minProductPrice }} - ${{ $maxProductPrice }}</h3>
                                 <div class="div-line"></div>
                                 <h5 class="heading-4 mb-2">{{ ucwords($product->variation_name) }}</h5>
@@ -233,7 +237,8 @@
                                                 id="" @if ($addon->required) required @endif>
                                                 @foreach ($addon->addons_options as $addons_option)
                                                     <option price="{{ $addons_option->price }}"
-                                                        value="{{ $addons_option->id }}">{{ $addons_option->name }} (${{$addons_option->price}})
+                                                        value="{{ $addons_option->id }}">{{ $addons_option->name }}
+                                                        (${{ $addons_option->price }})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -297,7 +302,8 @@
         <div class="product-vendor-n-info ea-up" style="width: 90%;">
             <div class="div-block-8">
                 <div class="vendor-product-detail">
-                    <img src="{{ asset('uploads/'.$product->vendor->photo) }}" loading="lazy" alt="" class="image-10" />
+                    <img src="{{ asset('uploads/' . $product->vendor->photo) }}" loading="lazy" alt=""
+                        class="image-10" />
                     <div class="vendor-detail-product-detail">
                         <h4 class="text-color-dark-grey">{{ $product->vendor->name }}</h4>
                         <div class="text-color-grey" style="font-size: 0.8rem;">Location:
@@ -375,7 +381,7 @@
         </div>
         <!-- END VENDOR -->
         <!-- REVIEW -->
-        <div class="flex relative max-width-full align-center" style="display:none !important;"><img
+        <div class="flex relative max-width-full align-center"><img
                 src="{{ asset('assets/6303b7b9afc8585f7943565c_shape 2.svg') }}" loading="lazy" alt=""
                 class="absolute bottom-left ea-left" />
             <div class="flex top-align max-width relative">
@@ -389,76 +395,84 @@
                     </div>
                     <h5 class="heading-4 p-beside-star">{{ $product->reviews_count }} Rating</h5>
                     <div class="div-block-16">
-                        <div class="flex gap-small"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
-                                alt="" class="image-11" />
+                        <div class="flex gap-small">
+                            <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy" alt=""
+                                class="image-11" />
                             <h5 class="heading-4 p-beside-star text-weight-medium">5</h5>
                             <div class="div-block-10">
-                                <div class="div-block-11"></div>
+                                <div class="div-block-11"
+                                    style="width: {{ $product->reviews->where('rating', 5)->count() / $product->reviews->count() * 100 }}%;">
+                                </div>
                             </div>
-                            <h5 class="heading-4 p-beside-star text-weight-medium">121</h5>
+                            <h5 class="heading-4 p-beside-star text-weight-medium">
+                                {{ $product->reviews->where('rating', 5)->count() }}</h5>
                         </div>
                         <div class="flex gap-small"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
                                 alt="" class="image-11" />
                             <h5 class="heading-4 p-beside-star text-weight-medium">4</h5>
                             <div class="div-block-10">
-                                <div class="div-block-12"></div>
+                                <div class="div-block-12"
+                                    style="width: {{ $product->reviews->where('rating', '<', 5)->where('rating', '>=', 4)->count() / $product->reviews->count() * 100 }}%;">
+                                </div>
                             </div>
-                            <h5 class="heading-4 p-beside-star text-weight-medium">40</h5>
+                            <h5 class="heading-4 p-beside-star text-weight-medium">
+                                {{ $product->reviews->where('rating', '<', 5)->where('rating', '>=', 4)->count() }}</h5>
                         </div>
                         <div class="flex gap-small"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
                                 alt="" class="image-11" />
                             <h5 class="heading-4 p-beside-star text-weight-medium">3</h5>
                             <div class="div-block-10">
-                                <div class="div-block-13"></div>
+                                <div class="div-block-13"
+                                    style="width: {{ $product->reviews->where('rating', '<', 4)->where('rating', '>=', 3)->count() / $product->reviews->count() * 100 }}%;">
+                                </div>
                             </div>
-                            <h5 class="heading-4 p-beside-star text-weight-medium">13</h5>
+                            <h5 class="heading-4 p-beside-star text-weight-medium">
+                                {{ $product->reviews->where('rating', '<', 4)->where('rating', '>=', 3)->count() }}</h5>
                         </div>
                         <div class="flex gap-small"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
                                 alt="" class="image-11" />
                             <h5 class="heading-4 p-beside-star text-weight-medium">2</h5>
                             <div class="div-block-10">
-                                <div class="div-block-14"></div>
+                                <div class="div-block-14"
+                                    style="width: {{ $product->reviews->where('rating', '<', 3)->where('rating', '>=', 2)->count() / $product->reviews->count() * 100 }}%;">
+                                </div>
                             </div>
-                            <h5 class="heading-4 p-beside-star text-weight-medium">8</h5>
+                            <h5 class="heading-4 p-beside-star text-weight-medium">
+                                {{ $product->reviews->where('rating', '<', 3)->where('rating', '>=', 2)->count() }}</h5>
                         </div>
                         <div class="flex gap-small"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
                                 alt="" class="image-11" />
                             <h5 class="heading-4 p-beside-star text-weight-medium">1</h5>
                             <div class="div-block-10">
-                                <div class="div-block-15"></div>
+                                <div class="div-block-15"
+                                    style="width: {{ $product->reviews->where('rating', '<', 2)->count() / $product->reviews->count() * 100 }}%;">
+                                </div>
                             </div>
-                            <h5 class="heading-4 p-beside-star text-weight-medium">2</h5>
+                            <h5 class="heading-4 p-beside-star text-weight-medium">
+                                {{ $product->reviews->where('rating', '<', 2)->count() }}</h5>
                         </div>
                     </div>
                 </div>
                 <div class="text-color-dark-grey ea-right">
-                    @for ($i = 0; $i < 10; $i++)
+                    @foreach ($product->reviews as $productReview)
                         <div class="card28 row padding-small margin-small m-3">
                             <div class="col-md-3 col-sm-2 col-6">
-                                <div id="reviewImage{{ $i }}" class="carousel slide" data-ride="carousel">
+                                <div id="reviewImage{{ $productReview->id }}" class="carousel slide"
+                                    data-ride="carousel">
                                     <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <img class="d-block w-100"
-                                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
-                                                alt="First slide">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img class="d-block w-100"
-                                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
-                                                alt="Second slide">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img class="d-block w-100"
-                                                src="https://bigvsg.com/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-28-at-11.47.58-300x300.jpeg"
-                                                alt="Third slide">
-                                        </div>
+                                        @foreach ($productReview->images as $reviewImage)
+                                            <div @class(['carousel-item', 'active' => $loop->iteration == 1]) class="carousel-item active">
+                                                <img class="d-block w-100"
+                                                    src="{{ asset('uploads' . '/' . $reviewImage->link) }}">
+                                            </div>
+                                        @endforeach
                                     </div>
-                                    <a class="carousel-control-prev" href="#reviewImage{{ $i }}"
+                                    <a class="carousel-control-prev" href="#reviewImage{{ $productReview->id }}"
                                         role="button" data-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                         <span class="sr-only">Previous</span>
                                     </a>
-                                    <a class="carousel-control-next" href="#reviewImage{{ $i }}"
+                                    <a class="carousel-control-next" href="#reviewImage{{ $productReview->id }}"
                                         role="button" data-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="sr-only">Next</span>
@@ -467,61 +481,100 @@
                             </div>
                             <div class="col-md-9 col-sm-10 col-12">
                                 <div class="div-block-17">
-                                    <h4>Chris William</h4>
-                                    <h5 class="heading-4 p-beside-star">29-10-2022</h5>
+                                    <h4>{{ $productReview->user->name }}</h4>
+                                    <h5 class="heading-4 p-beside-star">
+                                        {{ date('d-m-Y', strtotime($productReview->created_at)) }}</h5>
                                 </div>
                                 <div class="flex">
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
-                                                    alt="" /></div>
+                                            <div>
+                                                @if ($productReview->rating >= 1)
+                                                    <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @elseif($productReview->rating >= 0.5)
+                                                    <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @else
+                                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
-                                                    alt="" /></div>
+                                            <div>
+                                                @if ($productReview->rating >= 2)
+                                                    <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @elseif($productReview->rating >= 1.5)
+                                                    <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @else
+                                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div><img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
-                                                    alt="" /></div>
+                                            <div>
+                                                @if ($productReview->rating >= 3)
+                                                    <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @elseif($productReview->rating >= 2.5)
+                                                    <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @else
+                                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div><img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
-                                                    alt="" /></div>
+                                            <div>
+                                                @if ($productReview->rating >= 4)
+                                                    <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @elseif($productReview->rating >= 3.5)
+                                                    <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @else
+                                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="c-product-rating__star">
                                         <div class="icon">
-                                            <div><img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
-                                                    alt="" /></div>
+                                            <div>
+                                                @if ($productReview->rating >= 5)
+                                                    <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @elseif($productReview->rating >= 4.5)
+                                                    <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @else
+                                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy"
+                                                        alt="" />
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <h5 class="heading-4 p-beside-star">300 Rating</h5>
-                                <div class="text-size-tiny text-color-grey">At vero eos et accusamus et iusto odio
-                                    dignissimos
-                                    ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et
-                                    quas
-                                    molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
-                                    officia deserunt mollitia animi, id est laborum et dolorum fuga.</div>
+                                <h5 class="heading-4 p-beside-star">{{ $productReview->user->reviews->count() }} Rating
+                                </h5>
+                                <div class="text-size-tiny text-color-grey">{{ $productReview->description }}</div>
                             </div>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
             </div>
-        </div>
-        <div class="pagination flex justify-center margin-large" style="display:none !important;">
-            <a href="#" class="pagination-selected text-style-none">
-                <div class="text-color-white">1</div>
-            </a>
-            <a href="#" class="pagination-not-selected text-style-none">
-                <div class="orange-text">1</div>
-            </a>
         </div>
     </div>
     <div data-w-id="1469b1e8-77d5-4eda-0931-cc24293decef"
@@ -592,28 +645,32 @@
         <div class="heading-large text-align-center margin-bottom margin-large">Suggested Products</div>
         <div class="products-archive-grid margin-auto">
             @php(date_default_timezone_set('Asia/Singapore'))
-            @php($dateNow = new DateTime(date("Y-m-d H:i:s")))
+            @php($dateNow = new DateTime(date('Y-m-d H:i:s')))
             @foreach ($productSuggestion as $product)
                 <a href="{{ route('product.show', $product->id) }}" class="text-style-none">
                     <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c" class="product-card padding-small">
-                        <div class="text-rich-text text-size-small text-color-grey">{{ $product->vendor->name }}</div><img
-                            src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt="" class="product-image" />
+                        <div class="text-rich-text text-size-small text-color-grey">{{ $product->vendor->name }}</div>
+                        <img src="{{ asset('uploads/' . $product->featured_image) }}" loading="lazy" alt=""
+                            class="product-image" />
                         <div class="product-card-stars">
                             @php($arr_rating = explode('.', $product->rating))
                             @php($first_num = $arr_rating[0])
                             @while ($first_num > 0)
-                                <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy" alt="" class="card-stars" />
+                                <img src="{{ asset('assets/Star 1.svg') }}" loading="lazy" alt=""
+                                    class="card-stars" />
                                 @php($first_num--)
                             @endwhile
-        
+
                             @if (isset($arr_rating[1]))
-                                <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy" alt="" class="card-stars" />
+                                <img src="{{ asset('assets/Star 2.svg') }}" loading="lazy" alt=""
+                                    class="card-stars" />
                             @endif
-        
+
                             @php($remaining_rating = explode('.', 5 - $product->rating)[0])
                             @if ($remaining_rating > 0)
                                 @while ($remaining_rating > 0)
-                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy" alt="" class="card-stars" />
+                                    <img src="{{ asset('assets/Star 3.svg') }}" loading="lazy" alt=""
+                                        class="card-stars" />
                                     @php($remaining_rating--)
                                 @endwhile
                             @endif
@@ -627,7 +684,7 @@
                                 @if ($product->variations[0]->discount > 0)
                                     @php($startDate = new DateTime($product->variations[0]->discount_start_date))
                                     @php($endDate = new DateTime($product->variations[0]->discount_end_date))
-                                    
+
                                     @if ($startDate <= $dateNow && $dateNow <= $endDate)
                                         <div class="card-discount">
                                             <!--<div class="discount">-${{ $product->variations[0]->discount }}</div>-->
@@ -636,14 +693,18 @@
                                         <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
                                             class="sale-price text-color-light-grey" style="padding: 0.25em;">
                                             ${{ $product->variations[0]->price }}</div>
-                                        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                            ${{ $product->variations[0]->price - $product->variations[0]->discount }}</div>
+                                        <div class="text-rich-text text-color-orange text-weight-bold"
+                                            style="padding: 0.25em;">
+                                            ${{ $product->variations[0]->price - $product->variations[0]->discount }}
+                                        </div>
                                     @else
-                                        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                        <div class="text-rich-text text-color-orange text-weight-bold"
+                                            style="padding: 0.25em;">
                                             ${{ $product->variations[0]->price }}</div>
                                     @endif
                                 @else
-                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                    <div class="text-rich-text text-color-orange text-weight-bold"
+                                        style="padding: 0.25em;">
                                         ${{ $product->variations[0]->price }}</div>
                                 @endif
                             @else
@@ -652,11 +713,10 @@
                                     @if ($pv->discount > 0)
                                         @php($startDate = new DateTime($product->variations[0]->discount_start_date))
                                         @php($endDate = new DateTime($product->variations[0]->discount_end_date))
-                                        
+
                                         @if ($startDate <= $dateNow && $dateNow <= $endDate)
                                             @php($salePriceAvailable = true)
-                                            @break
-                                        @endif
+                                        @break
                                     @endif
                                 @endforeach
                                 
@@ -665,18 +725,27 @@
                                         <div class="discount">Sale</div>
                                     </div>
                                 @endif
-                                
-                                <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                                ${{ $product->variations->min('price') }} - ${{ $product->variations->max('price') }}
-                                            </div>
+                            @endforeach
+
+                            @if ($salePriceAvailable)
+                                <div class="card-discount">
+                                    <!--<div class="discount">-${{ $product->variations[0]->discount }}</div>-->
+                                    <div class="discount">Sale</div>
+                                </div>
                             @endif
-                        </div>
+
+                            <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                ${{ $product->variations->min('price') }} -
+                                ${{ $product->variations->max('price') }}
+                            </div>
+                        @endif
                     </div>
-                </a>
-            @endforeach
-        </div><a href="{{url('product')}}" class="button margin-top margin-large ea-grow w-button">See More</a>
-        <div data-w-id="2763fafa-9663-7a88-db5c-9d4056894d11" class="product-info"></div>
-    </div>
+                </div>
+            </a>
+        @endforeach
+    </div><a href="{{ url('product') }}" class="button margin-top margin-large ea-grow w-button">See More</a>
+    <div data-w-id="2763fafa-9663-7a88-db5c-9d4056894d11" class="product-info"></div>
+</div>
 @endsection
 
 @section('javascript-extra')
@@ -699,72 +768,76 @@
                         price = parseFloat($(".product-variation.selected").attr("price"));
                     }
                 } else {
-                    price = $(".product-price").attr("min-price") + " - $" + $(".product-price").attr("max-price");
-                    alert("Please select one of variation product first!");
-                    return price;
+                    price = parseFloat($(".product-variation.selected").attr("price"));
                 }
+            } else {
+                price = $(".product-price").attr("min-price") + " - $" + $(".product-price").attr("max-price");
+                alert("Please select one of variation product first!");
+                return price;
             }
-
-            if (price != undefined && $(".addons-option").length > 0) {
-                var total_normal_price = ($(".product-variation.selected").attr("after-sale-price") != undefined) ? parseFloat($(".product-variation.selected").attr("price")) : 0;
-                $(".addons-option option:selected").each(function() {
-                    if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
-                        total_normal_price += parseFloat($(this).attr("price"));
-                    }
-                    price += parseFloat($(this).attr("price"));
-                });
-                
-                if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
-                    $(".sale-price-detail").html("$" + total_normal_price);
-                }
-            }
-            
-            return price;
         }
 
-        $(".product-variation").on("click", function() {
-            if ($(this).hasClass("selected")) {
+        if (price != undefined && $(".addons-option").length > 0) {
+            var total_normal_price = ($(".product-variation.selected").attr("after-sale-price") != undefined) ?
+                parseFloat($(".product-variation.selected").attr("price")) : 0;
+            $(".addons-option option:selected").each(function() {
+                if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
+                    total_normal_price += parseFloat($(this).attr("price"));
+                }
+                price += parseFloat($(this).attr("price"));
+            });
+
+            if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
+                $(".sale-price-detail").html("$" + total_normal_price);
+            }
+        }
+
+        return price;
+    }
+
+    $(".product-variation").on("click", function() {
+        if ($(this).hasClass("selected")) {
+            $(this).removeClass("selected");
+            $(".product-price").html("$" + $(".product-price").attr("min-price") + " - $" + $(".product-price")
+                .attr("max-price")).removeAttr("product-id");
+            $(".btn-add-cart").attr("disabled", "").addClass("btn-secondary");
+            $(".btn-buy-now").attr("disabled", "").addClass("btn-outline-secondary text-secondary");
+            $(".sale-price-detail").css("display", "none");
+        } else {
+            $(".product-variation").each(function() {
                 $(this).removeClass("selected");
-                $(".product-price").html("$" + $(".product-price").attr("min-price") + " - $" + $(".product-price")
-                    .attr("max-price")).removeAttr("product-id");
-                $(".btn-add-cart").attr("disabled", "").addClass("btn-secondary");
-                $(".btn-buy-now").attr("disabled", "").addClass("btn-outline-secondary text-secondary");
-                $(".sale-price-detail").css("display", "none");
+            });
+
+            $(this).addClass("selected");
+            if ($(this).attr("after-sale-price") != undefined) {
+                $(".sale-price-detail").css("display", "").html("$" + $(this).attr("price"));
+                $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
+                    "variation-id"));
             } else {
-                $(".product-variation").each(function() {
-                    $(this).removeClass("selected");
-                });
-
-                $(this).addClass("selected");
-                if ($(this).attr("after-sale-price") != undefined) {
-                    $(".sale-price-detail").css("display", "").html("$" + $(this).attr("price"));
-                    $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
-                        "variation-id"));
-                } else {
-                    $(".sale-price-detail").css("display", "none").html(0);
-                    $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
-                        "variation-id"));
-                }
-                $(".btn-add-cart").removeAttr("disabled").removeClass("btn-secondary");
-                $(".btn-buy-now").removeAttr("disabled").removeClass("btn-outline-secondary text-secondary");
+                $(".sale-price-detail").css("display", "none").html(0);
+                $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
+                    "variation-id"));
             }
-        });
+            $(".btn-add-cart").removeAttr("disabled").removeClass("btn-secondary");
+            $(".btn-buy-now").removeAttr("disabled").removeClass("btn-outline-secondary text-secondary");
+        }
+    });
 
-        $(".addons-option option").on("click", function() {
-            $(".product-price").html("$" + calculatePrice());
-        });
+    $(".addons-option option").on("click", function() {
+        $(".product-price").html("$" + calculatePrice());
+    });
 
 
-        $(".quantity-change").on('click', function() {
-            var qty = parseInt($(".product-quantity").val());
-            if ($(this).attr("id") == "addQuantity") {
-                $(".product-quantity").val(qty + 1);
-            } else {
-                if (qty - 1 >= 1) {
-                    $(".product-quantity").val(qty - 1);
-                }
+    $(".quantity-change").on('click', function() {
+        var qty = parseInt($(".product-quantity").val());
+        if ($(this).attr("id") == "addQuantity") {
+            $(".product-quantity").val(qty + 1);
+        } else {
+            if (qty - 1 >= 1) {
+                $(".product-quantity").val(qty - 1);
             }
-        });
+        }
+    });
 
         @if (auth()->user() != null)
             @if (auth()->user()->role_id == 1)
@@ -832,45 +905,75 @@
                         $("form").submit();
                     }
                 });
-            @endif
-        @else
-            $(".btn-add-cart, .btn-buy-now").attr("href", "{{ route('login') }}");
+
+                $.post(url + "/user/cart", {
+                    _token: CSRF_TOKEN,
+                    product_variation_id: product_variation_id,
+                    product_addons_id: product_addons_id,
+                    quantity: $(".product-quantity").val()
+                }).done(function(data) {
+                    alert(data);
+                }).fail(function(error) {
+                    console.log(error);
+                });
+            });
+
+            $(".btn-buy-now").on("click", function() {
+                var product_variation_id = ($(".product-variation.selected").length > 0) ?
+                    $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
+                        "variation-id");
+                var product_addons_id = [];
+                $(".addons-option").each(function() {
+                    if ($(this).val() > 0) {
+                        product_addons_id.push($(this).val());
+                    }
+                });
+
+                $("#productVariationId").val(product_variation_id);
+                if (product_addons_id.length > 0) {
+                    $("#productAddonsId").val(product_addons_id);
+                }
+                $("#quantity").val($(".product-quantity").val());
+            });
         @endif
+    @else
+        $(".btn-add-cart, .btn-buy-now").attr("href", "{{ route('login') }}");
+    @endif
 
-        var shareLink = "<?= $shareLink ?>";
+    var shareLink = "<?= $shareLink ?>";
 
-        const shareButton = document.querySelector('.share-button');
-        const shareDialog = document.querySelector('.share-dialog');
-        const closeButton = document.querySelector('.close-button');
+    const shareButton = document.querySelector('.share-button');
+    const shareDialog = document.querySelector('.share-dialog');
+    const closeButton = document.querySelector('.close-button');
 
-        shareButton.addEventListener('click', event => {
-            if (navigator.share) {
-                navigator.share({
-                        title: 'Big V - Share Product',
-                        url: shareLink // product link
-                    }).then(() => {
-                        console.log('Thanks for sharing!');
-                    })
-                    .catch(console.error);
-            } else {
-                shareDialog.classList.add('is-open');
+    shareButton.addEventListener('click', event => {
+        if (navigator.share) {
+            navigator.share({
+                    title: 'Big V - Share Product',
+                    url: shareLink // product link
+                }).then(() => {
+                    console.log('Thanks for sharing!');
+                })
+                .catch(console.error);
+        } else {
+            shareDialog.classList.add('is-open');
+        }
+    });
+
+    closeButton.addEventListener('click', event => {
+        shareDialog.classList.remove('is-open');
+    });
+
+    $(document).on('click', "#copyLink", function() {
+        navigator.permissions.query({
+            name: "write-on-clipboard"
+        }).then((result) => {
+            if (result.state == "granted" || result.state == "prompt") {
+                alert("Write access granted!");
             }
         });
-
-        closeButton.addEventListener('click', event => {
-            shareDialog.classList.remove('is-open');
-        });
-
-        $(document).on('click', "#copyLink", function() {
-            navigator.permissions.query({
-                name: "write-on-clipboard"
-            }).then((result) => {
-                if (result.state == "granted" || result.state == "prompt") {
-                    alert("Write access granted!");
-                }
-            });
-            navigator.clipboard.writeText(shareLink); //product link
-            $("#copyLink").html("Link Copied");
-        });
-    </script>
+        navigator.clipboard.writeText(shareLink); //product link
+        $("#copyLink").html("Link Copied");
+    });
+</script>
 @endsection

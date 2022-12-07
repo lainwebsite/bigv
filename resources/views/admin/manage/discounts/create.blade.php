@@ -125,12 +125,12 @@
                                     <label>Active Period</label>
                                     <div class="align-self-center d-flex align-items-center flex-wrap">
                                         <p class="mr-4 mb-0 text-nowrap">Start Datetime</p>
-                                        <input type="datetime-local" class="form-control w-auto" name="duration_start"
-                                            required>
+                                        <input type="datetime-local" class="form-control w-auto" id="duration-start"
+                                            name="duration_start" required>
                                         <p class="ml-4 mr-4 mb-0">-</p>
                                         <p class="mr-4 mb-0 text-nowrap">End Datetime</p>
-                                        <input type="datetime-local" class="form-control w-auto mr-4" name="duration_end"
-                                            required>
+                                        <input type="datetime-local" class="form-control w-auto mr-4" id="duration-end"
+                                            name="duration_end" required>
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +178,7 @@
                                 </div>
 
                                 <!-- Cuma muncul kalo productnya ada variation -->
-                                <div class="form-group mt-4">
+                                {{-- <div class="form-group mt-4">
                                     <label for="salePriceVariation">Product Variation</label>
                                     <select class="custom-select custom-border" id="salePriceVariation"
                                         name="product_sale" style="border-radius: 10px !important;">
@@ -187,19 +187,11 @@
                                                 ${{ $variation->price }}</option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> --}}
                                 <!-- Cuma muncul kalo productnya ada variation -->
 
-                                <div class="form-group mt-4">
-                                    <label for="salePrice">Sale Price</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <label for="salePrice" style="border-radius: 10px 0 0 10px;"
-                                                class="input-group-text">$</label>
-                                        </div>
-                                        <input type="number" class="form-control" id="salePrice" name="sale_price"
-                                            placeholder="Sale Price">
-                                    </div>
+                                <div class="form-group mt-4" id="variation-list">
+                                    @include('admin.manage.discounts.inc.variation')
                                 </div>
                                 <div class="d-flex mt-4 gap-15x">
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -511,11 +503,12 @@
                     id: id,
                 })
                 .done(function(data) {
-                    data.forEach(element => {
-                        $("#salePriceVariation").append(
-                            `<option value="${element.id}">${element.name} -
-                                            $${element.price}</option>`);
-                    });
+                    $('#variation-list').html(data);
+                    // data.forEach(element => {
+                    //     $("#salePriceVariation").append(
+                    //         `<option value="${element.id}">${element.name} -
+                //                         $${element.price}</option>`);
+                    // });
                 })
                 .fail(function(error) {
                     console.log(error);
@@ -788,6 +781,14 @@
             }
             if ($(this).val() == 1) $("#expandableCheckboxMaxDiscountProductVoucher").slideUp();
             else $("#expandableCheckboxMaxDiscountProductVoucher").slideDown();
+        });
+    </script>
+    <script>
+        $('#duration-start').change(function() {
+            $('#duration-end').attr('min', $('#duration-start').val());
+        });
+        $('#duration-end').change(function() {
+            $('#duration-start').attr('max', $('#duration-end').val());
         });
     </script>
 @endsection

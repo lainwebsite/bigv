@@ -154,11 +154,11 @@
                                     <div class="align-self-center d-flex align-items-center flex-wrap">
                                         <p class="mr-4 mb-0 text-nowrap">Start Datetime</p>
                                         <input type="datetime-local" class="form-control w-auto" name="duration_start"
-                                            required value="{{ $discount->duration_start }}">
+                                            id="duration-start" required value="{{ $discount->duration_start }}">
                                         <p class="ml-4 mr-4 mb-0">-</p>
                                         <p class="mr-4 mb-0 text-nowrap">End Datetime</p>
                                         <input type="datetime-local" class="form-control w-auto mr-4" name="duration_end"
-                                            required value="{{ $discount->duration_end }}">
+                                            id="duration-end" required value="{{ $discount->duration_end }}">
                                     </div>
                                 </div>
                             </div>
@@ -954,6 +954,14 @@
             }
             if ($(this).val() == 1) $("#expandableCheckboxMaxDiscountProductVoucher").slideUp();
             else $("#expandableCheckboxMaxDiscountProductVoucher").slideDown();
+        });
+    </script>
+    <script>
+        $('#duration-start').change(function() {
+            $('#duration-end').attr('min', $('#duration-start').val());
+        });
+        $('#duration-end').change(function() {
+            $('#duration-start').attr('max', $('#duration-end').val());
         });
     </script>
 @endsection
