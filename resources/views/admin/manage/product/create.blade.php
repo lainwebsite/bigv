@@ -140,12 +140,12 @@
                                 </div>
                                 <div class="divider-dash mt-4 mb-4"></div>
                                 <!-- PRODUCT ADDON -->
-                                <h4 class="card-title mb-4">Product Addon</h4>
+                                <h4 class="card-title mb-4">Product Add-on</h4>
                                 <div id="productAddonGroup" class="d-flex flex-column" style="gap:30px;">
                                 </div>
                                 <p class="text-lg-right mt-4">
                                     <a href="javascript:void(0)" class="btn btn-primary text-white" id="addAddon">Add
-                                        Addon</a>
+                                        Add-on</a>
                                 </p>
                                 <!-- PRODUCT ADDON -->
                                 <div class="d-flex mt-4 gap-15x">
@@ -210,7 +210,7 @@
             if ($(this).is(':checked')){
                 $("#addProductVariationGroup").slideDown();
                 $("#productPriceNoVariation").slideUp();
-            } 
+            }
             else {
                 $("#addProductVariationGroup").slideUp();
                 $("#productPriceNoVariation").slideDown();
