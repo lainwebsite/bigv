@@ -262,14 +262,46 @@ class ProductController extends Controller
         } else {
             $featured = $product->featured_image;
         }
-        $product->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'variation_name' => $request->variation_named,
-            'featured_image' => $featured,
-            'vendor_id' => $request->vendor,
-            'category_id' => $request->category
-        ]);
+        if ($request->with_variation) {
+            $product->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'variation_name' => $request->variation_named,
+                'featured_image' => $featured,
+                'vendor_id' => $request->vendor,
+                'category_id' => $request->category
+            ]);
+
+            foreach ($product->variations as $key => $productVariation) {
+                $productVariation->delete();
+            }
+            foreach ($request->variation_name as $key => $variation) {
+                ProductVariation::create([
+                    'name' => $request->variation_name[$key],
+                    'price' => $request->variation_price[$key],
+                    'product_id' => $product->id
+                ]);
+            }
+        } else {
+            $product->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'variation_name' => "novariation",
+                'featured_image' => $featured,
+                'vendor_id' => $request->vendor,
+                'category_id' => $request->category
+            ]);
+
+            foreach ($product->variations as $key => $productVariation) {
+                $productVariation->delete();
+            }
+
+            ProductVariation::create([
+                'name' => "novariation",
+                'price' => $request->product_price_no_var,
+                'product_id' => $product->id
+            ]);
+        }
         foreach ($request->delete_product_image_id as $key => $id) {
             if ($id) {
                 $productImage = ProductImage::where('id', $id)->first();
@@ -287,16 +319,6 @@ class ProductController extends Controller
             }
         }
 
-        foreach ($product->variations as $key => $productVariation) {
-            $productVariation->delete();
-        }
-        foreach ($request->variation_name as $key => $variation) {
-            ProductVariation::create([
-                'name' => $request->variation_name[$key],
-                'price' => $request->variation_price[$key],
-                'product_id' => $product->id
-            ]);
-        }
         if ($product->addons->count() > 0) {
             foreach ($product->addons as $key => $addon) {
                 $addon->delete();
