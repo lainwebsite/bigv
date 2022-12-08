@@ -51,6 +51,7 @@ class DiscountController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
         if ($request->discount_type == "1") {
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
@@ -90,7 +91,7 @@ class DiscountController extends Controller
                     $variation->update([
                         "discount_start_date" => $request->duration_start,
                         "discount_end_date" => $request->duration_end,
-                        "discount" => $request->sale_price
+                        "discount" => $request->sale_price[$variation->id]
                     ]);
                     $discount = Discount::create([
                         'name' => $variation->id,
@@ -252,12 +253,12 @@ class DiscountController extends Controller
                 $variation->update([
                     "discount_start_date" => $request->duration_start,
                     "discount_end_date" => $request->duration_end,
-                    "discount" => $request->sale_price
+                    "discount" => $request->sale_price[$variation->id]
                 ]);
                 $discount->update([
                     'name' => $variation->id,
                     'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id),
-                    'amount' => $request->sale_price,
+                    "discount" => $request->sale_price[$variation->id],
                     'duration_start' => $request->duration_start,
                     'duration_end' => $request->duration_end,
                     'type_id' => 3,
@@ -286,13 +287,13 @@ class DiscountController extends Controller
                 $variation->update([
                     "discount_start_date" => $request->duration_start,
                     "discount_end_date" => $request->duration_end,
-                    "discount" => $request->sale_price
+                    "discount" => $request->sale_price[$variation->id]
                 ]);
 
                 $discount->update([
                     'name' => $variation->id,
                     'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id),
-                    'amount' => $request->sale_price,
+                    "discount" => $request->sale_price[$variation->id],
                     'duration_start' => $request->duration_start,
                     'duration_end' => $request->duration_end,
                     'type_id' => 3,
