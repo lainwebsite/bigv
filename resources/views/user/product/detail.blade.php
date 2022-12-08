@@ -192,17 +192,17 @@
                                      $now->format("Y-m-d H:i:s") >= $product->variations[0]->discount_start_date &&
                                      $now->format("Y-m-d H:i:s") < $product->variations[0]->discount_end_date)
                                     <h3 class="sale-price-detail heading-3 text-color-light-grey margin-vertical margin-xsmall">
-                                        ${{ $product->variations[0]->price }}</h3>
+                                        ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</h3>
                                     <h3 class="product-price heading-3 margin-vertical margin-xsmall"
-                                        price="${{ $product->variations[0]->price - $product->variations[0]->discount }}"
+                                        price="${{ $product->variations[0]->discount }}"
                                         variation-id="{{ $product->variations[0]->id }}" style="display: inline-block;">
-                                        ${{ $product->variations[0]->price - $product->variations[0]->discount }}</h3>
+                                        ${{ number_format($product->variations[0]->discount, 2, ".", ",") }}</h3>
                                     <div class="div-line"></div>
                                 @else
                                     <h3 class="product-price heading-3 margin-vertical margin-xsmall"
                                         price="{{ $product->variations[0]->price }}"
                                         variation-id="{{ $product->variations[0]->id }}" style="display: inline-block;">
-                                        ${{ $product->variations[0]->price }}</h3>
+                                        ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</h3>
                                     <div class="div-line"></div>
                                 @endif
                             @else
@@ -212,7 +212,7 @@
                                 <h3 class="product-price heading-3 margin-vertical margin-xsmall"
                                     min-price="{{ $minProductPrice }}" max-price="{{ $maxProductPrice }}"
                                     style="display: inline-block;">
-                                    ${{ $minProductPrice }} - ${{ $maxProductPrice }}</h3>
+                                    ${{ number_format($minProductPrice, 2, ".", ",") }} - ${{ number_format($maxProductPrice, 2, ".", ",") }}</h3>
                                 <div class="div-line"></div>
                                 <h5 class="heading-4 mb-2">{{ ucwords($product->variation_name) }}</h5>
                                 <div class="flex flex-wrap mb-3">
@@ -222,7 +222,7 @@
                                             price="{{ $productVariation->price }}"
                                             @if ($productVariation->discount > 0 && 
                                                  $now->format("Y-m-d H:i:s") >= $product->variations[0]->discount_start_date &&
-                                                 $now->format("Y-m-d H:i:s") < $product->variations[0]->discount_end_date) after-sale-price="{{ $productVariation->price - $productVariation->discount }}" @endif>{{ $productVariation->name }}</button>
+                                                 $now->format("Y-m-d H:i:s") < $product->variations[0]->discount_end_date) after-sale-price="{{ $productVariation->discount }}" @endif>{{ $productVariation->name }}</button>
                                     @endforeach
                                 </div>
                             @endif
@@ -286,10 +286,10 @@
                                     @endif
                                 @else
                                     <a href="#"
-                                        class="btn-add-cart btn-secondary atc-product-page oh-grow w-button">Add to
+                                        class="btn-add-cart atc-product-page oh-grow w-button">Add to
                                         Cart</a>
                                     <a href="#"
-                                        class="btn-buy-now btn-outline-secondary text-secondary button-secondary oh-grow w-button">Buy
+                                        class="btn-buy-now button-secondary oh-grow w-button">Buy
                                         Now</a>
                                 @endauth
                             </div>
@@ -401,7 +401,7 @@
                             <h5 class="heading-4 p-beside-star text-weight-medium">5</h5>
                             <div class="div-block-10">
                                 <div class="div-block-11"
-                                    style="width: {{ $product->reviews->where('rating', 5)->count() / $product->reviews->count() * 100 }}%;">
+                                    style="width: {{ ($product->reviews->count() > 0) ? $product->reviews->where('rating', 5)->count() / $product->reviews->count() * 100 : 0 }}%;">
                                 </div>
                             </div>
                             <h5 class="heading-4 p-beside-star text-weight-medium">
@@ -412,7 +412,7 @@
                             <h5 class="heading-4 p-beside-star text-weight-medium">4</h5>
                             <div class="div-block-10">
                                 <div class="div-block-12"
-                                    style="width: {{ $product->reviews->where('rating', '<', 5)->where('rating', '>=', 4)->count() / $product->reviews->count() * 100 }}%;">
+                                    style="width: {{ ($product->reviews->count() > 0) ? $product->reviews->where('rating', '<', 5)->where('rating', '>=', 4)->count() / $product->reviews->count() * 100 : 0 }}%;">
                                 </div>
                             </div>
                             <h5 class="heading-4 p-beside-star text-weight-medium">
@@ -423,7 +423,7 @@
                             <h5 class="heading-4 p-beside-star text-weight-medium">3</h5>
                             <div class="div-block-10">
                                 <div class="div-block-13"
-                                    style="width: {{ $product->reviews->where('rating', '<', 4)->where('rating', '>=', 3)->count() / $product->reviews->count() * 100 }}%;">
+                                    style="width: {{ ($product->reviews->count() > 0) ? $product->reviews->where('rating', '<', 4)->where('rating', '>=', 3)->count() / $product->reviews->count() * 100 : 0 }}%;">
                                 </div>
                             </div>
                             <h5 class="heading-4 p-beside-star text-weight-medium">
@@ -434,7 +434,7 @@
                             <h5 class="heading-4 p-beside-star text-weight-medium">2</h5>
                             <div class="div-block-10">
                                 <div class="div-block-14"
-                                    style="width: {{ $product->reviews->where('rating', '<', 3)->where('rating', '>=', 2)->count() / $product->reviews->count() * 100 }}%;">
+                                    style="width: {{ ($product->reviews->count() > 0) ? $product->reviews->where('rating', '<', 3)->where('rating', '>=', 2)->count() / $product->reviews->count() * 100 : 0 }}%;">
                                 </div>
                             </div>
                             <h5 class="heading-4 p-beside-star text-weight-medium">
@@ -445,7 +445,7 @@
                             <h5 class="heading-4 p-beside-star text-weight-medium">1</h5>
                             <div class="div-block-10">
                                 <div class="div-block-15"
-                                    style="width: {{ $product->reviews->where('rating', '<', 2)->count() / $product->reviews->count() * 100 }}%;">
+                                    style="width: {{ ($product->reviews->count() > 0) ? $product->reviews->where('rating', '<', 2)->count() / $product->reviews->count() * 100 : 0 }}%;">
                                 </div>
                             </div>
                             <h5 class="heading-4 p-beside-star text-weight-medium">
@@ -453,9 +453,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-color-dark-grey ea-right">
+                <div class="text-color-dark-grey ea-right" style="width: 100%;">
                     @foreach ($product->reviews as $productReview)
-                        <div class="card28 row padding-small margin-small m-3">
+                        <div class="card28 row padding-small margin-small m-3" style="width: calc(100% - 2rem) !important;">
                             <div class="col-md-3 col-sm-2 col-6">
                                 <div id="reviewImage{{ $productReview->id }}" class="carousel slide"
                                     data-ride="carousel">
@@ -588,9 +588,16 @@
                     </h3>
                     <div class="popup-atc-price-n-star">
                         @if ($product->variations[0]->name == 'novariation')
-                            <h4 class="product-price heading-3">${{ $product->variations[0]->price }}</h4>
+                            @if ($product->variations[0]->discount > 0 && 
+                                 $now->format("Y-m-d H:i:s") >= $product->variations[0]->discount_start_date &&
+                                 $now->format("Y-m-d H:i:s") < $product->variations[0]->discount_end_date)
+                                <h4 class="sale-price-detail product-price heading-3 text-color-light-grey">${{ number_format($product->variations[0]->price, 2, ".", ",") }}</h4>
+                                <h4 class="product-price heading-3">${{ number_format($product->variations[0]->discount, 2, ".", ",") }}</h4>
+                            @else
+                                <h4 class="product-price heading-3">${{ number_format($product->variations[0]->price, 2, ".", ",") }}</h4>
+                            @endif
                         @else
-                            <h4 class="product-price heading-3">${{ $minProductPrice }} - ${{ $maxProductPrice }}</h4>
+                            <h4 class="product-price heading-3">${{ number_format($minProductPrice, 2, ".", ",") }} - ${{ number_format($maxProductPrice, 2, ".", ",") }}</h4>
                         @endif
                         <div class="flex">
                             @php($arr_rating = explode('.', $product->rating))
@@ -681,64 +688,52 @@
                         </div>
                         <div class="product-card-low-div">
                             @if (count($product->variations) <= 1)
-                                @if ($product->variations[0]->discount > 0)
+                                @if ($product->variations[0]->discount != 0)
                                     @php($startDate = new DateTime($product->variations[0]->discount_start_date))
                                     @php($endDate = new DateTime($product->variations[0]->discount_end_date))
-
+                                    
                                     @if ($startDate <= $dateNow && $dateNow <= $endDate)
                                         <div class="card-discount">
-                                            <!--<div class="discount">-${{ $product->variations[0]->discount }}</div>-->
                                             <div class="discount">Sale</div>
                                         </div>
                                         <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
                                             class="sale-price text-color-light-grey" style="padding: 0.25em;">
-                                            ${{ $product->variations[0]->price }}</div>
-                                        <div class="text-rich-text text-color-orange text-weight-bold"
-                                            style="padding: 0.25em;">
-                                            ${{ $product->variations[0]->price - $product->variations[0]->discount }}
-                                        </div>
+                                            ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
+                                        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                            ${{ number_format($product->variations[0]->discount, 2, ".", ",") }}</div>
                                     @else
-                                        <div class="text-rich-text text-color-orange text-weight-bold"
-                                            style="padding: 0.25em;">
-                                            ${{ $product->variations[0]->price }}</div>
+                                        <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                            ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                     @endif
                                 @else
-                                    <div class="text-rich-text text-color-orange text-weight-bold"
-                                        style="padding: 0.25em;">
-                                        ${{ $product->variations[0]->price }}</div>
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                        ${{ number_format($product->variations[0]->price, 2, ".", ",") }}</div>
                                 @endif
                             @else
                                 @php($salePriceAvailable = false)
                                 @foreach($product->variations as $pv)
-                                    @if ($pv->discount > 0)
+                                    @if ($pv->discount != 0)
                                         @php($startDate = new DateTime($product->variations[0]->discount_start_date))
                                         @php($endDate = new DateTime($product->variations[0]->discount_end_date))
-
+                                        
                                         @if ($startDate <= $dateNow && $dateNow <= $endDate)
                                             @php($salePriceAvailable = true)
-                                        @break
+                                            @break
+                                        @endif
                                     @endif
                                 @endforeach
                                 
                                 @if ($salePriceAvailable)
                                     <div class="card-discount">
+                                        <!--<div class="discount">-${{ $product->variations[0]->discount }}</div>-->
                                         <div class="discount">Sale</div>
                                     </div>
                                 @endif
-                            @endforeach
-
-                            @if ($salePriceAvailable)
-                                <div class="card-discount">
-                                    <!--<div class="discount">-${{ $product->variations[0]->discount }}</div>-->
-                                    <div class="discount">Sale</div>
-                                </div>
+                                
+                                <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                                ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
+                                            </div>
                             @endif
-
-                            <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
-                                ${{ $product->variations->min('price') }} -
-                                ${{ $product->variations->max('price') }}
-                            </div>
-                        @endif
                     </div>
                 </div>
             </a>
@@ -775,70 +770,69 @@
                 alert("Please select one of variation product first!");
                 return price;
             }
-        }
-
-        if (price != undefined && $(".addons-option").length > 0) {
-            var total_normal_price = ($(".product-variation.selected").attr("after-sale-price") != undefined) ?
-                parseFloat($(".product-variation.selected").attr("price")) : 0;
-            $(".addons-option option:selected").each(function() {
+            
+            if (price != undefined && $(".addons-option").length > 0) {
+                var total_normal_price = ($(".product-variation.selected").attr("after-sale-price") != undefined) ?
+                    parseFloat($(".product-variation.selected").attr("price")) : 0;
+                $(".addons-option option:selected").each(function() {
+                    if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
+                        total_normal_price += parseFloat($(this).attr("price"));
+                    }
+                    price += parseFloat($(this).attr("price"));
+                });
+    
                 if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
-                    total_normal_price += parseFloat($(this).attr("price"));
+                    $(".sale-price-detail").html("$" + total_normal_price);
                 }
-                price += parseFloat($(this).attr("price"));
-            });
-
-            if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
-                $(".sale-price-detail").html("$" + total_normal_price);
             }
+    
+            return price;
         }
 
-        return price;
-    }
-
-    $(".product-variation").on("click", function() {
-        if ($(this).hasClass("selected")) {
-            $(this).removeClass("selected");
-            $(".product-price").html("$" + $(".product-price").attr("min-price") + " - $" + $(".product-price")
-                .attr("max-price")).removeAttr("product-id");
-            $(".btn-add-cart").attr("disabled", "").addClass("btn-secondary");
-            $(".btn-buy-now").attr("disabled", "").addClass("btn-outline-secondary text-secondary");
-            $(".sale-price-detail").css("display", "none");
-        } else {
-            $(".product-variation").each(function() {
+        $(".product-variation").on("click", function() {
+            if ($(this).hasClass("selected")) {
                 $(this).removeClass("selected");
-            });
-
-            $(this).addClass("selected");
-            if ($(this).attr("after-sale-price") != undefined) {
-                $(".sale-price-detail").css("display", "").html("$" + $(this).attr("price"));
-                $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
-                    "variation-id"));
+                $(".product-price").html("$" + $(".product-price").attr("min-price") + " - $" + $(".product-price")
+                    .attr("max-price")).removeAttr("product-id");
+                $(".btn-add-cart").attr("disabled", "").addClass("btn-secondary");
+                $(".btn-buy-now").attr("disabled", "").addClass("btn-outline-secondary text-secondary");
+                $(".sale-price-detail").css("display", "none");
             } else {
-                $(".sale-price-detail").css("display", "none").html(0);
-                $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
-                    "variation-id"));
+                $(".product-variation").each(function() {
+                    $(this).removeClass("selected");
+                });
+    
+                $(this).addClass("selected");
+                if ($(this).attr("after-sale-price") != undefined) {
+                    $(".sale-price-detail").css("display", "").html("$" + $(this).attr("price"));
+                    $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
+                        "variation-id"));
+                } else {
+                    $(".sale-price-detail").css("display", "none").html(0);
+                    $(".product-price").html("$" + calculatePrice()).attr("variation-id", $(this).attr(
+                        "variation-id"));
+                }
+                $(".btn-add-cart").removeAttr("disabled").removeClass("btn-secondary");
+                $(".btn-buy-now").removeAttr("disabled").removeClass("btn-outline-secondary text-secondary");
             }
-            $(".btn-add-cart").removeAttr("disabled").removeClass("btn-secondary");
-            $(".btn-buy-now").removeAttr("disabled").removeClass("btn-outline-secondary text-secondary");
-        }
-    });
-
-    $(".addons-option option").on("click", function() {
-        $(".product-price").html("$" + calculatePrice());
-    });
-
-
-    $(".quantity-change").on('click', function() {
-        var qty = parseInt($(".product-quantity").val());
-        if ($(this).attr("id") == "addQuantity") {
-            $(".product-quantity").val(qty + 1);
-        } else {
-            if (qty - 1 >= 1) {
-                $(".product-quantity").val(qty - 1);
+        });
+    
+        $(".addons-option option").on("click", function() {
+            $(".product-price").html("$" + calculatePrice());
+        });
+    
+    
+        $(".quantity-change").on('click', function() {
+            var qty = parseInt($(".product-quantity").val());
+            if ($(this).attr("id") == "addQuantity") {
+                $(".product-quantity").val(qty + 1);
+            } else {
+                if (qty - 1 >= 1) {
+                    $(".product-quantity").val(qty - 1);
+                }
             }
-        }
-    });
-
+        });
+    
         @if (auth()->user() != null)
             @if (auth()->user()->role_id == 1)
                 $(document).on("click", ".btn-add-cart", function(event) {
@@ -895,7 +889,7 @@
                         }
                     });
 
-                    if (($(".product-variation").length <= 0 && 
+                    if (($(".product-variation").length > 0 && 
                         $(".product-variation.selected").length > 0) ||
                         $(".product-price").attr("price") != undefined) 
                     {
@@ -905,75 +899,45 @@
                         $("form").submit();
                     }
                 });
-
-                $.post(url + "/user/cart", {
-                    _token: CSRF_TOKEN,
-                    product_variation_id: product_variation_id,
-                    product_addons_id: product_addons_id,
-                    quantity: $(".product-quantity").val()
-                }).done(function(data) {
-                    alert(data);
-                }).fail(function(error) {
-                    console.log(error);
-                });
-            });
-
-            $(".btn-buy-now").on("click", function() {
-                var product_variation_id = ($(".product-variation.selected").length > 0) ?
-                    $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
-                        "variation-id");
-                var product_addons_id = [];
-                $(".addons-option").each(function() {
-                    if ($(this).val() > 0) {
-                        product_addons_id.push($(this).val());
-                    }
-                });
-
-                $("#productVariationId").val(product_variation_id);
-                if (product_addons_id.length > 0) {
-                    $("#productAddonsId").val(product_addons_id);
-                }
-                $("#quantity").val($(".product-quantity").val());
-            });
+            @endif
+        @else
+            $(".btn-add-cart, .btn-buy-now").attr("href", "{{ route('login') }}");
         @endif
-    @else
-        $(".btn-add-cart, .btn-buy-now").attr("href", "{{ route('login') }}");
-    @endif
-
-    var shareLink = "<?= $shareLink ?>";
-
-    const shareButton = document.querySelector('.share-button');
-    const shareDialog = document.querySelector('.share-dialog');
-    const closeButton = document.querySelector('.close-button');
-
-    shareButton.addEventListener('click', event => {
-        if (navigator.share) {
-            navigator.share({
-                    title: 'Big V - Share Product',
-                    url: shareLink // product link
-                }).then(() => {
-                    console.log('Thanks for sharing!');
-                })
-                .catch(console.error);
-        } else {
-            shareDialog.classList.add('is-open');
-        }
-    });
-
-    closeButton.addEventListener('click', event => {
-        shareDialog.classList.remove('is-open');
-    });
-
-    $(document).on('click', "#copyLink", function() {
-        navigator.permissions.query({
-            name: "write-on-clipboard"
-        }).then((result) => {
-            if (result.state == "granted" || result.state == "prompt") {
-                alert("Write access granted!");
+    
+        var shareLink = "<?= $shareLink ?>";
+    
+        const shareButton = document.querySelector('.share-button');
+        const shareDialog = document.querySelector('.share-dialog');
+        const closeButton = document.querySelector('.close-button');
+    
+        shareButton.addEventListener('click', event => {
+            if (navigator.share) {
+                navigator.share({
+                        title: 'Big V - Share Product',
+                        url: shareLink // product link
+                    }).then(() => {
+                        console.log('Thanks for sharing!');
+                    })
+                    .catch(console.error);
+            } else {
+                shareDialog.classList.add('is-open');
             }
         });
-        navigator.clipboard.writeText(shareLink); //product link
-        $("#copyLink").html("Link Copied");
-    });
-</script>
+    
+        closeButton.addEventListener('click', event => {
+            shareDialog.classList.remove('is-open');
+        });
+    
+        $(document).on('click', "#copyLink", function() {
+            navigator.permissions.query({
+                name: "write-on-clipboard"
+            }).then((result) => {
+                if (result.state == "granted" || result.state == "prompt") {
+                    alert("Write access granted!");
+                }
+            });
+            navigator.clipboard.writeText(shareLink); //product link
+            $("#copyLink").html("Link Copied");
+        });
+    </script>
 @endsection

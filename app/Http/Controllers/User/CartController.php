@@ -124,6 +124,7 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        $now = \Carbon\Carbon::now();
         try {
             $request->validate([
                 'quantity' => 'required|numeric',
@@ -137,10 +138,21 @@ class CartController extends Controller
             if ($request->quantity > 0) {
                 if ($cart == null) {
                     $data = $request->except('product_addons_id');
-                    $data += [
-                        'price' => $productVariation->price,
-                        'user_id' => auth()->user()->id,
-                    ];
+                    if ($productVariation->discount > 0 && 
+                        $now->format("Y-m-d H:i:s") >= $productVariation->discount_start_date &&
+                        $now->format("Y-m-d H:i:s") < $productVariation->discount_end_date) 
+                    {
+                        $data += [
+                            'price' => $productVariation->discount,
+                            'user_id' => auth()->user()->id,
+                        ];
+                    } else {
+                        $data += [
+                            'price' => $productVariation->price,
+                            'user_id' => auth()->user()->id,
+                        ];
+                    }
+                    
                     
                     $cart = Cart::create($data);
                     if ($request->product_addons_id) {
@@ -156,7 +168,7 @@ class CartController extends Controller
                     }
                 } else {
                     $addon_cart = OptionCart::where('cart_id', $cart->id)->orderBy('id', 'ASC')->get();
-                    if ($addon_cart == null) {
+                    if (count($addon_cart) <= 0) {
                         $qty = $cart->quantity + $request->quantity;
                         $cart->update([
                             'quantity' => $qty
@@ -178,10 +190,20 @@ class CartController extends Controller
                                 ]);
                             } else {
                                 $data = $request->except('product_addons_id');
-                                $data += [
-                                    'price' => $productVariation->price,
-                                    'user_id' => auth()->user()->id,
-                                ];
+                                if ($productVariation->discount > 0 && 
+                                    $now->format("Y-m-d H:i:s") >= $productVariation->discount_start_date &&
+                                    $now->format("Y-m-d H:i:s") < $productVariation->discount_end_date) 
+                                {
+                                    $data += [
+                                        'price' => $productVariation->discount,
+                                        'user_id' => auth()->user()->id,
+                                    ];
+                                } else {
+                                    $data += [
+                                        'price' => $productVariation->price,
+                                        'user_id' => auth()->user()->id,
+                                    ];
+                                }
                                 
                                 $cart = Cart::create($data);
                                 if ($request->product_addons_id) {
@@ -263,7 +285,7 @@ class CartController extends Controller
                                     ->where('option_carts.cart_id', $cart->id)
                                     ->select('addon_options.price as addon_price')
                                     ->sum('addon_options.price');
-                                    
+
                 $cart['price'] = $cart['price'] + $addons_price;
 
                 $productVariation = ProductVariation::find($cart->product_variation_id);
@@ -279,8 +301,8 @@ class CartController extends Controller
         if ($productDeleted) {
             return isset($errorInfo) ? "There is an error when deleting product in the cart. Please try again or contact our developer." : "Product in the cart has been deleted.";
         } else {
-            // return isset($errorInfo) ? "There is an error when update product in the cart. Please try again or contact our developer." : $cart->makeHidden(['id', 'product_variation_id', 'transaction_id', 'user_id', 'created_at', 'updated_at']);
-            return isset($errorInfo) ? $errorInfo : $cart->makeHidden(['id', 'product_variation_id', 'transaction_id', 'user_id', 'created_at', 'updated_at']);
+            return isset($errorInfo) ? "There is an error when update product in the cart. Please try again or contact our developer." : $cart->makeHidden(['id', 'product_variation_id', 'transaction_id', 'user_id', 'created_at', 'updated_at']);
+            // return isset($errorInfo) ? $errorInfo : $cart->makeHidden(['id', 'product_variation_id', 'transaction_id', 'user_id', 'created_at', 'updated_at']);
         }
     }
     /**

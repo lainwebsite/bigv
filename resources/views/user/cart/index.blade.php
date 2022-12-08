@@ -48,10 +48,10 @@
                                                     @if ($product->discount > 0 && 
                                                          $now->format("Y-m-d H:i:s") >= $product->discount_start_date &&
                                                          $now->format("Y-m-d H:i:s") < $product->discount_end_date)
-                                                        <span style="text-decoration: line-through;">${{ $product->price }}</span>
-                                                        <span>${{ $product->price - $product->discount }}</span>
+                                                        <span style="text-decoration: line-through;">${{ number_format($product->price, 2, ".", ",") }}</span>
+                                                        <span>${{ number_format($product->discount, 2, ".", ",") }}</span>
                                                     @else
-                                                        <span>${{ $product->price }}</span>
+                                                        <span>${{ number_format($product->price, 2, ".", ",") }}</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -207,6 +207,10 @@
 
         function updateCheckout() {
             var grandTotalPrice = 0;
+            console.log('cartItems');
+            console.log(cartItems);
+            console.log('Object.keys(cartItems).length');
+            console.log(Object.keys(cartItems).length);
             if (Object.keys(cartItems).length > 0) {
                 $(".container-summary-item").html("");
                 for (var key in cartItems) {
@@ -215,6 +219,8 @@
                     var totalPrice = 0;
                     var totalItem = 0;
                     var vendor = cartItems[key];
+                    console.log("vendor");
+                    console.log(vendor);
                     for (var item in vendor) {
                         if (!vendor.hasOwnProperty(item)) continue;
 
@@ -223,6 +229,13 @@
                             totalItem += parseInt(vendor[item].quantity);
                         }
                     }
+                    console.log("SESUSAH HITUNG VENDOR");
+                    console.log("totalprice");
+                    console.log(totalPrice);
+                    console.log("totalItem");
+                    console.log(totalItem);
+                    console.log("vendor");
+                    console.log(vendor);
 
                     $(".container-summary-item").append(`
                     <div id="summary-item-` + key + `" class="summary-item div-block-24">
@@ -253,6 +266,12 @@
             var parent = checkbox.parents(".vendor-item");
             var vendorId = parent.attr("vendor-id");
             var cartId = checkbox.val();
+            console.log('parent');
+            console.log(parent);
+            console.log('vendorId');
+            console.log(vendorId);
+            console.log('cartId');
+            console.log(cartId);
 
             if (checkbox.is(":checked")) {
                 var quantity = checkbox.parents().next().find(".product-quantity").val();
@@ -351,6 +370,16 @@
             var checkbox = $(this).parent().prev().find(".product-cart");
             var vendorId = parent.attr("vendor-id");
             var cartId = checkbox.val();
+            console.log('grandParent');
+            console.log(grandParent);
+            console.log('parent');
+            console.log(parent);
+            console.log('checkbox');
+            console.log(checkbox);
+            console.log('vendorId');
+            console.log(vendorId);
+            console.log('cartId');
+            console.log(cartId);
 
             if (confirm('Are you sure you want to delete this item?')) {
                 $.post(url + "/user/cart/" + cartId, {
@@ -360,12 +389,19 @@
                     var obj = JSON.parse(data);
 
                     if (checkbox.is(":checked")) {
+                        console.log('Object.keys(cartItems).length');
+                        console.log(Object.keys(cartItems).length);
                         if (Object.keys(cartItems).length <= 1) {
+                            console.log('Object.keys(cartItems).length <= 1');
                             delete cartItems[obj.vendor_id];
                         } else {
+                            console.log('Object.keys(cartItems).length > 1');
                             delete cartItems[obj.vendor_id][obj.cart_id];
+                            console.log('Object.keys(cartItems[obj.vendor_id]).length');
+                            console.log(Object.keys(cartItems[obj.vendor_id]).length);
                             if (Object.keys(cartItems[obj.vendor_id]).length <= 1) {
                                 delete cartItems[obj.vendor_id];
+                                console.log('Object.keys(cartItems[obj.vendor_id]).length <= 1');
                             }
                         }
                         updateCheckout();
@@ -383,7 +419,7 @@
             }
         });
 
-        $("#btnProceed").on("click", function(e) {
+        $(document).on("click", "#btnProceed", function(e) {
             if ($(this).attr("disabled") === undefined) {
                 if (Object.keys(cartItems).length > 0) {
                     if (Object.keys(cartItems[Object.keys(cartItems)[0]]).length > 0) {

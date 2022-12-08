@@ -28,6 +28,7 @@ class CheckoutController extends Controller
             session()->has('grandtotal-checkout-price') &&
             session()->has('total-checkout-items')
         ) {
+            // dd(session()->get('checkout-items'));
             $addresses = UserAddress::where('user_id', auth()->user()->id)->get();
 
             // $checkout_items = Vendor::with(['products' => function ($q1) {

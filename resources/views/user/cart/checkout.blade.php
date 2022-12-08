@@ -502,8 +502,9 @@
         }
 
         function clearInput() {
-            $("input, textarea").val("").removeClass("is-invalid");
+            $("input[type=text], input[type=number], textarea").val("").removeClass("is-invalid");
             $(".invalid-feedback").html("");
+            $("#addressType").val("building");
         }
 
         function changePayment(payment) {
