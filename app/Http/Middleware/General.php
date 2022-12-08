@@ -16,7 +16,8 @@ class General
      */
     public function handle(Request $request, Closure $next)
     {
-        if (strpos($request->route()->uri(), "checkout") === false) {
+        // if (strpos($request->route()->uri(), "checkout") === false) {
+        if (!preg_match("/.*(checkout).*/", $request->route()->uri())) {
             session()->forget([
                 'checkout-items',
                 'shipping-price',
@@ -25,7 +26,7 @@ class General
                 'total-checkout-items'
             ]);
         }
-
+        
         return $next($request);
     }
 }

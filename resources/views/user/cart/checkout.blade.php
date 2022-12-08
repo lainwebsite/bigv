@@ -37,7 +37,7 @@
 @endsection
 
 @section('content')
-    <div class="content">
+    <div class="content" style="min-height: 60vh;">
         <div class="max-width flex vertical">
             <h2 class="text-color-grey ea-top">Checkout</h2>
             <form id="checkoutForm" method="POST" action="{{ url('user/cart/checkout/place-order') }}"
@@ -171,11 +171,11 @@
                     </div>
                     @foreach ($checkouts as $checkout)
                         <div class="vendors-card ea-left">
-                            <div class="flex gap-medium"><img src="{{ asset('uploads/'.$checkout->photo) }}" loading="lazy"
+                            <div class="flex gap-medium"><img src="{{ asset('uploads/'.$checkout->vendor->photo) }}" loading="lazy"
                                     alt="" class="image-17" />
                                 <div>
-                                    <h5 class="text-color-dark-grey">{{ $checkout->name }}</h5>
-                                    <div class="text-size-small text-color-grey">Location: {{ $checkout->location->name }}
+                                    <h5 class="text-color-dark-grey">{{ $checkout->vendor->name }}</h5>
+                                    <div class="text-size-small text-color-grey">Location: {{ $checkout->vendor->location->name }}
                                     </div>
                                 </div>
                             </div>
@@ -514,16 +514,23 @@
         var editAddress = $("#deliveryAddressData"),
             pickupTime = "AM";
         var placeOrder = false;
+        var address_id = parseInt("{{$first_address_id}}");
 
         $(document).ready(function() {
             // give target to button modal discount
             $("#btnSelectDiscount").attr("data-target", "#discountModal");
 
-            // load default delivery address
-            getDetailAddress($("#deliveryAddressData"), 1, true);
-
-            // load default different delivery address
-            getDetailAddress($("#shippingAddressData"), 1);
+            if (address_id == 0){
+                $("#deliveryAddressData").html(`<h4 class="heading-7">You do not have any address yet! Please add one to proceed ordering.</h4>`);
+                $("#shippingAddressData").html(`<h4 class="heading-7">You do not have any address yet! Please add one to proceed ordering.</h4>`);
+            }
+            else{
+                // load default delivery address
+                getDetailAddress($("#deliveryAddressData"), address_id, true);
+    
+                // load default different delivery address
+                getDetailAddress($("#shippingAddressData"), address_id);
+            }
         });
 
         $(document).ajaxSend(function(event, request, settings) {
@@ -648,7 +655,17 @@
                 clearInput();
 
                 // alert status create address fail or success
-                alert(data);
+                alert(data.success);
+                
+                if (address_id == 0){
+                    // load default delivery address
+                    getDetailAddress($("#deliveryAddressData"), parseInt(data.newid), true);
+        
+                    // load default different delivery address
+                    getDetailAddress($("#shippingAddressData"), parseInt(data.newid));
+                    
+                    address_id = parseInt(data.newid);
+                }
             }).fail(function(error) {
                 var errorObj = error.responseJSON.errors;
                 var keys = Object.keys(errorObj);

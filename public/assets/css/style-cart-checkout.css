@@ -3814,6 +3814,7 @@ input[type=number] {
   width: 70px;
   height: 70px;
   border-radius: 18px;
+  object-fit: cover !important;
 }
 
 .div-block-23 {

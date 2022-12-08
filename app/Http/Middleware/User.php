@@ -18,7 +18,23 @@ class User
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            if (strpos($request->route()->uri(), "checkout") === false) {
+            // if (strpos($request->route()->uri(), "checkout") === false) {
+            //     session()->forget([
+            //         'checkout-items',
+            //         'shipping-price',
+            //         'total-checkout-price',
+            //         'grandtotal-checkout-price',
+            //         'total-checkout-items'
+            //     ]);
+            //     // session()->forget('checkout-items');
+            //     // session()->forget('shipping-price');
+            //     // session()->forget('total-checkout-price');
+            //     // session()->forget('grandtotal-checkout-price');
+            //     // session()->forget('total-checkout-items');
+            // }
+            
+            // if (strpos($request->route()->uri(), "checkout") === false) {
+            if (!preg_match("/.*(checkout).*/", $request->route()->uri())) {
                 session()->forget([
                     'checkout-items',
                     'shipping-price',
@@ -26,12 +42,8 @@ class User
                     'grandtotal-checkout-price',
                     'total-checkout-items'
                 ]);
-                // session()->forget('checkout-items');
-                // session()->forget('shipping-price');
-                // session()->forget('total-checkout-price');
-                // session()->forget('grandtotal-checkout-price');
-                // session()->forget('total-checkout-items');
             }
+            
 
             if (Auth::user()->role_id == 1) {
                 return $next($request);

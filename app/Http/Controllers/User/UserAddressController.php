@@ -165,9 +165,9 @@ class UserAddressController extends Controller
         // $data = $request->all();
         $data += ['user_id' => auth()->user()->id];
 
-        UserAddress::create($data);
+        $inputAddress = UserAddress::create($data);
 
-        return 'New Address created successfully.';
+        return ["success"=>'New Address created successfully.', "newid"=>$inputAddress->id];
     }
 
     public function getAddressAJAX(UserAddress $userAddress)

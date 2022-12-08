@@ -188,11 +188,10 @@
 
                             @if ($product->variations[0]->name == 'novariation')
                                 <!--NO VARIATIONS -->
-                                @if ($product->variations[0]->discount != 0 &&
-                                    $now->format('Y-m-d H:i:s') >= $product->variations[0]->discount_start_date &&
-                                    $now->format('Y-m-d H:i:s') < $product->variations[0]->discount_end_date)
-                                    <h3
-                                        class="sale-price-detail heading-3 text-color-light-grey margin-vertical margin-xsmall">
+                                @if ($product->variations[0]->discount > 0 && 
+                                     $now->format("Y-m-d H:i:s") >= $product->variations[0]->discount_start_date &&
+                                     $now->format("Y-m-d H:i:s") < $product->variations[0]->discount_end_date)
+                                    <h3 class="sale-price-detail heading-3 text-color-light-grey margin-vertical margin-xsmall">
                                         ${{ $product->variations[0]->price }}</h3>
                                     <h3 class="product-price heading-3 margin-vertical margin-xsmall"
                                         price="${{ $product->variations[0]->price - $product->variations[0]->discount }}"
@@ -221,9 +220,9 @@
                                         <button class="product-variation button-secondary-copy w-button"
                                             variation-id="{{ $productVariation->id }}"
                                             price="{{ $productVariation->price }}"
-                                            @if ($productVariation->discount != 0 &&
-                                                $now->format('Y-m-d H:i:s') >= $product->variations[0]->discount_start_date &&
-                                                $now->format('Y-m-d H:i:s') < $product->variations[0]->discount_end_date) after-sale-price="{{ $productVariation->price - $productVariation->discount }}" @endif>{{ $productVariation->name }}</button>
+                                            @if ($productVariation->discount > 0 && 
+                                                 $now->format("Y-m-d H:i:s") >= $product->variations[0]->discount_start_date &&
+                                                 $now->format("Y-m-d H:i:s") < $product->variations[0]->discount_end_date) after-sale-price="{{ $productVariation->price - $productVariation->discount }}" @endif>{{ $productVariation->name }}</button>
                                     @endforeach
                                 </div>
                             @endif
@@ -257,19 +256,34 @@
                                 <div class="cursor-pointer quantity-change" id="addQuantity">+</div>
                             </div>
                             <div class="upper-product-buttons">
-                                @if ($product->variations[0]->name == 'novariation')
-                                    <a href="#" class="btn-add-cart atc-product-page oh-grow w-button">Add to
-                                        Cart</a>
-                                    <form method="POST" action="{{ url('user/cart/checkout/buy-now') }}">
-                                        @csrf
-
-                                        <input id="productVariationId" type="hidden" name="product_variation_id">
-                                        <input id="productAddonsId" type="hidden" name="addons_id">
-                                        <input id="quantity" type="hidden" name="quantity">
-                                        <button type="submit" class="btn-buy-now button-secondary oh-grow w-button"
-                                            style="width: 100%;">Buy
-                                            Now</button>
-                                    </form>
+                                @auth
+                                    @if ($product->variations[0]->name == 'novariation')
+                                        <a href="#" class="btn-add-cart atc-product-page oh-grow w-button">Add to
+                                            Cart</a>
+                                        <form method="POST" action="{{ url('user/cart/checkout/buy-now') }}">
+                                            @csrf
+        
+                                            <input id="productVariationId" type="hidden" name="product_variation_id">
+                                            <input id="productAddonsId" type="hidden" name="product_addons_id">
+                                            <input id="quantity" type="hidden" name="quantity">
+                                            <button type="submit" class="btn-buy-now button-secondary oh-grow w-button"
+                                                style="width: 100%;">Buy
+                                                Now</button>
+                                        </form>
+                                    @else
+                                        <a href="#" class="btn-add-cart btn-secondary atc-product-page oh-grow w-button">Add to
+                                            Cart</a>
+                                        <form method="POST" action="{{ url('user/cart/checkout/buy-now') }}">
+                                            @csrf
+        
+                                            <input id="productVariationId" type="hidden" name="product_variation_id">
+                                            <input id="productAddonsId" type="hidden" name="product_addons_id">
+                                            <input id="quantity" type="hidden" name="quantity">
+                                            <button type="submit" class="btn-buy-now button-secondary text-secondary oh-grow w-button"
+                                                style="width: 100%;">Buy
+                                                Now</button>
+                                        </form>
+                                    @endif
                                 @else
                                     <a href="#"
                                         class="btn-add-cart btn-secondary atc-product-page oh-grow w-button">Add to
@@ -277,7 +291,7 @@
                                     <a href="#"
                                         class="btn-buy-now btn-outline-secondary text-secondary button-secondary oh-grow w-button">Buy
                                         Now</a>
-                                @endif
+                                @endauth
                             </div>
                         </div>
                     </div>
@@ -667,7 +681,7 @@
                         </div>
                         <div class="product-card-low-div">
                             @if (count($product->variations) <= 1)
-                                @if ($product->variations[0]->discount != 0)
+                                @if ($product->variations[0]->discount > 0)
                                     @php($startDate = new DateTime($product->variations[0]->discount_start_date))
                                     @php($endDate = new DateTime($product->variations[0]->discount_end_date))
 
@@ -695,8 +709,8 @@
                                 @endif
                             @else
                                 @php($salePriceAvailable = false)
-                                @foreach ($product->variations as $pv)
-                                    @if ($pv->discount != 0)
+                                @foreach($product->variations as $pv)
+                                    @if ($pv->discount > 0)
                                         @php($startDate = new DateTime($product->variations[0]->discount_start_date))
                                         @php($endDate = new DateTime($product->variations[0]->discount_end_date))
 
@@ -704,6 +718,12 @@
                                             @php($salePriceAvailable = true)
                                         @break
                                     @endif
+                                @endforeach
+                                
+                                @if ($salePriceAvailable)
+                                    <div class="card-discount">
+                                        <div class="discount">Sale</div>
+                                    </div>
                                 @endif
                             @endforeach
 
@@ -729,21 +749,24 @@
 @endsection
 
 @section('javascript-extra')
-<script src="{{ asset('assets/js/script-product-detail.js') }}" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
-</script>
-<script>
-    function calculatePrice() {
-        var price = $(".product-price").attr("price");
-
-        if ($(".product-variation").length > 0) {
-            if ($(".product-variation").is(".selected")) {
-                if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
-                    price = parseFloat($(".product-variation.selected").attr("after-sale-price"));
+    <script src="{{ asset('assets/js/script-product-detail.js') }}" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+    </script>
+    <script>
+        function calculatePrice() {
+            var price = parseFloat($(".product-price").attr("price"));
+            
+            if ($(".product-variation").length > 0) {
+                if ($(".product-variation").is(".selected")) {
+                    if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
+                        price = parseFloat($(".product-variation.selected").attr("after-sale-price"));
+                    } else {
+                        price = parseFloat($(".product-variation.selected").attr("price"));
+                    }
                 } else {
                     price = parseFloat($(".product-variation.selected").attr("price"));
                 }
@@ -816,18 +839,70 @@
         }
     });
 
-    @if (auth()->user() != null)
-        @if (auth()->user()->role_id == 1)
-            document.querySelector(".btn-add-cart").addEventListener("click", function(event) {
-                event.preventDefault();
+        @if (auth()->user() != null)
+            @if (auth()->user()->role_id == 1)
+                $(document).on("click", ".btn-add-cart", function(event) {
+                    event.preventDefault();
+                    
+                    var product_variation_id = ($(".product-variation.selected").length > 0) ?
+                        $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
+                            "variation-id");
+                    var product_addons_id = [];
+                    $(".addons-option").each(function() {
+                        if ($(this).val() > 0) {
+                            product_addons_id.push($(this).val());
+                        }
+                    });
+                    
+                    if ($(".product-variation").length > 0) {
+                        if ($(".product-variation.selected").length > 0) {
+                            $.post(url + "/user/cart", {
+                                _token: CSRF_TOKEN,
+                                product_variation_id: product_variation_id,
+                                product_addons_id: product_addons_id,
+                                quantity: $(".product-quantity").val()
+                            }).done(function(data) {
+                                alert(data);
+                            }).fail(function(error) {
+                                console.log(error);
+                            });
+                        }
+                    } else {
+                        if ($(".product-price").attr("price") != undefined) {
+                            $.post(url + "/user/cart", {
+                                _token: CSRF_TOKEN,
+                                product_variation_id: $(".product-price").attr("variation-id"),
+                                product_addons_id: product_addons_id,
+                                quantity: $(".product-quantity").val()
+                            }).done(function(data) {
+                                alert(data);
+                            }).fail(function(error) {
+                                console.log(error);
+                            });
+                        }
+                    }
+                });
 
-                var product_variation_id = ($(".product-variation.selected").length > 0) ?
-                    $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
-                        "variation-id");
-                var product_addons_id = [];
-                $(".addons-option").each(function() {
-                    if ($(this).val() > 0) {
-                        product_addons_id.push($(this).val());
+                $(document).on("click", ".btn-buy-now", function(e) {
+                    e.preventDefault();
+                    var product_variation_id = ($(".product-variation.selected").length > 0) ?
+                        $(".product-variation.selected").attr("variation-id") : $(".product-price").attr(
+                            "variation-id");
+                    var product_addons_id = [];
+                    $(".addons-option").each(function() {
+                        if ($(this).val() > 0) {
+                            product_addons_id.push($(this).val());
+                        }
+                    });
+
+                    if (($(".product-variation").length <= 0 && 
+                        $(".product-variation.selected").length > 0) ||
+                        $(".product-price").attr("price") != undefined) 
+                    {
+                        $("#productVariationId").val(product_variation_id);
+                        $("#productAddonsId").val(JSON.stringify(product_addons_id));
+                        $("#quantity").val($(".product-quantity").val());
+                        $("form").submit();
                     }
                 });
 

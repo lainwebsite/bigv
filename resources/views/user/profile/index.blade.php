@@ -24,7 +24,7 @@ Profile Settings - Big V
               <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none; white-space: nowrap;">Profile Settings</a>
               <a href="{{url('/user/transaction')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Transactions</a>
               <a href="{{url('/user/user-address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
-              <a href="{{url('/user/promo')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
+              <a href="{{url('/user/discount')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
           </div>
         </div>
       </div>

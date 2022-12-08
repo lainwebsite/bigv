@@ -9,11 +9,11 @@
 @endsection
 
 @section('content')
-    <div class="content" style="min-height:100vh; width: 100%;">
+    <div class="content" style="min-height:55vh; width: 100%;">
         <div class="header-section">
             <h2 class="orange-text">Transactions</h2>
         </div>
-        <div class="transactions-page-wrapper">
+        <div class="transactions-page-wrapper" style="min-height: 100vh;">
             <div class="profile-page-menu">
                 <div class="flex gap-small">
                   <div><b>{{auth()->user()->name}}</b></div>
@@ -24,7 +24,7 @@
                       <a href="{{url('/profile')}}" class="transaction-menus text-color-grey" style="text-decoration: none; white-space:nowrap;">Profile Settings</a>
                       <a href="{{url('/user/transaction')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Transactions</a>
                       <a href="{{url('/user/user-address')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Addresses</a>
-                      <a href="{{url('/user/promo')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
+                      <a href="{{url('/user/discount')}}" class="transaction-menus text-color-grey" style="text-decoration: none;">Promos</a>
                   </div>
                 </div>
             </div>

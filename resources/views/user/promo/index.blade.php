@@ -22,12 +22,12 @@
                 <div class="w-form">
                     <div class="form-2">
                         <a href="{{ url('/profile') }}" class="transaction-menus text-color-grey"
-                            style="text-decoration: none;">Profile Settings</a>
+                            style="text-decoration: none; white-space: nowrap;">Profile Settings</a>
                         <a href="{{ url('/user/transaction') }}" class="transaction-menus text-color-grey"
                             style="text-decoration: none;">Transactions</a>
                         <a href="{{ url('/user/address') }}" class="transaction-menus text-color-grey"
                             style="text-decoration: none;">Addresses</a>
-                        <a href="{{ url('/user/promo') }}" class="transaction-menus text-color-grey"
+                        <a href="{{ url('/user/discount') }}" class="transaction-menus text-color-grey"
                             style="text-decoration: none;">Promos</a>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
             <div class="promo-column-profile">
                 <div class="promo-row-top">
                     <div class="text-size-small text-color-grey">Here are the Promos available for you</div>
-                    <div class="promo-div">
+                    <div class="promo-div" style="display:none;">
                         <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c4-92c73a6a"><img
                                 src="{{ asset('assets/diskon1.jpg') }}" loading="lazy"
                                 id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c5-92c73a6a" height="410"
@@ -49,6 +49,67 @@
                                 src="{{ asset('assets/diskon3.jpg') }}" width="351" height="183" loading="lazy"
                                 id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c9-92c73a6a" alt=""
                                 class="ea-right" />
+                        </div>
+                    </div>
+                    <style>
+                        .four-promo-container{
+                            display: -ms-flexbox;
+                            display: flex;
+                            -ms-flex-wrap: wrap;
+                            flex-wrap: wrap;
+                            row-gap: 15px;
+                        }
+                        
+                        .promo-image{
+                            max-width:450px;
+                            height: 100%;
+                            border-radius: 10px;
+                            width: 100%;
+                        }
+                        
+                        .promo-content{
+                            display: flex;
+                            position: relative;
+                            width: 100%;
+                            min-height: 1px;
+                            padding-right: 15px;
+                            padding-left: 15px;
+                        }
+                        
+                        .promo-content{
+                            -ms-flex: 0 0 50%;
+                            flex: 0 0 50%;
+                            max-width: 50%;
+                        }
+                        
+                        @media screen and (max-width: 479px) {
+                            #column-reverse-responsive{
+                                flex-direction: column-reverse;
+                            }
+                            .promo-content{
+                                -ms-flex: 0 0 100%;
+                                flex: 0 0 100%;
+                                max-width: 100%;
+                            }
+                            
+                            .value-section{
+                                margin-top: 10vh !important;
+                                margin-bottom: 10vh !important;
+                            }
+                        }
+                    </style>
+                    <div class="four-promo-container">
+                        <div class="promo-content" style="justify-content: flex-end;">
+                            <img src="{{ asset('promo/promo-1.png') }}" loading="lazy" alt="" class="promo-image"  />
+                        </div>
+                        <div class="promo-content">
+                            <img src="{{ asset('promo/promo-2.png') }}" loading="lazy" alt="" class="promo-image" />
+                        </div>
+                        <div class="promo-content" style="justify-content: flex-end;">
+                            <img src="{{ asset('promo/promo-3.png') }}" loading="lazy" alt="" class="promo-image" />
+                        </div>
+                        <div class="promo-content">
+                            <img src="{{ asset('promo/promo-4.png') }}" loading="lazy" alt="" class="promo-image" />
                         </div>
                     </div>
                 </div>

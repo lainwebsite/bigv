@@ -3851,6 +3851,7 @@ figcaption {
   width: 70px;
   height: 70px;
   border-radius: 18px;
+  object-fit: cover !important;
 }
 
 .div-block-23 {
@@ -4450,6 +4451,7 @@ figcaption {
   width: 30px;
   height: 30px;
   border-radius: 52%;
+  object-fit: cover !important;
 }
 
 .transactions-page-wrapper {
@@ -6813,6 +6815,7 @@ figcaption {
     width: 70px;
     height: 70px;
     border-radius: 9px;
+    object-fit: cover !important;
   }
 
   .quantity-pill-small {

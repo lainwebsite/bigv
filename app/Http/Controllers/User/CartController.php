@@ -45,12 +45,10 @@ class CartController extends Controller
         // })->get();
         
         $sub = OptionCart::join('addon_options', 'addon_options.id', '=', 'option_carts.addon_option_id')
-            ->select('addon_options.name as addon_name', 'option_carts.cart_id')
+            ->select('addon_options.name as addon_name', 'addon_options.price as addon_price', 'option_carts.cart_id')
             ->toSql();
-        // dd($sub);
-
+            
         $carts = Vendor::with(['products' => function ($q1) use ($sub) {
-            // $carts = Vendor::with(['products' => function ($q1) {
             $q1->select(
                 'vendor_id',
                 'products.featured_image',
@@ -63,7 +61,8 @@ class CartController extends Controller
                 'carts.price',
                 'carts.quantity',
                 'carts.user_id',
-                'addon_carts.addon_name'
+                'addon_carts.addon_name',
+                'addon_carts.addon_price'
             )
                 ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
                 ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
@@ -78,15 +77,20 @@ class CartController extends Controller
                 ->whereNull('carts.transaction_id')
                 ->where('user_id', auth()->user()->id);
         })->get()->map(function ($vendor) {
-            $vendor_products = $vendor->products->mapToGroups(function ($item, $key) {
+            $addons_name = $vendor->products->mapToGroups(function ($item, $key) {
                 return [$item['cart_id'] => $item['addon_name']];
             });
+            $addons_price = $vendor->products->groupBy('cart_id')
+                ->map(function ($item) {
+                    return $item->sum('addon_price');
+                });
             return (object) [
                 'vendor' => (object) $vendor,
-                'products' => $vendor->products->mapToGroups(function ($item, $key) use ($vendor_products) {
-                    $product = collect($item)->except(['addon_name'])->toArray();
+                'products' => $vendor->products->mapToGroups(function ($item, $key) use ($addons_name, $addons_price) {
+                    $product = collect($item)->except(['addon_name', 'addon_price'])->toArray();
+                    $product['price'] = $product['price'] + $addons_price[$product['cart_id']];
                     $product += [
-                        'addons' => $vendor_products[$product['cart_id']][0] == null ? [] : $vendor_products[$product['cart_id']]->toArray()
+                        'addons' => $addons_name[$product['cart_id']][0] == null ? [] : $addons_name[$product['cart_id']]->toArray()
                     ];
                     return (object) [$item['cart_id'] => $product];
                 })->map(function ($product) {
@@ -94,7 +98,7 @@ class CartController extends Controller
                 })
             ];
         });
-        
+        // dd($carts);
         $productSuggestion = Product::withCount(['carts as items_sold' => function ($query) {
             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
         }])->inRandomOrder()->limit(10)->get();
@@ -137,21 +141,60 @@ class CartController extends Controller
                         'price' => $productVariation->price,
                         'user_id' => auth()->user()->id,
                     ];
+                    
                     $cart = Cart::create($data);
+                    if ($request->product_addons_id) {
+                        $product_addons_id = json_decode($request->product_addons_id, true);
+                        if (count($request->product_addons_id) > 0) {
+                            foreach ($request->product_addons_id as $addons_id) {
+                                OptionCart::create([
+                                    'addon_option_id' => $addons_id,
+                                    'cart_id' => $cart->id
+                                ]);
+                            }
+                        }
+                    }
                 } else {
-                    $qty = $cart->quantity + $request->quantity;
-                    $cart->update([
-                        'quantity' => $qty
-                    ]);
-                }
-                
-                if ($request->product_addons_id) {
-                    if (count($request->product_addons_id) > 0) {
-                        foreach ($request->product_addons_id as $addons_id) {
-                            OptionCart::create([
-                                'addon_option_id' => $addons_id,
-                                'cart_id' => $cart->id
-                            ]);
+                    $addon_cart = OptionCart::where('cart_id', $cart->id)->orderBy('id', 'ASC')->get();
+                    if ($addon_cart == null) {
+                        $qty = $cart->quantity + $request->quantity;
+                        $cart->update([
+                            'quantity' => $qty
+                        ]);
+                    } else {
+                        $addons_db = implode("",$cart->toArray());
+                        if ($request->product_addons_id != null) {
+                            $product_addons_id = json_decode($request->product_addons_id, true);
+                            $sorted_addons_req = $product_addons_id;
+                            if (count($product_addons_id) > 1) {
+                                $sorted_addons_req = sort($product_addons_id);
+                            }
+                            $addons_request = implode("",$sorted_addons_req);
+                            
+                            if ($addons_db == $addons_request) {
+                                $qty = $cart->quantity + $request->quantity;
+                                $cart->update([
+                                    'quantity' => $qty
+                                ]);
+                            } else {
+                                $data = $request->except('product_addons_id');
+                                $data += [
+                                    'price' => $productVariation->price,
+                                    'user_id' => auth()->user()->id,
+                                ];
+                                
+                                $cart = Cart::create($data);
+                                if ($request->product_addons_id) {
+                                    if (count($request->product_addons_id) > 0) {
+                                        foreach ($request->product_addons_id as $addons_id) {
+                                            OptionCart::create([
+                                                'addon_option_id' => $addons_id,
+                                                'cart_id' => $cart->id
+                                            ]);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -214,6 +257,14 @@ class CartController extends Controller
                         'quantity' => $quantity
                     ]);
                 }
+                
+                $addons_price = OptionCart::join('carts', 'carts.id', '=', 'option_carts.cart_id')
+                                    ->join('addon_options', 'addon_options.id', '=', 'option_carts.addon_option_id')
+                                    ->where('option_carts.cart_id', $cart->id)
+                                    ->select('addon_options.price as addon_price')
+                                    ->sum('addon_options.price');
+                                    
+                $cart['price'] = $cart['price'] + $addons_price;
 
                 $productVariation = ProductVariation::find($cart->product_variation_id);
                 $productVariation->product->vendor;
@@ -228,7 +279,8 @@ class CartController extends Controller
         if ($productDeleted) {
             return isset($errorInfo) ? "There is an error when deleting product in the cart. Please try again or contact our developer." : "Product in the cart has been deleted.";
         } else {
-            return isset($errorInfo) ? "There is an error when update product in the cart. Please try again or contact our developer." : $cart->makeHidden(['id', 'product_variation_id', 'transaction_id', 'user_id', 'created_at', 'updated_at']);
+            // return isset($errorInfo) ? "There is an error when update product in the cart. Please try again or contact our developer." : $cart->makeHidden(['id', 'product_variation_id', 'transaction_id', 'user_id', 'created_at', 'updated_at']);
+            return isset($errorInfo) ? $errorInfo : $cart->makeHidden(['id', 'product_variation_id', 'transaction_id', 'user_id', 'created_at', 'updated_at']);
         }
     }
     /**
