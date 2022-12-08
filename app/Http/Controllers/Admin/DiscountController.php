@@ -51,7 +51,6 @@ class DiscountController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
         if ($request->discount_type == "1") {
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
@@ -253,12 +252,12 @@ class DiscountController extends Controller
                 $variation->update([
                     "discount_start_date" => $request->duration_start,
                     "discount_end_date" => $request->duration_end,
-                    "discount" => $request->sale_price[$variation->id]
+                    "discount" => $request->sale_price
                 ]);
                 $discount->update([
                     'name' => $variation->id,
                     'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id),
-                    "discount" => $request->sale_price[$variation->id],
+                    "discount" => $request->sale_price,
                     'duration_start' => $request->duration_start,
                     'duration_end' => $request->duration_end,
                     'type_id' => 3,
@@ -287,13 +286,13 @@ class DiscountController extends Controller
                 $variation->update([
                     "discount_start_date" => $request->duration_start,
                     "discount_end_date" => $request->duration_end,
-                    "discount" => $request->sale_price[$variation->id]
+                    "discount" => $request->sale_price
                 ]);
 
                 $discount->update([
                     'name' => $variation->id,
                     'code' => $variation->product->name . '-' . $variation->name . '-' . (Discount::latest()->first()->id),
-                    "discount" => $request->sale_price[$variation->id],
+                    "discount" => $request->sale_price,
                     'duration_start' => $request->duration_start,
                     'duration_end' => $request->duration_end,
                     'type_id' => 3,
@@ -393,6 +392,15 @@ class DiscountController extends Controller
      */
     public function destroy(Discount $discount)
     {
+        if ($discount->type_id == 3) {
+            $variation = ProductVariation::find($discount->name);
+
+            $variation->update([
+                "discount_start_date" => null,
+                "discount_end_date" => null,
+                "discount" => null
+            ]);
+        }
         $discount->delete();
         return redirect()->route('admin.discount.index');
     }
