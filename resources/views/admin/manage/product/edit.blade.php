@@ -242,17 +242,6 @@
                                                         value="{{ $addon->name }}" placeholder="Add-on Name">
                                                 </div>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        @checked($addon->required == 1)
-                                                        id="addon-required-{{ $key + 1 }}"
-                                                        name="addon_required[{{ $key + 1 }}]">
-                                                    <label class="custom-control-label"
-                                                        for="addon-required-{{ $key + 1 }}">Add-on
-                                                        Required</label>
-                                                </div>
-                                            </div>
                                             <div class="addon-option-group d-flex flex-column" style="gap: 10px;">
                                                 @foreach ($addon->options as $keyed => $addon_option)
                                                     <div class="row align-items-center">
@@ -439,14 +428,6 @@
                                             <div class="col-12 col-md-8">
                                                 <input type="text" class="form-control w-100" id="addonName"
                                                     name="addon_name[${countAddon}]" required placeholder="Add-on Name">
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="addon-required-${countAddon}"
-                                                    name="addon_required[${countAddon}]">
-                                                <label class="custom-control-label" for="addon-required-${countAddon}">Add-on
-                                                    Required</label>
                                             </div>
                                         </div>
                                         <div class="addon-option-group d-flex flex-column" style="gap: 10px;"></div>

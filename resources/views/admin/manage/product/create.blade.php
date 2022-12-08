@@ -271,14 +271,6 @@
                                                     name="addon_name[${countAddon}]" required placeholder="Addon Name">
                                             </div>
                                         </div>
-                                        <div class="form-check form-check-inline">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="addon-required-${countAddon}"
-                                                    name="addon_required[${countAddon}]">
-                                                <label class="custom-control-label" for="addon-required-${countAddon}">Addon
-                                                    Required</label>
-                                            </div>
-                                        </div>
                                         <div class="addon-option-group d-flex flex-column" style="gap: 10px;"></div>
                                         <div class="d-flex justify-content-end" style="gap: 10px;">
                                             <a href="javascript:void(0)"
