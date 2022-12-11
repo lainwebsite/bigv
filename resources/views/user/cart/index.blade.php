@@ -21,7 +21,7 @@
                                         src="{{asset('uploads/'.$cart->vendor->photo)}}" loading="lazy"
                                         alt="" class="image-17" />
                                     <div>
-                                        <h5 class="text-color-dark-grey">{{ $cart->vendor->name }}</h5>
+                                        <h5><a href={{ url('/vendor/'.$cart->vendor->id) }} class="text-style-none text-color-dark-grey">{{ $cart->vendor->name }}</a></h5>
                                         <div class="text-size-small text-color-grey">Location: {{ $cart->vendor->location->name }}
                                         </div>
                                     </div>
@@ -34,7 +34,7 @@
                                             <img src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt=""
                                                 class="image-18" />
                                             <div>
-                                                <h5 class="text-color-dark-grey">{{ $product->product_name }}</h5>
+                                                <h5><a href={{ url('/product/'.$product->product_id) }} class="text-style-none text-color-dark-grey">{{ $product->product_name }}</a></h5>
                                                 @if ($product->product_variation_name != 'novariation')
                                                     <div class="text-size-small text-color-grey">Variant:
                                                         {{ $product->product_variation_name }}</div>
@@ -48,10 +48,10 @@
                                                     @if ($product->discount > 0 && 
                                                          $now->format("Y-m-d H:i:s") >= $product->discount_start_date &&
                                                          $now->format("Y-m-d H:i:s") < $product->discount_end_date)
-                                                        <span style="text-decoration: line-through;">${{ number_format($product->price, 2, ".", ",") }}</span>
-                                                        <span>${{ number_format($product->discount, 2, ".", ",") }}</span>
+                                                        <span style="text-decoration: line-through;">${{ number_format($product->product_price, 2, ".", ",") }}</span>
+                                                        <span>${{ number_format($product->cart_price, 2, ".", ",") }}</span>
                                                     @else
-                                                        <span>${{ number_format($product->price, 2, ".", ",") }}</span>
+                                                        <span>${{ number_format($product->cart_price, 2, ".", ",") }}</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -207,10 +207,6 @@
 
         function updateCheckout() {
             var grandTotalPrice = 0;
-            console.log('cartItems');
-            console.log(cartItems);
-            console.log('Object.keys(cartItems).length');
-            console.log(Object.keys(cartItems).length);
             if (Object.keys(cartItems).length > 0) {
                 $(".container-summary-item").html("");
                 for (var key in cartItems) {
@@ -219,8 +215,6 @@
                     var totalPrice = 0;
                     var totalItem = 0;
                     var vendor = cartItems[key];
-                    console.log("vendor");
-                    console.log(vendor);
                     for (var item in vendor) {
                         if (!vendor.hasOwnProperty(item)) continue;
 
@@ -229,13 +223,6 @@
                             totalItem += parseInt(vendor[item].quantity);
                         }
                     }
-                    console.log("SESUSAH HITUNG VENDOR");
-                    console.log("totalprice");
-                    console.log(totalPrice);
-                    console.log("totalItem");
-                    console.log(totalItem);
-                    console.log("vendor");
-                    console.log(vendor);
 
                     $(".container-summary-item").append(`
                     <div id="summary-item-` + key + `" class="summary-item div-block-24">
@@ -266,12 +253,7 @@
             var parent = checkbox.parents(".vendor-item");
             var vendorId = parent.attr("vendor-id");
             var cartId = checkbox.val();
-            console.log('parent');
-            console.log(parent);
-            console.log('vendorId');
-            console.log(vendorId);
-            console.log('cartId');
-            console.log(cartId);
+            
 
             if (checkbox.is(":checked")) {
                 var quantity = checkbox.parents().next().find(".product-quantity").val();
@@ -338,14 +320,18 @@
         });
 
         $(document).on("click", ".quantity-change", function() {
-            var qty = $(this).parent().find(".product-quantity");
+            var parent = $(this).parents(".vendor-item");
+            var checkbox = parent.find(".product-cart");
+            var qty = parent.find(".product-quantity");
             if ($(this).attr("logic") == "add") {
                 qty.val(parseInt(qty.val()) + 1);
             } else {
                 if (qty.val() != 1) qty.val(parseInt(qty.val()) - 1);
             }
-
-            updateBaseCheckout($(this).parents(".vendor-item").find(".product-cart"));
+        
+            if (checkbox.is(":checked")) {
+                updateBaseCheckout(checkbox);
+            }
         });
 
         $(document).on("change", ".product-quantity", function() {
@@ -370,49 +356,28 @@
             var checkbox = $(this).parent().prev().find(".product-cart");
             var vendorId = parent.attr("vendor-id");
             var cartId = checkbox.val();
-            console.log('grandParent');
-            console.log(grandParent);
-            console.log('parent');
-            console.log(parent);
-            console.log('checkbox');
-            console.log(checkbox);
-            console.log('vendorId');
-            console.log(vendorId);
-            console.log('cartId');
-            console.log(cartId);
 
             if (confirm('Are you sure you want to delete this item?')) {
                 $.post(url + "/user/cart/" + cartId, {
                     _token: CSRF_TOKEN,
                     _method: "DELETE",
                 }).done(function(data) {
-                    var obj = JSON.parse(data);
-
                     if (checkbox.is(":checked")) {
-                        console.log('Object.keys(cartItems).length');
-                        console.log(Object.keys(cartItems).length);
-                        if (Object.keys(cartItems).length <= 1) {
-                            console.log('Object.keys(cartItems).length <= 1');
-                            delete cartItems[obj.vendor_id];
-                        } else {
-                            console.log('Object.keys(cartItems).length > 1');
-                            delete cartItems[obj.vendor_id][obj.cart_id];
-                            console.log('Object.keys(cartItems[obj.vendor_id]).length');
-                            console.log(Object.keys(cartItems[obj.vendor_id]).length);
-                            if (Object.keys(cartItems[obj.vendor_id]).length <= 1) {
-                                delete cartItems[obj.vendor_id];
-                                console.log('Object.keys(cartItems[obj.vendor_id]).length <= 1');
-                            }
+                        delete cartItems[data.vendor_id][data.cart_id];
+                        if (Object.keys(cartItems[data.vendor_id]).length <= 1) {
+                            delete cartItems[data.vendor_id];
                         }
+
                         updateCheckout();
+                        console.log(cartItems);
                     }
                     parent.remove();
 
-                    if (obj.vendor_product_exist <= 0) {
+                    if (data.vendor_product_exist <= 0) {
                         grandParent.remove();
                     }
 
-                    alert(obj.message);
+                    alert(data.message);
                 }).fail(function(error) {
                     console.log(error);
                 });

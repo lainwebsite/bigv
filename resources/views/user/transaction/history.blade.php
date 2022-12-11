@@ -51,7 +51,7 @@
                         <div class="flex space-between">
                             <div class="flex gap-small">
                                 <div>
-                                    <h5 class="text-color-dark-grey">ID: {{ $transaction->id }}</h5>
+                                    <h5 class="text-color-dark-grey">Transaction ID: {{ $transaction->id }}</h5>
                                     <div class="text-size-small text-color-grey">
                                         {{ date('d F Y', strtotime($transaction->created_at)) }}</div>
                                 </div>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="div-line-sumarry"></div>
                         @php($current_vendor = 0)
-                        @foreach ($transaction->carts as $cart)
+                        @foreach ($transaction->cart_customs as $cart)
                             @if ($current_vendor != $cart->vendor_id)
                                 <div class="flex space-between">
                                     <div class="flex gap-small"><img src="{{ asset('uploads/'.$cart->vendor_photo) }}" loading="lazy"
@@ -84,24 +84,25 @@
                                     <div>
                                         <h5 class="text-color-dark-grey">{{ $cart->product_name }}</h5>
                                         @if ($cart->product_variation_name != 'novariation')
-                                            :
-                                            <div class="text-size-small text-color-grey">Variant:
-                                                {{ $cart->product_variation_name }}</div>
+                                            <div class="text-size-small text-color-grey">Variant: {{ $cart->product_variation_name }}</div>
                                         @endif
-                                        <div class="text-size-small text-color-grey">${{ $cart->product_price }}</div>
+                                        @if ($cart->addons != null)
+                                            <div class="text-size-small text-color-grey">Addons: {{ $cart->addons }}</div>
+                                        @endif
+                                        <div class="text-size-small text-color-grey">${{ number_format($cart->cart_price, 2, ".", ",") }}</div>
                                         <!-- <div class="text-size-small text-color-grey">+ 4 more products</div> -->
                                     </div>
                                 </div>
                                 <div class="div-block-36">
                                     <div>{{ $cart->qty }}x</div>
-                                    <div>${{ $cart->product_price * $cart->qty }}</div>
+                                    <div>${{ number_format($cart->cart_price, 2, ".", ",") }}</div>
                                 </div>
                             </div>
                             <div class="div-line-sumarry"></div>
                         @endforeach
                         <div style="display: flex; flex-direction: row; justify-content: space-between;">
                             <div><b>Total Price</b></div>
-                            <div><b>${{ $transaction->total_price }}</b></div>
+                            <div><b>${{ number_format($transaction->total_price, 2, ".", ",") }}</b></div>
                         </div>
                     </div>
                 @endforeach

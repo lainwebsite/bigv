@@ -99,7 +99,10 @@ class PickupAddressController extends Controller
         }
 
         if (isset($addresses)) {
-            return view('user.cart.itemPickupAddressCheckout', ['addresses' => $addresses]);
+            return response()->json(array(
+                "viewData"=>view('user.cart.itemPickupAddressCheckout', ['addresses' => $addresses])->render(), 
+                "firstID" => $addresses[0]->id
+            ));
         }
     }
 }

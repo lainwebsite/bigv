@@ -1,8 +1,9 @@
-
 @foreach($shipping_discounts as $shippingDiscount)
     <div code="{{ $shippingDiscount->code }}" class="delivery-add-item w-auto mr-2 ml-2 flex-column align-items-start shipping-discount-button cursor-pointer">
-        <h4 class="heading-7">{{ $shippingDiscount->code }}</h4>
-        <div class="text-size-small">{{ $shippingDiscount->name }}</div>
+        <h4 class="heading-7"><b>{{ $shippingDiscount->code }}</b></h4>
+        <div class="text-size-small"><b>{{ $shippingDiscount->name }}</b></div>
+        <div class="text-size-small">Discount ${{$shippingDiscount->amount}}</div>
+        <small class="text-size-small">{{ $shippingDiscount->description }}</small>
     </div>
 @endforeach
 

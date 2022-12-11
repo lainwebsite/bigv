@@ -20,10 +20,14 @@ class General
         if (!preg_match("/.*(checkout).*/", $request->route()->uri())) {
             session()->forget([
                 'checkout-items',
-                'shipping-price',
                 'total-checkout-price',
                 'grandtotal-checkout-price',
-                'total-checkout-items'
+                'total-price-after-discount',
+                'shipping-voucher-used',
+                'product-voucher-used',
+                'total-checkout-items',
+                'total-discount-product',
+                'total-discount-shipping'
             ]);
         }
         

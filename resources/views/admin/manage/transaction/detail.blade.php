@@ -139,54 +139,74 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h4 class="card-title mb-4">Customer Info</h4>
-                                            <p class="m-0">{{ $billingAddress->name }}</p>
-                                            <p class="m-0">{{ $billingAddress->phone }}</p>
-                                            <p class="m-0">{{ $billingAddress->user->tier->name }}</p>
-                                            <div class="divider-dash mt-4 mb-4"></div>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <h4 class="card-title mb-4">Billing Address</h4>
-                                                    <p class="m-0">{{ $billingAddress->name }}</p>
-                                                    <p class="m-0">{{ $billingAddress->phone }}</p>
-                                                    @if ($billingAddress->building_name != null)
-                                                        <p class="mb-2">{{ $billingAddress->block_number }}
-                                                            {{ $billingAddress->street }}<br>#{{ $billingAddress->unit_level }}-{{ $billingAddress->unit_number }}
-                                                            {{ $billingAddress->building_name }}<br>Singapore
-                                                            {{ $billingAddress->postal_code }}</p>
-                                                        <small>{{ $billingAddress->additional_info }}</small>
-                                                    @else
-                                                        <p class="mb-2">
-                                                            {{ $billingAddress->unit_number }}
-                                                            {{ $billingAddress->street }}<br>Singapore
-                                                            {{ $billingAddress->postal_code }}</p>
+                                            @if ($transaction->pickup_method_id == 1)
+                                                <h4 class="card-title mb-4">Customer Info</h4>
+                                                <p class="m-0">{{ $transaction->user->name }}</p>
+                                                <p class="m-0">{{ $transaction->user->phone }}</p>
+                                                <p class="m-0">{{ $transaction->user->tier->name }}</p>
+                                                <div class="divider-dash mt-4 mb-4"></div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <h4 class="card-title mb-4">Billing Address</h4>
+                                                        <p class="m-0">{{ $billingAddress->name }}</p>
+                                                        <p class="m-0">{{ $billingAddress->phone }}</p>
+                                                        @if ($billingAddress->building_name != null)
+                                                            <p class="mb-2">{{ $billingAddress->block_number }}
+                                                                {{ $billingAddress->street }}<br>#{{ $billingAddress->unit_level }}-{{ $billingAddress->unit_number }}
+                                                                {{ $billingAddress->building_name }}<br>Singapore
+                                                                {{ $billingAddress->postal_code }}</p>
                                                             <small>{{ $billingAddress->additional_info }}</small>
-                                                    @endif
-                                                </div>
-                                                <div class="col-6">
-                                                    @if ($transaction->shipping_address_id != null)
-                                                        <h4 class="card-title mb-4">Shipping Address</h4>
-                                                        <p class="m-0">{{ $shippingAddress->name }}</p>
-                                                        <p class="m-0">{{ $shippingAddress->phone }}</p>
-                                                        @if ($shippingAddress->building_name != null)
-                                                            <p class="mb-2">
-                                                            {{ $shippingAddress->block_number }}
-                                                            {{ $shippingAddress->street }}<br>#{{ $shippingAddress->unit_level }}-{{ $shippingAddress->unit_number }}
-                                                            {{ $shippingAddress->building_name }}<br>Singapore
-                                                            {{ $shippingAddress->postal_code }}</p>
-                                                            <small>{{ $shippingAddress->additional_info }}</small>
                                                         @else
                                                             <p class="mb-2">
-                                                            {{ $shippingAddress->unit_number }}
-                                                            {{ $shippingAddress->street }}<br>Singapore
-                                                            {{ $shippingAddress->postal_code }}</p>
-                                                            <small>{{ $shippingAddress->additional_info }}</small>
+                                                                {{ $billingAddress->unit_number }}
+                                                                {{ $billingAddress->street }}<br>Singapore
+                                                                {{ $billingAddress->postal_code }}</p>
+                                                                <small>{{ $billingAddress->additional_info }}</small>
                                                         @endif
-                                                    @else
-                                                        <p class="m-0">Same as Billing Address</p>
-                                                    @endif
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <h4 class="card-title mb-4">Shipping Address</h4>
+                                                        @if ($transaction->shipping_address_id != null)
+                                                            <p class="m-0">{{ $shippingAddress->name }}</p>
+                                                            <p class="m-0">{{ $shippingAddress->phone }}</p>
+                                                            @if ($shippingAddress->building_name != null)
+                                                                <p class="mb-2">
+                                                                {{ $shippingAddress->block_number }}
+                                                                {{ $shippingAddress->street }}<br>#{{ $shippingAddress->unit_level }}-{{ $shippingAddress->unit_number }}
+                                                                {{ $shippingAddress->building_name }}<br>Singapore
+                                                                {{ $shippingAddress->postal_code }}</p>
+                                                                <small>{{ $shippingAddress->additional_info }}</small>
+                                                            @else
+                                                                <p class="mb-2">
+                                                                {{ $shippingAddress->unit_number }}
+                                                                {{ $shippingAddress->street }}<br>Singapore
+                                                                {{ $shippingAddress->postal_code }}</p>
+                                                                <small>{{ $shippingAddress->additional_info }}</small>
+                                                            @endif
+                                                        @else
+                                                            <p class="m-0">Same as Billing Address</p>
+                                                        @endif
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @else
+                                                <h4 class="card-title mb-4">Pickup Address</h4>
+                                                <p class="m-0">{{ $transaction->pickup_address->name }}</p>
+                                                <p class="m-0">{{ $transaction->pickup_address->phone }}</p>
+                                                @if ($transaction->pickup_address->building_name != null)
+                                                    <p class="mb-2">
+                                                    {{ $transaction->pickup_address->block_number }}
+                                                    {{ $transaction->pickup_address->street }}<br>#{{ $transaction->pickup_address->unit_level }}-{{ $transaction->pickup_address->unit_number }}
+                                                    {{ $transaction->pickup_address->building_name }}<br>Singapore
+                                                    {{ $transaction->pickup_address->postal_code }}</p>
+                                                    <small>{{ $transaction->pickup_address->additional_info }}</small>
+                                                @else
+                                                    <p class="mb-2">
+                                                    {{ $transaction->pickup_address->unit_number }}
+                                                    {{ $transaction->pickup_address->street }}<br>Singapore
+                                                    {{ $transaction->pickup_address->postal_code }}</p>
+                                                    <small>{{ $transaction->pickup_address->additional_info }}</small>
+                                                @endif
+                                            @endif
                                             <div class="divider-dash mt-4 mb-4"></div>
                                             <div class="row">
                                                 <div class="col">
@@ -239,36 +259,9 @@
                                     <div class="d-flex justify-content-between">
                                         <p class="m-0">Discount Subtotal</p>
                                         @php
-                                            $discountval = 0;
+                                            $discountval = $transaction->product_discount_total + $transaction->shipping_discount_total;
                                         @endphp
-                                        @if ($transaction->transaction_discounts->count() > 0)
-                                            @foreach ($transaction->transaction_discounts as $discount)
-                                                @switch($discount->discount->type_id)
-                                                    @case(1)
-                                                        @php
-                                                            $discountval += ($discount->discount->amount * $transaction->shipping_fee) / 100;
-                                                        @endphp
-                                                    @break
-
-                                                    @case(2)
-                                                        @php
-                                                            $discountval += ($discount->discount->amount * $transaction->total_price) / 100;
-                                                        @endphp
-                                                    @break
-
-                                                    @case(3)
-                                                        @php
-                                                            $discountval += $transaction->total_price - $discount->discount->amount;
-                                                        @endphp
-                                                    @break
-
-                                                    @default
-                                                @endswitch
-                                            @endforeach
-                                            <p class="m-0">${{ $discountval }}</p>
-                                        @else
-                                            <p class="m-0">$0</p>
-                                        @endif
+                                        <p class="m-0">${{ $discountval }}</p>
                                     </div>
                                     <div class="divider-dash"></div>
                                     <div class="d-flex justify-content-between">

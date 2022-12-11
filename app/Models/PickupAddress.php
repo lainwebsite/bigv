@@ -10,12 +10,13 @@ class PickupAddress extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'additional_info',
+        'block_number',
         'street',
-        'building_name',
         'unit_level',
-        'building_number',
         'unit_number',
+        'building_name',
         'postal_code',
     ];
 

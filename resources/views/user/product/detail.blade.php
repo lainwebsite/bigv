@@ -238,7 +238,7 @@
                                                 @foreach ($addon->addons_options as $addons_option)
                                                     <option price="{{ $addons_option->price }}"
                                                         value="{{ $addons_option->id }}">{{ $addons_option->name }}
-                                                        (${{ $addons_option->price }})
+                                                        (${{ number_format($addons_option->price, 2, ".", ",") }})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -584,7 +584,7 @@
             <div class="c-product-form__row">
                 <div class="c-product-form__col col-sizing--grow">
                     <h3 class="product-name heading-2 text-color-grey">
-                        {{ count($product->variations) > 0 ? ($product->variations[0]->name == 'novariation' ? $product->name : $product->variations[0]->name) : $product->name }}
+                        {{ $product->name }}
                     </h3>
                     <div class="popup-atc-price-n-star">
                         @if ($product->variations[0]->name == 'novariation')
@@ -756,19 +756,23 @@
             var price = parseFloat($(".product-price").attr("price"));
             
             if ($(".product-variation").length > 0) {
-                if ($(".product-variation").is(".selected")) {
-                    if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
-                        price = parseFloat($(".product-variation.selected").attr("after-sale-price"));
+                if (($(".product-variation.selected").length > 0)){
+                    if ($(".product-variation").is(".selected")) {
+                        if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
+                            price = parseFloat($(".product-variation.selected").attr("after-sale-price"));
+                        } else {
+                            price = parseFloat($(".product-variation.selected").attr("price"));
+                        }
                     } else {
                         price = parseFloat($(".product-variation.selected").attr("price"));
                     }
-                } else {
-                    price = parseFloat($(".product-variation.selected").attr("price"));
                 }
-            } else {
-                price = $(".product-price").attr("min-price") + " - $" + $(".product-price").attr("max-price");
-                alert("Please select one of variation product first!");
-                return price;
+                else {
+                    price = parseFloat($(".product-price").attr("min-price")).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + " - $" + 
+                            parseFloat($(".product-price").attr("max-price")).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                    alert("Please select one of variation product first!");
+                    return price;
+                }
             }
             
             if (price != undefined && $(".addons-option").length > 0) {
@@ -782,18 +786,18 @@
                 });
     
                 if ($(".product-variation.selected").attr("after-sale-price") != undefined) {
-                    $(".sale-price-detail").html("$" + total_normal_price);
+                    $(".sale-price-detail").html("$" + total_normal_price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                 }
             }
     
-            return price;
+            return price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
 
         $(".product-variation").on("click", function() {
             if ($(this).hasClass("selected")) {
                 $(this).removeClass("selected");
-                $(".product-price").html("$" + $(".product-price").attr("min-price") + " - $" + $(".product-price")
-                    .attr("max-price")).removeAttr("product-id");
+                $(".product-price").html("$" + parseFloat($(".product-price").attr("min-price")).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + 
+                                        " - $" + parseFloat($(".product-price").attr("max-price")).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')).removeAttr("product-id");
                 $(".btn-add-cart").attr("disabled", "").addClass("btn-secondary");
                 $(".btn-buy-now").attr("disabled", "").addClass("btn-outline-secondary text-secondary");
                 $(".sale-price-detail").css("display", "none");
@@ -817,7 +821,7 @@
             }
         });
     
-        $(".addons-option option").on("click", function() {
+        $(document).on('change', '.addons-option', function(){
             $(".product-price").html("$" + calculatePrice());
         });
     
@@ -860,6 +864,8 @@
                             }).fail(function(error) {
                                 console.log(error);
                             });
+                        } else {
+                            alert("Please select one of variation product first!");
                         }
                     } else {
                         if ($(".product-price").attr("price") != undefined) {

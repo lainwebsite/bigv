@@ -70,9 +70,6 @@ Route::group(['middleware' => 'general'], function () {
     Route::get('/addresstes', [PageController::class, 'address'])->name('addresstes');
     Route::get('/vendortes', [PageController::class, 'vendor'])->name('vendortes');
     Route::get('/vendordettes', [PageController::class, 'vendordetail'])->name('vendordettes');
-    // Route::get('/product', [PageController::class, 'products']);
-    // Route::get('product/search', [ProductController::class, 'search']);
-    // Route::post('product/sort', [ProductController::class, 'sort']);
     Route::get('product/filter', [ProductController::class, 'filter']);
     Route::resource('product', ProductController::class);
     Route::resource('vendor', VendorController::class);
@@ -81,24 +78,22 @@ Route::group(['middleware' => 'general'], function () {
 
 // Route::group(['middleware' => ['user', 'verified'], 'as' => 'user.', 'prefix' => 'user'], function () {
 Route::group(['middleware' => ['user'], 'as' => 'user.', 'prefix' => 'user'], function () {
-    // Route::get('h/p/y/coba-pay', [CheckoutController::class, 'placeOrder']);
+    Route::get('coba', function() {
+        return view('user.transaction.details'); 
+    });
     Route::post('cart/verify-checkout', [CheckoutController::class, 'preCheckout']);
     Route::post('cart/checkout/buy-now', [CheckoutController::class, 'buyNowCheckout']);
     Route::get('cart/checkout', [CheckoutController::class, 'getCheckout']);
-    // Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
     Route::get('transit/transaction', [CheckoutController::class, 'transitStatusPayment']);
     Route::post('cart/checkout/place-order', [CheckoutController::class, 'placeOrder']);
-    // Route::post('cart/checkout/place-order', function () {
-    //     return redirect('/');
-    // });
-    Route::post('cart/checkout/atome', [CheckoutController::class, 'atomePayment']);
+    Route::get('cart/checkout/re-pay', [CheckoutController::class, 'rePayment']);
     Route::resource('cart', CartController::class);
     Route::get('checkout/product-discount/search', [DiscountController::class, 'productSearch']);
     Route::get('checkout/shipping-discount/search', [DiscountController::class, 'shippingSearch']);
     Route::get('checkout/product-discount/search/{keyword?}', [DiscountController::class, 'productSearch']);
     Route::get('checkout/shipping-discount/search/{keyword?}', [DiscountController::class, 'shippingSearch']);
     Route::post('checkout/discount/apply-voucher', [DiscountController::class, 'applyVoucher']);
-    Route::get('checkout/discount/cancel-voucher', [DiscountController::class, 'cancelVoucher']);
+    Route::post('checkout/discount/cancel-voucher', [DiscountController::class, 'cancelVoucher']);
     Route::resource('discount', DiscountController::class);
     Route::post('discount/search', [DiscountController::class, 'search']);
     Route::resource('payment-method', PaymentMethodController::class);
