@@ -770,7 +770,6 @@
                 else {
                     price = parseFloat($(".product-price").attr("min-price")).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + " - $" + 
                             parseFloat($(".product-price").attr("max-price")).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-                    alert("Please select one of variation product first!");
                     return price;
                 }
             }

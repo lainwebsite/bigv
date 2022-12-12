@@ -63,6 +63,10 @@ class Transaction extends Model
     {
         return $this->belongsTo(PickupAddress::class, 'self_collection_address_id', 'id');
     }
+    public function pickup_address_trashed()
+    {
+        return $this->belongsTo(PickupAddress::class, 'self_collection_address_id', 'id')->withTrashed();
+    }
     public function pickup_time()
     {
         return $this->belongsTo(PickupTime::class, 'pickup_time_id', 'id');

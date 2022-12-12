@@ -13,6 +13,11 @@ use DB;
 
 class CartController extends Controller
 {
+    public function __construct()
+    {
+        \Artisan::call('cache:clear');
+    }
+    
     public function index()
     {
         $sub = OptionCart::join('addon_options', 'addon_options.id', '=', 'option_carts.addon_option_id')
@@ -89,14 +94,39 @@ class CartController extends Controller
                 'product_variation_id' => 'required|numeric',
                 'product_addons_id' => 'sometimes|array',
             ]);
+            
+            $addons_request = '';
+            $addons = [];
+            if ($request->product_addons_id != null) {
+                $product_addons_id = $request->product_addons_id;
+                if (gettype($request->product_addons_id) == "string") {
+                    $product_addons_id = json_decode($request->product_addons_id, true);
+                    $addons = $product_addons_id;
+                } else if (gettype($request->product_addons_id) == "array") {
+                    $addons = $product_addons_id;
+                }
+                if (count($product_addons_id) > 1) sort($product_addons_id);
+                $addons_request = join("",$product_addons_id);
+            }
 
             $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
-            $cart = Cart::join('')
-                        ->whereNull('transaction_id')
-                        ->where('user_id', auth()->user()->id)
-                        ->where('product_variation_id', $request->product_variation_id)
-                        ->first();
 
+            // Mengambil semua cart berdasarkan (transaksi = null), (user id = auth()->user()->id), dan (product variation id) -->> disini kemungkinan cart dihasilkan lebih dari 1
+            $temp_cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('product_variation_id', $request->product_variation_id)->pluck('id')->toArray();
+            $cart = null;
+            if ($temp_cart != null) {
+                // Looping tiap cart dimana memiliki (product variation id = $request->product_variation_id)
+                foreach ($temp_cart as $c) {
+                    // Mengambil addon tiap cart
+                    $temp_addons = OptionCart::where('cart_id', $c)->get()->implode('addon_option_id', '');
+                    // Mengecek apakah addon pada cart sama dengan addon yang dikirimkan melalui ($request)
+                    if ($temp_addons == $addons_request) {
+                        $cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('id', $c)->first();
+                        break;
+                    }
+                }
+            }
+            
             if ($request->quantity > 0) {
                 if ($cart == null) {
                     $data = $request->except('product_addons_id');
@@ -145,16 +175,11 @@ class CartController extends Controller
                         ]);
                     } else {
                         $addons_db = join("", $addon_cart);
-
-                        if ($request->product_addons_id != null) {
-                             $product_addons_id = $request->product_addons_id;
-                            if (gettype($request->product_addons_id) == "string") $product_addons_id = json_decode($request->product_addons_id, true);
-                            if (count($product_addons_id) > 1) sort($product_addons_id);
-                            $addons_request = join("",$product_addons_id);
-                            return [$addons_db, $addons_request];
+                        
+                        if ($addons_request != "") {
+                            // return [$addons_db, $addons_request];
                             if ($addons_db == $addons_request) {
                                 $qty = $cart->quantity + $request->quantity;
-                                return $qty;
                                 $cart->update([
                                     'quantity' => $qty
                                 ]);
@@ -226,13 +251,13 @@ class CartController extends Controller
                                     ->select('addon_options.price as addon_price')
                                     ->sum('addon_options.price');
 
-                $cart['price'] = $cart['price'] + $addons_price;
+                $cart->price = $cart->price + $addons_price;
 
                 $productVariation = ProductVariation::find($cart->product_variation_id);
                 $productVariation->product->vendor;
 
-                $cart['vendor_id'] = $productVariation->product->vendor->id;
-                $cart['vendor_name'] = $productVariation->product->vendor->name;
+                $cart->vendor_id = $productVariation->product->vendor->id;
+                $cart->vendor_name = $productVariation->product->vendor->name;
             }
         } catch (\Illuminate\Database\QueryException $exception) {
             $errorInfo = $exception->errorInfo;

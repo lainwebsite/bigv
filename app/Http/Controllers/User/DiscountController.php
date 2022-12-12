@@ -304,6 +304,9 @@ class DiscountController extends Controller
                             $totalPrice += $productPrice;
                         }
                     }
+                    else {
+                        $totalPrice += $productPrice;
+                    }
                 }
                 else if ($disc->applicable_id == 2){
                     // Cek applicable vendor (id 2)
@@ -338,6 +341,9 @@ class DiscountController extends Controller
                             $totalPrice += $productPrice;
                         }
                     }
+                    else {
+                        $totalPrice += $productPrice;
+                    }
                 } 
                 else {
                     // Cek applicable category (id 3)
@@ -371,6 +377,9 @@ class DiscountController extends Controller
                             
                             $totalPrice += $productPrice;
                         }
+                    }
+                    else {
+                        $totalPrice += $productPrice;
                     }
                 }
             } else {

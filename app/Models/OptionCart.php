@@ -19,4 +19,8 @@ class OptionCart extends Model
     public function addon_option() {
         return $this->belongsTo(AddonOption::class, 'addon_option_id', 'id');
     }
+    
+    public function addon_option_trashed() {
+        return $this->belongsTo(AddonOption::class, 'addon_option_id', 'id')->withTrashed();
+    }
 }

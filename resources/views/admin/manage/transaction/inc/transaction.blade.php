@@ -40,17 +40,28 @@
                                 <ul class="list-unstyled">
                                     <li class="media align-items-center">
                                         <img class="d-flex mr-3 br-18"
-                                            src="{{ asset('uploads/' . $transaction->carts->first()->product_variation->product->featured_image) }}"
+                                            src="{{ asset('uploads/' . $transaction->carts->first()->product_variation_trashed->product->featured_image) }}"
                                             width="60" alt="Generic placeholder image">
                                         <div class="media-body">
                                             <h5 class="mt-0 mb-1">
-                                                <b>{{ $transaction->carts->first()->product_variation->product->name }}</b>
+                                                <b>{{ $transaction->carts->first()->product_variation_trashed->product->name }}</b>
                                             </h5>
+                                            @if ($transaction->carts->first()->product_variation_trashed->name != "novariation")
+                                                <h6 class="m-0">{{ $transaction->carts->first()->product_variation_trashed->name }}</h6>
+                                            @endif
+                                            @if ($transaction->carts->first()->addon_options->count() > 0)
+                                                @php 
+                                                    $addonOptArr = [];
+                                                @endphp
+                                                @foreach ($transaction->carts->first()->addon_options as $addon)
+                                                    @php
+                                                        array_push($addonOptArr, $addon->addon_option_trashed->name);
+                                                    @endphp
+                                                @endforeach
+                                                <h6 class="m-0">Addon: {{join(",", $addonOptArr)}}</h6>
+                                            @endif
                                             <h6 class="m-0">
-                                                {{ $transaction->carts->first()->product_variation->name }}
-                                            </h6>
-                                            <h6 class="m-0">
-                                                {{ $transaction->carts->first()->price }}</h6>
+                                                ${{ $transaction->carts->first()->price }}</h6>
                                         </div>
                                         <p class="m-0">
                                             x{{ $transaction->carts->first()->quantity }}</p>

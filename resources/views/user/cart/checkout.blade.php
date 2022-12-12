@@ -740,7 +740,6 @@
 
         $("#deliveryShippingButton").on('click', function() {
             if ($("#cancelVoucher").is(":not(.d-none)")) {
-                 alert("MASUK CANCEL 1");
                 cancelVoucher(1);
             } else {
                 $("#grandtotal-price").html($("#grandtotal-price").attr("grandtotal-price"));
@@ -763,7 +762,6 @@
 
         $("#pickupShippingButton").on('click', function() {
             if ($("#cancelVoucher").is(":not(.d-none)")) {
-                alert("MASUK CANCEL 2");
                 cancelVoucher(2);
             } else {
                 $("#grandtotal-price").html((parseFloat($("#grandtotal-price").attr("grandtotal-price")) - parseFloat(shipping_price)));

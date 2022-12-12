@@ -21,6 +21,11 @@ use DB;
 
 class CheckoutController extends Controller
 {
+    public function __construct()
+    {
+        \Artisan::call('cache:clear');
+    }
+    
     public function getCheckout(Request $request)
     {
         if (
@@ -159,8 +164,39 @@ class CheckoutController extends Controller
             'product_addons_id' => 'sometimes|nullable|array',
         ]);
         
+        // $cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('product_variation_id', $request->product_variation_id)->first();
+        $addons_request = '';
+        $addons = [];
+        if ($request->product_addons_id != null) {
+            $product_addons_id = $request->product_addons_id;
+            if (gettype($request->product_addons_id) == "string") {
+                $product_addons_id = json_decode($request->product_addons_id, true);
+                $addons = $product_addons_id;
+            } else if (gettype($request->product_addons_id) == "array") {
+                $addons = $product_addons_id;
+            }
+            if (count($product_addons_id) > 1) sort($product_addons_id);
+            $addons_request = join("",$product_addons_id);
+        }
+
         $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
-        $cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('product_variation_id', $request->product_variation_id)->first();
+        
+        // Mengambil semua cart berdasarkan (transaksi = null), (user id = auth()->user()->id), dan (product variation id) -->> disini kemungkinan cart dihasilkan lebih dari 1
+        $temp_cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('product_variation_id', $request->product_variation_id)->pluck('id')->toArray();
+        $cart = null;
+        if ($temp_cart != null) {
+            // Looping tiap cart dimana memiliki (product variation id = $request->product_variation_id)
+            foreach ($temp_cart as $c) {
+                // Mengambil addon tiap cart
+                $temp_addons = OptionCart::where('cart_id', $c)->get()->implode('addon_option_id', '');
+                // Mengecek apakah addon pada cart sama dengan addon yang dikirimkan melalui ($request)
+                if ($temp_addons == $addons_request) {
+                    $cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('id', $c)->first();
+                    break;
+                }
+            }
+        }
+        
         if ($productVariation == null) {
             return redirect()->back()->with('error', 'Please choose at least one product.');
         }
@@ -175,9 +211,8 @@ class CheckoutController extends Controller
                                 ->toArray();
                                 
                 if (count($addon_cart) <= 0) { 
-                    $qty = $cart->quantity + $request->quantity;
                     $dataUpdated = [
-                        'quantity' => $qty,
+                        'quantity' => $request->quantity,
                         'price' => ($productVariation->discount != 0 && ($now >= $productVariation->discount_start_date) && ($now < $productVariation->discount_end_date)) ? $productVariation->discount : $productVariation->price
                     ];
 
@@ -185,17 +220,11 @@ class CheckoutController extends Controller
                 } else {
                     $addons_db = join("", $addon_cart);
 
-                    if ($request->product_addons_id != null) {
-                         $product_addons_id = $request->product_addons_id;
-                        if (gettype($request->product_addons_id) == "string") $product_addons_id = json_decode($request->product_addons_id, true);
-                        if (count($product_addons_id) > 1) sort($product_addons_id);
-                        $addons_request = join("",$product_addons_id);
-
+                    if ($addons_request != "") {
                         // Check if cart has addons or not
                         if ($addons_db == $addons_request) {
-                            $qty = $cart->quantity + $request->quantity;
                             $dataUpdated = [
-                                'quantity' => $qty,
+                                'quantity' => $request->quantity,
                                 'price' => ($productVariation->discount != 0 && ($now >= $productVariation->discount_start_date) && ($now < $productVariation->discount_end_date)) ? $productVariation->discount : $productVariation->price
                             ];
                             
@@ -286,10 +315,13 @@ class CheckoutController extends Controller
         if (session()->has('total-price-after-discount')) {
             $grandtotal_checkout_price = (float) session()->get('total-price-after-discount', 0);
         }
-        
         $shipping_price = (float) env('SHIPPING_PRICE');
+
         if ($request->pickup_method_id == 2) {
-            $grandtotal_checkout_price -= (float) $shipping_price;
+            if (session()->has('total-price-after-discount')) {
+                $shipping_price = 0;
+            }
+            $grandtotal_checkout_price -= $shipping_price;
             $shipping_price = 0;
         }
 
