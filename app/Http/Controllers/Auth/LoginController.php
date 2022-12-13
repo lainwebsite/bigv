@@ -46,7 +46,7 @@ class LoginController extends Controller
         
         $user_login = User::where($this->username(), $request->email)->first();
         if ($user_login != null) {
-            if ($user_login->ban) {
+            if ($user_login->ban == 1) {
                 $error = \Illuminate\Validation\ValidationException::withMessages([
                    $this->username() => ['You are banned! Please contact our customer service.']
                 ]);

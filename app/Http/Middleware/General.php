@@ -34,7 +34,7 @@ class General
         }
         
         if (Auth::check()) {
-            if (Auth::user()->ban) {
+            if (Auth::user()->ban == 1) {
                 session()->flush();
                 Auth::logout();
                 return redirect('login')->withErrors(['email' => 'You are banned! Please contact our customer service.']);

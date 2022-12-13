@@ -72,7 +72,7 @@ Route::group(['middleware' => 'general'], function () {
     Route::get('/vendordettes', [PageController::class, 'vendordetail'])->name('vendordettes');
     Route::get('product/filter', [ProductController::class, 'filter']);
     Route::resource('product', ProductController::class);
-    Route::resource('vendor', VendorController::class);
+    Route::resource('vendors', VendorController::class);
     Route::get('/about', [PageController::class, 'about']);
 });
 

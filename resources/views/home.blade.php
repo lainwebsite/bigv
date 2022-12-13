@@ -85,7 +85,7 @@
                             data-w-id="bca3a5c8-7269-035c-5884-488e78117e57" class="nav-link w-nav-link">Products</a>
                         <div class="underline"></div>
                     </div>
-                    <div class="nav-link-wrapper"><a href="{{url('vendor')}}" data-w-id="bca3a5c8-7269-035c-5884-488e78117e5b"
+                    <div class="nav-link-wrapper"><a href="{{url('vendors')}}" data-w-id="bca3a5c8-7269-035c-5884-488e78117e5b"
                             class="nav-link w-nav-link">Vendors</a>
                         <div class="underline"></div>
                     </div>

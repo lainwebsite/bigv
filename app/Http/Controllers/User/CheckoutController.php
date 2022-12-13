@@ -157,7 +157,7 @@ class CheckoutController extends Controller
     public function buyNowCheckout(Request $request)
     {
         if ($request->product_addons_id != "" || $request->product_addons_id != null) {
-            $request->product_addons_id = json_decode($request->product_addons_id);
+            $request['product_addons_id'] = json_decode($request->product_addons_id, true);
         }
         
         $request->validate([
@@ -165,7 +165,7 @@ class CheckoutController extends Controller
             'product_variation_id' => 'required|numeric',
             'product_addons_id' => 'sometimes|nullable|array',
         ]);
-        
+
         // $cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('product_variation_id', $request->product_variation_id)->first();
         $addons_request = '';
         $addons = [];

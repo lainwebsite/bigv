@@ -28,12 +28,13 @@ class PaynowController extends Controller
                 'name' => auth()->user()->name,
                 'email' => auth()->user()->email,
                 'phone' => auth()->user()->phone,
+                'purpose' => 'Payment E-Commerce Website Paynow',
                 'amount' => $total_price,
                 'payment_methods' => ['paynow_online'],
                 'currency' => 'SGD',
                 // 'redirect_url' => 'https://bigvsg.com/public/user/transaction',
-                'redirect_url' => 'https://bigvsg.com/public/user/transit/transaction?id=' . $transaction_id,
-                'webhook' => 'https://bigvsg.com/public/api/h/p/y/webhook'
+                'redirect_url' => 'https://bigvsg.com/user/transit/transaction?id=' . $transaction_id,
+                'webhook' => 'https://bigvsg.com/api/h/p/y/webhook'
             ]);
 
             $responseJSON = json_decode($response->getBody()->getContents());
