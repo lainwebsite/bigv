@@ -716,7 +716,6 @@
             <div data-id="${id}">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
-                        <img class="d-flex br-18 mr-3" src="${image}" height="60" width="60" alt="Generic placeholder image">
                         <div class="d-flex justify-content-center flex-column">
                             <h5 class="m-0"><b>${name}</b></h5>
                         </div>

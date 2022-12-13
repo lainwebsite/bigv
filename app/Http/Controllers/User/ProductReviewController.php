@@ -92,7 +92,7 @@ class ProductReviewController extends Controller
                 'rating' => $new_rating,
             ]);
     
-            if ($request->review_photos[$key]) {
+            if (isset($request->review_photos[$key])) {
                 foreach ($request->review_photos[$key] as $keyd => $photo) {
                     $photod = 'review-' . $cart->product_variation->product_id . '-' . time() . '-' . $photo->getClientOriginalName();
                     $photo->move(public_path('uploads'), $photod);

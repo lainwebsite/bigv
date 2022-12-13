@@ -47,7 +47,9 @@ class ProductController extends Controller
             $query->whereHas('transaction')->select(DB::raw('sum(quantity)'));
         }])->withCount(['reviews as reviews_count' => function ($query) use ($product) {
             $query->where('product_id', $product->id);
-        }])->where('id', $product->id)->get()[0];
+        }])->where('id', $product->id)->first();
+        
+        $product->setRelation('reviews', $product->reviews()->paginate(5));
 
         $addons = Addon::where('product_id', $product->id)->with(['addons_options'])->get();
 

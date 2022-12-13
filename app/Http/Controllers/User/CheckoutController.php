@@ -5,11 +5,13 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\PaymentGateway\PaynowController;
 use App\Models\Cart;
+use App\Models\Discount;
 use App\Models\PickupMethod;
 use App\Models\PickupTime;
 use App\Models\ProductVariation;
 use App\Models\UserAddress;
 use App\Models\Transaction;
+use App\Models\TransactionDiscount;
 use App\Models\OptionCart;
 use App\Models\Vendor;
 use Carbon\Carbon;
@@ -155,7 +157,7 @@ class CheckoutController extends Controller
     public function buyNowCheckout(Request $request)
     {
         if ($request->product_addons_id != "" || $request->product_addons_id != null) {
-            $request['product_addons_id'] = json_decode($request->product_addons_id);
+            $request->product_addons_id = json_decode($request->product_addons_id);
         }
         
         $request->validate([
@@ -337,12 +339,48 @@ class CheckoutController extends Controller
         ];
 
         $transaction = Transaction::create($data);
+        
+        // Update discount use
+        if (session()->has('shipping-voucher-used')) {
+            $shippingVoucher = session()->get('shipping-voucher-used', null);
+            if ($shippingVoucher != null) {
+                TransactionDiscount::create([
+                    'transaction_id' => $transaction->id,
+                    'discount_id' => $shippingVoucher->id
+                ]);
+            }
+        }
+        if (session()->has('product-voucher-used')) {
+            $productVoucher = session()->get('product-voucher-used', null);
+            if ($productVoucher != null) {
+                TransactionDiscount::create([
+                    'transaction_id' => $transaction->id,
+                    'discount_id' => $productVoucher->id
+                ]);
+            }
+        }
 
         // update transaction id in cart
         $checkout_items = session()->get('checkout-items');
         foreach ($checkout_items as $item) {
             Cart::where('id', $item)->update(['transaction_id' => $transaction->id]);
         }
+        
+        \Artisan::call('cache:clear');
+        session()->forget([
+                    'checkout-items',
+                    'total-checkout-price',
+                    'grandtotal-checkout-price',
+                    'total-price-after-discount',
+                    'total-price-before-discount',
+                    'shipping-voucher-used',
+                    'product-voucher-used',
+                    'total-checkout-items',
+                    'total-discount-product',
+                    'total-discount-shipping'
+                ]);
+        session()->save();
+        \Artisan::call('cache:clear');
 
         $paynow = new PaynowController();
         return $paynow->pay($grandtotal_checkout_price, $transaction->id);

@@ -449,16 +449,17 @@ class DiscountController extends Controller
         $pickupMethodId = $request->pickup_method_id;
         
         \Artisan::call('cache:clear');
-        session()->forget('product-voucher-used');
-        session()->forget('shipping-voucher-used');
-        session()->forget('total-price-after-discount');
-        session()->forget('total-discount-product');
-        session()->forget('total-discount-shipping');
+        session()->forget([
+            'total-price-after-discount',
+            'total-price-before-discount',
+            'shipping-voucher-used',
+            'product-voucher-used',
+            'total-discount-product',
+            'total-discount-shipping'
+        ]);
         session()->save();
+        \Artisan::call('cache:clear');
 
-        session()->put('masuk', 'cancelvoucher');
-        session()->save();
-        // return response()->json(session());
         if ($pickupMethodId == 2)
             return (session()->get('grandtotal-checkout-price') - (float) env('SHIPPING_PRICE'));
         

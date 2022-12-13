@@ -25,6 +25,7 @@ class User
                     'total-checkout-price',
                     'grandtotal-checkout-price',
                     'total-price-after-discount',
+                    'total-price-before-discount',
                     'shipping-voucher-used',
                     'product-voucher-used',
                     'total-checkout-items',
@@ -33,6 +34,11 @@ class User
                 ]);
             }
             
+            if (Auth::user()->ban) {
+                session()->flush();
+                Auth::logout();
+                return redirect('login')->withErrors(['email' => 'You are banned! Please contact our customer service.']);
+            }
 
             if (Auth::user()->role_id == 1) {
                 return $next($request);

@@ -33,13 +33,13 @@
                     <div class="carousel-inner">
                         <div class="carousel-item active">
                             <img src="{{ asset('uploads/' . $product->featured_image) }}" alt="Product Image"
-                                class="d-block w-100" />
+                                class="d-block w-100 custom-image-carousel-product" />
                         </div>
                         @if (count($product->images) > 0)
                             @foreach ($product->images as $image)
                                 <div class="carousel-item">
                                     <img src="{{ asset('uploads/' . $image->link) }}" alt="Product Image"
-                                        class="d-block w-100" />
+                                        class="d-block w-100 custom-image-carousel-product" />
                                 </div>
                             @endforeach
                         @endif
@@ -53,7 +53,7 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-                <div class="content-col col--width-50 display-none" id="productDetail">
+                <div class="content-col col--width-50" id="productDetail">
                     <div class="div-block-5 ea-up">
                         <div class="product-info">
                             <h5 class="heading-4 inline text-weight-normal padding-right padding-xsmall text-color-grey">
@@ -383,9 +383,10 @@
         <!-- REVIEW -->
         <div class="flex relative max-width-full align-center"><img
                 src="{{ asset('assets/6303b7b9afc8585f7943565c_shape 2.svg') }}" loading="lazy" alt=""
-                class="absolute bottom-left ea-left" />
-            <div class="flex top-align max-width relative">
-                <div class="card27 padding-small margin-small sticky-top ea-left" id="reviewSummary">
+                class="absolute bottom-left ea-left" style="z-index: -2;" />
+            <div class="row top-align max-width relative">
+                <div class="col-md-3 col-12">
+                    <div class="card27 padding-small margin-small sticky-top ea-left" style="width: calc(100% - 2rem);" id="reviewSummary">
                     <h4 class="text-color-dark-grey">Reviews</h4>
                     <div class="flex gap-small"><img src="{{ asset('assets/Star 1.svg') }}" loading="lazy"
                             alt="" />
@@ -453,16 +454,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-color-dark-grey ea-right" style="width: 100%;">
+                </div>
+                <div class="text-color-dark-grey ea-right col-md-9 col-12" style="width: 100%;">
                     @foreach ($product->reviews as $productReview)
                         <div class="card28 row padding-small margin-small m-3" style="width: calc(100% - 2rem) !important;">
-                            <div class="col-md-3 col-sm-2 col-6">
+                            @if($productReview->images->count() > 0)
+                            <div class="col-md-3 col-6">
                                 <div id="reviewImage{{ $productReview->id }}" class="carousel slide"
                                     data-ride="carousel">
                                     <div class="carousel-inner">
                                         @foreach ($productReview->images as $reviewImage)
                                             <div @class(['carousel-item', 'active' => $loop->iteration == 1]) class="carousel-item active">
-                                                <img class="d-block w-100"
+                                                <img class="d-block custom-image-carousel-review"
                                                     src="{{ asset('uploads' . '/' . $reviewImage->link) }}">
                                             </div>
                                         @endforeach
@@ -479,7 +482,10 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="col-md-9 col-sm-10 col-12">
+                            <div class="col-md-9 col-12">
+                            @else
+                            <div class="col-12">
+                            @endif
                                 <div class="div-block-17">
                                     <h4>{{ $productReview->user->name }}</h4>
                                     <h5 class="heading-4 p-beside-star">
@@ -575,6 +581,9 @@
                     @endforeach
                 </div>
             </div>
+        </div>
+        <div class="row">
+            {!! $product->reviews->render() !!}
         </div>
     </div>
     <div data-w-id="1469b1e8-77d5-4eda-0931-cc24293decef"

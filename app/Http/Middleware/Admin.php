@@ -21,10 +21,10 @@ class Admin
             if (Auth::user()->role_id == 2) {
                 return $next($request);
             } else {
-                return redirect()->route('home');
+                return redirect('/admin/dashboard');
             }
         } else {
-            return redirect()->route('home');
+            return redirect('/admin/dashboard');
         }
     }
 }
