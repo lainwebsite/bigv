@@ -23,7 +23,8 @@ class Transaction extends Model
         'pickup_time_id',
         'user_id',
         'status_id',
-        'self_collection_address_id'
+        'self_collection_address_id',
+        'payment_request_id'
     ];
 
     public function carts()
@@ -57,6 +58,14 @@ class Transaction extends Model
     public function pickup_method()
     {
         return $this->belongsTo(PickupMethod::class, 'pickup_method_id', 'id');
+    }
+    public function pickup_address()
+    {
+        return $this->belongsTo(PickupAddress::class, 'self_collection_address_id', 'id');
+    }
+    public function pickup_address_trashed()
+    {
+        return $this->belongsTo(PickupAddress::class, 'self_collection_address_id', 'id')->withTrashed();
     }
     public function pickup_time()
     {

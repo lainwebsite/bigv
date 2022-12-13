@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        \Artisan::call('cache:clear');
+    }
+    
     /**
      * Display a listing of the resource.
      *

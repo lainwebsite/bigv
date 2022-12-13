@@ -19,28 +19,17 @@ class User
     {
         if (Auth::check()) {
             // if (strpos($request->route()->uri(), "checkout") === false) {
-            //     session()->forget([
-            //         'checkout-items',
-            //         'shipping-price',
-            //         'total-checkout-price',
-            //         'grandtotal-checkout-price',
-            //         'total-checkout-items'
-            //     ]);
-            //     // session()->forget('checkout-items');
-            //     // session()->forget('shipping-price');
-            //     // session()->forget('total-checkout-price');
-            //     // session()->forget('grandtotal-checkout-price');
-            //     // session()->forget('total-checkout-items');
-            // }
-            
-            // if (strpos($request->route()->uri(), "checkout") === false) {
             if (!preg_match("/.*(checkout).*/", $request->route()->uri())) {
                 session()->forget([
                     'checkout-items',
-                    'shipping-price',
                     'total-checkout-price',
                     'grandtotal-checkout-price',
-                    'total-checkout-items'
+                    'total-price-after-discount',
+                    'shipping-voucher-used',
+                    'product-voucher-used',
+                    'total-checkout-items',
+                    'total-discount-product',
+                    'total-discount-shipping'
                 ]);
             }
             

@@ -191,7 +191,26 @@
                                                 <div class="text-size-small text-color-grey">Variant:
                                                     {{ $product->product_variation_name }}</div>
                                             @endif
-                                            <div class="text-size-small text-color-grey">${{ $product->price }}</div>
+                                            @if (count($product->addons) > 0)
+                                                <div class="text-size-small text-color-grey">Addons:
+                                                    {{ implode(", ", $product->addons) }}</div>
+                                            @endif
+                                            <div class="text-size-small text-color-grey">
+                                                @php ($now = \Carbon\Carbon::now())
+                                                @if ($product->discount > 0 && 
+                                                     $now->format("Y-m-d H:i:s") >= $product->discount_start_date &&
+                                                     $now->format("Y-m-d H:i:s") < $product->discount_end_date)
+                                                    <span style="text-decoration: line-through;">${{ number_format($product->product_price, 2, ".", ",") }}</span>
+                                                    <span>${{ number_format($product->cart_price, 2, ".", ",") }}</span>
+                                                @else
+                                                    <span>${{ number_format($product->cart_price, 2, ".", ",") }}</span>
+                                                @endif
+                                                </div>
+                                            {{--@if ($product->product_variation_name != 'novariation')
+                                                <div class="text-size-small text-color-grey">Variant:
+                                                    {{ $product->product_variation_name }}</div>
+                                            @endif
+                                            <div class="text-size-small text-color-grey">${{ $product->price }}</div>--}}
                                         </div>
                                     </div>
                                     <div class="flex gap-small">
@@ -218,9 +237,9 @@
                         <h4 class="heading-8 text-color-dark-grey">Summary</h4>
                         <div class="div-block-24 text-color-grey">
                             <div class="inline">Total Price ({{ $total_items }} items)</div>
-                            <div class="inline">${{ $total_price }}</div>
+                            <div class="inline" id="total-price" total-price="{{ $total_price }}">${{ $total_price }}</div>
                         </div>
-                        <div class="div-block-24 text-color-grey">
+                        <div class="div-block-24 text-color-grey" id="shippingPrice">
                             <div class="inline">Shipping Price</div>
                             <div class="inline">${{ $shipping_price }}</div>
                         </div>
@@ -236,7 +255,7 @@
                         <div class="div-block-24 text-color-dark-grey">
                             <div class="inline text-weight-bold">Total</div>
                             <div class="inline text-weight-bold">$<span
-                                    id="grandtotal-price">{{ $grandtotal_price }}</span></div>
+                                    id="grandtotal-price" grandtotal-price="{{ $grandtotal_price }}">{{ $grandtotal_price }}</span></div>
                         </div><button id="placeOrder" type="submit" class="checkout-button oh-grow w-button"
                             disabled>Place Order</button>
                         {{-- <input id="paymentGateway" type="hidden" name="payment_gateway">
@@ -413,18 +432,19 @@
                     <div class="div-line ml-3 mr-3"></div>
 
                     {{-- SHIPPING VOUCHER --}}
-                    <div class="d-flex justify-content-between m-2">
-                        <div class="form-block-3 w-form">
-                            <input type="text" id="inputShippingDiscountSearch" class="text-field-2 w-input"
-                                maxlength="256" placeholder="Search discount code">
+                    <div id="shippingVoucherContainer">
+                        <div class="d-flex justify-content-between m-2">
+                            <div class="form-block-3 w-form">
+                                <input type="text" id="inputShippingDiscountSearch" class="text-field-2 w-input"
+                                    maxlength="256" placeholder="Search discount code">
+                            </div>
+                            <button type="button" id="btnShippingDiscountSearch" class="search-modal"
+                                tabindex="0">Search</button>
                         </div>
-                        <button type="button" id="btnShippingDiscountSearch" class="search-modal"
-                            tabindex="0">Search</button>
+                        <div class="div-line ml-3 mr-3"></div>
+                        <h4 class="heading-7 ml-2 mb-3">Shipping Discount Voucher</h4>
+                        <div id="shippingVoucher" class="d-flex flex-column modal-list-container-2"></div>
                     </div>
-                    <div class="div-line ml-3 mr-3"></div>
-                    <h4 class="heading-7 ml-2 mb-3">Shipping Discount Voucher</h4>
-                    <div id="shippingVoucher" class="d-flex flex-column modal-list-container-2"></div>
-
                     <div class="d-flex justify-content-end mt-3" style="gap: 10px;">
                         <button id="btnApplyDiscount" type="button" class="pr-4 pl-4 checkout-button w-button"
                             data-dismiss="modal">Apply</button>
@@ -500,14 +520,48 @@
                 console.log("Error!");
             });
         }
+        
+        function cancelVoucher(pickupMethodId) {
+            $.post(url + "/user/checkout/discount/cancel-voucher", {
+                _token: CSRF_TOKEN,
+                pickup_method_id: pickupMethodId
+            }).done(function(data) {
+                $("#btnSelectDiscount").attr("data-toggle", "modal");
+
+                $("#applyVoucher").removeClass("d-none").next().removeClass("d-none");
+                $("#voucherUsed").html("").addClass("d-none").next().addClass("d-none");
+
+                $("#productDiscountUsed").addClass("d-none");
+                $("#productDiscountPrice").html("0");
+
+                $("#shippingDiscountUsed").addClass("d-none");
+                $("#shippingDiscountPrice").html("0");
+
+                $("#grandtotal-price").html(data);
+                
+                $("#productVoucher").removeAttr("selected-voucher");
+                $("#shippingVoucher").removeAttr("selected-voucher");
+            }).fail(function(error) {
+                console.log(error);
+            });
+        }
 
         function clearInput() {
-            $("input, textarea").val("").removeClass("is-invalid");
+            $("input[type=text], input[type=number], textarea").val("").removeClass("is-invalid");
             $(".invalid-feedback").html("");
+            $("#addressType").val("building");
         }
 
         function changePayment(payment) {
             $("#paymentGateway").val(payment);
+        }
+        
+        function setDefaultAddress(addId){
+            // load default delivery address
+            getDetailAddress($("#deliveryAddressData"), addId, true);
+    
+            // load default different delivery address
+            getDetailAddress($("#shippingAddressData"), addId);
         }
     </script>
     <script>
@@ -515,6 +569,7 @@
             pickupTime = "AM";
         var placeOrder = false;
         var address_id = parseInt("{{$first_address_id}}");
+        var shipping_price = "{{ env('SHIPPING_PRICE') }}";
 
         $(document).ready(function() {
             // give target to button modal discount
@@ -525,11 +580,7 @@
                 $("#shippingAddressData").html(`<h4 class="heading-7">You do not have any address yet! Please add one to proceed ordering.</h4>`);
             }
             else{
-                // load default delivery address
-                getDetailAddress($("#deliveryAddressData"), address_id, true);
-    
-                // load default different delivery address
-                getDetailAddress($("#shippingAddressData"), address_id);
+                setDefaultAddress(address_id);
             }
         });
 
@@ -564,10 +615,10 @@
                         value: time.attr("pickup-time-id")
                     }).appendTo('#checkoutForm');
                 }
-
-                var method_type = shipping_method.find("div").html();
+                var method_type = shipping_method.find("div").html().toLowerCase();
                 if (method_type.includes("self")) {
-                    if ($("input[name=self_collection_address_id]").length <= 0 && editAddress != "") {
+                    if ($("input[name=self_collection_address_id]").length <= 0 && $("#pickupShippingDetail").attr(
+                            "selected-address") !== undefined) {
                         $("<input>").attr({
                             type: "hidden",
                             name: "self_collection_address_id",
@@ -688,14 +739,19 @@
         });
 
         $("#deliveryShippingButton").on('click', function() {
+            if ($("#cancelVoucher").is(":not(.d-none)")) {
+                cancelVoucher(1);
+            } else {
+                $("#grandtotal-price").html($("#grandtotal-price").attr("grandtotal-price"));
+            }
+            
+            $("#shippingVoucherContainer").removeClass("d-none");
+            $("#shippingPrice").removeClass("d-none");
+            
             // clear selected address from delivery address and pickup address
             $("#pickupShippingDetail, #deliveryAddressData, #shippingAddressData").removeAttr("selected-address");
 
-            // load default delivery address
-            getDetailAddress($("#deliveryAddressData"), 1, true);
-
-            // load default different delivery address
-            getDetailAddress($("#shippingAddressData"), 1);
+            setDefaultAddress(address_id);
 
             // show delivery content
             $("#deliveryShippingDetail").removeClass("d-none");
@@ -705,6 +761,15 @@
         });
 
         $("#pickupShippingButton").on('click', function() {
+            if ($("#cancelVoucher").is(":not(.d-none)")) {
+                cancelVoucher(2);
+            } else {
+                $("#grandtotal-price").html((parseFloat($("#grandtotal-price").attr("grandtotal-price")) - parseFloat(shipping_price)));
+            }
+            
+            $("#shippingVoucherContainer").addClass("d-none");
+            $("#shippingPrice").addClass("d-none");
+
             // clear selected address from delivery address and pickup address
             $("#pickupShippingDetail, #deliveryAddressData, #shippingAddressData").removeAttr("selected-address");
 
@@ -713,10 +778,11 @@
                 _token: CSRF_TOKEN,
                 keyword: "",
             }).done(function(data) {
-                $("#pickupShippingDetail .container-address").html(data);
+                $("#pickupShippingDetail .container-address").html(data.viewData);
 
                 // set default selected pickup-address
-                $("#pickupShippingDetail").attr("selected-address", 1);
+                // GANTI
+                $("#pickupShippingDetail").attr("selected-address", parseInt(data.firstID));
             }).fail(function(error) {
                 console.log("Error!")
             });
@@ -742,60 +808,58 @@
 
         $("#btnApplyDiscount").on("click", function() {
             $("#btnSelectDiscount").removeAttr("data-toggle");
-            if ($("#productVoucher").attr("selected-voucher") != "" && $("#shippingVoucher").attr(
-                    "selected-voucher") != "") {
-                $.post(url + "/user/checkout/discount/apply-voucher", {
-                    _token: CSRF_TOKEN,
-                    product_voucher: $("#productVoucher").attr("selected-voucher"),
-                    shipping_voucher: $("#shippingVoucher").attr("selected-voucher"),
-                }).done(function(data) {
-
-                    if (data.product_voucher !== undefined) {
-                        $("#applyVoucher").addClass("d-none").next().addClass("d-none");
-                        $("#voucherUsed").html(data.product_voucher.name).removeClass("d-none").next()
-                            .removeClass("d-none");
-                        $("#productDiscountUsed").removeClass("d-none");
-                        $("#productDiscountPrice").html(data.product_voucher.amount);
-                    } else {
-                        $("#applyVoucher").removeClass("d-none").next().removeClass("d-none");
-                        $("#voucherUsed").html("").addClass("d-none").next().addClass("d-none");
-                        $("#productDiscountUsed").addClass("d-none");
-                        $("#productDiscountPrice").html("0");
-                    }
-
-                    if (data.shipping_voucher !== undefined) {
-                        $("#shippingDiscountUsed").removeClass("d-none");
-                        $("#shippingDiscountPrice").html(data.shipping_voucher.amount);
-                    } else {
-                        $("#shippingDiscountUsed").addClass("d-none");
-                        $("#shippingDiscountPrice").html("0");
-                    }
-
-
-                    $("#grandtotal-price").html(data.total_price_after_discount);
-                }).fail(function(error) {
-                    console.log(error);
-                });
+            // alert($("#shippingVoucher").attr("selected-voucher"));
+            if ($("#productVoucher").attr("selected-voucher") == undefined && $("#shippingVoucher").attr("selected-voucher") == undefined){
+                $("#btnSelectDiscount").attr("data-toggle", "modal");
+            }
+            else {
+                if ($("#productVoucher").attr("selected-voucher") != "" || $("#shippingVoucher").attr(
+                        "selected-voucher") != "") {
+                            
+                    $.post(url + "/user/checkout/discount/apply-voucher", {
+                        _token: CSRF_TOKEN,
+                        pickup_method_id: $(".shipping-button.shipping-button-active").attr("pickup-method-id"),
+                        product_voucher: $("#productVoucher").attr("selected-voucher"),
+                        shipping_voucher: $("#shippingVoucher").attr("selected-voucher"),
+                    }).done(function(data) {
+                        $("#total-price").html("$" + data.total_price_before_discount);
+                        if (data.product_voucher !== undefined) {
+                            $("#applyVoucher").addClass("d-none").next().addClass("d-none");
+                            $("#voucherUsed").html(data.product_voucher.name).removeClass("d-none").next()
+                                .removeClass("d-none");
+                            $("#productDiscountUsed").removeClass("d-none");
+                            $("#productDiscountPrice").html(data.total_discount);
+                        } else {
+                            $("#applyVoucher").removeClass("d-none").next().removeClass("d-none");
+                            $("#voucherUsed").html("").addClass("d-none").next().addClass("d-none");
+                            $("#productDiscountUsed").addClass("d-none");
+                            $("#productDiscountPrice").html("0");
+                        }
+    
+                        if (data.shipping_voucher !== undefined) {
+                            if (data.product_voucher === undefined) {
+                                $("#applyVoucher").addClass("d-none").next().addClass("d-none");
+                                $("#voucherUsed").html(data.shipping_voucher.name).removeClass("d-none").next()
+                                .removeClass("d-none");
+                            }
+                            $("#shippingDiscountUsed").removeClass("d-none");
+                            $("#shippingDiscountPrice").html(data.total_discount_shipping);
+                        } else {
+                            $("#shippingDiscountUsed").addClass("d-none");
+                            $("#shippingDiscountPrice").html("0");
+                        }
+    
+    
+                        $("#grandtotal-price").html(data.total_price_after_discount);
+                    }).fail(function(error) {
+                        console.log(error);
+                    });
+                }
             }
         });
 
         $("#cancelVoucher").on("click", function() {
-            $.get(url + "/user/checkout/discount/cancel-voucher").done(function(data) {
-                $("#btnSelectDiscount").attr("data-toggle", "modal");
-
-                $("#applyVoucher").removeClass("d-none").next().removeClass("d-none");
-                $("#voucherUsed").html("").addClass("d-none").next().addClass("d-none");
-
-                $("#productDiscountUsed").addClass("d-none");
-                $("#productDiscountPrice").html("0");
-
-                $("#shippingDiscountUsed").addClass("d-none");
-                $("#shippingDiscountPrice").html("0");
-
-                $("#grandtotal-price").html(data);
-            }).fail(function(error) {
-                console.log(error);
-            });
+            cancelVoucher($(".shipping-button.shipping-button-active").attr("pickup-method-id"));
         });
 
         $(".time-button").on('click', function() {
@@ -821,7 +885,8 @@
                 editAddress = $("#shippingAddressData");
 
                 // default selected-address on another shipping address
-                editAddress.attr("selected-address", 1);
+                // GANTI
+                editAddress.attr("selected-address", address_id);
             } else {
                 $("#shippingAddress").slideUp();
                 shippingAddress = false;

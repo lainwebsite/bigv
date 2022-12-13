@@ -21,7 +21,7 @@
                                         src="{{asset('uploads/'.$cart->vendor->photo)}}" loading="lazy"
                                         alt="" class="image-17" />
                                     <div>
-                                        <h5 class="text-color-dark-grey">{{ $cart->vendor->name }}</h5>
+                                        <h5><a href={{ url('/vendor/'.$cart->vendor->id) }} class="text-style-none text-color-dark-grey">{{ $cart->vendor->name }}</a></h5>
                                         <div class="text-size-small text-color-grey">Location: {{ $cart->vendor->location->name }}
                                         </div>
                                     </div>
@@ -34,7 +34,7 @@
                                             <img src="{{ asset('uploads/'.$product->featured_image) }}" loading="lazy" alt=""
                                                 class="image-18" />
                                             <div>
-                                                <h5 class="text-color-dark-grey">{{ $product->product_name }}</h5>
+                                                <h5><a href={{ url('/product/'.$product->product_id) }} class="text-style-none text-color-dark-grey">{{ $product->product_name }}</a></h5>
                                                 @if ($product->product_variation_name != 'novariation')
                                                     <div class="text-size-small text-color-grey">Variant:
                                                         {{ $product->product_variation_name }}</div>
@@ -48,10 +48,10 @@
                                                     @if ($product->discount > 0 && 
                                                          $now->format("Y-m-d H:i:s") >= $product->discount_start_date &&
                                                          $now->format("Y-m-d H:i:s") < $product->discount_end_date)
-                                                        <span style="text-decoration: line-through;">${{ $product->price }}</span>
-                                                        <span>${{ $product->price - $product->discount }}</span>
+                                                        <span style="text-decoration: line-through;">${{ number_format($product->product_price, 2, ".", ",") }}</span>
+                                                        <span>${{ number_format($product->cart_price, 2, ".", ",") }}</span>
                                                     @else
-                                                        <span>${{ $product->price }}</span>
+                                                        <span>${{ number_format($product->cart_price, 2, ".", ",") }}</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -253,6 +253,7 @@
             var parent = checkbox.parents(".vendor-item");
             var vendorId = parent.attr("vendor-id");
             var cartId = checkbox.val();
+            
 
             if (checkbox.is(":checked")) {
                 var quantity = checkbox.parents().next().find(".product-quantity").val();
@@ -319,14 +320,18 @@
         });
 
         $(document).on("click", ".quantity-change", function() {
-            var qty = $(this).parent().find(".product-quantity");
+            var parent = $(this).parents(".vendor-item");
+            var checkbox = parent.find(".product-cart");
+            var qty = parent.find(".product-quantity");
             if ($(this).attr("logic") == "add") {
                 qty.val(parseInt(qty.val()) + 1);
             } else {
                 if (qty.val() != 1) qty.val(parseInt(qty.val()) - 1);
             }
-
-            updateBaseCheckout($(this).parents(".vendor-item").find(".product-cart"));
+        
+            if (checkbox.is(":checked")) {
+                updateBaseCheckout(checkbox);
+            }
         });
 
         $(document).on("change", ".product-quantity", function() {
@@ -357,33 +362,29 @@
                     _token: CSRF_TOKEN,
                     _method: "DELETE",
                 }).done(function(data) {
-                    var obj = JSON.parse(data);
-
                     if (checkbox.is(":checked")) {
-                        if (Object.keys(cartItems).length <= 1) {
-                            delete cartItems[obj.vendor_id];
-                        } else {
-                            delete cartItems[obj.vendor_id][obj.cart_id];
-                            if (Object.keys(cartItems[obj.vendor_id]).length <= 1) {
-                                delete cartItems[obj.vendor_id];
-                            }
+                        delete cartItems[data.vendor_id][data.cart_id];
+                        if (Object.keys(cartItems[data.vendor_id]).length <= 1) {
+                            delete cartItems[data.vendor_id];
                         }
+
                         updateCheckout();
+                        console.log(cartItems);
                     }
                     parent.remove();
 
-                    if (obj.vendor_product_exist <= 0) {
+                    if (data.vendor_product_exist <= 0) {
                         grandParent.remove();
                     }
 
-                    alert(obj.message);
+                    alert(data.message);
                 }).fail(function(error) {
                     console.log(error);
                 });
             }
         });
 
-        $("#btnProceed").on("click", function(e) {
+        $(document).on("click", "#btnProceed", function(e) {
             if ($(this).attr("disabled") === undefined) {
                 if (Object.keys(cartItems).length > 0) {
                     if (Object.keys(cartItems[Object.keys(cartItems)[0]]).length > 0) {

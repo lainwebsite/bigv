@@ -13,38 +13,28 @@ use App\Models\Transaction;
 use App\Models\OptionCart;
 use App\Models\Vendor;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Traits\Tappable;
 use DB;
 
 class CheckoutController extends Controller
 {
+    public function __construct()
+    {
+        \Artisan::call('cache:clear');
+    }
+    
     public function getCheckout(Request $request)
     {
         if (
             session()->has('checkout-items') &&
-            session()->has('shipping-price') &&
             session()->has('total-checkout-price') &&
             session()->has('grandtotal-checkout-price') &&
             session()->has('total-checkout-items')
         ) {
             $addresses = UserAddress::where('user_id', auth()->user()->id)->get();
-
-            // $checkout_items = Vendor::with(['products' => function ($q1) {
-            //     $q1->select('vendor_id', 'carts.id as cart_id', 'products.featured_image', 'products.name as product_name', 'product_variations.name as product_variation_name', 'carts.price', 'carts.quantity', 'carts.user_id')
-            //         ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
-            //         ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
-            //         ->whereIn('carts.id', session()->get('checkout-items'))
-            //         ->whereNull('carts.transaction_id')
-            //         ->where('user_id', auth()->user()->id);
-            // }, 'location'])->whereHas('products', function ($q1) {
-            //     $q1->select('vendor_id')
-            //         ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
-            //         ->join('carts', 'carts.product_variation_id', '=', 'product_variations.id')
-            //         ->whereIn('carts.id', session()->get('checkout-items'))
-            //         ->whereNull('carts.transaction_id')
-            //         ->where('user_id', auth()->user()->id);
-            // })->orderBy('id', 'ASC')->get();
             
             $sub = OptionCart::join('addon_options', 'addon_options.id', '=', 'option_carts.addon_option_id')
                 ->select('addon_options.name as addon_name', 'addon_options.price as addon_price', 'option_carts.cart_id')
@@ -56,11 +46,12 @@ class CheckoutController extends Controller
                     'products.featured_image',
                     'products.name as product_name',
                     'product_variations.name as product_variation_name',
+                    'product_variations.price as product_price',
                     'product_variations.discount',
                     'product_variations.discount_start_date',
                     'product_variations.discount_end_date',
                     'carts.id as cart_id',
-                    'carts.price',
+                    'carts.price as cart_price',
                     'carts.quantity',
                     'carts.user_id',
                     'addon_carts.addon_name',
@@ -92,7 +83,8 @@ class CheckoutController extends Controller
                     'vendor' => (object) $vendor,
                     'products' => $vendor->products->mapToGroups(function ($item, $key) use ($addons_name, $addons_price) {
                         $product = collect($item)->except(['addon_name', 'addon_price'])->toArray();
-                        $product['price'] = $product['price'] + $addons_price[$product['cart_id']];
+                        $product['product_price'] = $product['product_price'] + $addons_price[$product['cart_id']];
+                        $product['cart_price'] = $product['cart_price'] + $addons_price[$product['cart_id']];
                         $product += [
                             'addons' => $addons_name[$product['cart_id']][0] == null ? [] : $addons_name[$product['cart_id']]->toArray()
                         ];
@@ -114,7 +106,7 @@ class CheckoutController extends Controller
                 'checkouts' => $checkout_items,
                 'total_price' => session()->get('total-checkout-price'),
                 'total_items' => session()->get('total-checkout-items'),
-                'shipping_price' => session()->get('shipping-price'),
+                'shipping_price' => (float) env('SHIPPING_PRICE'),
                 'grandtotal_price' => session()->get('grandtotal-checkout-price'),
             ]);
         }
@@ -144,12 +136,11 @@ class CheckoutController extends Controller
                 }
 
                 if (count($cart_checkout_id) > 0) {
-                    $shipping_price = 25;
+                    $shipping_price = (float) env('SHIPPING_PRICE');
 
                     session()->put('total-checkout-items', $total_items);
                     session()->put('total-checkout-price', $total_price);
                     session()->put('grandtotal-checkout-price', $total_price + $shipping_price);
-                    session()->put('shipping-price', $shipping_price);
                     session()->put('checkout-items', $cart_checkout_id);
                     session()->save();
 
@@ -163,7 +154,9 @@ class CheckoutController extends Controller
 
     public function buyNowCheckout(Request $request)
     {
-        $request['product_addons_id'] = json_decode($request->product_addons_id);
+        if ($request->product_addons_id != "" || $request->product_addons_id != null) {
+            $request['product_addons_id'] = json_decode($request->product_addons_id);
+        }
         
         $request->validate([
             'quantity' => 'required|numeric',
@@ -171,26 +164,108 @@ class CheckoutController extends Controller
             'product_addons_id' => 'sometimes|nullable|array',
         ]);
         
-        $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
-        if ($request->quantity > 0) {
-            if ($productVariation == null) {
-                return redirect()->back();
+        // $cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('product_variation_id', $request->product_variation_id)->first();
+        $addons_request = '';
+        $addons = [];
+        if ($request->product_addons_id != null) {
+            $product_addons_id = $request->product_addons_id;
+            if (gettype($request->product_addons_id) == "string") {
+                $product_addons_id = json_decode($request->product_addons_id, true);
+                $addons = $product_addons_id;
+            } else if (gettype($request->product_addons_id) == "array") {
+                $addons = $product_addons_id;
             }
-                
-            $data = $request->except('product_addons_id');
-            $data += [
-                'price' => $productVariation->price,
-                'user_id' => auth()->user()->id,
-            ];
+            if (count($product_addons_id) > 1) sort($product_addons_id);
+            $addons_request = join("",$product_addons_id);
+        }
+
+        $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
+        
+        // Mengambil semua cart berdasarkan (transaksi = null), (user id = auth()->user()->id), dan (product variation id) -->> disini kemungkinan cart dihasilkan lebih dari 1
+        $temp_cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('product_variation_id', $request->product_variation_id)->pluck('id')->toArray();
+        $cart = null;
+        if ($temp_cart != null) {
+            // Looping tiap cart dimana memiliki (product variation id = $request->product_variation_id)
+            foreach ($temp_cart as $c) {
+                // Mengambil addon tiap cart
+                $temp_addons = OptionCart::where('cart_id', $c)->get()->implode('addon_option_id', '');
+                // Mengecek apakah addon pada cart sama dengan addon yang dikirimkan melalui ($request)
+                if ($temp_addons == $addons_request) {
+                    $cart = Cart::whereNull('transaction_id')->where('user_id', auth()->user()->id)->where('id', $c)->first();
+                    break;
+                }
+            }
+        }
+        
+        if ($productVariation == null) {
+            return redirect()->back()->with('error', 'Please choose at least one product.');
+        }
+        
+        if ($request->quantity > 0) {
+            $now = \Carbon\Carbon::now()->format("Y-m-d H:i:s");
             
-            $cart = Cart::create($data);
-            if ($request->product_addons_id) {
-                if (count($request->product_addons_id) > 0) {
-                    foreach ($request->product_addons_id as $addons_id) {
-                        OptionCart::create([
-                            'addon_option_id' => $addons_id,
-                            'cart_id' => $cart->id
-                        ]);
+            if ($cart != null) {
+                $addon_cart = OptionCart::where('cart_id', $cart->id)
+                                ->orderBy('id', 'ASC')
+                                ->pluck('addon_option_id')
+                                ->toArray();
+                                
+                if (count($addon_cart) <= 0) { 
+                    $dataUpdated = [
+                        'quantity' => $request->quantity,
+                        'price' => ($productVariation->discount != 0 && ($now >= $productVariation->discount_start_date) && ($now < $productVariation->discount_end_date)) ? $productVariation->discount : $productVariation->price
+                    ];
+
+                    $cart = tap($cart)->update($dataUpdated);
+                } else {
+                    $addons_db = join("", $addon_cart);
+
+                    if ($addons_request != "") {
+                        // Check if cart has addons or not
+                        if ($addons_db == $addons_request) {
+                            $dataUpdated = [
+                                'quantity' => $request->quantity,
+                                'price' => ($productVariation->discount != 0 && ($now >= $productVariation->discount_start_date) && ($now < $productVariation->discount_end_date)) ? $productVariation->discount : $productVariation->price
+                            ];
+                            
+                            $cart = tap($cart)->update($dataUpdated);
+                        } else {
+                            $data = $request->except('product_addons_id');
+                            $data += [
+                                'price' => ($productVariation->discount != 0 && ($now >= $productVariation->discount_start_date) && ($now < $productVariation->discount_end_date)) ? $productVariation->discount : $productVariation->price,
+                                'user_id' => auth()->user()->id,
+                            ];
+                            
+                            $cart = Cart::create($data);
+                            if ($request->product_addons_id) {
+                                if (count($request->product_addons_id) > 0) {
+                                    foreach ($request->product_addons_id as $addons_id) {
+                                        OptionCart::create([
+                                            'addon_option_id' => $addons_id,
+                                            'cart_id' => $cart->id
+                                        ]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                $data = $request->except('product_addons_id');
+                $data += [
+                    'price' => ($productVariation->discount != 0 && ($now >= $productVariation->discount_start_date) && ($now < $productVariation->discount_end_date)) ? $productVariation->discount : $productVariation->price,
+                    'user_id' => auth()->user()->id,
+                ];
+                
+                $cart = Cart::create($data);
+                if ($request->product_addons_id) {
+                    if (count($request->product_addons_id) > 0) {
+                        foreach ($request->product_addons_id as $addons_id) {
+                            OptionCart::create([
+                                'addon_option_id' => $addons_id,
+                                'cart_id' => $cart->id
+                            ]);
+                        }
                     }
                 }
             }
@@ -200,16 +275,15 @@ class CheckoutController extends Controller
                                 ->where('option_carts.cart_id', $cart->id)
                                 ->select('addon_options.price as addon_price')
                                 ->sum('addon_options.price');
-                                
-            $cart['price'] = $cart['price'] + $addons_price;
 
-            $shipping_price = 25;
+            $cart->price = $cart->price + $addons_price;
 
-            $total_price = $cart->quantity * $cart->price; // WARNING (price can be updated by user)
+            $shipping_price = (float) env('SHIPPING_PRICE');
+
+            $total_price = $cart->quantity * $cart->price;
             session()->put('total-checkout-items', $cart->quantity);
             session()->put('total-checkout-price', $total_price);
             session()->put('grandtotal-checkout-price', $total_price + $shipping_price);
-            session()->put('shipping-price', $shipping_price);
             session()->put('checkout-items', [$cart->id]);
             session()->save();
 
@@ -232,14 +306,34 @@ class CheckoutController extends Controller
             'self_collection_address_id' => 'required_without:billing_address_id|numeric',
             'shipping_address_id' => 'sometimes|required|numeric',
         ]);
+        
+        if (!session()->has('grandtotal-checkout-price') || !session()->has('checkout-items')) {
+            return redirect('/user/cart');
+        }
+        
+        $grandtotal_checkout_price = (float) session()->get('grandtotal-checkout-price', 0);
+        if (session()->has('total-price-after-discount')) {
+            $grandtotal_checkout_price = (float) session()->get('total-price-after-discount', 0);
+        }
+        $shipping_price = (float) env('SHIPPING_PRICE');
+
+        if ($request->pickup_method_id == 2) {
+            if (session()->has('total-price-after-discount')) {
+                $shipping_price = 0;
+            }
+            $grandtotal_checkout_price -= $shipping_price;
+            $shipping_price = 0;
+        }
 
         $data = $request->all();
         $data += [
-            'total_price' => session()->get('total-checkout-price'),
-            'shipping_fee' => session()->get('shipping-price'),
+            'total_price' => $grandtotal_checkout_price,
+            'shipping_fee' => $shipping_price,
             'user_id' => auth()->user()->id,
             'status_id' => 1, // default "Order Pending"
-            'payment_method_id' => 1, // contoh
+            'payment_method_id' => 2, // Pay Now
+            'product_discount_total' => session()->get('total-discount-product', 0),
+            'shipping_discount_total' => session()->get('total-discount-shipping', 0),
         ];
 
         $transaction = Transaction::create($data);
@@ -251,20 +345,7 @@ class CheckoutController extends Controller
         }
 
         $paynow = new PaynowController();
-        return $paynow->pay(session()->get('grandtotal-checkout-price'), $transaction->id);
-        // return $paynow->pay(session()->get('total-checkout-price'), $transaction->id);
-
-        // $transaction = Transaction::create([
-        //     'delivery_date' => '2022-11-29',
-        //     'pickup_method_id' => '1',
-        //     'pickup_time_id' => '1',
-        //     'billing_address_id' => '1',
-        //     'total_price' => 0.8,
-        //     'shipping_fee' => 25,
-        //     'user_id' => 1,
-        //     'status_id' => 1,
-        //     'payment_method_id' => 1,
-        // ]);
+        return $paynow->pay($grandtotal_checkout_price, $transaction->id);
     }
 
     public function transitStatusPayment(Request $request)
@@ -282,5 +363,18 @@ class CheckoutController extends Controller
         } while ($timeDiff > 0);
 
         return redirect('/user/transaction');
+    }
+    
+    public function rePayment(Request $request)
+    {
+        $transaction_id = $request->get('transaction_id', 0);
+        $transaction = Transaction::where('user_id', auth()->user()->id)->where('id', $transaction_id)->first();
+        
+        if ($transaction->status_id == 1) {
+            $paynow = new PaynowController();
+            return $paynow->pay($transaction->total_price, $transaction->id);
+        }
+        
+        return redirect()->back();
     }
 }

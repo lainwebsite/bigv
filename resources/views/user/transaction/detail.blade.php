@@ -3,9 +3,13 @@
 @section('page-title')
     Transaction - Big V
 @endsection
-
 @section('head-extra')
     <link href="{{ asset('assets/css/style-transaction.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        .transaction-card:hover, .status-button-like:hover {
+            cursor: default !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -28,123 +32,128 @@
                   </div>
                 </div>
             </div>
-            @php
+            {{--@php
                 $vendors = [];
-                foreach ($transaction->carts as $key => $cart) {
+                foreach ($transaction->transaction->carts as $key => $cart) {
                     if (!in_array($cart->product_variation->product->vendor_id, $vendors)) {
                         array_push($vendors, $cart->product_variation->product->vendor_id);
                     }
                 }
-            @endphp
+            @endphp--}}
             <div class="transactions-column">
                 <form action="{{ route('user.product-review.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="transaction_id" value="{{ $transaction->id }}">
+                    <input type="hidden" name="transaction_id" value="{{ $transaction->transaction->id }}">
                     <div class="transaction-card">
                         <div class="flex space-between">
                             <div class="flex gap-small">
                                 <div>
-                                    <h5 class="text-color-dark-grey">Transaction ID: {{ $transaction->id }}</h5>
+                                    <h5 class="text-color-dark-grey">Transaction ID: {{ $transaction->transaction->id }}</h5>
                                     <div class="text-size-small text-color-grey">
-                                        {{ date('d F', strtotime($transaction->created_at)) }}</div>
+                                        {{ date('d F Y', strtotime($transaction->transaction->created_at)) }}</div>
                                 </div>
                             </div>
                             <div class="flex gap-small">
                                 <h5 class="text-color-dark-grey">Status</h5><a href="#"
                                     class="status-button-like w-inline-block">
-                                    <div>{{ $transaction->status->name }}</div>
+                                    <div>{{ $transaction->transaction->status->name }}</div>
                                 </a>
                             </div>
                         </div>
-                        @foreach ($vendors as $vendor)
-                            @php($counter = 0)
-                            @foreach ($transaction->carts as $key => $cart)
-                                @if ($cart->product_variation->product->vendor_id == $vendor && $counter == 0)
-                                    @php($counter = 1)
-                                    <div class="div-line-sumarry"></div>
-                                    <div class="flex space-between">
-                                        <div class="flex gap-small"><img
-                                                src="{{ asset('uploads/' . $cart->product_variation->product->vendor->photo) }}"
-                                                loading="lazy" alt="" class="vendor-image" />
-                                            <div>
-                                                <h5 class="text-color-dark-grey">
-                                                    {{ $cart->product_variation->product->vendor->name }}</h5>
-                                            </div>
+                        @php ($currentVendor = 0)
+                        @foreach ($transaction->carts as $cart)
+                            @if ($currentVendor != $cart->vendor_id)
+                                <div class="div-line-sumarry"></div>
+                                <div class="flex space-between">
+                                    <div class="flex gap-small"><img
+                                            src="{{ asset('uploads/' . $cart->vendor_photo) }}"
+                                            loading="lazy" alt="" class="vendor-image" />
+                                        <div>
+                                            <h5 class="text-color-dark-grey">
+                                                {{ $cart->vendor_name }}</h5>
                                         </div>
                                     </div>
-                                @endif
-                                @if ($cart->product_variation->product->vendor_id == $vendor)
-                                    <div style="display: flex; flex-direction: column;">
-                                        <div class="vendor-item">
-                                            <div class="flex gap-medium"><img
-                                                    src="{{ asset('uploads/' . $cart->product_variation->product->featured_image) }}"
-                                                    loading="lazy" sizes="(max-width: 479px) 61vw, 70px" alt=""
-                                                    class="image-18" />
-                                                <div>
-                                                    <h5 class="text-color-dark-grey">
-                                                        {{ $cart->product_variation->product->name }}</h5>
-                                                    <div class="text-size-small text-color-grey">
-                                                        {{ $cart->product_variation->name }}</div>
-                                                    <div class="text-size-small text-color-grey">${{ $cart->price }}</div>
-                                                </div>
-                                            </div>
-                                            <div class="div-block-36">
-                                                <div>{{ $cart->quantity }}x</div>
-                                                <div>${{ $cart->price }}</div>
-                                            </div>
+                                </div>
+                                @php($current_vendor = $cart->vendor_id)
+                            @endif
+                            <div style="display: flex; flex-direction: column;">
+                                <div class="vendor-item">
+                                    <div class="flex gap-medium"><img
+                                            src="{{ asset('uploads/' . $cart->product_featured_image) }}"
+                                            loading="lazy" sizes="(max-width: 479px) 61vw, 70px" alt=""
+                                            class="image-18" />
+                                        <div>
+                                            <h5 class="text-color-dark-grey">{{ $cart->product_name }}</h5>
+                                            @if ($cart->product_variation_name != 'novariation')
+                                                <div class="text-size-small text-color-grey">Variation: {{ $cart->product_variation_name }}</div>
+                                            @endif
+                                            @if ($cart->addons != null)
+                                                <div class="text-size-small text-color-grey">Addons: {{ $cart->addons }}</div>
+                                            @endif
+                                            <div class="text-size-small text-color-grey">${{ number_format($cart->cart_price, 2, ".", ",") }}</div>
                                         </div>
-                                        @if ($transaction->is_reviewed == 0)
-                                            <div class="flex"
-                                                style="flex-direction: column; gap: 15px; margin-bottom: 18px;">
-                                                <div class="flex" style="justify-content:space-between; width: 100%;">
-                                                    <div class="text-size-small text-color-grey">Submit your Review</div>
-                                                    <div class="flex">
-                                                        @for ($j = 1; $j <= 5; $j++)
-                                                            <div class="c-product-rating__star star-review"
-                                                                style="cursor: pointer;" step="{{ $j }}">
-                                                                <div class="icon">
-                                                                    <div>
-                                                                        <img src="{{ asset('assets/Star 1.svg') }}"
-                                                                            loading="lazy" alt="" />
-                                                                    </div>
-                                                                </div>
+                                    </div>
+                                    <div class="div-block-36">
+                                        <div>{{ $cart->qty }}x</div>
+                                        <div>${{ number_format($cart->cart_price, 2, ".", ",") }}</div>
+                                    </div>
+                                </div>
+                                @if ($transaction->transaction->is_reviewed == 0 && ($transaction->transaction->status_id == 2 || $statusPayment == "1"))
+                                    <div class="flex"
+                                        style="flex-direction: column; gap: 15px; margin-bottom: 18px;">
+                                        <div class="flex" style="justify-content:space-between; width: 100%;">
+                                            <div class="text-size-small text-color-grey">Submit your Review</div>
+                                            <div class="flex">
+                                                @for ($j = 1; $j <= 5; $j++)
+                                                    <div class="c-product-rating__star star-review"
+                                                        style="cursor: pointer;" step="{{ $j }}">
+                                                        <div class="icon">
+                                                            <div>
+                                                                <img src="{{ asset('assets/Star 1.svg') }}"
+                                                                    loading="lazy" alt="" />
                                                             </div>
-                                                        @endfor
-                                                    </div>
-                                                    <input name="rating[{{ $cart->id }}]" type="hidden"
-                                                        value="5">
-                                                </div>
-                                                <div class="flex" style="width: 100%; gap: 10px; flex-direction: column;">
-                                                    <div class="flex" id="photo-review-container-{{ $cart->id }}"
-                                                        style="width: 100%; flex-wrap: wrap; gap: 10px;">
-
-                                                    </div>
-                                                    <div id="add-photo-button-{{ $cart->id }}" class="flex"
-                                                        style="justify-content: flex-end; width: 100%;">
-                                                        <div class="button-3 w-inline-block button-add-photo-review"
-                                                            onclick="addPhotoReview({{ $cart->id }})"
-                                                            style="height: auto !important; padding: 5px 10px !important;">
-                                                            <div class="text-color-white"
-                                                                style="font-size: 12px; white-space: nowrap;">
-                                                                Add
-                                                                Photo</div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <textarea name="description[{{ $cart->id }}]"
-                                                    style="width: 100%; border-radius: 10px; padding: 10px; resize: none; border: #c5c5c5 1px solid; font-size: 0.875rem;"
-                                                    rows="2"></textarea>
+                                                @endfor
                                             </div>
-                                        @endif
+                                            <input name="rating[{{ $cart->cart_id }}]" type="hidden"
+                                                value="5">
+                                        </div>
+                                        <div class="flex" style="width: 100%; gap: 10px; flex-direction: column;">
+                                            <div class="flex" id="photo-review-container-{{ $cart->cart_id }}"
+                                                style="width: 100%; flex-wrap: wrap; gap: 10px;">
+
+                                            </div>
+                                            <div id="add-photo-button-{{ $cart->cart_id }}" class="flex"
+                                                style="justify-content: flex-end; width: 100%;">
+                                                <div class="button-3 w-inline-block button-add-photo-review"
+                                                    onclick="addPhotoReview({{ $cart->cart_id }})"
+                                                    style="height: auto !important; padding: 5px 10px !important;">
+                                                    <div class="text-color-white"
+                                                        style="font-size: 12px; white-space: nowrap;">
+                                                        Add
+                                                        Photo</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <textarea name="description[{{ $cart->cart_id }}]"
+                                            style="width: 100%; border-radius: 10px; padding: 10px; resize: none; border: #c5c5c5 1px solid; font-size: 0.875rem;"
+                                            rows="2"></textarea>
                                     </div>
                                 @endif
-                            @endforeach
+                            </div>
                         @endforeach
-                        @if ($transaction->is_reviewed == 0)
+                        @if ($transaction->transaction->is_reviewed == 0 && ($transaction->transaction->status_id == 2 || $statusPayment == "1"))
                             <div class="flex" style="justify-content: flex-end;">
                                 <button class="button-3 button-size--small w-inline-block">
                                     <div class="text-color-white">Submit Review</div>
                                 </button>
+                            </div>
+                        @elseif ($transaction->transaction->status_id == 1 && $statusPayment == "0")
+                            <div class="flex" style="justify-content: flex-end;">
+                                <a href="{{ url('user/cart/checkout/re-pay?transaction_id='.$transaction->transaction->id) }}" class="button-3 button-size--small w-inline-block">
+                                    <div class="text-color-white">Re-Pay</div>
+                                </a>
                             </div>
                         @endif
                     </div>
@@ -154,7 +163,7 @@
                         <h4>Shipping Method</h4>
                         <div>
                             <div class="checkout-buttons">
-                                @if ($transaction->pickup_method_id == 1)
+                                @if ($transaction->transaction->pickup_method_id == 1)
                                 <a href="#" class='delivery-button w-inline-block'>
                                     <svg width="33" height="33" viewBox="0 0 33 33" class="shipping-icon"
                                         fill="#444349" xmlns="http://www.w3.org/2000/svg">
@@ -168,7 +177,7 @@
                                     <div class="text-size-small">Delivery</div>
                                 </a>
                                 @endif
-                                @if ($transaction->pickup_method_id == 2)
+                                @if ($transaction->transaction->pickup_method_id == 2)
                                 <a href="#" class='delivery-button w-inline-block'>
                                     <svg width="24" height="24" viewBox="0 0 24 24" class="shipping-icon"
                                         fill="#444349" xmlns="http://www.w3.org/2000/svg">
@@ -183,72 +192,97 @@
                         </div>
                     </div>
                     <div class="div-line"></div>
-                    <h4 class="heading-6 margin-vertical margin-small">Delivery Address</h4>
-                    <div class="delivery-add-item">
-                        <div>
-                            <h4 class="heading-7">{{ $transaction->user->name }}</h4>
-                            <div class="text-size-small">{{ $billingAddress->phone }}</div>
-                            <div class="text-size-small">
-                                @if ($billingAddress->building_name != null)
-                                <p class="mb-2">
-                                    {{ $billingAddress->block_number }}
-                                    {{ $billingAddress->street }}<br>#{{ $billingAddress->unit_level }}-{{ $billingAddress->unit_number }}
-                                    {{ $billingAddress->building_name }}<br>Singapore
-                                    {{ $billingAddress->postal_code }}</p>
-                                <small>{{ $billingAddress->additional_info }}</small>
-                                @else
-                                <p class="mb-2">
-                                    {{ $billingAddress->unit_number }}
-                                    {{ $billingAddress->street }}<br>Singapore
-                                    {{ $billingAddress->postal_code }}</p>
-                                    <small>{{ $billingAddress->additional_info }}</small>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    @if ($transaction->shipping_address_id != null)
-                    <div class="different-add-div">
-                        
-                            <div class="div-block-26">
-                                <h4 class="heading-7">Shipped to Different Address</h4><img
-                                    src="{{ asset('assets/630b960db00126d372dcaef4_check.svg') }}" loading="lazy"
-                                    alt="" />
-                            </div>
-                            <div class="div-line"></div>
-                        
-                        <div class="div-block-26">
+                    @if ($transaction->transaction->pickup_method_id == 1)
+                        <h4 class="heading-6 margin-vertical margin-small">Delivery Address</h4>
+                        <div class="delivery-add-item">
                             <div>
-                                <h4 class="heading-7">{{ $transaction->user->name }}</h4>
-                                <div class="text-size-small">{{ $shippingAddress->phone }}</div>
+                                <h4 class="heading-7">{{ $transaction->transaction->user->name }}</h4>
+                                <div class="text-size-small">{{ $billingAddress->phone }}</div>
                                 <div class="text-size-small">
-                                    @if ($shippingAddress->building_name != null)
-                                    <p class="mb-2">{{ $shippingAddress->block_number }}
-                                        {{ $shippingAddress->street }}<br>#{{ $shippingAddress->unit_level }}-{{ $shippingAddress->unit_number }}
-                                        {{ $shippingAddress->building_name }}<br>Singapore
-                                        {{ $shippingAddress->postal_code }}</p>
-                                    <small>{{ $shippingAddress->additional_info }}</small>
+                                    @if ($billingAddress->building_name != null)
+                                    <p class="mb-2">
+                                        {{ $billingAddress->block_number }}
+                                        {{ $billingAddress->street }}<br>#{{ $billingAddress->unit_level }}-{{ $billingAddress->unit_number }}
+                                        {{ $billingAddress->building_name }}<br>Singapore
+                                        {{ $billingAddress->postal_code }}</p>
+                                    <small>{{ $billingAddress->additional_info }}</small>
                                     @else
                                     <p class="mb-2">
-                                        {{ $shippingAddress->unit_number }}
-                                        {{ $shippingAddress->street }}<br>Singapore
-                                        {{ $shippingAddress->postal_code }}</p>
-                                        <small>{{ $shippingAddress->additional_info }}</small>
+                                        {{ $billingAddress->unit_number }}
+                                        {{ $billingAddress->street }}<br>Singapore
+                                        {{ $billingAddress->postal_code }}</p>
+                                        <small>{{ $billingAddress->additional_info }}</small>
                                     @endif
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        @if ($transaction->transaction->shipping_address_id != null)
+                        <div class="different-add-div">
+                            
+                                <div class="div-block-26">
+                                    <h4 class="heading-7">Shipped to Different Address</h4><img
+                                        src="{{ asset('assets/630b960db00126d372dcaef4_check.svg') }}" loading="lazy"
+                                        alt="" />
+                                </div>
+                                <div class="div-line"></div>
+                            
+                            <div class="div-block-26">
+                                <div>
+                                    <h4 class="heading-7">{{ $transaction->transaction->user->name }}</h4>
+                                    <div class="text-size-small">{{ $shippingAddress->phone }}</div>
+                                    <div class="text-size-small">
+                                        @if ($shippingAddress->building_name != null)
+                                        <p class="mb-2">{{ $shippingAddress->block_number }}
+                                            {{ $shippingAddress->street }}<br>#{{ $shippingAddress->unit_level }}-{{ $shippingAddress->unit_number }}
+                                            {{ $shippingAddress->building_name }}<br>Singapore
+                                            {{ $shippingAddress->postal_code }}</p>
+                                        <small>{{ $shippingAddress->additional_info }}</small>
+                                        @else
+                                        <p class="mb-2">
+                                            {{ $shippingAddress->unit_number }}
+                                            {{ $shippingAddress->street }}<br>Singapore
+                                            {{ $shippingAddress->postal_code }}</p>
+                                            <small>{{ $shippingAddress->additional_info }}</small>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                    @else
+                        <h4 class="heading-6 margin-vertical margin-small">Pickup Address</h4>
+                        <div class="delivery-add-item">
+                            <div>
+                                <h4 class="heading-7">{{ $transaction->transaction->pickup_address->name }}</h4>
+                                <div class="text-size-small">
+                                    @if ($transaction->transaction->pickup_address->building_name != null)
+                                    <p class="mb-2">
+                                        {{ $transaction->transaction->pickup_address->block_number }}
+                                        {{ $transaction->transaction->pickup_address->street }}<br>#{{ $transaction->transaction->pickup_address->unit_level }}-{{ $transaction->transaction->pickup_address->unit_number }}
+                                        {{ $transaction->transaction->pickup_address->building_name }}<br>Singapore
+                                        {{ $transaction->transaction->pickup_address->postal_code }}</p>
+                                    <small>{{ $transaction->transaction->pickup_address->additional_info }}</small>
+                                    @else
+                                    <p class="mb-2">
+                                        {{ $transaction->transaction->pickup_address->unit_number }}
+                                        {{ $transaction->transaction->pickup_address->street }}<br>Singapore
+                                        {{ $transaction->transaction->pickup_address->postal_code }}</p>
+                                        <small>{{ $transaction->transaction->pickup_address->additional_info }}</small>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     @endif
                     <div class="div-line"></div>
                     <h4 class="heading-6 margin-vertical margin-small text-color-dark-grey">Shipping/Pickup Time</h4>
                     <div class="delivery-add-item">
                         <div>
                             <div class="text-size-small text-color-grey">Delivery Date</div>
-                            <h5 class="text-color-grey">{{ $transaction->delivery_date }}</h5>
+                            <h5 class="text-color-grey">{{ $transaction->transaction->delivery_date }}</h5>
                         </div>
                     </div>
                     <div class="div-block-27">
-                        @if ($transaction->pickup_time_id == 1)
+                        @if ($transaction->transaction->pickup_time_id == 1)
                         <a href="#" class="delivery-button w-inline-block">
                             <div>AM</div>
                         </a>
@@ -262,7 +296,7 @@
             </div>
             <div class="cart-summary">
                 <h4 class="text-color-dark-grey">Discount</h4>
-                @foreach ($transaction->transaction_discounts as $td)
+                @foreach ($transaction->transaction->transaction_discounts as $td)
                     <a href="#" class="payment-gateway-button w-inline-block">
                         <div>
                             <div class="text-weight-bold">{{$td->discount->name}}</div>
@@ -272,21 +306,31 @@
                 @endforeach
                 <h4 class="heading-8 text-color-dark-grey">Summary</h4>
                 <div class="div-block-24 text-color-grey">
-                    <div class="inline">Total Price ({{$transaction->carts->count()}} items)</div>
-                    <div class="inline">${{$transaction->total_price}}</div>
+                    <div class="inline">Total Price ({{ $transaction->transaction->carts->count() }} items)</div>
+                    <div class="inline">${{ number_format(($transaction->transaction->total_price - $transaction->transaction->shipping_fee + $transaction->transaction->product_discount_total + $transaction->transaction->shipping_discount_total), 2, ".", ",") }}</div>
                 </div>
+                @if ($transaction->transaction->shipping_fee > 0)
                 <div class="div-block-24 text-color-grey">
                     <div class="inline">Shipping Price</div>
-                    <div class="inline">${{$transaction->shipping_fee}}</div>
+                    <div class="inline">${{ number_format($transaction->transaction->shipping_fee, 2, ".", ",") }}</div>
                 </div>
+                @endif
+                @if ($transaction->transaction->product_discount_total > 0)
                 <div class="div-block-24 text-color-grey">
-                    <div class="inline">Discounts</div>
-                    <div class="inline">- ${{$transaction->product_discount_total + $transaction->shipping_discount_total}}</div>
+                    <div class="inline">Product Discount</div>
+                    <div class="inline">- ${{ number_format($transaction->transaction->product_discount_total, 2, ".", ",") }}</div>
                 </div>
+                @endif
+                @if ($transaction->transaction->shipping_discount_total > 0)
+                <div class="div-block-24 text-color-grey">
+                    <div class="inline">Shipping Discount</div>
+                    <div class="inline">- ${{ number_format($transaction->transaction->shipping_discount_total, 2, ".", ",") }}</div>
+                </div>
+                @endif
                 <div class="div-line-sumarry"></div>
                 <div class="div-block-24 text-color-dark-grey">
                     <div class="inline text-weight-bold">Total</div>
-                    <div class="inline text-weight-bold">${{$transaction->total_price + $transaction->shipping_fee - ($transaction->product_discount_total + $transaction->shipping_discount_total)}}</div>
+                    <div class="inline text-weight-bold">${{ number_format($transaction->transaction->total_price, 2, ".", ",") }}</div>
                 </div>
             </div>
         </div>

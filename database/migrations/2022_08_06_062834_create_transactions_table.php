@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreign('billing_address_id')->references('id')->on('user_addresses')->onDelete('cascade');
             $table->unsignedBigInteger('shipping_address_id')->index()->nullable();
             $table->foreign('shipping_address_id')->references('id')->on('user_addresses')->onDelete('cascade');
+            $table->text('payment_request_id')->nullable();
             $table->timestamps();
         });
     }

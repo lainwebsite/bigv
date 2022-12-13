@@ -52,7 +52,7 @@
 
         <div>
             <div class="flex flex-center top-align relative archive-flex"
-                style="width: 100vw; min-width: 0 !important; max-width: 1200px; margin:auto;">
+                style="width: 100vw; min-width: 0 !important; max-width: 1200px;margin: 0 auto 60px auto;;">
                 <div class="filter card27 padding-small text-color-grey sticky-filter" style="padding: 2rem;">
                     <h4>Categories</h4>
                     <div class="w-form">

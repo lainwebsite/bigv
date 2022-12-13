@@ -39,7 +39,6 @@
                                 
                                 @if ($startDate <= $dateNow && $dateNow <= $endDate)
                                     <div class="card-discount">
-                                        <!--<div class="discount">-${{ $product->variations[0]->discount }}</div>-->
                                         <div class="discount">Sale</div>
                                     </div>
                                     <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e85-fac73a6c"
