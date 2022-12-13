@@ -70,7 +70,6 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         $statuses = TransactionStatus::all();
-        
         if ($transaction->pickup_method_id == 1){
             $billingAddress = UserAddress::withTrashed()->where('id', $transaction->billing_address_id)->get()[0];
             if ($transaction->shipping_address_id != null){
@@ -128,11 +127,27 @@ class TransactionController extends Controller
                 ->whereHas('user', function ($q) use ($request) {
                     $q->where('name', 'LIKE', '%' . $request->search . '%');
                 })
+                ->orWhere('id',  'LIKE', '%' . $request->search . '%')
+                ->orwhereHas('carts', function ($q) use ($request) {
+                    $q->whereHas('product_variation', function ($q) use ($request) {
+                        $q->whereHas('product', function ($q) use ($request) {
+                            $q->where('name', 'LIKE', '%' . $request->search . '%');
+                        });
+                    });
+                })
                 ->paginate(10);
         } else {
             $transactions = Transaction::orderBy('created_at', $request->sort)
                 ->whereHas('user', function ($q) use ($request) {
                     $q->where('name', 'LIKE', '%' . $request->search . '%');
+                })
+                ->orWhere('id',  'LIKE', '%' . $request->search . '%')
+                ->orwhereHas('carts', function ($q) use ($request) {
+                    $q->whereHas('product_variation', function ($q) use ($request) {
+                        $q->whereHas('product', function ($q) use ($request) {
+                            $q->where('name', 'LIKE', '%' . $request->search . '%');
+                        });
+                    });
                 })
                 ->paginate(10);
         }
