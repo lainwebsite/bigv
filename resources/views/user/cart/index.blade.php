@@ -179,7 +179,7 @@
                                         </div>
                                     @endif
                                     
-                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                                     ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
                                 @endif

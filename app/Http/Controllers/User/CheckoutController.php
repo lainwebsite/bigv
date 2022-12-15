@@ -96,7 +96,7 @@ class CheckoutController extends Controller
                     })
                 ];
             });
-            
+
             $pickup_methods = PickupMethod::all();
             $pickup_times = PickupTime::all();
 
@@ -322,9 +322,10 @@ class CheckoutController extends Controller
         if ($request->pickup_method_id == 2) {
             if (session()->has('total-price-after-discount')) {
                 $shipping_price = 0;
+            } else {
+                $grandtotal_checkout_price -= $shipping_price;
+                $shipping_price = 0;
             }
-            $grandtotal_checkout_price -= $shipping_price;
-            $shipping_price = 0;
         }
 
         $data = $request->all();

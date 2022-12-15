@@ -43,6 +43,7 @@ class DiscountController extends Controller
                 ->where('duration_end', '>=', Carbon::now())
                 ->get();
         }
+
         return view('user.promo.inc.discount', compact('discounts'));
     }
 
@@ -159,7 +160,7 @@ class DiscountController extends Controller
         $voucherListFinal = [];
         foreach($allDisc as $disc){
             // Cek minimum order
-            if ($disc->min_order != null) if (session()->get('total-checkout-price') < $disc->min_order) continue;
+            if ($disc->min_order != null) if ((float)session()->get('total-checkout-price') < $disc->min_order) continue;
             
             // Cek maximum quota
             if ($disc->max_quota != null) if($disc->transaction_discounts->count() >= $disc->max_quota) continue;
@@ -224,6 +225,10 @@ class DiscountController extends Controller
         session()->forget('total-discount-product');
         session()->forget('total-discount-shipping');
         session()->save();
+
+        if (!$request->product_voucher && !$request->shipping_voucher) {
+            return [];
+        }
 
         $productVoucher = $request->product_voucher;
         $shippingVoucher = $request->shipping_voucher;
@@ -461,7 +466,7 @@ class DiscountController extends Controller
         \Artisan::call('cache:clear');
 
         if ($pickupMethodId == 2)
-            return (session()->get('grandtotal-checkout-price') - (float) env('SHIPPING_PRICE'));
+            return session()->get('grandtotal-checkout-price') - (float) env('SHIPPING_PRICE');
         
         return session()->get('grandtotal-checkout-price');
     }

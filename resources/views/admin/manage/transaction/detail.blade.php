@@ -139,12 +139,12 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
+                                            <h4 class="card-title mb-4">Customer Info</h4>
+                                            <p class="m-0">{{ $transaction->user->name }}</p>
+                                            <p class="m-0">{{ $transaction->user->phone }}</p>
+                                            <p class="m-0">{{ $transaction->user->tier->name }}</p>
+                                            <div class="divider-dash mt-4 mb-4"></div>
                                             @if ($transaction->pickup_method_id == 1)
-                                                <h4 class="card-title mb-4">Customer Info</h4>
-                                                <p class="m-0">{{ $transaction->user->name }}</p>
-                                                <p class="m-0">{{ $transaction->user->phone }}</p>
-                                                <p class="m-0">{{ $transaction->user->tier->name }}</p>
-                                                <div class="divider-dash mt-4 mb-4"></div>
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <h4 class="card-title mb-4">Billing Address</h4>

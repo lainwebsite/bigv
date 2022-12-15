@@ -4533,10 +4533,6 @@ figcaption {
   background-color: #fff;
 }
 
-.transaction-card:hover {
-  background-color: #f1f1f1;
-  cursor: pointer !important;
-}
 
 .new-products-text-div {
   display: -webkit-box;

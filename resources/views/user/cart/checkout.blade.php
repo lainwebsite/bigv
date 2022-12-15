@@ -210,7 +210,7 @@
                                                 <div class="text-size-small text-color-grey">Variant:
                                                     {{ $product->product_variation_name }}</div>
                                             @endif
-                                            <div class="text-size-small text-color-grey">${{ $product->price }}</div>--}}
+                                            <div class="text-size-small text-color-grey">${{ number_format($product->price, 2, ".", ",") }}</div>--}}
                                         </div>
                                     </div>
                                     <div class="flex gap-small">
@@ -236,26 +236,26 @@
                         </div>
                         <h4 class="heading-8 text-color-dark-grey">Summary</h4>
                         <div class="div-block-24 text-color-grey">
-                            <div class="inline">Total Price ({{ $total_items }} items)</div>
-                            <div class="inline" id="total-price" total-price="{{ $total_price }}">${{ $total_price }}</div>
+                            <div class="inline">Total Price ({{ number_format($total_items, 2, ".", ",") }} items)</div>
+                            <div class="inline" id="total-price" total-price="{{ number_format($total_price, 2, ".", ",") }}">${{ number_format($total_price, 2, ".", ",") }}</div>
                         </div>
                         <div class="div-block-24 text-color-grey" id="shippingPrice">
                             <div class="inline">Shipping Price</div>
-                            <div class="inline">${{ $shipping_price }}</div>
+                            <div class="inline">${{ number_format($shipping_price, 2, ".", ",") }}</div>
                         </div>
                         <div id="shippingDiscountUsed" class="div-block-24 text-color-grey d-none">
                             <div class="inline">Shipping Discount Price</div>
-                            <div class="inline">- $<span id="shippingDiscountPrice">0</span></div>
+                            <div class="inline">- $<span id="shippingDiscountPrice">0.00</span></div>
                         </div>
                         <div id="productDiscountUsed" class="div-block-24 text-color-grey d-none">
                             <div class="inline">Discount Price</div>
-                            <div class="inline">- $<span id="productDiscountPrice">0</span></div>
+                            <div class="inline">- $<span id="productDiscountPrice">0.00</span></div>
                         </div>
                         <div class="div-line-sumarry"></div>
                         <div class="div-block-24 text-color-dark-grey">
                             <div class="inline text-weight-bold">Total</div>
                             <div class="inline text-weight-bold">$<span
-                                    id="grandtotal-price" grandtotal-price="{{ $grandtotal_price }}">{{ $grandtotal_price }}</span></div>
+                                    id="grandtotal-price" grandtotal-price="{{ $grandtotal_price }}">{{ number_format($grandtotal_price, 2, ".", ",") }}</span></div>
                         </div><button id="placeOrder" type="submit" class="checkout-button oh-grow w-button"
                             disabled>Place Order</button>
                         {{-- <input id="paymentGateway" type="hidden" name="payment_gateway">
@@ -764,7 +764,7 @@
             if ($("#cancelVoucher").is(":not(.d-none)")) {
                 cancelVoucher(2);
             } else {
-                $("#grandtotal-price").html((parseFloat($("#grandtotal-price").attr("grandtotal-price")) - parseFloat(shipping_price)));
+                $("#grandtotal-price").html((parseFloat($("#grandtotal-price").attr("grandtotal-price")) - parseFloat(shipping_price)).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
             }
             
             $("#shippingVoucherContainer").addClass("d-none");
@@ -822,18 +822,18 @@
                         product_voucher: $("#productVoucher").attr("selected-voucher"),
                         shipping_voucher: $("#shippingVoucher").attr("selected-voucher"),
                     }).done(function(data) {
-                        $("#total-price").html("$" + data.total_price_before_discount);
+                        $("#total-price").html("$" + parseFloat(data.total_price_before_discount).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                         if (data.product_voucher !== undefined) {
                             $("#applyVoucher").addClass("d-none").next().addClass("d-none");
                             $("#voucherUsed").html(data.product_voucher.name).removeClass("d-none").next()
                                 .removeClass("d-none");
                             $("#productDiscountUsed").removeClass("d-none");
-                            $("#productDiscountPrice").html(data.total_discount);
+                            $("#productDiscountPrice").html(parseFloat(data.total_discount).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                         } else {
                             $("#applyVoucher").removeClass("d-none").next().removeClass("d-none");
                             $("#voucherUsed").html("").addClass("d-none").next().addClass("d-none");
                             $("#productDiscountUsed").addClass("d-none");
-                            $("#productDiscountPrice").html("0");
+                            $("#productDiscountPrice").html(parseFloat("0").toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                         }
     
                         if (data.shipping_voucher !== undefined) {
@@ -843,14 +843,14 @@
                                 .removeClass("d-none");
                             }
                             $("#shippingDiscountUsed").removeClass("d-none");
-                            $("#shippingDiscountPrice").html(data.total_discount_shipping);
+                            $("#shippingDiscountPrice").html(parseFloat(data.total_discount_shipping).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                         } else {
                             $("#shippingDiscountUsed").addClass("d-none");
-                            $("#shippingDiscountPrice").html("0");
+                            $("#shippingDiscountPrice").html(parseFloat("0").toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                         }
     
     
-                        $("#grandtotal-price").html(data.total_price_after_discount);
+                        $("#grandtotal-price").html(parseFloat(data.total_price_after_discount).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
                     }).fail(function(error) {
                         console.log(error);
                     });

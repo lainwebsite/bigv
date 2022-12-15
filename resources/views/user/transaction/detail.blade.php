@@ -128,7 +128,7 @@
                                                 style="justify-content: flex-end; width: 100%;">
                                                 <div class="button-3 w-inline-block button-add-photo-review"
                                                     onclick="addPhotoReview({{ $cart->cart_id }})"
-                                                    style="height: auto !important; padding: 5px 10px !important;">
+                                                    style="height: auto !important; padding: 5px 10px !important; border-radius: 27px !important; ">
                                                     <div class="text-color-white"
                                                         style="font-size: 12px; white-space: nowrap;">
                                                         Add
@@ -146,7 +146,7 @@
                         @if ($transaction->transaction->is_reviewed == 0 && ($transaction->transaction->status_id == 2 || $statusPayment == "1"))
                             <div class="flex" style="justify-content: flex-end;">
                                 <button class="button-3 button-size--small w-inline-block">
-                                    <div class="text-color-white">Submit Review</div>
+                                    <div class="text-color-white" style="width: auto; white-space:nowrap;">Submit Review</div>
                                 </button>
                             </div>
                         @elseif ($transaction->transaction->status_id == 1 && $statusPayment == "0")

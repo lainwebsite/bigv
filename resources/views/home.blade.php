@@ -285,7 +285,7 @@
                                         </div>
                                     @endif
                                     
-                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                                     ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
                                 @endif
@@ -379,7 +379,7 @@
                                         </div>
                                     @endif
                                     
-                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em;">
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                                     ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
                                 @endif
@@ -482,22 +482,23 @@
             </div><!--<a href="#" class="button ea-bottom w-button">Enroll Now</a>-->
         </div>
         <div class="value-left max-width-medium"><img
-            src="{{ asset('assets/Tekka Place.jpg') }}" loading="lazy"
-            srcset="{{ asset('assets/Tekka Place.jpg') }}"
+            src="{{ asset('assets/event-home-1.jpg') }}" loading="lazy"
+            srcset="{{ asset('assets/event-home-1.jpg') }}"
             sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
             class="image-8 ea-left" style="border-radius:10px;" /></div>
     </div>
     <div class="value-section"><img src="{{ asset('assets/633652c3764cda2b58895a36_Intersect.svg') }}"
             loading="lazy" data-w-id="d482b9a8-9984-a9ec-8860-e4973c48c7e1" alt="" class="image-24" />
         <div class="value-left max-width-medium"><img
-                src="{{ asset('assets/63365480eb20ee37f49a8fbb_image 76.webp') }}" loading="lazy"
-                srcset="{{ asset('assets/63365480eb20ee37f49a8fbb_image%2076.webp') }}"
+                src="{{ asset('assets/event-home-2.jpg') }}" loading="lazy"
+                srcset="{{ asset('assets/event-home-2.jpg') }}"
                 sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
                 class="image-8 ea-left" /></div>
         <div class="value-right">
-            <div class="heading-xlarge ea-top">Meet with Vincent</div>
-            <div class="heading-medium orange-text ea-right">27th November</div>
-            <div class="text-size-regular text-color-grey ea-right">Join our BigV Gathering with Vincent to learn more about the insights and benefits of becoming a vendor. Vincent will also show the tips and tricks to excell in your home-based business with social media. Click the button bellow to sign up!
+            <div class="heading-xlarge ea-top">BIGV HBB POP UP MARKET At *SCAPE</div>
+            <div class="heading-medium orange-text ea-right">Thursday &amp; Sunday 11am-7pm<br>
+Friday &amp; Sunday 11am-9pm</div>
+            <div class="text-size-regular text-color-grey ea-right">Let&#39;s have an exciting shopping experience with our various, uniquely Home Based Businesses! Many kinds of handcrafted items and homemade baked goods can be found here. Explore new and unique things in the BIGV HBB POP-UP MARKET. Are you ready to shop? Come and join us at Scape!
             </div><a href="#" class="button ea-bottom w-button" style="display:none;">Enroll Now</a>
         </div><img src="{{ asset('assets/633652c5de27787915ec9b2f_Intersect (1).svg') }}" loading="lazy"
             data-w-id="55107afb-6f21-606b-b271-a1ff35a970cf" alt="" class="image-23" />
