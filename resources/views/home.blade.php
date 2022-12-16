@@ -487,8 +487,8 @@
             sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
             class="image-8 ea-left" style="border-radius:10px;" /></div>
     </div>
-    <div class="value-section"><img src="{{ asset('assets/633652c3764cda2b58895a36_Intersect.svg') }}"
-            loading="lazy" data-w-id="d482b9a8-9984-a9ec-8860-e4973c48c7e1" alt="" class="image-24" />
+    <div class="value-section" style="display:none">
+        <img src="{{ asset('assets/633652c3764cda2b58895a36_Intersect.svg') }}" loading="lazy" data-w-id="d482b9a8-9984-a9ec-8860-e4973c48c7e1" alt="" class="image-24" />
         <div class="value-left max-width-medium"><img
                 src="{{ asset('assets/event-home-2.jpg') }}" loading="lazy"
                 srcset="{{ asset('assets/event-home-2.jpg') }}"

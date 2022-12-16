@@ -264,29 +264,84 @@ class TransactionController extends Controller
     {
         $status = $request->get('status', '');
 
+        // $transactions = Transaction::where('user_id', auth()->user()->id)
+        //     ->with(['carts' => function ($q1) {
+        //         $q1->select(
+        //             'transaction_id',
+        //             'carts.id as cart_id',
+        //             'carts.quantity as qty',
+        //             'vendor_id',
+        //             'vendors.name as vendor_name',
+        //             'vendors.photo as vendor_photo',
+        //             'products.name as product_name',
+        //             'products.featured_image as product_featured_image',
+        //             'product_variations.name as product_variation_name',
+        //             'carts.price as product_price'
+        //         )
+        //             ->join('product_variations', 'product_variations.id', '=', 'product_variation_id')
+        //             ->join('products', 'products.id', '=', 'product_variations.product_id')
+        //             ->join('vendors', 'vendors.id', '=', 'products.vendor_id')
+        //             ->orderBy('products.vendor_id', 'ASC')
+        //             ->get();
+        //     }])
+        //     ->whereHas('status', function ($query) use ($status) {
+        //         $query->where('id', $status);
+        //     })->orderBy('created_at', 'DESC')->paginate(10);
+        $sub = OptionCart::join('addon_options', 'addon_options.id', '=', 'option_carts.addon_option_id')
+                ->select('addon_options.name as addon_name', 'addon_options.price as addon_price', 'option_carts.cart_id')
+                ->toSql();
+        
         $transactions = Transaction::where('user_id', auth()->user()->id)
-            ->with(['carts' => function ($q1) {
+            ->with(['carts' => function ($q1) use ($sub) {
                 $q1->select(
                     'transaction_id',
                     'carts.id as cart_id',
                     'carts.quantity as qty',
+                    'carts.price as cart_price',
                     'vendor_id',
                     'vendors.name as vendor_name',
                     'vendors.photo as vendor_photo',
+                    'products.id as product_id',
                     'products.name as product_name',
                     'products.featured_image as product_featured_image',
                     'product_variations.name as product_variation_name',
-                    'carts.price as product_price'
+                    'product_variations.price as product_price',
+                    'product_variations.discount',
+                    'addon_carts.addon_name',
+                    'addon_carts.addon_price'
                 )
                     ->join('product_variations', 'product_variations.id', '=', 'product_variation_id')
                     ->join('products', 'products.id', '=', 'product_variations.product_id')
                     ->join('vendors', 'vendors.id', '=', 'products.vendor_id')
+                    ->leftJoin(DB::raw('(' . $sub . ') as addon_carts'), 'addon_carts.cart_id', '=', 'carts.id')
                     ->orderBy('products.vendor_id', 'ASC')
                     ->get();
-            }])
-            ->whereHas('status', function ($query) use ($status) {
+            }])->whereHas('status', function ($query) use ($status) {
                 $query->where('id', $status);
-            })->orderBy('created_at', 'DESC')->paginate(10);
+            })->orderBy('created_at', 'DESC')->paginate(10)->map(function ($transaction) {
+                $addons_name = $transaction->carts->mapToGroups(function ($item, $key) {
+                    return [$item['cart_id'] => $item['addon_name']];
+                });
+                $addons_price = $transaction->carts->groupBy('cart_id')
+                    ->map(function ($item) {
+                        return $item->sum('addon_price');
+                    });
+                
+                $transaction->cart_customs = $transaction->carts->mapToGroups(function ($item, $key) use ($addons_name, $addons_price) {
+                        $product = collect($item)->except(['addon_name', 'addon_price'])->toArray();
+                        $product['product_price'] = $product['product_price'] + $addons_price[$product['cart_id']];
+                        $product['cart_price'] = $product['cart_price'] + $addons_price[$product['cart_id']];
+                        $product += [
+                            'addons' => $addons_name[$product['cart_id']][0] == null ? [] : implode(', ', $addons_name[$product['cart_id']]->toArray())
+                        ];
+
+                        return [(object) $product];
+                    })->map(function ($product) {
+                        return collect($product)->unique('cart_id');
+                    })->first();
+                return $transaction;
+            })->paginate(10);
+
         $transaction_statuses = TransactionStatus::all();
 
         return view('user.transaction.history', [

@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 @foreach ($transactions as $transaction)
-                    <div class="transaction-card" style="width: 100%;">
+                    <div class="transaction-card transaction-hover-style" style="width: 100%;">
                         <a class="transaction-detail" href="{{ url('user/transaction/' . $transaction->id) }}"
                             style="text-decoration: none; display: none;"></a>
                         <div class="flex space-between">
