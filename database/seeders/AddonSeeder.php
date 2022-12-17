@@ -18,25 +18,25 @@ class AddonSeeder extends Seeder
         $temp = new Addon();
         $temp->name = "Appetizer";
         $temp->required = "0";
-        $temp->product_id = "5";
+        $temp->product_id = 3;
         $temp->save();
 
         $temp = new Addon();
         $temp->name = "Salad";
         $temp->required = "0";
-        $temp->product_id = "5";
+        $temp->product_id = 3;
         $temp->save();
 
         $temp = new Addon();
         $temp->name = "First Pasta";
         $temp->required = "0";
-        $temp->product_id = "5";
+        $temp->product_id = 3;
         $temp->save();
 
         $temp = new Addon();
         $temp->name = "Second Pasta";
         $temp->required = "0";
-        $temp->product_id = "5";
+        $temp->product_id = 3;
         $temp->save();
     }
 }

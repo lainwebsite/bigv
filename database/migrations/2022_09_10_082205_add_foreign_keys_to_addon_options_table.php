@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('addon_options', function (Blueprint $table) {
-            $table->unsignedBigInteger('addon_id')->index()->nullable();
-            $table->foreign('addon_id')->references('id')->on('addons')->onDelete('cascade');
+            // $table->unsignedBigInteger('addon_id')->index()->nullable();
+            // $table->foreign('addon_id')->references('id')->on('addons')->onDelete('cascade');
         });
     }
 

@@ -81,8 +81,19 @@
                 <div class="card-body">
                     <h4 class="card-title mb-4">Message</h4>
                     <div class="row">
+                        @php
+                            $wa_customer = 'https://wa.me/' . $transaction->user->phone . '?text=Hello%20*' . $transaction->user->name . '*%0AThankyou%20for%20your%20order%20at%20BigV!%0AWe%20have%20received%20your%20order%20for%20%3A%0A';
+                            foreach ($transaction->carts as $key => $cart) {
+                                $wa_customer = $wa_customer . '%0A*' . $cart->product_variation_trashed->product->name . '*%20x%20*' . $cart->quantity . '*%20-%20' . $cart->product_variation->name;
+                                foreach ($cart->addon_options as $key => $option_cart) {
+                                    $wa_customer = $wa_customer . '%20+%20' . $option_cart->addon_option_trashed->name;
+                                }
+                                $wa_customer = $wa_customer . '%20%3A%20*$' . $cart->quantity * $cart->price . '*';
+                            }
+                            $wa_customer = $wa_customer . '%0A*TOTAL%20%3A%20$' . $transaction->total_price . '*%0A%0Ato%20be%20' . ($transaction->pickup_method_id == 1 ? "Delivered" : "Picked Up") . '%20at%0A' . ($transaction->pickup_method_id == 1 ? $transaction->shipping_address->name : $transaction->pickup_address_trashed->name) . '%0A%0AOder%20time%20%3A%20*' . $transaction->created_at . '*%0AShipping%20Date%20%3A%20*' . $transaction->delivery_date . '%20' . $transaction->pickup_time->time . '*%0A%0APlease%20wait%20kindly%20for%20your%20order.';
+                        @endphp
                         <div class="col-3">
-                            <a href="https://api.whatsapp.com/send?phone={{ $billingAddress->user->phone ?? '#' }}"
+                            <a target="_blank" href="{{ $wa_customer }}"
                                 class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2">
                                 <img src="{{ asset('assets/images/whatsapp.svg') }}" width="24"
                                     height="24" />Customer</a>
@@ -98,9 +109,10 @@
                                             $wa_string = 'https://wa.me/' . $cart->product_variation_trashed->product->vendor->phone . '?text=Hello%20Vendor%20*' . $cart->product_variation_trashed->product->vendor->name . '*%0AThere%20is%20a%20new%20order%20with%20the%20ID%20*' . $cart->transaction->id . '*';
                                         @endphp
                                         @foreach ($transaction->carts as $carted)
-                                            @if ($carted->product_variation_trashed->product->vendor_id == $cart->product_variation_trashed->product->vendor_id)
+                                            @if ($carted->product_variation_trashed->product->vendor_id ==
+                                                $cart->product_variation_trashed->product->vendor_id)
                                                 @php
-                                                    $wa_string = $wa_string . '%0A*' . $carted->product_variation_trashed->product->name . '%20' . $carted->product_variation_trashed->name . '%20x%20' . $carted->quantity .'*';
+                                                    $wa_string = $wa_string . '%0A*' . $carted->product_variation_trashed->product->name . '%20' . $carted->product_variation_trashed->name . '%20x%20' . $carted->quantity . '*';
                                                 @endphp
                                                 @foreach ($carted->addon_options as $addon)
                                                     @if ($loop->first)
@@ -161,7 +173,7 @@
                                                                 {{ $billingAddress->unit_number }}
                                                                 {{ $billingAddress->street }}<br>Singapore
                                                                 {{ $billingAddress->postal_code }}</p>
-                                                                <small>{{ $billingAddress->additional_info }}</small>
+                                                            <small>{{ $billingAddress->additional_info }}</small>
                                                         @endif
                                                     </div>
                                                     <div class="col-6">
@@ -171,16 +183,16 @@
                                                             <p class="m-0">{{ $shippingAddress->phone }}</p>
                                                             @if ($shippingAddress->building_name != null)
                                                                 <p class="mb-2">
-                                                                {{ $shippingAddress->block_number }}
-                                                                {{ $shippingAddress->street }}<br>#{{ $shippingAddress->unit_level }}-{{ $shippingAddress->unit_number }}
-                                                                {{ $shippingAddress->building_name }}<br>Singapore
-                                                                {{ $shippingAddress->postal_code }}</p>
+                                                                    {{ $shippingAddress->block_number }}
+                                                                    {{ $shippingAddress->street }}<br>#{{ $shippingAddress->unit_level }}-{{ $shippingAddress->unit_number }}
+                                                                    {{ $shippingAddress->building_name }}<br>Singapore
+                                                                    {{ $shippingAddress->postal_code }}</p>
                                                                 <small>{{ $shippingAddress->additional_info }}</small>
                                                             @else
                                                                 <p class="mb-2">
-                                                                {{ $shippingAddress->unit_number }}
-                                                                {{ $shippingAddress->street }}<br>Singapore
-                                                                {{ $shippingAddress->postal_code }}</p>
+                                                                    {{ $shippingAddress->unit_number }}
+                                                                    {{ $shippingAddress->street }}<br>Singapore
+                                                                    {{ $shippingAddress->postal_code }}</p>
                                                                 <small>{{ $shippingAddress->additional_info }}</small>
                                                             @endif
                                                         @else
@@ -194,16 +206,16 @@
                                                 <p class="m-0">{{ $transaction->pickup_address_trashed->phone }}</p>
                                                 @if ($transaction->pickup_address_trashed->building_name != null)
                                                     <p class="mb-2">
-                                                    {{ $transaction->pickup_address_trashed->block_number }}
-                                                    {{ $transaction->pickup_address_trashed->street }}<br>#{{ $transaction->pickup_address_trashed->unit_level }}-{{ $transaction->pickup_address_trashed->unit_number }}
-                                                    {{ $transaction->pickup_address_trashed->building_name }}<br>Singapore
-                                                    {{ $transaction->pickup_address_trashed->postal_code }}</p>
+                                                        {{ $transaction->pickup_address_trashed->block_number }}
+                                                        {{ $transaction->pickup_address_trashed->street }}<br>#{{ $transaction->pickup_address_trashed->unit_level }}-{{ $transaction->pickup_address_trashed->unit_number }}
+                                                        {{ $transaction->pickup_address_trashed->building_name }}<br>Singapore
+                                                        {{ $transaction->pickup_address_trashed->postal_code }}</p>
                                                     <small>{{ $transaction->pickup_address_trashed->additional_info }}</small>
                                                 @else
                                                     <p class="mb-2">
-                                                    {{ $transaction->pickup_address_trashed->unit_number }}
-                                                    {{ $transaction->pickup_address_trashed->street }}<br>Singapore
-                                                    {{ $transaction->pickup_address_trashed->postal_code }}</p>
+                                                        {{ $transaction->pickup_address_trashed->unit_number }}
+                                                        {{ $transaction->pickup_address_trashed->street }}<br>Singapore
+                                                        {{ $transaction->pickup_address_trashed->postal_code }}</p>
                                                     <small>{{ $transaction->pickup_address_trashed->additional_info }}</small>
                                                 @endif
                                             @endif
@@ -238,11 +250,12 @@
                                                         <h5 class="mt-0 mb-1">
                                                             <b>{{ $cart->product_variation_trashed->product->name }}</b>
                                                         </h5>
-                                                        @if ($cart->product_variation_trashed->name != "novariation")
-                                                        <h6 class="m-0">{{ $cart->product_variation_trashed->name }}</h6>
+                                                        @if ($cart->product_variation_trashed->name != 'novariation')
+                                                            <h6 class="m-0">
+                                                                {{ $cart->product_variation_trashed->name }}</h6>
                                                         @endif
                                                         @if ($cart->addon_options->count() > 0)
-                                                            @php 
+                                                            @php
                                                                 $addonOptArr = [];
                                                             @endphp
                                                             @foreach ($cart->addon_options as $addon)
@@ -250,9 +263,9 @@
                                                                     array_push($addonOptArr, $addon->addon_option_trashed->name);
                                                                 @endphp
                                                             @endforeach
-                                                        <h6 class="m-0">Addon: {{join(",", $addonOptArr)}}</h6>
+                                                            <h6 class="m-0">Addon: {{ join(',', $addonOptArr) }}</h6>
                                                         @endif
-                                                        
+
                                                         <h6 class="m-0">${{ $cart->price }}</h6>
                                                     </div>
                                                 </div>
@@ -264,7 +277,9 @@
                                     <div class="divider-dash"></div>
                                     <div class="d-flex justify-content-between">
                                         <p class="m-0">Product Total</p>
-                                        <p class="m-0">${{ $transaction->total_price - $transaction->shipping_fee + $transaction->product_discount_total + $transaction->shipping_discount_total }}</p>
+                                        <p class="m-0">
+                                            ${{ $transaction->total_price - $transaction->shipping_fee + $transaction->product_discount_total + $transaction->shipping_discount_total }}
+                                        </p>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <p class="m-0">Shipping Fee</p>
