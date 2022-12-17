@@ -90,7 +90,7 @@
                                 }
                                 $wa_customer = $wa_customer . '%20%3A%20*$' . $cart->quantity * $cart->price . '*';
                             }
-                            $wa_customer = $wa_customer . '%0A*TOTAL%20%3A%20$' . $transaction->total_price . '*%0A%0Ato%20be%20' . ($transaction->pickup_method_id == 1 ? "Delivered" : "Picked Up") . '%20at%0A' . ($transaction->pickup_method_id == 1 ? $transaction->shipping_address->name : $transaction->pickup_address_trashed->name) . '%0A%0AOder%20time%20%3A%20*' . $transaction->created_at . '*%0AShipping%20Date%20%3A%20*' . $transaction->delivery_date . '%20' . $transaction->pickup_time->time . '*%0A%0APlease%20wait%20kindly%20for%20your%20order.';
+                            $wa_customer = $wa_customer . '%0A*TOTAL%20%3A%20$' . $transaction->total_price . '*%0A%0Ato%20be%20' . ($transaction->pickup_method_id == 1 ? 'Delivered' : 'Picked Up') . '%20at%0A' . ($transaction->pickup_method_id == 1 ? $transaction->shipping_address->name : $transaction->pickup_address_trashed->name) . '%0A%0AOder%20time%20%3A%20*' . $transaction->created_at . '*%0AShipping%20Date%20%3A%20*' . $transaction->delivery_date . '%20' . $transaction->pickup_time->time . '*%0A%0APlease%20wait%20kindly%20for%20your%20order.';
                         @endphp
                         <div class="col-3">
                             <a target="_blank" href="{{ $wa_customer }}"
@@ -133,7 +133,31 @@
                                             class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><img
                                                 src="{{ asset('assets/images/whatsapp.svg') }}" width="24"
                                                 height="24" />{{ $cart->product_variation_trashed->product->vendor->name }}</a>
-                                        <a href="mailto:{{ $cart->product_variation_trashed->product->vendor->email }}"
+                                        @php
+                                            $mail_link = 'https://mail.google.com/mail/?view=cm&fs=1&to=' . $cart->product_variation_trashed->product->vendor->email . '&su=New Order ID : ' . $transaction->id . ' from BigV&body=Hello ' . $cart->product_variation_trashed->product->vendor->name . '%0D%0A'. 'There%20is%20a%20new%20order%20with%20the%20ID%20' . $cart->transaction->id;
+                                        @endphp
+                                        @foreach ($transaction->carts as $carted)
+                                            @if ($carted->product_variation_trashed->product->vendor_id ==
+                                                $cart->product_variation_trashed->product->vendor_id)
+                                                @php
+                                                    $mail_link = $mail_link . '%0A' . $carted->product_variation_trashed->product->name . '%20' . $carted->product_variation_trashed->name . '%20x%20' . $carted->quantity ;
+                                                @endphp
+                                                @foreach ($carted->addon_options as $addon)
+                                                    @if ($loop->first)
+                                                        @php
+                                                            $mail_link = $mail_link . '%20with';
+                                                        @endphp
+                                                    @endif
+                                                    @php
+                                                        $mail_link = $mail_link . '%20' . $addon->addon_option_trashed->name;
+                                                    @endphp
+                                                @endforeach
+                                            @endif
+                                        @endforeach
+                                        @php
+                                            $mail_link = $mail_link . '%0Ato%20be%20prepared%20by%20' . $transaction->delivery_date . '%0A%0AOrder%20Date%20%3A%20' . $transaction->created_at . '%0A%0AThank%20You%20';
+                                        @endphp
+                                        <a target="_blank" href="{{ $mail_link }}"
                                             class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><i
                                                 data-feather="mail"
                                                 class="feather-icon"></i>{{ $cart->product_variation_trashed->product->vendor->name }}</a>
