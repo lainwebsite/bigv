@@ -67,7 +67,7 @@
                                         $product->variations[0]->name == 'novariation',
                                 ])>
                                     <label for="productPriceNoVar">Product Price</label>
-                                    <input type="number" class="form-control" id="productPriceNoVar"
+                                    <input type="number" class="form-control" id="productPriceNoVar" step="0.01"
                                         value="{{ $product->variations[0]->price }}" name="product_price_no_var"
                                         placeholder="Product Price">
                                 </div>
@@ -189,7 +189,7 @@
                                                             value="{{ $productVariation->name }}" placeholder="Name">
                                                     </div>
                                                     <div class="col-3">
-                                                        <input type="number" class="form-control" id="name"
+                                                        <input type="number" class="form-control" id="name" step="0.01"
                                                             name="variation_price[{{ $loop->iteration }}]" required
                                                             value="{{ $productVariation->price }}" placeholder="Price">
                                                     </div>
@@ -259,7 +259,7 @@
                                                                 </div>
                                                                 <div class="col-5 p-0">
                                                                     <input type="number" class="form-control"
-                                                                        id="productName"
+                                                                        id="productName" step="0.01"
                                                                         name="option_price[{{ $key + 1 }}][{{ $keyed + 1 }}]"
                                                                         value="{{ $addon_option->price }}" required=""
                                                                         placeholder="Price">
@@ -392,7 +392,7 @@
                         <input type="text" class="form-control" id="name" name="variation_name[${countVariation}]" required placeholder="Name">
                     </div>
                     <div class="col-3">
-                        <input type="number" class="form-control" id="name" name="variation_price[${countVariation}]" required placeholder="Price">
+                        <input type="number" step="0.01" class="form-control" id="name" name="variation_price[${countVariation}]" required placeholder="Price">
                     </div>
                     <div class="col-1">
                         <div class="d-flex h-100">
@@ -461,7 +461,7 @@
                             <input type="text" class="form-control" id="productName" name="option_name[${addonIndex}][${optCount}]" required="" placeholder="Name">
                         </div>
                         <div class="col-5 p-0">
-                            <input type="number" class="form-control" id="productName" name="option_price[${addonIndex}][${optCount}]" required="" placeholder="Price">
+                            <input type="number" step="0.01" class="form-control" id="productName" name="option_price[${addonIndex}][${optCount}]" required="" placeholder="Price">
                         </div>
                         <div class="col-2">
                             <div class="d-flex h-100">

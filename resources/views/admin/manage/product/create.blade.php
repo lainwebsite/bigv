@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="form-group" id="productPriceNoVariation">
                                     <label for="productPriceNoVar">Product Price</label>
-                                    <input type="number" class="form-control" id="productPriceNoVar"
+                                    <input type="number" step="0.01" class="form-control" id="productPriceNoVar"
                                         name="product_price_no_var" placeholder="Product Price">
                                 </div>
                                 <div class="form-group">
@@ -233,7 +233,7 @@
                         <input type="text" class="form-control" id="name" name="variation_name[${countVariation}]" required placeholder="Name">
                     </div>
                     <div class="col-3">
-                        <input type="number" class="form-control" id="name" name="variation_price[${countVariation}]" required placeholder="Price">
+                        <input type="number" step="0.01" class="form-control" id="name" name="variation_price[${countVariation}]" required placeholder="Price">
                     </div>
                     <div class="col-1">
                         <div class="d-flex h-100">
@@ -302,7 +302,7 @@
                             <input type="text" class="form-control" id="productName" name="option_name[${addonIndex}][${optCount}]" required="" placeholder="Name">
                         </div>
                         <div class="col-5 p-0">
-                            <input type="number" class="form-control" id="productName" name="option_price[${addonIndex}][${optCount}]" required="" placeholder="Price">
+                            <input type="number" class="form-control" id="productName" step="0.01" name="option_price[${addonIndex}][${optCount}]" required="" placeholder="Price">
                         </div>
                         <div class="col-2">
                             <div class="d-flex h-100">
