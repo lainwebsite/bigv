@@ -272,15 +272,28 @@ class ProductController extends Controller
                 'category_id' => $request->category
             ]);
 
-            foreach ($product->variations as $key => $productVariation) {
-                $productVariation->delete();
+            foreach ($product->variations as $keye => $productVariation) {
+                if (in_array($productVariation->id, $request->variation_id)) {
+                    foreach ($request->variation_id as $key => $v_id) {
+                        if ($v_id == $productVariation->id) {
+                            $productVariation->update([
+                                'name' => $request->variation_name[$key],
+                                'price' => $request->variation_price[$key]
+                            ]);
+                        }
+                    }
+                } else {
+                    $productVariation->delete();
+                }
             }
-            foreach ($request->variation_name as $key => $variation) {
-                ProductVariation::create([
-                    'name' => $request->variation_name[$key],
-                    'price' => $request->variation_price[$key],
-                    'product_id' => $product->id
-                ]);
+            foreach ($request->variation_id as $key => $variation) {
+                if ($variation == null) {
+                    ProductVariation::create([
+                        'name' => $request->variation_name[$key],
+                        'price' => $request->variation_price[$key],
+                        'product_id' => $product->id
+                    ]);
+                }
             }
         } else {
             $product->update([
@@ -291,16 +304,24 @@ class ProductController extends Controller
                 'vendor_id' => $request->vendor,
                 'category_id' => $request->category
             ]);
-
+            $novariation_exists = false;
             foreach ($product->variations as $key => $productVariation) {
-                $productVariation->delete();
+                if ($productVariation->name == "novariation") {
+                    $novariation_exists = true;
+                    $productVariation->update([
+                        'price' => $request->product_price_no_var,
+                    ]);
+                } else {
+                    $productVariation->delete();
+                }
             }
-
-            ProductVariation::create([
-                'name' => "novariation",
-                'price' => $request->product_price_no_var,
-                'product_id' => $product->id
-            ]);
+            if (!$novariation_exists) {
+                ProductVariation::create([
+                    'name' => "novariation",
+                    'price' => $request->product_price_no_var,
+                    'product_id' => $product->id
+                ]);
+            }
         }
         foreach ($request->delete_product_image_id as $key => $id) {
             if ($id) {

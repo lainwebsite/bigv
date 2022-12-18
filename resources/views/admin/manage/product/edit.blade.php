@@ -183,15 +183,18 @@
                                                     <div class="col-1 d-flex align-items-center">
                                                         <p style="white-space: nowrap;" class="m-0 mr-3">Variation</p>
                                                     </div>
+                                                    <input type="hidden" name="variation_id[{{ $loop->iteration }}]"
+                                                        value="{{ $productVariation->id }}">
                                                     <div class="col-6">
                                                         <input type="text" class="form-control" id="name"
                                                             name="variation_name[{{ $loop->iteration }}]" required
                                                             value="{{ $productVariation->name }}" placeholder="Name">
                                                     </div>
                                                     <div class="col-3">
-                                                        <input type="number" class="form-control" id="name" step="0.01"
-                                                            name="variation_price[{{ $loop->iteration }}]" required
-                                                            value="{{ $productVariation->price }}" placeholder="Price">
+                                                        <input type="number" class="form-control" id="name"
+                                                            step="0.01" name="variation_price[{{ $loop->iteration }}]"
+                                                            required value="{{ $productVariation->price }}"
+                                                            placeholder="Price">
                                                     </div>
                                                     <div class="col-1">
                                                         <div class="d-flex h-100">
@@ -388,6 +391,7 @@
                     <div class="col-1 d-flex align-items-center">
                         <p style="white-space: nowrap;" class="m-0 mr-3">Variation</p>
                     </div>
+                    <input type="hidden" name="variation_id[${countVariation}]">
                     <div class="col-6">
                         <input type="text" class="form-control" id="name" name="variation_name[${countVariation}]" required placeholder="Name">
                     </div>
@@ -408,7 +412,6 @@
         });
 
         $(document).on('click', '.deleteVariation', function() {
-            countVariation--;
             var id = $(this).attr("count");
             $("#inputProductVariation" + id).remove();
         });
