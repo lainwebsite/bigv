@@ -228,6 +228,8 @@
                                 <h4 class="card-title mb-4">Product Add-on</h4>
                                 <div id="productAddonGroup" class="d-flex flex-column" style="gap:30px;">
                                     @foreach ($product->addons as $key => $addon)
+                                        <input type="hidden" name="addon_id[{{ $loop->iteration }}]"
+                                            value="{{ $addon->id }}">
                                         <div class="d-flex flex-column" style="gap: 12px;"
                                             data-id="{{ $loop->iteration }}"
                                             data-optcount={{ $addon->options->count() }}>
@@ -247,6 +249,9 @@
                                             </div>
                                             <div class="addon-option-group d-flex flex-column" style="gap: 10px;">
                                                 @foreach ($addon->options as $keyed => $addon_option)
+                                                    <input type="hidden"
+                                                        name="option_id[{{ $key + 1 }}][{{ $keyed + 1 }}]"
+                                                        value="{{ $addon_option->id }}">
                                                     <div class="row align-items-center">
                                                         <div class="col-12 col-md-3 d-flex">
                                                             <p style="white-space: nowrap;" class="m-0">Option</p>
@@ -421,6 +426,7 @@
         $("#addAddon").on('click', function() {
             countAddon++;
             $("#productAddonGroup").append(`
+                                        <input type="hidden" name="addon_id[${countAddon}]">
                                     <div class="d-flex flex-column" style="gap: 12px;" data-id="${countAddon}" data-optcount=0>
                                         <div class="row align-items-center">
                                             <div class="col-12 col-md-4 d-flex">
@@ -454,6 +460,7 @@
             optCount++;
             $(this).parent().parent().data("optcount", optCount);
             $(this).parent().parent().children(".addon-option-group").append(`
+            <input type="hidden" name="option_id[${addonIndex}][${optCount}]">
             <div class="row align-items-center">
                 <div class="col-12 col-md-3 d-flex">
                     <p style="white-space: nowrap;" class="m-0">Option</p>

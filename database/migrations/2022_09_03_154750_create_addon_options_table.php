@@ -19,6 +19,7 @@ return new class extends Migration
             $table->double('price');
             $table->unsignedBigInteger('addon_id')->index();
             $table->foreign('addon_id')->references('id')->on('addons')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

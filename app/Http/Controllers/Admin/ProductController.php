@@ -283,6 +283,11 @@ class ProductController extends Controller
                         }
                     }
                 } else {
+                    foreach ($productVariation->carts as $key => $cart) {
+                        if ($cart->transaction_id == null) {
+                            $cart->delete();
+                        }
+                    }
                     $productVariation->delete();
                 }
             }
@@ -312,6 +317,11 @@ class ProductController extends Controller
                         'price' => $request->product_price_no_var,
                     ]);
                 } else {
+                    foreach ($productVariation->carts as $key => $cart) {
+                        if ($cart->transaction_id == null) {
+                            $cart->delete();
+                        }
+                    }
                     $productVariation->delete();
                 }
             }
@@ -340,31 +350,71 @@ class ProductController extends Controller
             }
         }
 
-        if ($product->addons->count() > 0) {
-            foreach ($product->addons as $key => $addon) {
-                $addon->delete();
-            }
-        }
         if ($request->addon_name) {
-            foreach ($request->option_name as $key => $option) {
-                $addon = Addon::create([
-                    'name' => $request->addon_name[$key],
-                    'product_id' => $product->id,
-                ]);
-                if ($request->addon_required) {
-                    if (array_key_exists($key, $request->addon_required)) {
-                        $addon->update([
-                            'required' => $request->addon_required[$key] == "on" ? 1 : 0,
-                        ]);
+            foreach ($product->addons as $keye => $addon) {
+                if (in_array($addon->id, $request->addon_id)) {
+                    foreach ($request->addon_id as $key => $a_id) {
+                        if ($a_id == $addon->id) {
+                            $addon->update([
+                                'name' => $request->addon_name[$key],
+                            ]);
+                            foreach ($addon->options as $keye => $addonOption) {
+                                if (in_array($addonOption->id, $request->option_id)) {
+                                    foreach ($request->option_id as $key => $o_id) {
+                                        if ($o_id == $addonOption->id) {
+                                            $addonOption->update([
+                                                'name' => $request->option_name[$key][$keye],
+                                                'price' => $request->option_price[$key][$keye],
+                                                'addon_id' => $addon->id
+                                            ]);
+                                        }
+                                    }
+                                } else {
+                                    foreach ($addonOption->carts as $key => $cart) {
+                                        if ($cart->transaction_id == null) {
+                                            $cart->delete();
+                                        }
+                                    }
+                                    $addonOption->delete();
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    foreach ($addon->addons_options as $key => $addonOption) {
+                        foreach ($addonOption->carts as $key => $cart) {
+                            if ($cart->transaction_id == null) {
+                                $cart->delete();
+                            }
+                        }
+                    }
+                    $addon->delete();
+                }
+            }
+            foreach ($request->addon_id as $key => $addon) {
+                if ($addon == null) {
+                    $addon = Addon::create([
+                        'name' => $request->addon_name[$key],
+                        'product_id' => $product->id,
+                    ]);
+                    foreach ($request->option_id as $keye => $option) {
+                        if ($key == $keye) {
+                            foreach ($option as $keyed => $opt) {
+                                if ($opt == null) {
+                                    AddonOption::create([
+                                        'name' => $request->option_name[$key][$keyed],
+                                        'price' => $request->option_price[$key][$keyed],
+                                        'addon_id' => $addon->id
+                                    ]);
+                                }
+                            }
+                        }
                     }
                 }
-                foreach ($option as $keyed => $opt) {
-                    AddonOption::create([
-                        'name' => $request->option_name[$key][$keyed],
-                        'price' => $request->option_price[$key][$keyed],
-                        'addon_id' => $addon->id
-                    ]);
-                }
+            }
+        } else {
+            foreach ($product->addons as $key => $addon) {
+                $addon->delete();
             }
         }
         return redirect()->route('admin.product.index');

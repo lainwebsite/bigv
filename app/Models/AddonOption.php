@@ -20,6 +20,6 @@ class AddonOption extends Model
         return $this->belongsTo(Addon::class, 'addon_id', 'id');
     }
     public function carts() {
-        return $this->hasMany(Cart::class, 'addon_option_id', 'id');
+        return $this->hasMany(OptionCart::class, 'addon_option_id', 'id');
     }
 }
