@@ -24,6 +24,11 @@ class ProductVariation extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
+    public function product_trashed()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id')->withTrashed();
+    }
+
     public function carts()
     {
         return $this->hasMany(Cart::class, 'product_variation_id', 'id');

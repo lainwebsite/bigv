@@ -43,7 +43,7 @@
         <div class="split-page-wrapper">
             <div class="short-page-wrapper">
                 <div class="navbar-5">
-                    <div class="container-10"><img src="assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png"
+                    <div class="container-10"><img src="{{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}"
                             loading="lazy" width="100" alt="" /></div>
                 </div>
                 <div class="flex-stack-center">
@@ -109,7 +109,7 @@
                                     <input type="password"
                                         class="text-field-3 w-input @error('password') is-invalid @enderror"
                                         maxlength="256" name="password" data-name="Password 2" placeholder="Password"
-                                        id="Password-2" data-ms-member="password" required="" />
+                                        id="Password-2" data-ms-member="password" required="" autocomplete="new-password" />
 
                                     @error('password')
                                         <span class="invalid-feedback">

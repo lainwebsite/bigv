@@ -1,7 +1,19 @@
 @extends('user.template.layout')
 
 @section('page-title')
-    {{ $product->name }} - Big V
+    {{ $product->name }} - BigV
+@endsection
+
+@section('meta-title')
+    {{ $product->name }} - BigV
+@endsection
+
+@section('meta-description')
+    {{ $product->description }}
+@endsection
+
+@section('meta-image')
+    {{ asset('uploads/' . $product->featured_image) }}
 @endsection
 
 @section('head-extra')
@@ -362,7 +374,9 @@
             </div>
             <div class="div-line"></div>
             <h4 class="text-color-grey mb-2">Product Description</h4>
-            <p class="paragraph-2 text-color-grey mb-3">{{ htmlspecialchars_decode($product->description) }}</p>
+            <p class="paragraph-2 text-color-grey mb-3">
+                {!! nl2br(e(htmlspecialchars_decode($product->description))) !!}
+            </p>
             {{-- <div class="div-block-9">
         <div id="w-node-_274f20e5-cf76-d21b-b2d2-1fb0375edc27-fac73a6b">
             <h4 class="text-color-grey mb-2">Additional Information</h4>
@@ -739,9 +753,15 @@
                                     </div>
                                 @endif
                                 
+                                @if (($product->variations->max('price') - $product->variations->min('price')) != 0)
                                 <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                                 ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                             </div>
+                                @else
+                                <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
+                                                ${{ number_format($product->variations->min('price'), 2, ".", ",") }}
+                                            </div>
+                                @endif
                             @endif
                     </div>
                 </div>
@@ -927,7 +947,7 @@
         shareButton.addEventListener('click', event => {
             if (navigator.share) {
                 navigator.share({
-                        title: 'Big V - Share Product',
+                        title: 'BigV - Share Product',
                         url: shareLink // product link
                     }).then(() => {
                         console.log('Thanks for sharing!');

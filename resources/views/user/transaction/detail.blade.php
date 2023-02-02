@@ -1,8 +1,21 @@
 @extends('user.template.layout')
 
 @section('page-title')
-    Transaction - Big V
+    Transaction Detail - BigV
 @endsection
+
+@section('meta-title')
+    Transaction Detail - BigV
+@endsection
+
+@section('meta-description')
+    Take a look at your transaction detail.
+@endsection
+
+@section('meta-image')
+    {{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}
+@endsection
+
 @section('head-extra')
     <link href="{{ asset('assets/css/style-transaction.css') }}" rel="stylesheet" type="text/css" />
     <style>
@@ -295,15 +308,28 @@
                 </div>
             </div>
             <div class="cart-summary">
-                <h4 class="text-color-dark-grey">Discount</h4>
-                @foreach ($transaction->transaction->transaction_discounts as $td)
-                    <a href="#" class="payment-gateway-button w-inline-block">
-                        <div>
-                            <div class="text-weight-bold">{{$td->discount->name}}</div>
-                            <div class="text-size-xtiny">{{$td->discount->description}}</div>
-                        </div>
-                    </a>
-                @endforeach
+                @if ($discounts != null)
+                    <h4 class="text-color-dark-grey">Discount</h4>
+                    @foreach ($discounts as $td)
+                        <a href="#" class="payment-gateway-button w-inline-block">
+                            <div>
+                                <div class="text-weight-bold">{{$td->name}}</div>
+                                <div>{{$td->description}}</div>
+                                <p class="text-size-xtiny">
+                                    @if($td->type_id == 1)
+                                        Shipping ${{$td->amount}}
+                                    @else
+                                        @if ($td->voucher_type == 1)
+                                        Discount ${{$td->amount}}
+                                        @else
+                                        {{$td->amount}}% @if($td->max_discount != null)up to ${{$td->max_discount}}@endif
+                                        @endif
+                                    @endif
+                                </p>
+                            </div>
+                        </a>
+                    @endforeach
+                @endif
                 <h4 class="heading-8 text-color-dark-grey">Summary</h4>
                 <div class="div-block-24 text-color-grey">
                     <div class="inline">Total Price ({{ $transaction->transaction->carts->count() }} items)</div>

@@ -1,4 +1,4 @@
-<div style="display:flex; flex-direction: column; align-items:center;width: calc(100% - 288px);">
+<div style="display:flex; flex-direction: column; align-items:center;">
     <div class="products-archive-grid" id="productsList">
         @php(date_default_timezone_set('Asia/Singapore'))
         @php($dateNow = new DateTime(date("Y-m-d H:i:s")))
@@ -75,9 +75,15 @@
                                 </div>
                             @endif
                             
+                            @if (($product->variations->max('price') - $product->variations->min('price')) != 0)
                             <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                             ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                         </div>
+                            @else
+                            <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
+                                            ${{ number_format($product->variations->min('price'), 2, ".", ",") }}
+                                        </div>
+                            @endif
                         @endif
                     </div>
                 </div>

@@ -1,7 +1,19 @@
 @extends('user.template.layout')
 
 @section('page-title')
-    Cart - Big V
+    Cart - BigV
+@endsection
+
+@section('meta-title')
+    Cart - BigV
+@endsection
+
+@section('meta-description')
+    Take a look at your cart.
+@endsection
+
+@section('meta-image')
+    {{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}
 @endsection
 
 @section('head-extra')
@@ -179,9 +191,15 @@
                                         </div>
                                     @endif
                                     
+                                    @if (($product->variations->max('price') - $product->variations->min('price')) != 0)
                                     <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                                     ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
+                                    @else
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
+                                                    ${{ number_format($product->variations->min('price'), 2, ".", ",") }}
+                                                </div>
+                                    @endif
                                 @endif
                             </div>
                         </div>

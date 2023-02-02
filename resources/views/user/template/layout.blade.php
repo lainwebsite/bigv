@@ -6,8 +6,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('page-title')</title>
-    <meta content="Protected page" property="og:title" />
-    <meta content="Protected page" property="twitter:title" />
+    <meta content="@yield('meta-title')" property="og:title" />
+    <meta property="og:description" content="@yield('meta-description')" />
+    <meta property="og:image" content="@yield('meta-image')" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     @yield('head-extra')
     <script type="text/javascript">
@@ -141,7 +142,7 @@
                     loading="lazy" alt="" /></div>
             <div class="align-vertical">
                 <h3 class="heading-5">Enjoy <span class="text-color-dark-grey">200+</span> foods from<br />‍<span
-                        class="text-color-dark-grey">30+</span> Vendors</h3>
+                        class="text-color-dark-grey">30+</span> HBB</h3>
             </div>
             <div class="flex align-vertical" style="align-items: flex-start !important;">
                 <div class="flex flex-vertical left-align margin-small">
@@ -152,11 +153,11 @@
                         class="text-color-white text-style-link">Facebook</a>
                     <a href="https://www.tiktok.com/@bigvsg.official" target="_blank"
                         class="text-color-white text-style-link">Tiktok</a>
-                    <a href="https://api.whatsapp.com/send?phone=6582151509" target="_blank"
+                    <a href="https://api.whatsapp.com/send?phone=6586543515" target="_blank"
                         class="text-color-white text-style-link">Whatsapp</a>
                 </div>
                 <div class="flex flex-vertical left-align margin-small">
-                    <h4>Company</h4><a href="https://wa.me/6582151509?text=Hello%20BigV!%20I'm%20interested%20to%20become%20a%20vendor" class="text-color-white text-style-link">Become a Vendor</a><a
+                    <h4>Company</h4><a href="https://wa.me/6586543515?text=Hello%20BigV!%20I'm%20interested%20to%20become%20a%20vendor" class="text-color-white text-style-link">Become a Vendor</a><a
                         href="{{url('/about')}}" class="text-color-white text-style-link">About Us</a><a href="#" style="display:none;"
                         class="text-color-white text-style-link">Terms &amp; Conditions</a><a href="#"
                         class="text-color-white text-style-link" style="display:none;">Privacy Policy</a>

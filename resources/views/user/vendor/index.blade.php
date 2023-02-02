@@ -1,7 +1,19 @@
 @extends('user.template.layout')
 
 @section('page-title')
-    Vendor - Big V
+    Vendor - BigV
+@endsection
+
+@section('meta-title')
+    Vendor - BigV
+@endsection
+
+@section('meta-description')
+    Take a look at all the Vendors in BigV
+@endsection
+
+@section('meta-image')
+    {{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}
 @endsection
 
 @section('head-extra')

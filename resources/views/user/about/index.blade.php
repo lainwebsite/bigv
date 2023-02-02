@@ -1,7 +1,19 @@
 @extends('user.template.layout')
 
 @section('page-title')
-    About Us - Big V
+    About Us - BigV
+@endsection
+
+@section('meta-title')
+    About Us - BigV
+@endsection
+
+@section('meta-description')
+    We are one of the Start-ups that built with the foundation to promote Home Based Businesses in Singapore Region to support the dreams of those Entrepreneurs to have modern way of E-commerce Marketing method with modern Platform of BigV. We do provide variety of Home Based Business Fields and Industries that can be explore, such as Food and Beverage, Service Providers, Retail Store, Educational Events, including Enrichment Programs and Webinars.
+@endsection
+
+@section('meta-image')
+    {{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}
 @endsection
 
 @section('head-extra')
@@ -12,10 +24,13 @@
     <div class="content">
         <section class="hero-heading-center wf-section">
         	<div class="container-11">
-        		<h1 class="centered-heading margin-bottom-32px orange-text">About BigV</h1>
+        		<h1 class="centered-heading margin-bottom-32px orange-text">Get to Know BigV</h1>
         		<div class="hero-wrapper-2">
         			<div class="hero-split-2">
-        				<p class="margin-bottom-24px-2">BigV is a start-up for homebased business, focusing on promoting and selling homebased businesses of all kinds, including F&amp;B, service, product and educational events such as online enrichment programme and webinars.
+        				<p class="margin-bottom-24px-2">
+        				    We are a start-up focusing on assisting entrepreneurs who run businesses from home. We relentlessly share our <i>knowledge</i> and <i>expertise</i> in helping <b>Home Based Businesses (HBB)</b> in enhancing their skills and techniques. We share our resources to our HBB by managing their <i>logistics, marketing</i> and <i>sales</i> via our <i>online marketplace</i>. By building a strong <i>community based business</i>, we aim to be the <b>No.1 online marketplace for HBB in Singapore</b>.
+                            <br/><br/>
+                            Besides promoting HBB online, we also encourage them to take up physical stall/space at our <b>Albert Street Pasar Malam @ Tekka Place</b>. It is a unique project that BigV is proud of. Continuing the tradition of Albert Street shophouses residents, our HBB gets to showcase their talents and skills to public onsite. Our <b>BigV Community Café</b> at Tekka Place aims to create community based workshops run by our HBB for adults and children, to enjoy learning skills passed down by Ah Gong and Ah Ma; <i>from cooking, baking to handicrafts, you name it, we will curate it specially for you!</i>  
         					<br>
         				</p>
         			</div>
@@ -26,8 +41,8 @@
         <section class="testimonial-slider-small wf-section">
         	<div class="container-11">
         		<h2 class="centered-heading orange-text">3 V Approach</h2>
-        		<p class="centered-subheading">BigV works on a 3 V approach. Big Vision, Big Venture, and Big Value.</p>
-        		<div class="vision-mission-div">
+        		<p class="centered-subheading">BigV works on a 3 V approach: Big in Value, Big in Varieties and Big in Virtues</p>
+        		<div class="vision-mission-div" style="display:none;">
         			<div class="testimonial-card-2">
         				<h3 class="testimonial-author">Mission</h3>
         				<p>1. Focusing on featuring Home Based Businesses.
@@ -57,8 +72,8 @@
         </section>
         <section class="team-circles wf-section">
         	<div class="container-11">
-        		<h2 class="centered-heading orange-text">The Team</h2>
-        		<p class="centered-subheading">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tincidunt sagittis eros. Quisque quis euismod lorem.</p>
+        		<h2 class="centered-heading orange-text">Meet Our Team</h2>
+        		<p class="centered-subheading" style="display:none;">Introducing the Team behind the Big Vision with the Passion of Creating Sustainable Singapore Home Based Business.</p>
         		<div class="team-grid-2">
         			<div id="w-node-ed1af603-cba9-a489-202b-d35cca6aac80-48a9ac08" class="team-card"><img src="{{ asset('assets/638c81fa95fb43adbf40a25a_278385831_513021147080208_3041277267152842079_n.jpg')}}" loading="lazy" alt="" class="team-member-image">
         				<div class="team-member-name">VINCENT CHONG</div>

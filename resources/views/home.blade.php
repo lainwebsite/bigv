@@ -3,9 +3,10 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Home - BigV</title>
+    <title>#1 Online Home Based Business Marketplace Singapore</title>
     <meta content="BigV Homepage" property="og:title" />
-    <meta content="BigV Homepage" property="twitter:title" />
+    <meta property="og:description" content="BigV is a start-up for homebased business, focusing on promoting and selling homebased businesses of all kinds, including F&B, service, product and educational events such as online enrichment programme and webinars." />
+    <meta property="og:image" content="{{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
 
     <script type="text/javascript">
@@ -139,15 +140,13 @@
                     srcset="{{ asset('assets/633f7db809c5ff224b96427e_image%2081.webp') }}" alt=""
                     class="image-2" /></div>
             <div class="hero-center">
-                <div class="text-rich-text text-size-small text-align-center text-color-orange ea-top">Treat your
-                    family every
-                    season</div>
+                <div class="text-rich-text text-size-small text-align-center text-color-orange ea-top">Homemade products for all day & all seasons!</div>
                 <div class="heading-xlarge text-align-center ea-top">By <span
                         class="text-color-orange">Community</span><br />with <span
                         class="text-color-orange">Love</span></div>
-                <div class="text-align-center text-color-grey ea-bottom">Shop and help Small Medium Enterprises all around Singapore. Made with love. Sign up to become a Vendor and Rise with BigV.</div>
+                <div class="text-align-center text-color-grey ea-bottom">Shop and help small business entrepreneurs all around Singapore. All products are made with love and care from home. Shop today or join us to be a Home Based Business owner (HBB)! Together with BigV, we make your dreams come true! </div>
                 <div class="hero-button ea-bottom"><a href="{{url('/product')}}" class="button w-button">Shop Now</a><a
-                        href="https://wa.me/6582151509?text=Hello%20BigV!%20I'm%20interested%20to%20become%20a%20vendor" class="button w-button">Join Now</a></div>
+                        href="https://wa.me/6586543515?text=Hello%20BigV!%20I'm%20interested%20to%20become%20a%20vendor" class="button w-button">Join Now</a></div>
             </div>
             <div class="hero-right"><img src="{{ asset('assets/63365a23566e80a62a58f972_Rectangle 60 (1).webp') }}"
                     loading="lazy" width="385" data-w-id="11418749-c043-2a0d-68a6-46d1a59afeeb"
@@ -165,7 +164,7 @@
             </div>
         </div>
     </div>
-    <div class="promo-section" style="margin-top: 20vh;">
+    <div class="promo-section" style="margin-top: 15vh;">
         <div class="todays-pick-promo-container">
             <div class="heading-large margin-bottom margin-large ea-bottom">Latest Promos</div>
             <div class="promo-div" style="display:none;">
@@ -184,7 +183,7 @@
                         id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c9-92c73a6a" alt="" class="ea-right" />
                 </div>
             </div>
-            <div class="four-promo-container">
+            <div class="four-promo-container" style="display:none;">
                 <div class="promo-content" style="justify-content: flex-end;">
                     <img src="{{ asset('promo/promo-1.png') }}" loading="lazy" alt="" class="promo-image"  />
                 </div>
@@ -197,6 +196,9 @@
                 <div class="promo-content">
                     <img src="{{ asset('promo/promo-4.png') }}" loading="lazy" alt="" class="promo-image" />
                 </div>
+            </div>
+            <div class="promo-div" style="display: block">
+                <img src="{{ asset('promo/promobig.jpg') }}" loading="lazy" alt="" class="promo-image" style="max-width: unset;" />
             </div>
         </div>
     </div>
@@ -285,9 +287,15 @@
                                         </div>
                                     @endif
                                     
+                                    @if (($product->variations->max('price') - $product->variations->min('price')) != 0)
                                     <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                                     ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
+                                    @else
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
+                                                    ${{ number_format($product->variations->min('price'), 2, ".", ",") }}
+                                                </div>
+                                    @endif
                                 @endif
                             </div>
                         </div>
@@ -300,8 +308,7 @@
         <div class="max-width flex vertical">
             <div class="new-products-text-div">
                 <h2>New Products</h2>
-                <div class="text-block-4">Here are some of our most recent products,<br />Be the first to taste and
-                    rate it!
+                <div class="text-block-4">Here are some of our most recent products.<br/>Be the first to taste or own and rate it! 
                 </div>
             </div>
             <div class="products-archive-grid ea-bottom">
@@ -379,9 +386,15 @@
                                         </div>
                                     @endif
                                     
+                                    @if (($product->variations->max('price') - $product->variations->min('price')) != 0)
                                     <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                                     ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
+                                    @else
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
+                                                    ${{ number_format($product->variations->min('price'), 2, ".", ",") }}
+                                                </div>
+                                    @endif
                                 @endif
                             </div>
                         </div>
@@ -425,7 +438,7 @@
                 </div>
             </a>
             <a href="{{ url('/product') }}/filter?category=4" style="text-decoration: none !important;">
-                <div class="categories-card categories-bottom cat-4-color"><img
+                <div class="categories-card cat-4-color"><img
                         src="{{ asset('assets/62fccd5cb02a38a37aef3d48_image 35 (3).webp') }}" loading="lazy"
                         alt="" class="category-image" />
                     <div
@@ -454,6 +467,16 @@
                     </div>
                 </div>
             </a>
+            <a href="{{ url('/product') }}/filter?category=13" style="text-decoration: none !important;">
+                <div class="categories-card categories-bottom cat-2-color"><img
+                        src="{{ asset('assets/yoga-min.png') }}" loading="lazy"
+                        alt="" class="category-image" style="width: auto; height: 97.5px;"/>
+                    <div
+                        class="text-rich-text text-size-large text-weight-bold text-color-white padding-left padding-small">
+                        Workshops
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
     <div class="div-block-33"><img src="{{ asset('assets/633657c00ab1d66c4dcf0530_Vector (4).svg') }}"
@@ -473,7 +496,25 @@
                 srcset="{{ asset('assets/Tekka Place.jpg') }}" alt=""
                 class="image-6 ea-right" /></div>
     </div> -->
+    <div class="value-section">
+        <div class="value-left max-width-medium"><img
+                src="{{ asset('event/event-1.jpg') }}" loading="lazy"
+                srcset="{{ asset('event/event-1.jpg') }}"
+                sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
+                class="image-8 ea-left" /></div>
+        <div class="value-right">
+            <div class="heading-xlarge ea-top"><span class="orange-text">Special</span> Homemade <span class="orange-text">CNY</span> Goodies</div>
+            <!-- div class="heading-medium orange-text ea-right">Thursday &amp; Sunday 11am-7pm<br>
+Friday &amp; Sunday 11am-9pm</div-->
+            <div class="text-size-regular text-color-grey ea-right">Hunt for Uncle V GOF and get a chance to win shopping vouchers from Albert Street Pasar Malam at Tekka Place !🤩<br>
+            A total of 18 winners will be selected. For the contest details, please refer to poster.<br>
+            Hunt for Uncle V GOF competition will ends on 15 Jan 2023.<br>
+            Invite your friends to hunt GOF Uncle V and win the Albert Street Pasar Malam vouchers together!
+            </div><a href="#" class="button ea-bottom w-button" style="display:none;">Enroll Now</a>
+        </div>
+    </div>
     <div class="value-section" id="column-reverse-responsive" style="z-index:4;">
+        <img src="{{ asset('assets/633652c3764cda2b58895a36_Intersect.svg') }}" loading="lazy" data-w-id="d482b9a8-9984-a9ec-8860-e4973c48c7e1" alt="" class="image-24" />
         <div class="value-right">
             <div class="heading-xlarge ea-top">Join us at<span class="orange-text"> Albert Street Pasar Malan </span> at <span
                     class="orange-text">Tekka Place</span></div>
@@ -557,17 +598,17 @@ Friday &amp; Sunday 11am-9pm</div>
                     loading="lazy" alt="" class="ea-left" /></div>
             <div class="align-vertical">
                 <h3 class="ea-bottom">Enjoy <span class="text-color-dark-grey">200+</span> foods from<br /><span
-                        class="text-color-dark-grey">30+</span> Vendors</h3>
+                        class="text-color-dark-grey">30+</span> HBB</h3>
             </div>
             <div class="flex align-vertical ea-right">
                 <div class="flex flex-vertical left-align margin-small">
                     <h4>Contact Us</h4><a href="https://www.instagram.com/bigvsg.official/" target="_blank" class="text-color-white text-style-link">Instagram</a><a
                     href="https://www.facebook.com/BigVSG/" target="_blank" class="text-color-white text-style-link">Facebook</a><a href="https://www.tiktok.com/@bigvsg.official" target="_blank"
-                        class="text-color-white text-style-link">Tiktok</a><a href="https://api.whatsapp.com/send?phone=6582151509" target="_blank"
+                        class="text-color-white text-style-link">Tiktok</a><a href="https://api.whatsapp.com/send?phone=6586543515" target="_blank"
                         class="text-color-white text-style-link">Whatsapp</a>
                 </div>
                 <div class="flex flex-vertical left-align margin-small">
-                    <h4>Company</h4><a href="https://wa.me/6582151509?text=Hello%20BigV!%20I'm%20interested%20to%20become%20a%20vendor" class="text-color-white text-style-link">Become a Vendor</a><a
+                    <h4>Company</h4><a href="https://wa.me/6586543515?text=Hello%20BigV!%20I'm%20interested%20to%20become%20a%20vendor" class="text-color-white text-style-link">Become a Vendor</a><a
                         href="{{url('/about')}}" class="text-color-white text-style-link">About Us</a><a style="display:none;" href="#"
                         class="text-color-white text-style-link">Terms &amp; Conditions</a><a href="#"
                         class="text-color-white text-style-link" style="display:none;">Privacy Policy</a>

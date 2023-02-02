@@ -60,7 +60,7 @@ Route::group(['middleware' => 'general'], function () {
     // Auth::routes(['verify' => false]);
     // Auth::routes();
     Auth::routes([
-      'register' => false,
+    //   'register' => false,
       'reset' => false,
       'verify' => false,
     ]);

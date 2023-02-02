@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\UserAddress;
 use App\Models\Transaction;
+use App\Models\TransactionDiscount;
+use App\Models\Discount;
 use App\Models\OptionCart;
 use App\Models\TransactionStatus;
 use Illuminate\Http\Request;
@@ -204,14 +206,15 @@ class TransactionController extends Controller
             if ($data->transaction->payment_request_id) {
                 try {
                     $response = Http::withHeaders([
-                        'X-BUSINESS-API-KEY' => '7cf06a78a52b715c117bca86fe326e3fffdc1288b9b6c5ed2fdaf102983477b7', // test
-                        // 'X-BUSINESS-API-KEY' => 'b17440ac8264ee31eead33c6ae3846d2c13b1d4a368d43af84ec39d643162270',
+                        // 'X-BUSINESS-API-KEY' => '7cf06a78a52b715c117bca86fe326e3fffdc1288b9b6c5ed2fdaf102983477b7', // test
+                        'X-BUSINESS-API-KEY' => 'b17440ac8264ee31eead33c6ae3846d2c13b1d4a368d43af84ec39d643162270',
                         'X-Requested-With' => 'XMLHttpRequest',
                         'accept' => 'application/json',
                         'content-type' => 'application/json'
-                    ])->get('https://api.sandbox.hit-pay.com/v1/payment-requests/'.$data->transaction->payment_request_id);
+                    ])->get('https://api.hit-pay.com/v1/payment-requests/'.$data->transaction->payment_request_id);
                     
                     $responseJSON = json_decode($response->getBody()->getContents());
+                    // dd($responseJSON);
                     if ($responseJSON->status == 'completed') {
                         Transaction::where('id', $data->transaction->id)
                                 ->update(['status_id' => 2]);
@@ -223,10 +226,16 @@ class TransactionController extends Controller
             }
         }
 
-        $discounts = [];
-        foreach ($transaction->transaction_discounts as $discount)
-            $discounts[] = $discount->discount->name;
-        $discounts = implode(", ", $discounts);
+        // $discounts = [];
+        // foreach ($transaction->transaction_discounts as $discount)
+        //     $discounts[] = $discount->discount->name;
+        // $discounts = implode(", ", $discounts);
+        $discId = [];
+        $transDisc = TransactionDiscount::where('transaction_id', $transaction->id)->get();
+        // dd($transDisc);
+        foreach($transDisc as $td) array_push($discId, $td->discount_id);
+        $discounts = null;
+        if (count($discId) > 0) $discounts = Discount::withTrashed()->whereIn('id', $discId)->get();
         
         return view('user.transaction.detail', [
             'transaction' => $data, 

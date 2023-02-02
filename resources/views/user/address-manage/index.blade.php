@@ -1,7 +1,19 @@
 @extends('user.template.layout')
 
 @section('page-title')
-Addresses - Big V
+Addresses - BigV
+@endsection
+
+@section('meta-title')
+    Your Addresses - BigV
+@endsection
+
+@section('meta-description')
+    Manage your address
+@endsection
+
+@section('meta-image')
+    {{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}
 @endsection
 
 @section('head-extra')

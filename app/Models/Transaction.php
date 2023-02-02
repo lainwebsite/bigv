@@ -51,6 +51,14 @@ class Transaction extends Model
     {
         return $this->belongsTo(UserAddress::class, 'shipping_address_id', 'id');
     }
+    public function billing_address_trashed()
+    {
+        return $this->belongsTo(UserAddress::class, 'billing_address_id', 'id')->withTrashed();
+    }
+    public function shipping_address_trashed()
+    {
+        return $this->belongsTo(UserAddress::class, 'shipping_address_id', 'id')->withTrashed();
+    }
     public function payment_method()
     {
         return $this->belongsTo(PaymentMethod::class, 'payment_method_id', 'id');

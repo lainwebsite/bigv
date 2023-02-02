@@ -1,6 +1,7 @@
 @php($userPagination = true)
 @auth
-    @if(auth()->user()->role_id == 2)
+    {{--@if(auth()->user()->role_id == 2)--}}
+    @if(strpos(Request::url(), "admin") == true)
         @php ($userPagination = false)
         <ul class="pagination justify-content-center">
         

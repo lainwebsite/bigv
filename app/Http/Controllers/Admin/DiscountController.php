@@ -300,6 +300,7 @@ class DiscountController extends Controller
                 ]);
             }
         } else if ($request->discount_type == "2") {
+            // dd($request->all_products);
             //product
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
@@ -337,6 +338,17 @@ class DiscountController extends Controller
             } else {
                 $discount->update([
                     'max_discount' => null
+                ]);
+            }
+
+            if ($request->all_products == "on") {
+                $discount->update([
+                    'all_products' => 1
+                ]);
+            }
+            else {
+                $discount->update([
+                    'all_products' => 0
                 ]);
             }
 

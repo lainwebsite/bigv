@@ -274,117 +274,148 @@ class DiscountController extends Controller
                 $output['product_voucher'] = $disc;
                 session()->put('product-voucher-used', $disc);
                 session()->save();
-                if ($disc->applicable_id == 1){
-                    // Cek applicable variation (id 1)
-                    $var = VariationDiscount::where('discount_id', $disc->id)->where('product_variation_id', $product->id)->get();
-                    $aval = count($var);
-                    // print($aval);
-                    // dd($var);
-                    if ($aval > 0){
-                        if ($disc->voucher_type == 1){
-                            $finalPrice = $productPrice - $disc->amount;
-                            if ($finalPrice > 0) {
-                                $totalPrice += $finalPrice;
-                                $totalDiscount += $disc->amount;
-                            }
-                            else {
-                                $totalPrice += 0;
-                                $totalDiscount += $productPrice;
-                            }
+                if ($disc->all_products == 1){
+                    if ($disc->voucher_type == 1){
+                        $finalPrice = $productPrice - $disc->amount;
+                        if ($finalPrice > 0) {
+                            $totalPrice += $finalPrice;
+                            $totalDiscount += $disc->amount;
                         }
-                        else if ($disc->voucher_type == 2){
-                            $discountAmount = $productPrice * $disc->amount / 100;
-                            if ($disc->max_discount != null){
-                                if ($discountAmount > $disc->max_discount) $discountAmount = $disc->max_discount;
-                            }
-                            if ($discountAmount > $productPrice){
-                                $totalDiscount += $productPrice;
-                                $productPrice = 0;
-                            }
-                            else {
-                                $productPrice = $productPrice - $discountAmount;
-                                $totalDiscount += $discountAmount;
-                            }
-                            
-                            $totalPrice += $productPrice;
+                        else {
+                            $totalPrice += 0;
+                            $totalDiscount += $productPrice;
                         }
                     }
-                    else {
+                    else if ($disc->voucher_type == 2){
+                        $discountAmount = $productPrice * $disc->amount / 100;
+                        if ($disc->max_discount != null){
+                            if ($discountAmount > $disc->max_discount) $discountAmount = $disc->max_discount;
+                        }
+                        if ($discountAmount > $productPrice){
+                            $totalDiscount += $productPrice;
+                            $productPrice = 0;
+                        }
+                        else {
+                            $productPrice = $productPrice - $discountAmount;
+                            $totalDiscount += $discountAmount;
+                        }
+                        
                         $totalPrice += $productPrice;
                     }
                 }
-                else if ($disc->applicable_id == 2){
-                    // Cek applicable vendor (id 2)
-                    $ven = VendorDiscount::where('discount_id', $disc->id)->where('vendor_id', $product->product->vendor_id)->get();
-                    $aval = count($ven);
-                    if ($aval > 0){
-                        if ($disc->voucher_type == 1){
-                            $finalPrice = $productPrice - $disc->amount;
-                            if ($finalPrice > 0) {
-                                $totalPrice += $finalPrice;
-                                $totalDiscount += $disc->amount;
-                            }
-                            else {
-                                $totalPrice += 0;
-                                $totalDiscount += $productPrice;
-                            }
-                        }
-                        else if ($disc->voucher_type == 2){
-                            $discountAmount = $productPrice * $disc->amount / 100;
-                            if ($disc->max_discount != null){
-                                if ($discountAmount > $disc->max_discount) $discountAmount = $disc->max_discount;
-                            }
-                            if ($discountAmount > $productPrice){
-                                $totalDiscount += $productPrice;
-                                $productPrice = 0;
-                            }
-                            else {
-                                $productPrice = $productPrice - $discountAmount;
-                                $totalDiscount += $discountAmount;
-                            }
-                            
-                            $totalPrice += $productPrice;
-                        }
-                    }
-                    else {
-                        $totalPrice += $productPrice;
-                    }
-                } 
                 else {
-                    // Cek applicable category (id 3)
-                    $cat = CategoryDiscount::where('discount_id', $disc->id)->where('product_category_id', $product->product->category_id)->get();
-                    $aval = count($cat);
-                    if ($aval > 0){
-                        if ($disc->voucher_type == 1){
-                            $finalPrice = $productPrice - $disc->amount;
-                            if ($finalPrice > 0) {
-                                $totalPrice += $finalPrice;
-                                $totalDiscount += $disc->amount;
+                    if ($disc->applicable_id == 1){
+                        // Cek applicable variation (id 1)
+                        $var = VariationDiscount::where('discount_id', $disc->id)->where('product_variation_id', $product->id)->get();
+                        $aval = count($var);
+                        // print($aval);
+                        // dd($var);
+                        if ($aval > 0){
+                            if ($disc->voucher_type == 1){
+                                $finalPrice = $productPrice - $disc->amount;
+                                if ($finalPrice > 0) {
+                                    $totalPrice += $finalPrice;
+                                    $totalDiscount += $disc->amount;
+                                }
+                                else {
+                                    $totalPrice += 0;
+                                    $totalDiscount += $productPrice;
+                                }
                             }
-                            else {
-                                $totalPrice += 0;
-                                $totalDiscount += $productPrice;
+                            else if ($disc->voucher_type == 2){
+                                $discountAmount = $productPrice * $disc->amount / 100;
+                                if ($disc->max_discount != null){
+                                    if ($discountAmount > $disc->max_discount) $discountAmount = $disc->max_discount;
+                                }
+                                if ($discountAmount > $productPrice){
+                                    $totalDiscount += $productPrice;
+                                    $productPrice = 0;
+                                }
+                                else {
+                                    $productPrice = $productPrice - $discountAmount;
+                                    $totalDiscount += $discountAmount;
+                                }
+                                
+                                $totalPrice += $productPrice;
                             }
                         }
-                        else if ($disc->voucher_type == 2){
-                            $discountAmount = $productPrice * $disc->amount / 100;
-                            if ($disc->max_discount != null){
-                                if ($discountAmount > $disc->max_discount) $discountAmount = $disc->max_discount;
-                            }
-                            if ($discountAmount > $productPrice){
-                                $totalDiscount += $productPrice;
-                                $productPrice = 0;
-                            }
-                            else {
-                                $productPrice = $productPrice - $discountAmount;
-                                $totalDiscount += $discountAmount;
-                            }
-                            
+                        else {
                             $totalPrice += $productPrice;
                         }
                     }
+                    else if ($disc->applicable_id == 2){
+                        // Cek applicable vendor (id 2)
+                        $ven = VendorDiscount::where('discount_id', $disc->id)->where('vendor_id', $product->product->vendor_id)->get();
+                        $aval = count($ven);
+                        if ($aval > 0){
+                            if ($disc->voucher_type == 1){
+                                $finalPrice = $productPrice - $disc->amount;
+                                if ($finalPrice > 0) {
+                                    $totalPrice += $finalPrice;
+                                    $totalDiscount += $disc->amount;
+                                }
+                                else {
+                                    $totalPrice += 0;
+                                    $totalDiscount += $productPrice;
+                                }
+                            }
+                            else if ($disc->voucher_type == 2){
+                                $discountAmount = $productPrice * $disc->amount / 100;
+                                if ($disc->max_discount != null){
+                                    if ($discountAmount > $disc->max_discount) $discountAmount = $disc->max_discount;
+                                }
+                                if ($discountAmount > $productPrice){
+                                    $totalDiscount += $productPrice;
+                                    $productPrice = 0;
+                                }
+                                else {
+                                    $productPrice = $productPrice - $discountAmount;
+                                    $totalDiscount += $discountAmount;
+                                }
+                                
+                                $totalPrice += $productPrice;
+                            }
+                        }
+                        else {
+                            $totalPrice += $productPrice;
+                        }
+                    } 
                     else {
-                        $totalPrice += $productPrice;
+                        // Cek applicable category (id 3)
+                        $cat = CategoryDiscount::where('discount_id', $disc->id)->where('product_category_id', $product->product->category_id)->get();
+                        $aval = count($cat);
+                        if ($aval > 0){
+                            if ($disc->voucher_type == 1){
+                                $finalPrice = $productPrice - $disc->amount;
+                                if ($finalPrice > 0) {
+                                    $totalPrice += $finalPrice;
+                                    $totalDiscount += $disc->amount;
+                                }
+                                else {
+                                    $totalPrice += 0;
+                                    $totalDiscount += $productPrice;
+                                }
+                            }
+                            else if ($disc->voucher_type == 2){
+                                $discountAmount = $productPrice * $disc->amount / 100;
+                                if ($disc->max_discount != null){
+                                    if ($discountAmount > $disc->max_discount) $discountAmount = $disc->max_discount;
+                                }
+                                if ($discountAmount > $productPrice){
+                                    $totalDiscount += $productPrice;
+                                    $productPrice = 0;
+                                }
+                                else {
+                                    $productPrice = $productPrice - $discountAmount;
+                                    $totalDiscount += $discountAmount;
+                                }
+                                
+                                $totalPrice += $productPrice;
+                            }
+                        }
+                        else {
+                            $totalPrice += $productPrice;
+                        }
                     }
                 }
             } else {

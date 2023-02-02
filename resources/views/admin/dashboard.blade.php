@@ -215,14 +215,14 @@
                                                         <ul class="list-unstyled">
                                                             <li class="media align-items-center">
                                                                 <img class="d-flex mr-3 br-18"
-                                                                    src="{{ asset('uploads/' . $transaction->carts->first()->product_variation->product->featured_image) }}"
+                                                                    src="{{ asset('uploads/' . $transaction->carts->first()->product_variation_trashed->product_trashed->featured_image) }}"
                                                                     width="60" alt="Generic placeholder image">
                                                                 <div class="media-body">
                                                                     <h5 class="mt-0 mb-1">
-                                                                        <b>{{ $transaction->carts->first()->product_variation->product->name }}</b>
+                                                                        <b>{{ $transaction->carts->first()->product_variation_trashed->product_trashed->name }}</b>
                                                                     </h5>
                                                                     <h6 class="m-0">
-                                                                        {{ $transaction->carts->first()->product_variation->name }}
+                                                                        {{ $transaction->carts->first()->product_variation_trashed->name }}
                                                                     </h6>
                                                                     <h6 class="m-0">
                                                                         {{ $transaction->carts->first()->price }}</h6>

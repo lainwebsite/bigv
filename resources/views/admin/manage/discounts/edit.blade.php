@@ -176,14 +176,14 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <img id="selected-product-sale-image" class="d-flex br-18 mr-3"
-                                                    src="{{ asset('uploads/' . $discount->variation->product->featured_image) }}"
+                                                    src="{{ asset('uploads/' . $discount->variation_trashed->product_trashed->featured_image) }}"
                                                     height="60" width="60" alt="Generic placeholder image">
                                                 <div class="d-flex justify-content-center flex-column">
                                                     <h5 class="m-0"><b
-                                                            id="selected-product-sale-name">{{ $discount->variation->product->name }}</b>
+                                                            id="selected-product-sale-name">{{ $discount->variation_trashed->product_trashed->name }}</b>
                                                     </h5>
                                                     <small class="m-0"
-                                                        id="selected-product-sale-category">{{ $discount->variation->product->category->name }}</small>
+                                                        id="selected-product-sale-category">{{ $discount->variation_trashed->product_trashed->category->name }}</small>
                                                 </div>
                                             </div>
                                             <i class="fa fa-chevron-down" id="iconExpandSearchProductSale"></i>
@@ -229,7 +229,7 @@
                                     <select class="custom-select custom-border" id="salePriceVariation"
                                         name="product_sale" style="border-radius: 10px !important;">
                                         @if ($discount->type_id == 3)
-                                            @foreach ($discount->variation->product->variations as $variation)
+                                            @foreach ($discount->variation_trashed->product_trashed->variations as $variation)
                                                 <option value="{{ $variation->id }}" @selected($variation->id == $discount->name)>
                                                     {{ $variation->name }} -
                                                     ${{ $variation->price }}</option>
@@ -310,14 +310,14 @@
                                     <div class="form-check form-check-inline">
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="allProductVoucher"
-                                                name="all_products" value="{{ $discount->all_products }}">
+                                                name="all_products" {{ ($discount->all_products == 1) ? 'checked' : '' }}>
                                             <label class="custom-control-label" for="allProductVoucher">Apply Discount for
                                                 All
                                                 Products</label>
                                         </div>
                                     </div>
                                     <div class="divider-dash mt-3 mb-3"></div>
-                                    <div class="w-100" id="chooseProductVoucher">
+                                    <div class="w-100" id="chooseProductVoucher" style="{{ ($discount->all_products == 1) ? 'display:none;' : '' }}">
                                         <div class="form-group">
                                             <label for="productName">Search Product for Discount</label>
                                             <div class="input-group">
@@ -347,17 +347,17 @@
                                                         <div class="d-flex align-items-center justify-content-between">
                                                             <div class="d-flex align-items-center">
                                                                 <img class="d-flex br-18 mr-3"
-                                                                    src="{{ asset('uploads/' . $variation_discount->product_variation->product->featured_image) }}"
+                                                                    src="{{ asset('uploads/' . $variation_discount->product_variation->product_trashed->featured_image) }}"
                                                                     height="60" width="60"
                                                                     alt="Generic placeholder image">
                                                                 <div class="d-flex justify-content-center flex-column">
                                                                     <h5 class="m-0">
-                                                                        <b>{{ $variation_discount->product_variation->product->name }}
+                                                                        <b>{{ $variation_discount->product_variation->product_trashed->name }}
                                                                             -
                                                                             {{ $variation_discount->product_variation->name }}</b>
                                                                     </h5>
                                                                     <small
-                                                                        class="m-0">{{ $variation_discount->product_variation->product->category->name }}</small>
+                                                                        class="m-0">{{ $variation_discount->product_variation->product_trashed->category->name }}</small>
                                                                 </div>
                                                             </div>
                                                             <i class="fa fa-times cursor-pointer delete-product-voucher"

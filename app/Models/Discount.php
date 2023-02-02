@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Discount extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -38,6 +38,10 @@ class Discount extends Model
     public function variation()
     {
         return $this->belongsTo(ProductVariation::class, 'name', 'id');
+    }
+    public function variation_trashed()
+    {
+        return $this->belongsTo(ProductVariation::class, 'name', 'id')->withTrashed();
     }
     public function transaction_discounts()
     {

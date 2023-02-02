@@ -84,13 +84,13 @@
                         @php
                             $wa_customer = 'https://wa.me/' . $transaction->user->phone . '?text=Hello%20*' . $transaction->user->name . '*%0AThankyou%20for%20your%20order%20at%20BigV!%0AWe%20have%20received%20your%20order%20for%20%3A%0A';
                             foreach ($transaction->carts as $key => $cart) {
-                                $wa_customer = $wa_customer . '%0A*' . $cart->product_variation_trashed->product->name . '*%20x%20*' . $cart->quantity . '*%20-%20' . $cart->product_variation->name;
+                                $wa_customer = $wa_customer . '%0A*' . $cart->product_variation_trashed->product_trashed->name . '*%20x%20*' . $cart->quantity . '*%20-%20' . $cart->product_variation_trashed->name;
                                 foreach ($cart->addon_options as $key => $option_cart) {
                                     $wa_customer = $wa_customer . '%20+%20' . $option_cart->addon_option_trashed->name;
                                 }
                                 $wa_customer = $wa_customer . '%20%3A%20*$' . $cart->quantity * $cart->price . '*';
                             }
-                            $wa_customer = $wa_customer . '%0A*TOTAL%20%3A%20$' . $transaction->total_price . '*%0A%0Ato%20be%20' . ($transaction->pickup_method_id == 1 ? 'Delivered' : 'Picked Up') . '%20at%0A' . ($transaction->pickup_method_id == 1 ? $transaction->shipping_address->name : $transaction->pickup_address_trashed->name) . '%0A%0AOder%20time%20%3A%20*' . $transaction->created_at . '*%0AShipping%20Date%20%3A%20*' . $transaction->delivery_date . '%20' . $transaction->pickup_time->time . '*%0A%0APlease%20wait%20kindly%20for%20your%20order.';
+                            $wa_customer = $wa_customer . '%0A*TOTAL%20%3A%20$' . $transaction->total_price . '*%0A%0Ato%20be%20' . ($transaction->pickup_method_id == 1 ? 'Delivered' : 'Picked Up') . '%20at%0A' . ($transaction->pickup_method_id == 1 ? $transaction->billing_address_trashed->name : $transaction->pickup_address_trashed->name) . '%0A%0AOder%20time%20%3A%20*' . $transaction->created_at . '*%0AShipping%20Date%20%3A%20*' . $transaction->delivery_date . '%20' . $transaction->pickup_time->time . '*%0A%0APlease%20wait%20kindly%20for%20your%20order.';
                         @endphp
                         <div class="col-3">
                             <a target="_blank" href="{{ $wa_customer }}"
@@ -103,16 +103,16 @@
                                 $vendors = [];
                             @endphp
                             @foreach ($transaction->carts as $cart)
-                                @if (!in_array($cart->product_variation_trashed->product->vendor_id, $vendors))
+                                @if (!in_array($cart->product_variation_trashed->product_trashed->vendor_id, $vendors))
                                     <div class="d-flex gap-15x">
                                         @php
-                                            $wa_string = 'https://wa.me/' . $cart->product_variation_trashed->product->vendor->phone . '?text=Hello%20Vendor%20*' . $cart->product_variation_trashed->product->vendor->name . '*%0AThere%20is%20a%20new%20order%20with%20the%20ID%20*' . $cart->transaction->id . '*';
+                                            $wa_string = 'https://wa.me/' . $cart->product_variation_trashed->product_trashed->vendor->phone . '?text=Hello%20Vendor%20*' . $cart->product_variation_trashed->product_trashed->vendor->name . '*%0AThere%20is%20a%20new%20order%20with%20the%20ID%20*' . $cart->transaction->id . '*';
                                         @endphp
                                         @foreach ($transaction->carts as $carted)
-                                            @if ($carted->product_variation_trashed->product->vendor_id ==
-                                                $cart->product_variation_trashed->product->vendor_id)
+                                            @if ($carted->product_variation_trashed->product_trashed->vendor_id ==
+                                                $cart->product_variation_trashed->product_trashed->vendor_id)
                                                 @php
-                                                    $wa_string = $wa_string . '%0A*' . $carted->product_variation_trashed->product->name . '%20' . $carted->product_variation_trashed->name . '%20x%20' . $carted->quantity . '*';
+                                                    $wa_string = $wa_string . '%0A*' . $carted->product_variation_trashed->product_trashed->name . '%20' . $carted->product_variation_trashed->name . '%20x%20' . $carted->quantity . '*';
                                                 @endphp
                                                 @foreach ($carted->addon_options as $addon)
                                                     @if ($loop->first)
@@ -132,15 +132,15 @@
                                         <a target="_blank" href="{{ $wa_string }}"
                                             class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><img
                                                 src="{{ asset('assets/images/whatsapp.svg') }}" width="24"
-                                                height="24" />{{ $cart->product_variation_trashed->product->vendor->name }}</a>
+                                                height="24" />{{ $cart->product_variation_trashed->product_trashed->vendor->name }}</a>
                                         @php
-                                            $mail_link = 'https://mail.google.com/mail/?view=cm&fs=1&to=' . $cart->product_variation_trashed->product->vendor->email . '&su=New Order ID : ' . $transaction->id . ' from BigV&body=Hello ' . $cart->product_variation_trashed->product->vendor->name . '%0D%0A'. 'There%20is%20a%20new%20order%20with%20the%20ID%20' . $cart->transaction->id;
+                                            $mail_link = 'https://mail.google.com/mail/?view=cm&fs=1&to=' . $cart->product_variation_trashed->product_trashed->vendor->email . '&su=New Order ID : ' . $transaction->id . ' from BigV&body=Hello ' . $cart->product_variation_trashed->product_trashed->vendor->name . '%0D%0A'. 'There%20is%20a%20new%20order%20with%20the%20ID%20' . $cart->transaction->id;
                                         @endphp
                                         @foreach ($transaction->carts as $carted)
-                                            @if ($carted->product_variation_trashed->product->vendor_id ==
-                                                $cart->product_variation_trashed->product->vendor_id)
+                                            @if ($carted->product_variation_trashed->product_trashed->vendor_id ==
+                                                $cart->product_variation_trashed->product_trashed->vendor_id)
                                                 @php
-                                                    $mail_link = $mail_link . '%0A' . $carted->product_variation_trashed->product->name . '%20' . $carted->product_variation_trashed->name . '%20x%20' . $carted->quantity ;
+                                                    $mail_link = $mail_link . '%0A' . $carted->product_variation_trashed->product_trashed->name . '%20' . $carted->product_variation_trashed->name . '%20x%20' . $carted->quantity ;
                                                 @endphp
                                                 @foreach ($carted->addon_options as $addon)
                                                     @if ($loop->first)
@@ -160,10 +160,10 @@
                                         <a target="_blank" href="{{ $mail_link }}"
                                             class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 pb-2 pt-2"><i
                                                 data-feather="mail"
-                                                class="feather-icon"></i>{{ $cart->product_variation_trashed->product->vendor->name }}</a>
+                                                class="feather-icon"></i>{{ $cart->product_variation_trashed->product_trashed->vendor->name }}</a>
                                     </div>
                                     @php
-                                        array_push($vendors, $cart->product_variation_trashed->product->vendor_id);
+                                        array_push($vendors, $cart->product_variation_trashed->product_trashed->vendor_id);
                                     @endphp
                                 @endif
                             @endforeach
@@ -268,11 +268,11 @@
                                             <li class="media align-items-center mt-3 mb-3 justify-content-between">
                                                 <div class="d-flex align-items-center">
                                                     <img class="d-flex mr-3 br-18"
-                                                        src="{{ asset('uploads/' . $cart->product_variation_trashed->product->featured_image) }}"
+                                                        src="{{ asset('uploads/' . $cart->product_variation_trashed->product_trashed->featured_image) }}"
                                                         width="60" alt="Generic placeholder image">
                                                     <div class="d-flex flex-column">
                                                         <h5 class="mt-0 mb-1">
-                                                            <b>{{ $cart->product_variation_trashed->product->name }}</b>
+                                                            <b>{{ $cart->product_variation_trashed->product_trashed->name }}</b>
                                                         </h5>
                                                         @if ($cart->product_variation_trashed->name != 'novariation')
                                                             <h6 class="m-0">
@@ -327,21 +327,33 @@
                             </div>
                         </div>
                     </div>
-                    @if ($transaction->transaction_discounts->count() > 0)
+                    @if ($discounts != null)
                         <div class="row">
                             <div class="col">
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="card-title mb-4">Discount Applied</h4>
                                         <div class="row m-0">
-                                            @foreach ($transaction->transaction_discounts as $discount)
+                                            @foreach ($discounts as $discount)
                                                 <div class="col-3 pl-1 pr-1 pb-2">
                                                     <div class="bg-success p-3 br-18">
-                                                        <h5 class="card-title text-white">{{ $discount->discount->name }}
+                                                        <h5 class="card-title text-white m-0"><b>{{ $discount->code }}</b>
                                                         </h5>
+                                                        <h5 class="text-white mb-2">{{$discount->name}}</h5>
                                                         <h6 class="card-text text-white">
-                                                            {{ $discount->discount->description }}
+                                                             @if($discount->type_id == 1)
+                                                                Shipping ${{$discount->amount}}
+                                                            @else
+                                                                @if ($discount->voucher_type == 1)
+                                                                Discount ${{$discount->amount}}
+                                                                @else
+                                                                {{$discount->amount}}% @if($discount->max_discount != null)up to ${{$discount->max_discount}}@endif
+                                                                @endif
+                                                            @endif
                                                         </h6>
+                                                        <p class="card-text text-white">
+                                                            {{ $discount->description }}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             @endforeach

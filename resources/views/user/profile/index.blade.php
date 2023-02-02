@@ -1,7 +1,19 @@
 @extends('user.template.layout')
 
 @section('page-title')
-Profile Settings - Big V
+Profile Settings - BigV
+@endsection
+
+@section('meta-title')
+    Profile - BigV
+@endsection
+
+@section('meta-description')
+    Take a look at your profile.
+@endsection
+
+@section('meta-image')
+    {{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}
 @endsection
 
 @section('head-extra')

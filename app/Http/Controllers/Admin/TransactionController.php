@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\UserAddress;
 use App\Models\TransactionStatus;
+use App\Models\TransactionDiscount;
+use App\Models\Discount;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -82,7 +84,15 @@ class TransactionController extends Controller
             $billingAddress = null;
             $shippingAddress = null;
         }
-        return view('admin.manage.transaction.detail', compact('transaction', 'billingAddress', 'shippingAddress', 'statuses'));
+        
+        $discId = [];
+        $transDisc = TransactionDiscount::where('transaction_id', $transaction->id)->get();
+        // dd($transDisc);
+        foreach($transDisc as $td) array_push($discId, $td->discount_id);
+        $discounts = null;
+        if (count($discId) > 0) $discounts = Discount::withTrashed()->whereIn('id', $discId)->get();
+        
+        return view('admin.manage.transaction.detail', compact('transaction', 'discounts', 'billingAddress', 'shippingAddress', 'statuses'));
     }
 
     /**

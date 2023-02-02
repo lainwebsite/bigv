@@ -1,12 +1,25 @@
 @extends('user.template.layout')
 
 @section('page-title')
-    Checkout - Big V
+    Checkout - BigV
+@endsection
+
+@section('meta-title')
+    Checkout - BigV
+@endsection
+
+@section('meta-description')
+    Take a look at your cart.
+@endsection
+
+@section('meta-image')
+    {{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}
 @endsection
 
 @section('head-extra')
     <link href="{{ asset('assets/css/style-cart-checkout.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/datepicker/date-picker.css') }}">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
@@ -16,6 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
     </script>
+    
     <style>
         .w-icon-close-toggle {
             top: 0;
@@ -37,7 +51,7 @@
 @endsection
 
 @section('content')
-    <div class="content" style="min-height: 60vh;">
+    <div class="content" style="min-height: 60vh; !important">
         <div class="max-width flex vertical">
             <h2 class="text-color-grey ea-top">Checkout</h2>
             <form id="checkoutForm" method="POST" action="{{ url('user/cart/checkout/place-order') }}"
@@ -136,13 +150,10 @@
                         </div>
                         <div class="div-line"></div>
                         <h4 class="heading-6 margin-vertical margin-small text-color-dark-grey">Shipping/Pickup Time</h4>
-                        <div class="position-relative w-100 h-auto">
-                            <?php date_default_timezone_set('Asia/Singapore');
-                            $minDate = date('Y-m-d', strtotime(date('Y-m-d') . '+ 8 days')); ?>
-                            <input type="date" name="delivery_date" class="delivery-add-time w-100" id="shippingDate"
-                                min="<?= $minDate ?>">
-                            <div class="position-absolute d-flex justify-content-between align-items-center"
-                                style="top:18px; left:18px; width: calc(100% - 36px); background: #f7f7f7; pointer-events:none;">
+                        <div class="position-relative w-100 h-auto d-flex justify-content-end">
+                            <input type="text" name="delivery_date" style="border:none !important;" class="delivery-add-time w-100 digits" id="shippingDate" readonly>
+                            <div class="position-absolute d-flex justify-content-between align-items-center w-100"
+                                style="padding:18px; top: 0px; left:0px; background: #f7f7f7; pointer-events:none; border-radius: 18px;">
                                 <div class="d-flex flex-column">
                                     <div class="text-size-small text-color-grey">Delivery Date</div>
                                     <h5 class="text-color-grey" id="shippingDateFormat">Monday, 4th July</h5>
@@ -183,7 +194,7 @@
                             @foreach ($checkout->products as $product)
                                 <div class="vendor-item">
                                     <div class="flex gap-medium">
-                                        <img loading="lazy" srcset="{{ asset('uploads/'.$product->featured_image) }}" alt=""
+                                        <img loading="lazy" srcset="{{ asset('uploads/'.$product->featured_image) }}" src="{{ asset('uploads/'.$product->featured_image) }}" alt=""
                                             class="image-18" />
                                         <div>
                                             <h5 class="text-color-dark-grey">{{ $product->product_name }}</h5>
@@ -286,7 +297,7 @@
                 </div>
             </form>
             <img src="{{ asset('assets/6303b67a5064f05035c5a701_shape 1.svg') }}" loading="lazy" alt=""
-                class="absolute shape-cart" />
+                class="absolute shape-cart" style="max-width: 20% !important" />
         </div>
     </div>
 
@@ -459,6 +470,8 @@
 
 @section('javascript-extra')
     <script src="{{ asset('assets/js/script-cart-checkout.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/libs/datepicker/datepicker.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/libs/datepicker/datepicker.en.js') }}" type="text/javascript"></script>
     <script>
         function getDetailAddress(el, addressId, selected = false) {
             $.get(url + "/user/checkout/user-address/get-address/" + addressId).done(function(data) {
@@ -912,6 +925,9 @@
             getProductDiscounts($("#inputProductDiscountSearch").val());
         });
 
+        <?php date_default_timezone_set('Asia/Singapore');
+        $minDate = date('Y-m-d', strtotime(date('Y-m-d') . '+ 8 days')); ?>
+        // alert(<?= $minDate ?>);
         const nth = function(d) {
             if (d > 3 && d < 21) return 'th';
             switch (d % 10) {
@@ -925,23 +941,47 @@
                     return "th";
             }
         }
-
-        $("#shippingDate").on('change', function() {
-            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-                'October', 'November', 'December'
-            ];
-            if ($(this).val() != "") {
-                const selectedDate = new Date($(this).val());
-                let dd = selectedDate.getDate();
-
-                $("#shippingDateFormat").html(days[selectedDate.getDay()] + ", " + dd + nth(dd) + " " + months[
-                    selectedDate.getMonth()]);
-            }
+        
+        var disabledDays = [0, 6];
+        $("#shippingDate").datepicker({
+            language: "en",
+            minDate: new Date("<?= $minDate ?>"),
+            toggleSelected: false,
+            dateFormat: 'yyyy-mm-dd',
+            onSelect: function (e) { 
+                var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+                    'October', 'November', 'December'
+                ];
+                if ($("#shippingDate").val() != "") {
+                    const selectedDate = new Date($("#shippingDate").val());
+                    let dd = selectedDate.getDate();
+    
+                    $("#shippingDateFormat").html(days[selectedDate.getDay()] + ", " + dd + nth(dd) + " " + months[
+                        selectedDate.getMonth()]);
+                }
+                
+            },
+            autoClose: true,
+            onRenderCell: function (date, cellType) {
+              if (cellType == "day") {
+                var day = date.getDay(),
+                  isDisabled = disabledDays.indexOf(day) != -1;
+                return { disabled: isDisabled };
+              }
+            },
         });
-
-        document.getElementById('shippingDate').valueAsDate = new Date("<?= $minDate ?>");
-        $("#shippingDate").change();
+        
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var minDateOrder = new Date("<?= $minDate ?>");
+        if (minDateOrder.getDay() == 0 || minDateOrder.getDay() == 6) {
+            if (minDateOrder.getDay() == 0) minDateOrder.setDate(minDateOrder.getDate() + 1);
+            else minDateOrder.setDate(minDateOrder.getDate() + 2);
+        }
+        document.getElementById('shippingDate').value = (minDateOrder.getFullYear() + "-" + (minDateOrder.getMonth()+1) + "-" + minDateOrder.getDate());
+        let dd = minDateOrder.getDate();
+        $("#shippingDateFormat").html(days[minDateOrder.getDay()] + ", " + dd + nth(dd) + " " + months[minDateOrder.getMonth()]);
 
         $("#addNewAddressShipping").on("click", function() {
             $("#shippingAddressList").addClass("d-none");

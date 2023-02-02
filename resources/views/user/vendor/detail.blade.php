@@ -4,6 +4,18 @@
     Vendor - Big V
 @endsection
 
+@section('meta-title')
+    {{$vendor->name}} - BigV
+@endsection
+
+@section('meta-description')
+    {{$vendor->description}}
+@endsection
+
+@section('meta-image')
+    {{ asset('uploads/'.$vendor->photo) }}
+@endsection
+
 @section('head-extra')
     <link href="{{ asset('assets/css/style-product-list.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
@@ -62,7 +74,9 @@
                             <p class="tagline">{{ $vendor->products->count() }} products</p>
                         </div>
                     </div>
-                    <p>{{ $vendor->description }}</p>
+                    <p>
+                    {!! nl2br(e($vendor->description)) !!}
+                    </p>
                 </div>
             </div>
         </div>
@@ -144,9 +158,15 @@
                                         </div>
                                     @endif
                                     
+                                    @if (($product->variations->max('price') - $product->variations->min('price')) != 0)
                                     <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
                                                     ${{ number_format($product->variations->min('price'), 2, ".", ",") }} - ${{ number_format($product->variations->max('price'), 2, ".", ",") }}
                                                 </div>
+                                    @else
+                                    <div class="text-rich-text text-color-orange text-weight-bold" style="padding: 0.25em; white-space:nowrap;">
+                                                    ${{ number_format($product->variations->min('price'), 2, ".", ",") }}
+                                                </div>
+                                    @endif
                                 @endif
                             </div>
                         </div>

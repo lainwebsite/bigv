@@ -4,6 +4,18 @@
     Promos - Big V
 @endsection
 
+@section('meta-title')
+    Promo - BigV
+@endsection
+
+@section('meta-description')
+    Take a look at our exciting promos.
+@endsection
+
+@section('meta-image')
+    {{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}
+@endsection
+
 @section('head-extra')
     <link href="{{ asset('assets/css/style-transaction.css') }}" rel="stylesheet" type="text/css" />
 @endsection
@@ -25,7 +37,7 @@
                             style="text-decoration: none; white-space: nowrap;">Profile Settings</a>
                         <a href="{{ url('/user/transaction') }}" class="transaction-menus text-color-grey"
                             style="text-decoration: none;">Transactions</a>
-                        <a href="{{ url('/user/address') }}" class="transaction-menus text-color-grey"
+                        <a href="{{ url('/user/user-address') }}" class="transaction-menus text-color-grey"
                             style="text-decoration: none;">Addresses</a>
                         <a href="{{ url('/user/discount') }}" class="transaction-menus text-color-grey"
                             style="text-decoration: none;">Promos</a>
@@ -35,22 +47,6 @@
             <div class="promo-column-profile">
                 <div class="promo-row-top">
                     <div class="text-size-small text-color-grey">Here are the Promos available for you</div>
-                    <div class="promo-div" style="display:none;">
-                        <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c4-92c73a6a"><img
-                                src="{{ asset('assets/diskon1.jpg') }}" loading="lazy"
-                                id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c5-92c73a6a" height="410"
-                                sizes="(max-width: 479px) 46vw, (max-width: 767px) 41vw, (max-width: 991px) 50vw, 46vw"
-                                srcset="{{ asset('assets/diskon1.jpg') }}" alt="" class="ea-left" /></div>
-                        <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c6-92c73a6a" class="div-block-2"><img
-                                src="{{ asset('assets/diskon2.webp') }}" loading="lazy"
-                                id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c7-92c73a6a" alt="" class="ea-top" />
-                        </div>
-                        <div id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c8-92c73a6a" class="div-block-2"><img
-                                src="{{ asset('assets/diskon3.jpg') }}" width="351" height="183" loading="lazy"
-                                id="w-node-_5eb6a600-3317-8d0d-76be-b3ed7dd852c9-92c73a6a" alt=""
-                                class="ea-right" />
-                        </div>
-                    </div>
                     <style>
                         .four-promo-container{
                             display: -ms-flexbox;
@@ -98,7 +94,7 @@
                             }
                         }
                     </style>
-                    <div class="four-promo-container">
+                    <div class="four-promo-container" style="display:none;">
                         <div class="promo-content" style="justify-content: flex-end;">
                             <img src="{{ asset('promo/promo-1.png') }}" loading="lazy" alt="" class="promo-image"  />
                         </div>
@@ -111,6 +107,9 @@
                         <div class="promo-content">
                             <img src="{{ asset('promo/promo-4.png') }}" loading="lazy" alt="" class="promo-image" />
                         </div>
+                    </div>
+                    <div class="promo-div" style="display: block">
+                        <img src="{{ asset('promo/promobig.jpg') }}" loading="lazy" alt="" class="promo-image" style="max-width: unset;" />
                     </div>
                 </div>
                 <div class="promo-row-bottom" style="margin-bottom: 5vh;">
