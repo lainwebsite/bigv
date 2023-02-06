@@ -22,6 +22,7 @@ class Kernel extends HttpKernel
         // \Illuminate\Session\Middleware\StartSession::class, // <-- remove this if @error doesn't show
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\Cors::class,
     ];
 
     /**
@@ -67,5 +68,6 @@ class Kernel extends HttpKernel
         'user' => \App\Http\Middleware\User::class,
         'admin' => \App\Http\Middleware\Admin::class,
         'general' => \App\Http\Middleware\General::class,
+        'cors' => \App\Http\Middleware\Cors::class,
     ];
 }

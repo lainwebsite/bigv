@@ -22,6 +22,7 @@
 
 @section('content')
     <div class="content">
+        @csrf
         <div class="max-width flex vertical">
             <h2 class="text-color-grey ea-top">Your Cart</h2>
             <div class="cart-wrapper" style="gap: 15px;">
@@ -376,9 +377,13 @@
             var cartId = checkbox.val();
 
             if (confirm('Are you sure you want to delete this item?')) {
-                $.post(url + "/user/cart/" + cartId, {
-                    _token: CSRF_TOKEN,
-                    _method: "DELETE",
+                $.ajax({
+                   type:'POST',
+                   url: url + "/user/cart/" + cartId,
+                   data:{
+                        _token: CSRF_TOKEN,
+                        _method: "DELETE",
+                   }
                 }).done(function(data) {
                     if (checkbox.is(":checked")) {
                         delete cartItems[data.vendor_id][data.cart_id];
@@ -399,6 +404,30 @@
                 }).fail(function(error) {
                     console.log(error);
                 });
+                
+                // $.post(url + "/user/cart/" + cartId, {
+                //     _token: CSRF_TOKEN,
+                //     _method: "DELETE",
+                // }).done(function(data) {
+                //     if (checkbox.is(":checked")) {
+                //         delete cartItems[data.vendor_id][data.cart_id];
+                //         if (Object.keys(cartItems[data.vendor_id]).length <= 1) {
+                //             delete cartItems[data.vendor_id];
+                //         }
+
+                //         updateCheckout();
+                //         console.log(cartItems);
+                //     }
+                //     parent.remove();
+
+                //     if (data.vendor_product_exist <= 0) {
+                //         grandParent.remove();
+                //     }
+
+                //     alert(data.message);
+                // }).fail(function(error) {
+                //     console.log(error);
+                // });
             }
         });
 

@@ -182,7 +182,7 @@
                     alt="" /></a>
         </div> -->
         <div class="footer-bottom background-color-grey text-align-center text-color-white padding-xsmall relative">
-            <div>©2022 <span class="text-color-orange">Big V</span> | All Rights Reserved</div>
+            <div>©2022 <span class="text-color-orange">BigV</span> | All Rights Reserved</div>
         </div>
     </div>
     <script>
@@ -190,7 +190,8 @@
 
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var hostname = "{{ request()->getHost() }}";
-        var url = "{{ config('app.url') }}";
+        // var url = "{{ config('app.url') }}";
+        var url = "https://www.bigvsg.com";
 
         if (hostname.includes('localhost')) {
             url += ":8000";
