@@ -32,7 +32,7 @@
                 <div style="display:flex; flex-direction: column; align-items:center;width: calc(100% - 288px);">
                     <div class="products-archive-grid" id="productsList" style="margin-bottom: 8vh;">
                         @foreach ($vendors as $vendor)
-                            <a href="{{ url('vendors/' . $vendor->id) }}" class="text-style-none">
+                            <a href="{{ url('vendors/' . $vendor->slug) }}" class="text-style-none">
                                 <div id="w-node-_98aa59c7-5c20-8fcb-852c-972bad093e75-fac73a6c"
                                     class="product-card padding-small">
                                     <div class="text-rich-text text-size-small text-color-grey">

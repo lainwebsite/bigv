@@ -19,6 +19,11 @@ class Vendor extends Model
         'rating',
         'location_id'
     ];
+    
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function location()
     {

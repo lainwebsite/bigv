@@ -1,7 +1,8 @@
 <div class="col pt-0 pb-0 pr-4 pl-4">
     <ul class="list-unstyled mb-5">
         @foreach ($transactions as $transaction)
-            <li>
+            @if ($transaction->carts->first() != null)
+                <li>
                 <div class="w-100 card custom-border my-2">
                     <div @class([
                         'card-header d-flex justify-content-between flex-column',
@@ -84,6 +85,7 @@
                     </div>
                 </div>
             </li>
+            @endif
         @endforeach
     </ul>
     {{ $transactions->links() }}

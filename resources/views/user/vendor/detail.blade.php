@@ -1,7 +1,7 @@
 @extends('user.template.layout')
 
 @section('page-title')
-    Vendor - Big V
+    Vendor - BigV
 @endsection
 
 @section('meta-title')

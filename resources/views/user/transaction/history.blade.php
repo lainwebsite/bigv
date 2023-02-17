@@ -57,7 +57,8 @@
                     </div>
                 </div>
                 @foreach ($transactions as $transaction)
-                    <div class="transaction-card transaction-hover-style" style="width: 100%;">
+                    @if ($transaction->cart_customs != null)
+                        <div class="transaction-card transaction-hover-style" style="width: 100%;">
                         <a class="transaction-detail" href="{{ url('user/transaction/' . $transaction->id) }}"
                             style="text-decoration: none; display: none;"></a>
                         <div class="flex space-between">
@@ -117,6 +118,7 @@
                             <div><b>${{ number_format($transaction->total_price, 2, ".", ",") }}</b></div>
                         </div>
                     </div>
+                    @endif
                 @endforeach
             </div>
         </div>

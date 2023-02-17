@@ -10,6 +10,15 @@
     <meta property="og:description" content="@yield('meta-description')" />
     <meta property="og:image" content="@yield('meta-image')" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C8KECYLPVP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-C8KECYLPVP');
+    </script>
     @yield('head-extra')
     <script type="text/javascript">
         ! function(o, c) {

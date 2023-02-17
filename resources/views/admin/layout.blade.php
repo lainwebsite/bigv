@@ -175,6 +175,11 @@
                                 href="{{ route('admin.vendor.index') }}" aria-expanded="false"><i
                                     data-feather="smile" class="feather-icon"></i><span
                                     class="hide-menu">Vendor</span></a></li>
+                        <li class="sidebar-item @yield('events-manage-selected')"> <a
+                                class="sidebar-link sidebar-link @yield('events-manage-active')"
+                                href="{{ route('admin.event.index') }}" aria-expanded="false"><i
+                                    data-feather="clock" class="feather-icon"></i><span
+                                    class="hide-menu">Event</span></a></li>
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Analytics</span></li>
                         <li class="sidebar-item @yield('orders-analytics-selected')"> <a

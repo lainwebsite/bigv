@@ -247,7 +247,7 @@
                         </div>
                         <h4 class="heading-8 text-color-dark-grey">Summary</h4>
                         <div class="div-block-24 text-color-grey">
-                            <div class="inline">Total Price ({{ number_format($total_items, 2, ".", ",") }} items)</div>
+                            <div class="inline">Total Price ({{ $total_items }} items)</div>
                             <div class="inline" id="total-price" total-price="{{ number_format($total_price, 2, ".", ",") }}">${{ number_format($total_price, 2, ".", ",") }}</div>
                         </div>
                         <div class="div-block-24 text-color-grey" id="shippingPrice">
@@ -582,7 +582,7 @@
             pickupTime = "AM";
         var placeOrder = false;
         var address_id = parseInt("{{$first_address_id}}");
-        var shipping_price = "{{ env('SHIPPING_PRICE') }}";
+        var shipping_price = "{{ '25' }}";
 
         $(document).ready(function() {
             // give target to button modal discount
@@ -974,12 +974,17 @@
         
         var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        function pad(num, size) {
+            num = num.toString();
+            while (num.length < size) num = "0" + num;
+            return num;
+        }
         var minDateOrder = new Date("<?= $minDate ?>");
         if (minDateOrder.getDay() == 0 || minDateOrder.getDay() == 6) {
             if (minDateOrder.getDay() == 0) minDateOrder.setDate(minDateOrder.getDate() + 1);
             else minDateOrder.setDate(minDateOrder.getDate() + 2);
         }
-        document.getElementById('shippingDate').value = (minDateOrder.getFullYear() + "-" + (minDateOrder.getMonth()+1) + "-" + minDateOrder.getDate());
+        document.getElementById('shippingDate').value = (minDateOrder.getFullYear() + "-" + pad((minDateOrder.getMonth()+1), 2) + "-" + pad(minDateOrder.getDate(), 2));
         let dd = minDateOrder.getDate();
         $("#shippingDateFormat").html(days[minDateOrder.getDay()] + ", " + dd + nth(dd) + " " + months[minDateOrder.getMonth()]);
 

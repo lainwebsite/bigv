@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 
 class DiscountController extends Controller
 {
+    protected $shipping_price = 25;
+    
     /**
      * Display a listing of the resource.
      *
@@ -233,7 +235,7 @@ class DiscountController extends Controller
         $productVoucher = $request->product_voucher;
         $shippingVoucher = $request->shipping_voucher;
         $pickupMethodId = $request->pickup_method_id;
-        $shippingPrice = (float) env('SHIPPING_PRICE');
+        $shippingPrice = (float) $this->shipping_price;
         
         $cartId = session()->get('checkout-items');
         $productVariationIdList = [];
@@ -497,7 +499,7 @@ class DiscountController extends Controller
         \Artisan::call('cache:clear');
 
         if ($pickupMethodId == 2)
-            return session()->get('grandtotal-checkout-price') - (float) env('SHIPPING_PRICE');
+            return session()->get('grandtotal-checkout-price') - (float) $this->shipping_price;
         
         return session()->get('grandtotal-checkout-price');
     }

@@ -9,6 +9,15 @@
     <meta property="og:image" content="{{asset('assets/62ffbe41b946fc3a2b7b6747_Big%20V(NoTag)-ColorB%202.png')}}" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-C8KECYLPVP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-C8KECYLPVP');
+    </script>
     <script type="text/javascript">
         ! function(o, c) {
             var n = c.documentElement,
@@ -496,6 +505,41 @@
                 srcset="{{ asset('assets/Tekka Place.jpg') }}" alt=""
                 class="image-6 ea-right" /></div>
     </div> -->
+    <div class="value-section" id="column-reverse-responsive" style="z-index:4;">
+        <img src="{{ asset('assets/633652c3764cda2b58895a36_Intersect.svg') }}" loading="lazy" data-w-id="d482b9a8-9984-a9ec-8860-e4973c48c7e1" alt="" class="image-24" />
+        <div class="value-right">
+            <div class="heading-xlarge ea-top">A haven for <span class="orange-text">Entrepreneurs</span>! A test ground for your <span class="orange-text">brilliant business ideas</span></div>
+            <!--<div class="heading-medium orange-text ea-right">9th December 2022</div>-->
+            <div class="text-size-regular text-color-grey ea-right">
+                Albert Street Pasar Malam at Tekka Place welcome entrepreneurs to kickstart your big business idea for:<br>
+                <ul>
+                    <li>F&B</li>
+                    <li>Art & Craft</li>
+                    <li>Upcycle and pre-loved products</li>
+                    <li>Workshops</li>
+                </ul>
+                <!--We provide low rental, administration and full marketing support! Plus professional guidance in business and marketing consultation.<br>-->
+                <!--Special rate available for Home Based Businesses. WhatsApp us Mr Vincent Chong at 9003 3497 today to make an appointment to visit the space and find out more details.<br>-->
+                <!--Other important information:<br>-->
+                <!--<ol>-->
+                <!--    <li>Metal Pushcart $800/mth</li>-->
+                <!--    <li>Wooden Booth $600/mth</li>-->
+                <!--    <li>5 tier rack $350/mth (sales to be managed by BigV staff)</li>-->
+                <!--    <li>Good and steady footfall daily</li>-->
+                <!--    <li>Manpower not included</li>-->
+                <!--    <li>Utilities included</li>-->
+                <!--    <li>Contract renewable either monthly or quarterly</li>-->
+                <!--    <li>Stand a chance to be featured by media </li>-->
+                <!--    <li>Get to meet fellow entrepreneurs and create your own community!</li>-->
+                <!--</ol>-->
+            </div><a href="{{url('event/4')}}" class="button ea-bottom w-button">Read more</a>
+        </div>
+        <div class="value-left max-width-medium"><img
+            src="{{ asset('event/happening.jpg') }}" loading="lazy"
+            srcset="{{ asset('event/happening.jpg') }}"
+            sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
+            class="image-8 ea-left" style="border-radius:10px;" /></div>
+    </div>
     <div class="value-section">
         <div class="value-left max-width-medium"><img
                 src="{{ asset('event/event-1.jpg') }}" loading="lazy"

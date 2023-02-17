@@ -215,7 +215,8 @@ class VendorController extends Controller
             'email' => $request->email,
             'description' => $request->description,
             'location_id' => $request->location,
-            'photo' => $photo
+            'photo' => $photo,
+            'slug' => \Str::slug($request->name)
         ]);
         return redirect()->route('admin.vendor.index');
     }
@@ -264,7 +265,8 @@ class VendorController extends Controller
             'email' => $request->email,
             'description' => $request->description,
             'location_id' => $request->location,
-            'photo' => $photo
+            'photo' => $photo,
+            'slug' => \Str::slug($request->name)
         ]);
         return redirect()->route('admin.vendor.index');
     }

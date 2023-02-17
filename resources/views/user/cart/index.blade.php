@@ -34,7 +34,7 @@
                                         src="{{asset('uploads/'.$cart->vendor->photo)}}" loading="lazy"
                                         alt="" class="image-17" />
                                     <div>
-                                        <h5><a href={{ url('/vendor/'.$cart->vendor->id) }} class="text-style-none text-color-dark-grey">{{ $cart->vendor->name }}</a></h5>
+                                        <h5><a href={{ url('/vendors/'.$cart->vendor->slug) }} class="text-style-none text-color-dark-grey">{{ $cart->vendor->name }}</a></h5>
                                         <div class="text-size-small text-color-grey">Location: {{ $cart->vendor->location->name }}
                                         </div>
                                     </div>

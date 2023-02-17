@@ -246,7 +246,7 @@
                                             <div class="divider-dash mt-4 mb-4"></div>
                                             <div class="row">
                                                 <div class="col">
-                                                    <h4 class="card-title mb-4">Shipping/Pickup Time</h4>
+                                                    <h4 class="card-title mb-4">Time</h4>
                                                     <p class="m-0">
                                                         {{ date('d, F Y', strtotime($transaction->delivery_date)) }} |
                                                         {{ $transaction->pickup_time->time }}</p>

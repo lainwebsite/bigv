@@ -23,6 +23,8 @@ use DB;
 
 class CheckoutController extends Controller
 {
+    protected $shipping_price = 25;
+    
     public function __construct()
     {
         \Artisan::call('cache:clear');
@@ -108,7 +110,7 @@ class CheckoutController extends Controller
                 'checkouts' => $checkout_items,
                 'total_price' => session()->get('total-checkout-price'),
                 'total_items' => session()->get('total-checkout-items'),
-                'shipping_price' => (float) env('SHIPPING_PRICE'),
+                'shipping_price' => (float) $this->shipping_price,
                 'grandtotal_price' => session()->get('grandtotal-checkout-price'),
             ]);
         }
@@ -138,7 +140,7 @@ class CheckoutController extends Controller
                 }
 
                 if (count($cart_checkout_id) > 0) {
-                    $shipping_price = (float) env('SHIPPING_PRICE');
+                    $shipping_price = (float) $this->shipping_price;
 
                     session()->put('total-checkout-items', $total_items);
                     session()->put('total-checkout-price', $total_price);
@@ -280,7 +282,7 @@ class CheckoutController extends Controller
 
             $cart->price = $cart->price + $addons_price;
 
-            $shipping_price = (float) env('SHIPPING_PRICE');
+            $shipping_price = (float) $this->shipping_price;
 
             $total_price = $cart->quantity * $cart->price;
             session()->put('total-checkout-items', $cart->quantity);
@@ -317,7 +319,7 @@ class CheckoutController extends Controller
         if (session()->has('total-price-after-discount')) {
             $grandtotal_checkout_price = (float) session()->get('total-price-after-discount', 0);
         }
-        $shipping_price = (float) env('SHIPPING_PRICE');
+        $shipping_price = (float) $this->shipping_price;
 
         if ($request->pickup_method_id == 2) {
             if (session()->has('total-price-after-discount')) {

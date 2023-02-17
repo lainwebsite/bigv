@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="col-4 d-flex justify-content-end gap-15x">
-                    <a href="{{ route('admin.vendor.edit', $vendor->id) }}"
+                    <a href="{{ route('admin.vendor.edit', $vendor->slug) }}"
                         class="btn btn-primary d-flex gap-15x align-items-center pr-4 pl-4 text-white"><i
                             class="fa fa-edit text-white"></i>Edit</a>
                     <a onclick="deleteData({{ $vendor->id }}, '{{ $vendor->name }}');"

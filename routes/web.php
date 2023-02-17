@@ -19,11 +19,13 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\UserRoleController as AdminUserRoleController;
 use App\Http\Controllers\Admin\UserTierController as AdminUserTierController;
 use App\Http\Controllers\Admin\VendorController as AdminVendorController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PickupAddressController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\DiscountController;
+use App\Http\Controllers\User\EventController;
 use App\Http\Controllers\User\PaymentGateway\PaynowController;
 use App\Http\Controllers\User\PaymentMethodController;
 use App\Http\Controllers\User\PickupMethodController;
@@ -73,6 +75,7 @@ Route::group(['middleware' => 'general'], function () {
     Route::get('product/filter', [ProductController::class, 'filter']);
     Route::resource('product', ProductController::class);
     Route::resource('vendors', VendorController::class);
+    Route::resource('event', EventController::class);
     Route::get('/about', [PageController::class, 'about']);
 });
 
@@ -131,6 +134,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
 // Route::group(['middleware' => ['admin', 'verified'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
 Route::group(['middleware' => ['admin'], 'as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [AdminPageController::class, 'dashboard'])->name('dashboard');
+    Route::post('event/sort', [AdminEventController::class, 'sort'])->name('event.sort');
+    Route::resource('event', AdminEventController::class);
     Route::resource('cart', AdminCartController::class);
     Route::post('discount/sort', [AdminDiscountController::class, 'sort'])->name('discount.sort');
     Route::post('discount/search', [AdminDiscountController::class, 'search'])->name('discount.search');
