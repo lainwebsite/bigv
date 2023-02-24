@@ -505,6 +505,21 @@
                 srcset="{{ asset('assets/Tekka Place.jpg') }}" alt=""
                 class="image-6 ea-right" /></div>
     </div> -->
+    <div class="value-section">
+        <div class="value-left max-width-medium"><img
+                src="{{ asset('event/happening-2.jpg') }}" loading="lazy"
+                srcset="{{ asset('event/happening-2.jpg') }}"
+                sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
+                class="image-8 ea-left" /></div>
+        <div class="value-right">
+            <div class="heading-xlarge ea-top">Looking for <span class="orange-text">fun</span> and <span class="orange-text">creative</span> workshops?</div>
+            <!--div class="heading-medium orange-text ea-right">Thursday &amp; Sunday 11am-7pm<br>
+Friday &amp; Sunday 11am-9pm</div-->
+            <div class="text-size-regular text-color-grey ea-right">Specially curated by BigV and host by our <b>Home Based Business</b> owners.<br>Suitable for all ages! Great for <b>family bonding</b> or <b>corporate activities</b>!<br>Dates and registration links to be launched soon! 
+            </div><a href="#" class="button ea-bottom w-button" style="display:none;">Enroll Now</a>
+        </div><img src="{{ asset('assets/633652c5de27787915ec9b2f_Intersect (1).svg') }}" loading="lazy"
+            data-w-id="55107afb-6f21-606b-b271-a1ff35a970cf" alt="" class="image-23" />
+    </div>
     <div class="value-section" id="column-reverse-responsive" style="z-index:4;">
         <img src="{{ asset('assets/633652c3764cda2b58895a36_Intersect.svg') }}" loading="lazy" data-w-id="d482b9a8-9984-a9ec-8860-e4973c48c7e1" alt="" class="image-24" />
         <div class="value-right">
@@ -571,22 +586,6 @@ Friday &amp; Sunday 11am-9pm</div-->
             srcset="{{ asset('assets/event-home-1.jpg') }}"
             sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
             class="image-8 ea-left" style="border-radius:10px;" /></div>
-    </div>
-    <div class="value-section" style="display:none">
-        <img src="{{ asset('assets/633652c3764cda2b58895a36_Intersect.svg') }}" loading="lazy" data-w-id="d482b9a8-9984-a9ec-8860-e4973c48c7e1" alt="" class="image-24" />
-        <div class="value-left max-width-medium"><img
-                src="{{ asset('assets/event-home-2.jpg') }}" loading="lazy"
-                srcset="{{ asset('assets/event-home-2.jpg') }}"
-                sizes="(max-width: 479px) 94vw, (max-width: 767px) 49vw, (max-width: 991px) 45vw, 48vw" alt=""
-                class="image-8 ea-left" /></div>
-        <div class="value-right">
-            <div class="heading-xlarge ea-top">BIGV HBB POP UP MARKET At *SCAPE</div>
-            <div class="heading-medium orange-text ea-right">Thursday &amp; Sunday 11am-7pm<br>
-Friday &amp; Sunday 11am-9pm</div>
-            <div class="text-size-regular text-color-grey ea-right">Let&#39;s have an exciting shopping experience with our various, uniquely Home Based Businesses! Many kinds of handcrafted items and homemade baked goods can be found here. Explore new and unique things in the BIGV HBB POP-UP MARKET. Are you ready to shop? Come and join us at Scape!
-            </div><a href="#" class="button ea-bottom w-button" style="display:none;">Enroll Now</a>
-        </div><img src="{{ asset('assets/633652c5de27787915ec9b2f_Intersect (1).svg') }}" loading="lazy"
-            data-w-id="55107afb-6f21-606b-b271-a1ff35a970cf" alt="" class="image-23" />
     </div>
     <div class="sustainability-section">
         <div class="value-right">

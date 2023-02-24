@@ -4938,8 +4938,13 @@ figcaption {
     width:180px !important;
   }
   
+  .events-archive-grid {
+    -ms-grid-columns: auto;
+        grid-template-columns: auto;
+    }
+  
   .event-card{
-    width:180px !important;
+    width:95vw !important;
   }
 
   .show-mobile-portrait {
@@ -5052,7 +5057,6 @@ figcaption {
 
   .event-card.padding-small {
     width: auto;
-    padding: 10%;
   }
 
   .product-card-low-div {

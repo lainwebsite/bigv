@@ -26,7 +26,6 @@ Homestead.json
 public/uploads
 public/main
 public/error_log
-.htaccess
 error_log
 index.php
 php.ini
